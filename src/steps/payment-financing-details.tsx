@@ -3,7 +3,7 @@ import React from 'react';
 import { validateNumberInRange } from '../utils/validation';
 import { IPaymentData, IEcomLifecycle } from '../types';
 
-export interface IPaymentFinancingDetails extends IEcomLifecycle {
+export interface IPaymentFinancingDetailsProps extends IEcomLifecycle {
     payment: IPaymentData;
 
     onFinancingValuesChange: (downPayment: number, duration: number) => void;
@@ -30,8 +30,8 @@ const getDurationFromIndex = (index: number): number => {
     return (index + 1) * 24;
 };
 
-class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetails, IState> {
-    constructor(props: IPaymentFinancingDetails) {
+class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsProps, IState> {
+    constructor(props: IPaymentFinancingDetailsProps) {
         super(props);
 
         this.handleDurationChange = this.handleDurationChange.bind(this);
