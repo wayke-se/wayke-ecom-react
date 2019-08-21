@@ -4,8 +4,6 @@ import { validateRegistrationNumber, validateMilage } from '../utils/validation'
 import { IEcomLifecycle, IInteractData, ITradeInCarData } from '../types';
 
 export interface ITradeInCarDefinitionProps extends IEcomLifecycle {
-    tradeInCar: ITradeInCarData;
-    interact: IInteractData;
 };
 
 const TradeInCarDefinition = (props: ITradeInCarDefinitionProps) => {

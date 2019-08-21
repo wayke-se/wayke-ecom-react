@@ -3,7 +3,6 @@ import React from 'react';
 import PaymentMethod from '../enums/payment-method';
 
 export interface IPaymentMethodChooserProps {
-    onPaymentMethodChange: (paymentMethod: PaymentMethod) => void;
 };
 
 const PaymentMethodChooser = (props: IPaymentMethodChooserProps) => {

@@ -2,8 +2,6 @@ import React from 'react';
 import { ITradeInCarData, IEcomLifecycle } from '../types';
 
 export interface ITradeInConfirmCarProps extends IEcomLifecycle {
-    tradeInCar: ITradeInCarData;
-    onShowTradeInCarDefinition: () => void;
 };
 
 const TradeInConfirmCar = (props: ITradeInConfirmCarProps) => {

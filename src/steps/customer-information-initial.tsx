@@ -6,10 +6,6 @@ import CustomerInformationInputType from '../enums/customer-information-input-ty
 import { IInteractData, IEcomLifecycle, ICustomerData } from '../types';
 
 export interface ICustomerInformationInitialProps extends IEcomLifecycle {
-    customer: ICustomerData;
-    interact: IInteractData;
-
-    onCustomerInformationInputTypeChange: (type: CustomerInformationInputType) => void;
 };
 
 const CustomerInformationInitial = (props: ICustomerInformationInitialProps) => {

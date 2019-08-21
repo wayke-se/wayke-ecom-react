@@ -4,9 +4,6 @@ import { validateNumberInRange } from '../utils/validation';
 import { IPaymentData, IEcomLifecycle } from '../types';
 
 export interface IPaymentFinancingDetailsProps extends IEcomLifecycle {
-    payment: IPaymentData;
-
-    onFinancingValuesChange: (downPayment: number, duration: number) => void;
 };
 
 interface IState {

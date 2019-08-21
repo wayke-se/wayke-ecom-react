@@ -16,9 +16,10 @@ export interface IEcomContext {
 };
 
 export interface IEcomLifecycle {
-    onInputChange: (e: ChangeEvent) => void;
-    onInputBlur: (e: FocusEvent) => void;
     onNextStepClick: () => void;
+    onShowCustomerInformationInitial: () => void;
+    onShowInsuranceInformationDefinition: () => void;
+    onShowTradeInCarDefinition: () => void;
 };
 
 export interface ITradeInCarData {

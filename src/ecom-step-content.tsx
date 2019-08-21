@@ -14,8 +14,10 @@ import TradeInConfirmCar from './steps/trade-in-confirm-car';
 import TradeInExistsChooser from './steps/trade-in-exists-chooser';
 
 import EcomStep from './enums/ecom-step';
+import { IEcomLifecycle } from './types';
 
-interface AllProps extends ITradeInExistsChooserProps {
+interface AllProps extends IEcomLifecycle {
+    step: EcomStep;
 }
 
 const EcomStepContent = (props: AllProps) => {

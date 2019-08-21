@@ -1,11 +1,7 @@
 import React from 'react';
-import { IInsuranceData } from '../types';
+import { IInsuranceData, IEcomLifecycle } from '../types';
 
-export interface IInsuranceAlternativeChooserProps {
-    insurance: IInsuranceData;
-
-    onInsuranceAlternativeChange: (id: string) => void;
-    onShowInsuranceInformationDefinition: () => void;
+export interface IInsuranceAlternativeChooserProps extends IEcomLifecycle {
 };
 
 const InsuranceAlternativeChooser = (props: IInsuranceAlternativeChooserProps) => {

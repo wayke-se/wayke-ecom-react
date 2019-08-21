@@ -5,21 +5,12 @@ import { validateEmail, validateSSN, validateZip } from '../utils/validation';
 import { ICustomerData, IEcomLifecycle, IEcomContext, IInteractData } from '../types';
 
 export interface ICustomerInformationDetailsProps extends IEcomLifecycle {
-    customer: ICustomerData;
-    context: IEcomContext;
-    interact: IInteractData;
-
-    onTermsToggle: () => void;
-    onShowCustomerInformationInitial: () => void;
 };
 
 interface IAutomaticContentProps extends IEcomLifecycle {
-    onShowCustomerInformationInitial: () => void;
 };
 
 interface IManualContentProps extends IEcomLifecycle {
-    customer: ICustomerData;
-    interact: IInteractData;
 };
 
 const AutomaticContent = (props: IAutomaticContentProps) => {

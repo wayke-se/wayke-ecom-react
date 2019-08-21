@@ -3,7 +3,6 @@ import React from 'react';
 import DeliveryType from '../enums/delivery-type';
 
 export interface IDeliveryTypeChooserProps {
-    onDeliveryTypeChange: (type: DeliveryType) => void;
 };
 
 const DeliveryTypeChooser = (props: IDeliveryTypeChooserProps) => {

@@ -1,7 +1,6 @@
 import React from 'react';
 
 export interface ITradeInExistsChooserProps {
-    onHasTradeInCarChange: (value: boolean) => void;
 }
 
 const TradeInExistsChooser = (props: ITradeInExistsChooserProps) => {

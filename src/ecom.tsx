@@ -16,10 +16,12 @@ export interface IEcomProps {
 }
 
 interface IState {
-    registrationNumber: string;
+    step: EcomStep;
+    stepHistory: EcomStep[];
+    isBackwardsStepForbidden: boolean;
 }
 
-const getNewStep = (currentStep, state) => {
+const getNewStep = (currentStep: EcomStep, state): EcomStep => {
     const transition = EcomStepTransitions[currentStep];
 
     if (transition) {
@@ -29,34 +31,7 @@ const getNewStep = (currentStep, state) => {
     }
 };
 
-class Ecom extends React.Component<IEcomProps, IState> {
-    constructor(props: IEcomProps) {
-        super(props);
-
-        this.componentDidTransitionForward = this.componentDidTransitionForward.bind(this);
-
-        this.handleNextStepClick = this.handleNextStepClick.bind(this);
-        this.handleRejectedStepForward = this.handleRejectedStepForward.bind(this);
-        this.handlePreviousStepClick = this.handlePreviousStepClick.bind(this);
-        this.handleSpecificStepClick = this.handleSpecificStepClick.bind(this);
-
-        this.handleInputChange = this.handleInputChange.bind(this);
-        this.handleInputBlur = this.handleInputBlur.bind(this);
-        this.handleHasTradeInCarChange = this.handleHasTradeInCarChange.bind(this);
-        this.handlePaymentMethodChange = this.handlePaymentMethodChange.bind(this);
-        this.handleInsuranceOptionChange = this.handleInsuranceOptionChange.bind(this);
-        this.handleInsuranceAlternativeChange = this.handleInsuranceAlternativeChange.bind(this);
-        this.handleInsuranceExpectedDrivingDistanceChange = this.handleInsuranceExpectedDrivingDistanceChange.bind(this);
-        this.handleCustomerInformationInputTypeChange = this.handleCustomerInformationInputTypeChange.bind(this);
-        this.handleTermsToggle = this.handleTermsToggle.bind(this);
-        this.handleDeliveryTypeChange = this.handleDeliveryTypeChange.bind(this);
-        this.handleFinancingValuesChange = this.handleFinancingValuesChange.bind(this);
-
-        this.state = {
-            step: EcomStep.TRADE_IN_EXISTS_CHOOSER,
-            stepHistory: [ EcomStep.TRADE_IN_EXISTS_CHOOSER ],
-            isBackwardsStepForbidden: false,
-
+/*
             hasTradeInCar: null,
             registrationNumber: '',
             milage: '',
@@ -96,7 +71,23 @@ class Ecom extends React.Component<IEcomProps, IState> {
                 customerEmail: false,
                 customerPhone: false,
                 hasAcceptedTerms: false,
-            }
+            }*/
+
+class Ecom extends React.Component<IEcomProps, IState> {
+    constructor(props: IEcomProps) {
+        super(props);
+
+        this.componentDidTransitionForward = this.componentDidTransitionForward.bind(this);
+
+        this.handleNextStepClick = this.handleNextStepClick.bind(this);
+        this.handleRejectedStepForward = this.handleRejectedStepForward.bind(this);
+        this.handlePreviousStepClick = this.handlePreviousStepClick.bind(this);
+        this.handleSpecificStepClick = this.handleSpecificStepClick.bind(this);
+
+        this.state = {
+            step: EcomStep.TRADE_IN_EXISTS_CHOOSER,
+            stepHistory: [ EcomStep.TRADE_IN_EXISTS_CHOOSER ],
+            isBackwardsStepForbidden: false
         };
     }
 
@@ -203,87 +194,6 @@ class Ecom extends React.Component<IEcomProps, IState> {
         });
     }
 
-    handleInputChange(e) {
-        const name = e.target.name;
-
-        this.setState({
-            [name]: e.target.value
-        });
-    }
-
-    handleInputBlur(e) {
-        let interact = { ...this.state.interact };
-        interact[e.target.name] = true;
-        this.setState({ interact });
-    }
-
-    handleHasTradeInCarChange(value) {
-        this.setState({
-            hasTradeInCar: value
-        }, () => {
-            this.handleNextStepClick();
-        });
-    }
-
-    handlePaymentMethodChange(paymentMethod) {
-        this.setState({
-            paymentMethod
-        }, () => {
-            this.handleNextStepClick();
-        });
-    }
-
-    handleInsuranceOptionChange(insuranceOption) {
-        this.setState({
-            insuranceOption
-        }, () => {
-            this.handleNextStepClick();
-        });
-    }
-
-    handleInsuranceAlternativeChange(insuranceAlternative) {
-        this.setState({
-            insuranceAlternative
-        }, () => {
-            this.handleNextStepClick();
-        });
-    }
-
-    handleInsuranceExpectedDrivingDistanceChange(expectedDrivingDistance) {
-        this.setState({
-            insuranceExpectedDrivingDistance: expectedDrivingDistance
-        });
-    }
-
-    handleCustomerInformationInputTypeChange(customerInformationInputType) {
-        this.setState({
-            customerInformationInputType
-        }, () => {
-            this.handleNextStepClick();
-        });
-    }
-
-    handleTermsToggle() {
-        this.setState({
-            hasAcceptedTerms: !this.state.hasAcceptedTerms
-        });
-    }
-
-    handleDeliveryTypeChange(deliveryType) {
-        this.setState({
-            deliveryType
-        }, () => {
-            this.handleNextStepClick();
-        });
-    }
-
-    handleFinancingValuesChange(downPayment, duration) {
-        this.setState({
-            financingDownPayment: downPayment,
-            financingDuration: duration
-        });
-    }
-
     render() {
         const canPressBackButton = this.state.stepHistory.length > 1 && !this.state.isBackwardsStepForbidden;
 
@@ -299,26 +209,12 @@ class Ecom extends React.Component<IEcomProps, IState> {
 
                         <div data-am-page="">
                             <EcomStepContent
-                                {...this.state}
+                                step={this.state.step}
 
                                 onNextStepClick={this.handleNextStepClick}
-                                onSpecificStepClick={this.handleSpecificStepClick}
-
-                                onInputChange={this.handleInputChange}
-                                onInputBlur={this.handleInputBlur}
-                                onHasTradeInCarChange={this.handleHasTradeInCarChange}
-                                onPaymentMethodChange={this.handlePaymentMethodChange}
-                                onInsuranceOptionChange={this.handleInsuranceOptionChange}
-                                onInsuranceAlternativeChange={this.handleInsuranceAlternativeChange}
-                                onInsuranceExpectedDrivingDistanceChange={this.handleInsuranceExpectedDrivingDistanceChange}
-                                onCustomerInformationInputTypeChange={this.handleCustomerInformationInputTypeChange}
-                                onTermsToggle={this.handleTermsToggle}
-                                onDeliveryTypeChange={this.handleDeliveryTypeChange}
-                                onFinancingValuesChange={this.handleFinancingValuesChange}
-
                                 onShowCustomerInformationInitial={() => this.handleSpecificStepClick(EcomStep.CUSTOMER_INFORMATION_INITIAL)}
                                 onShowInsuranceInformationDefinition={() => this.handleSpecificStepClick(EcomStep.INSURANCE_INFORMATION_DEFINITION)}
-                                onShowTradeInCarDefinition={() => this.handleSpecificStepClick(EcomStep.TRADE_IN_CAR_DEFINITION)} />
+                                onShowTradeInCarDefinition={() => this.handleSpecificStepClick(EcomStep.TRADE_IN_CAR_DEFINITION)} />*
                         </div>
                     </div>
 

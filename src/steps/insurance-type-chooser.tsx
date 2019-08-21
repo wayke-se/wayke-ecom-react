@@ -3,7 +3,6 @@ import React from 'react';
 import InsuranceOption from '../enums/insurance-option';
 
 export interface IInsuranceTypeChooserProps {
-    onInsuranceOptionChange: (insuranceOption: InsuranceOption) => void;
 };
 
 const InsuranceTypeChooser = (props: IInsuranceTypeChooserProps) => {

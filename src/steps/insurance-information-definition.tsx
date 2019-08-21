@@ -4,10 +4,6 @@ import { validateSSN } from '../utils/validation';
 import { IEcomLifecycle, IInsuranceData, IInteractData, IExpectedDrivingDistance } from '../types';
 
 export interface IInsuranceInformationDefinitionProps extends IEcomLifecycle {
-    insurance: IInsuranceData;
-    interact: IInteractData;
-
-    onInsuranceExpectedDrivingDistanceChange: (drivingDistance: IExpectedDrivingDistance) => void;
 };
 
 interface IState {
