@@ -29,10 +29,6 @@ const getNewStep = (currentStep, state) => {
 };
 
 class Ecom extends React.Component<IEcomProps, IState> {
-    private state: IState = {
-        registrationNumber: "",
-    };
-
     constructor(props: IEcomProps) {
         super(props);
 
