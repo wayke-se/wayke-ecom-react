@@ -2,6 +2,17 @@ import React from 'react';
 
 import EcomStep from './enums/ecom-step';
 
+export interface IEcomTimelineProps {
+    step: number;
+};
+
+interface IItemProps {
+    label: string;
+    shouldHide: boolean;
+    isPassed: boolean;
+    isCurrent: boolean;
+};
+
 const StepLabels = {
     [EcomStep.TRADE_IN_EXISTS_CHOOSER]: '1. Inbyte',
     [EcomStep.TRADE_IN_CAR_DEFINITION]: null,
@@ -22,7 +33,7 @@ const StepLabels = {
     [EcomStep.FINAL_CONFIRMATION]: '6. Bekräftelse',
 };
 
-const Item = (props) => {
+const Item = (props: IItemProps) => {
     if (props.shouldHide) {
         return (null);
     }
@@ -46,7 +57,7 @@ const Item = (props) => {
     );
 };
 
-const EcomTimeline = (props) => {
+const EcomTimeline = (props: IEcomTimelineProps) => {
     const currentStep = props.step;
     const ecomStepValues = Object.values(EcomStep);
 

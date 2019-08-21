@@ -1,6 +1,11 @@
 import React from 'react';
 
-const EcomHeader = (props) => {
+export interface IEcomHeaderProps {
+    canPressBackButton: boolean;
+    onPreviousStepClick: () => void;
+};
+
+const EcomHeader = (props: IEcomHeaderProps) => {
     return (
         <header data-am-header="">
             <div className="container">

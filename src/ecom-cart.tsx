@@ -1,10 +1,21 @@
 import React from 'react';
 
+export interface IEcomCartProps {
+    vehicle: {
+        title: string;
+        shortDescription: string;
+        price: number;
+    }
+};
+
+interface ICartItemProps extends IEcomCartProps {
+};
+
 const numberSeparator = (value) => {
     return value
 }
 
-const CartItem = (props) => {
+const CartItem = (props: ICartItemProps) => {
     const [ isExtended, setIsExtended ] = React.useState(false);
 
     return (
@@ -33,14 +44,10 @@ const CartItem = (props) => {
     );
 };
 
-const EcomCart = (props) => {
-    const items = [
-        <CartItem key={0} vehicle={props.vehicle} />
-    ];
-
+const EcomCart = (props: IEcomCartProps) => {
     return (
         <div data-am-footer="">
-            {items}
+            <CartItem vehicle={props.vehicle} />
         </div>
     );
 };

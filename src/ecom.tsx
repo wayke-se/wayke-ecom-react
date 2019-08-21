@@ -8,6 +8,17 @@ import EcomStepContent from './ecom-step-content';
 import EcomCart from './ecom-cart';
 import EcomTimeline from './ecom-timeline';
 
+export interface IEcomProps {
+    vehicle: {
+        title: string;
+        shortDescription: string;
+    }
+}
+
+interface IState {
+    registrationNumber: string;
+}
+
 const getNewStep = (currentStep, state) => {
     const transition = EcomStepTransitions[currentStep];
 
@@ -17,17 +28,6 @@ const getNewStep = (currentStep, state) => {
         throw 'Did not find a possible transition.';
     }
 };
-
-interface IState {
-    registrationNumber: string;
-}
-
-export interface IEcomProps {
-    vehicle: {
-        title: string;
-        shortDescription: string;
-    }
-}
 
 class Ecom extends React.Component<IEcomProps, IState> {
     private state: IState = {
