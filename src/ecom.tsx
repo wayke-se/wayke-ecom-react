@@ -9,6 +9,7 @@ import EcomCart from './ecom-cart';
 import EcomTimeline from './ecom-timeline';
 
 import { IVehicle } from "./types";
+import { EcomProvider } from "./ecom-context-provider";
 
 export interface IEcomProps {
     vehicle: IVehicle;
@@ -287,46 +288,45 @@ class Ecom extends React.Component<IEcomProps, IState> {
         const canPressBackButton = this.state.stepHistory.length > 1 && !this.state.isBackwardsStepForbidden;
 
         return (
-            <div data-am-frame="" style={{ marginBottom: '200px'}}>
-                <div className="frame-body">
-                    <EcomHeader
-                        canPressBackButton={canPressBackButton}
-                        onPreviousStepClick={this.handlePreviousStepClick} />
+            <EcomProvider>
+                <div data-am-frame="" style={{ marginBottom: '200px'}}>
+                    <div className="frame-body">
+                        <EcomHeader
+                            canPressBackButton={canPressBackButton}
+                            onPreviousStepClick={this.handlePreviousStepClick} />
 
-                    <EcomTimeline step={this.state.step} />
+                        <EcomTimeline step={this.state.step} />
 
-                    <div data-am-page="">
-                        <EcomStepContent
-                            {...this.state}
+                        <div data-am-page="">
+                            <EcomStepContent
+                                {...this.state}
 
-                            onNextStepClick={this.handleNextStepClick}
-                            onSpecificStepClick={this.handleSpecificStepClick}
+                                onNextStepClick={this.handleNextStepClick}
+                                onSpecificStepClick={this.handleSpecificStepClick}
 
-                            onInputChange={this.handleInputChange}
-                            onInputBlur={this.handleInputBlur}
-                            onHasTradeInCarChange={this.handleHasTradeInCarChange}
-                            onPaymentMethodChange={this.handlePaymentMethodChange}
-                            onInsuranceOptionChange={this.handleInsuranceOptionChange}
-                            onInsuranceAlternativeChange={this.handleInsuranceAlternativeChange}
-                            onInsuranceExpectedDrivingDistanceChange={this.handleInsuranceExpectedDrivingDistanceChange}
-                            onCustomerInformationInputTypeChange={this.handleCustomerInformationInputTypeChange}
-                            onTermsToggle={this.handleTermsToggle}
-                            onDeliveryTypeChange={this.handleDeliveryTypeChange}
-                            onFinancingValuesChange={this.handleFinancingValuesChange}
+                                onInputChange={this.handleInputChange}
+                                onInputBlur={this.handleInputBlur}
+                                onHasTradeInCarChange={this.handleHasTradeInCarChange}
+                                onPaymentMethodChange={this.handlePaymentMethodChange}
+                                onInsuranceOptionChange={this.handleInsuranceOptionChange}
+                                onInsuranceAlternativeChange={this.handleInsuranceAlternativeChange}
+                                onInsuranceExpectedDrivingDistanceChange={this.handleInsuranceExpectedDrivingDistanceChange}
+                                onCustomerInformationInputTypeChange={this.handleCustomerInformationInputTypeChange}
+                                onTermsToggle={this.handleTermsToggle}
+                                onDeliveryTypeChange={this.handleDeliveryTypeChange}
+                                onFinancingValuesChange={this.handleFinancingValuesChange}
 
-                            onShowCustomerInformationInitial={() => this.handleSpecificStepClick(EcomStep.CUSTOMER_INFORMATION_INITIAL)}
-                            onShowInsuranceInformationDefinition={() => this.handleSpecificStepClick(EcomStep.INSURANCE_INFORMATION_DEFINITION)}
-                            onShowTradeInCarDefinition={() => this.handleSpecificStepClick(EcomStep.TRADE_IN_CAR_DEFINITION)} />
+                                onShowCustomerInformationInitial={() => this.handleSpecificStepClick(EcomStep.CUSTOMER_INFORMATION_INITIAL)}
+                                onShowInsuranceInformationDefinition={() => this.handleSpecificStepClick(EcomStep.INSURANCE_INFORMATION_DEFINITION)}
+                                onShowTradeInCarDefinition={() => this.handleSpecificStepClick(EcomStep.TRADE_IN_CAR_DEFINITION)} />
+                        </div>
                     </div>
-                </div>
 
-                <EcomCart vehicle={this.props.vehicle} />
-            </div>
+                    <EcomCart vehicle={this.props.vehicle} />
+                </div>
+            </EcomProvider>
         );
     }
 }
-
-Ecom.propTypes = {
-};
 
 export default Ecom;
