@@ -52,6 +52,7 @@
     "tslint": "^5.18.0",
     "tslint-config-airbnb": "^5.11.1",
     "tslint-config-prettier": "^1.18.0",
+    "tslint-react": "^4.0.0",
     "typescript": "^3.5.3"
   },
   "peerDependencies": {
@@ -63,13 +64,14 @@
   "jest": {
     "moduleFileExtensions": [
       "ts",
-      "js"
+      "js",
+      "tsx"
     ],
     "transform": {
       "^.+\\.(ts|tsx)$": "ts-jest"
     },
     "testMatch": [
-      "<rootDir>/src/**/*.spec.(ts|js)"
+      "<rootDir>/src/**/*.spec.(ts|js|tsx)"
     ]
   },
   "@pika/pack": {
@@ -80,7 +82,7 @@
           "exclude": [
             "__test__/*",
             "@types/*",
-            "**/*.spec.ts"
+            "**/*.spec.ts[x]"
           ]
         }
       ],
@@ -97,5 +99,8 @@
   },
   "files": [
     "dist-*/"
-  ]
+  ],
+  "dependencies": {
+    "rc-slider": "^8.6.13"
+  }
 }

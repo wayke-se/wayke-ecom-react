@@ -1,6 +1,8 @@
 import React from 'react';
 
-import { formats } from '../../../../helpers';
+const numberSeparator = (value) => {
+    return value
+}
 
 const CartItem = (props) => {
     const [ isExtended, setIsExtended ] = React.useState(false);
@@ -16,7 +18,7 @@ const CartItem = (props) => {
                         <div className="cart-header-title">
                         <span className="font-medium">{props.vehicle.title}</span> {props.vehicle.shortDescription}
                         </div>
-                        <div className="cart-header-price">{formats.numberSeparator(props.vehicle.price)} kr</div>
+                        <div className="cart-header-price">{numberSeparator(props.vehicle.price)} kr</div>
                     </div>
                     <div className="cart-header-content-icon-container">
                         <div className="cart-header-content-icon"></div>

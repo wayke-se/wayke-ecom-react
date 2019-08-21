@@ -1,7 +1,7 @@
 import React from 'react';
 
 import CustomerInformationInputType from '../enums/customer-information-input-type';
-import { validateEmail, validateSSN, validateZip } from '../../../../../utils/validation';
+import { validateEmail, validateSSN, validateZip } from '../utils/validation';
 
 const AutomaticContent = (props) => {
     return (

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { validateSSN } from '../../../../../utils/validation';
+import { validateSSN } from '../utils/validation';
 
 const options = [
     {

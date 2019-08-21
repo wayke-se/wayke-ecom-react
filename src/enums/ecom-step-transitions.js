@@ -3,7 +3,7 @@ import PaymentMethod from './payment-method';
 import InsuranceOption from './insurance-option';
 import CustomerInformationInputType from './customer-information-input-type';
 
-import { validateRegistrationNumber, validateMilage, validateSSN, validateZip } from '../../../../../utils/validation';
+import { validateRegistrationNumber, validateMilage, validateSSN, validateZip } from '../utils/validation';
 
 export default {
     [EcomStep.TRADE_IN_EXISTS_CHOOSER]: (state) => {

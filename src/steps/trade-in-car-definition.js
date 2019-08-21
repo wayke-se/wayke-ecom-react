@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { validateRegistrationNumber, validateMilage } from '../../../../../utils/validation';
+import { validateRegistrationNumber, validateMilage } from '../utils/validation';
 
 const TradeInCarDefinition = (props) => {
     const hasErrorRegistrationNumber = props.interact.registrationNumber && !validateRegistrationNumber(props.registrationNumber);

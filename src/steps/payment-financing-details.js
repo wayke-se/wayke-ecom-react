@@ -1,7 +1,10 @@
 import React from 'react';
 
-import { validateNumberInRange } from '../../../../../utils/validation';
-import Slider from 'rc-slider';
+import { validateNumberInRange } from '../utils/validation';
+//import Slider from 'rc-slider';
+const Slider = () => {
+    return <div></div>
+};
 
 const downPaymentMin = 50000;
 const downPaymentMax = 500000;
