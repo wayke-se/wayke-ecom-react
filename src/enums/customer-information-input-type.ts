@@ -1,4 +1,6 @@
-export default {
-    AUTOMATIC: 0,
-    MANUAL: 1,
+enum CustomerInformationInputType {
+    AUTOMATIC,
+    MANUAL
 };
+
+export default CustomerInformationInputType;

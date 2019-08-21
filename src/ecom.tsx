@@ -1,7 +1,7 @@
 import React from "react";
 
 import EcomStep from './enums/ecom-step';
-import EcomStepTransitions from './enums/ecom-step-transitions';
+import EcomStepTransitions from './ecom-step-transitions';
 
 import EcomHeader from './ecom-header';
 import EcomStepContent from './ecom-step-content';

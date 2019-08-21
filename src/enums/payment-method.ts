@@ -1,5 +1,7 @@
-export default {
-    CASH: 0,
-    FINANCING: 1,
-    LEASING: 2,
+enum PaymentMethod {
+    CASH,
+    FINANCING,
+    LEASING
 };
+
+export default PaymentMethod;

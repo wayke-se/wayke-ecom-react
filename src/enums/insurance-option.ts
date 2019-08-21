@@ -1,3 +1,5 @@
-export default {
-    AUDI_INSURANCE: 0
+enum InsuranceOption {
+    AUDI_INSURANCE
 };
+
+export default InsuranceOption;

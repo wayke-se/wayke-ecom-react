@@ -1,4 +1,6 @@
-export default {
-    HOME_DELIVERY: 0,
-    SELF_PICKUP: 1,
+enum DeliveryType {
+    HOME_DELIVERY,
+    SELF_PICKUP
 };
+
+export default DeliveryType;
