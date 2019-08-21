@@ -1,24 +1,37 @@
 import React from 'react';
 
 import { validateNumberInRange } from '../utils/validation';
+import { IPaymentData, IEcomLifecycle } from '../types';
+
+export interface IPaymentFinancingDetails extends IEcomLifecycle {
+    payment: IPaymentData;
+
+    onFinancingValuesChange: (downPayment: number, duration: number) => void;
+};
+
+interface IState {
+    downPayment: string;
+    duration: number;
+};
+
 //import Slider from 'rc-slider';
-const Slider = () => {
+const Slider = (props) => {
     return <div></div>
 };
 
 const downPaymentMin = 50000;
 const downPaymentMax = 500000;
 
-const getIndexFromDuration = (duration) => {
+const getIndexFromDuration = (duration: number): number => {
     return duration / 24 - 1;
 };
 
-const getDurationFromIndex = (index) => {
+const getDurationFromIndex = (index: number): number => {
     return (index + 1) * 24;
 };
 
-class PaymentFinancingDetails extends React.Component {
-    constructor(props) {
+class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetails, IState> {
+    constructor(props: IPaymentFinancingDetails) {
         super(props);
 
         this.handleDurationChange = this.handleDurationChange.bind(this);
@@ -31,8 +44,8 @@ class PaymentFinancingDetails extends React.Component {
         this.handleProceedClick = this.handleProceedClick.bind(this);
 
         this.state = {
-            downPayment: props.financingDownPayment ? '' + props.financingDownPayment : '100000',
-            duration: props.financingDuration ? getIndexFromDuration(props.financingDuration) : 1
+            downPayment: props.payment.financingDownPayment ? '' + props.payment.financingDownPayment : '100000',
+            duration: props.payment.financingDuration ? getIndexFromDuration(props.payment.financingDuration) : 1
         };
     }
 

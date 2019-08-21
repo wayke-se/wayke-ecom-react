@@ -2,7 +2,11 @@ import React from 'react';
 
 import InsuranceOption from '../enums/insurance-option';
 
-const InsuranceTypeChooser = (props) => {
+export interface IInsuranceTypeChooserProps {
+    onInsuranceOptionChange: (insuranceOption: InsuranceOption) => void;
+};
+
+const InsuranceTypeChooser = (props: IInsuranceTypeChooserProps) => {
     return (
         <div className="page-main">
             <section className="page-section">

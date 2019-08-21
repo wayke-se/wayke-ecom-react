@@ -3,8 +3,17 @@ import React from 'react';
 import { validateSSN } from '../utils/validation';
 import CustomerInformationInputType from '../enums/customer-information-input-type';
 
-const CustomerInformationInitial = (props) => {
-    const hasPersonalNumberError = props.interact.customerPersonalNumber && !validateSSN(props.customerPersonalNumber);
+import { IInteractData, IEcomLifecycle, ICustomerData } from '../types';
+
+export interface ICustomerInformationInitialProps extends IEcomLifecycle {
+    customer: ICustomerData;
+    interact: IInteractData;
+
+    onCustomerInformationInputTypeChange: (type: CustomerInformationInputType) => void;
+};
+
+const CustomerInformationInitial = (props: ICustomerInformationInitialProps) => {
+    const hasPersonalNumberError = props.interact.customer.personalNumber && !validateSSN(props.customer.personalNumber);
 
     return (
         <div data-am-page="">
@@ -25,7 +34,7 @@ const CustomerInformationInitial = (props) => {
                                 id="information-1-input-personalnr"
                                 name="customerPersonalNumber"
                                 placeholder="ÅÅÅÅMMDD-XXXX"
-                                value={props.customerPersonalNumber || ''}
+                                value={props.customer.personalNumber || ''}
                                 onChange={props.onInputChange}
                                 onBlur={props.onInputBlur} />
                         </div>

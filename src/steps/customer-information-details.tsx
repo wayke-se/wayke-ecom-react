@@ -1,9 +1,28 @@
-import React from 'react';
+import React, { ChangeEvent, FocusEvent } from 'react';
 
 import CustomerInformationInputType from '../enums/customer-information-input-type';
 import { validateEmail, validateSSN, validateZip } from '../utils/validation';
+import { ICustomerData, IEcomLifecycle, IEcomContext, IInteractData } from '../types';
 
-const AutomaticContent = (props) => {
+export interface ICustomerInformationDetailsProps extends IEcomLifecycle {
+    customer: ICustomerData;
+    context: IEcomContext;
+    interact: IInteractData;
+
+    onTermsToggle: () => void;
+    onShowCustomerInformationInitial: () => void;
+};
+
+interface IAutomaticContentProps extends IEcomLifecycle {
+    onShowCustomerInformationInitial: () => void;
+};
+
+interface IManualContentProps extends IEcomLifecycle {
+    customer: ICustomerData;
+    interact: IInteractData;
+};
+
+const AutomaticContent = (props: IAutomaticContentProps) => {
     return (
         <React.Fragment>
             <section className="page-section page-section-border">
@@ -53,12 +72,12 @@ const AutomaticContent = (props) => {
     );
 };
 
-const ManualContent = (props) => {
-    const hasPersonalNumberError = props.interact.customerPersonalNumber && !validateSSN(props.customerPersonalNumber);
-    const hasNameError = props.interact.customerName && !props.customerName;
-    const hasAdressError = props.interact.customerAdress && !props.customerAdress;
-    const hasZipError = props.interact.customerZip && !validateZip(props.customerZip);
-    const hasCityError = props.interact.customerCity && !props.customerCity;
+const ManualContent = (props: IManualContentProps) => {
+    const hasPersonalNumberError = props.interact.customer.personalNumber && !validateSSN(props.customer.personalNumber);
+    const hasNameError = props.interact.customer.name && !props.customer.name;
+    const hasAdressError = props.interact.customer.adress && !props.customer.adress;
+    const hasZipError = props.interact.customer.zip && !validateZip(props.customer.zip);
+    const hasCityError = props.interact.customer.city && !props.customer.city;
 
     return (
         <section className="page-section">
@@ -71,7 +90,7 @@ const ManualContent = (props) => {
                             id="information-2-input-personalnr"
                             name="customerPersonalNumber"
                             placeholder="ÅÅÅÅMMDD-XXXX"
-                            value={props.customerPersonalNumber || ''}
+                            value={props.customer.personalNumber || ''}
                             onChange={props.onInputChange}
                             onBlur={props.onInputBlur} />
                     </div>
@@ -87,7 +106,7 @@ const ManualContent = (props) => {
                             id="information-2-input-name"
                             name="customerName"
                             placeholder="Förnamn Efternamn"
-                            value={props.customerName}
+                            value={props.customer.name}
                             onChange={props.onInputChange}
                             onBlur={props.onInputBlur} />
                     </div>
@@ -103,7 +122,7 @@ const ManualContent = (props) => {
                             id="information-2-input-street"
                             name="customerAdress"
                             placeholder="Gatuadress"
-                            value={props.customerAdress}
+                            value={props.customer.adress}
                             onChange={props.onInputChange}
                             onBlur={props.onInputBlur} />
                     </div>
@@ -119,7 +138,7 @@ const ManualContent = (props) => {
                             id="information-2-input-zip"
                             name="customerZip"
                             placeholder="XXX XX"
-                            value={props.customerZip}
+                            value={props.customer.zip}
                             onChange={props.onInputChange}
                             onBlur={props.onInputBlur} />
                     </div>
@@ -135,7 +154,7 @@ const ManualContent = (props) => {
                             id="information-2-input-city"
                             name="customerCity"
                             placeholder="Postort"
-                            value={props.customerCity}
+                            value={props.customer.city}
                             onChange={props.onInputChange}
                             onBlur={props.onInputBlur} />
                     </div>
@@ -147,10 +166,10 @@ const ManualContent = (props) => {
     );
 };
 
-const CustomerInformationDetails = (props) => {
-    const hasEmailError = props.interact.customerEmail && !validateEmail(props.customerEmail);
-    const hasPhoneError = props.interact.customerPhone && !props.customerPhone;
-    const hasTermsError = props.interact.hasAcceptedTerms && !props.hasAcceptedTerms;
+const CustomerInformationDetails = (props: ICustomerInformationDetailsProps) => {
+    const hasEmailError = props.interact.customer.email && !validateEmail(props.customer.email);
+    const hasPhoneError = props.interact.customer.phone && !props.customer.phone;
+    const hasTermsError = props.interact.context.hasAcceptedTerms && !props.context.hasAcceptedTerms;
 
     return (
         <div data-am-page="">
@@ -161,11 +180,11 @@ const CustomerInformationDetails = (props) => {
                 </div>
             </section>
 
-            { props.customerInformationInputType === CustomerInformationInputType.AUTOMATIC &&
+            { props.customer.inputType === CustomerInformationInputType.AUTOMATIC &&
                 <AutomaticContent {...props} />
             }
 
-            { props.customerInformationInputType === CustomerInformationInputType.MANUAL &&
+            { props.customer.inputType === CustomerInformationInputType.MANUAL &&
                 <ManualContent {...props} />
             }
 
@@ -179,7 +198,7 @@ const CustomerInformationDetails = (props) => {
                                 id="information-2-input-email"
                                 name="customerEmail"
                                 placeholder="E-postadress"
-                                value={props.customerEmail}
+                                value={props.customer.email}
                                 onChange={props.onInputChange}
                                 onBlur={props.onInputBlur} />
                         </div>
@@ -195,7 +214,7 @@ const CustomerInformationDetails = (props) => {
                                 id="information-2-input-phone"
                                 name="customerPhone"
                                 placeholder="Telefonnummer"
-                                value={props.customerPhone}
+                                value={props.customer.phone}
                                 onChange={props.onInputChange}
                                 onBlur={props.onInputBlur} />
                         </div>
@@ -208,7 +227,7 @@ const CustomerInformationDetails = (props) => {
                             <input type="checkbox"
                                 id="information-2-checkbox"
                                 name="hasAcceptedTerms"
-                                checked={props.hasAcceptedTerms}
+                                checked={props.context.hasAcceptedTerms}
                                 onChange={props.onTermsToggle}
                                 onBlur={props.onInputBlur} />
 

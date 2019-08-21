@@ -8,11 +8,10 @@ import EcomStepContent from './ecom-step-content';
 import EcomCart from './ecom-cart';
 import EcomTimeline from './ecom-timeline';
 
+import { IVehicle } from "./types";
+
 export interface IEcomProps {
-    vehicle: {
-        title: string;
-        shortDescription: string;
-    }
+    vehicle: IVehicle;
 }
 
 interface IState {

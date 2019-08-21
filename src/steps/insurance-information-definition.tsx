@@ -1,6 +1,18 @@
 import React from 'react';
 
 import { validateSSN } from '../utils/validation';
+import { IEcomLifecycle, IInsuranceData, IInteractData, IExpectedDrivingDistance } from '../types';
+
+export interface IInsuranceInformationDefinitionProps extends IEcomLifecycle {
+    insurance: IInsuranceData;
+    interact: IInteractData;
+
+    onInsuranceExpectedDrivingDistanceChange: (drivingDistance: IExpectedDrivingDistance) => void;
+};
+
+interface IState {
+    expectedDrivingDistance: number;
+};
 
 const options = [
     {
@@ -29,19 +41,19 @@ const options = [
     }
 ];
 
-const getIndexFromOption = (option) => {
+const getIndexFromOption = (option: IExpectedDrivingDistance): number => {
     return options.indexOf(option);
 };
 
-class InsuranceInformationDefinition extends React.Component {
-    constructor(props) {
+class InsuranceInformationDefinition extends React.Component<IInsuranceInformationDefinitionProps, IState> {
+    constructor(props: IInsuranceInformationDefinitionProps) {
         super(props);
 
         this.handleExpectedDrivingDistanceChange = this.handleExpectedDrivingDistanceChange.bind(this);
         this.handleProceedClick = this.handleProceedClick.bind(this);
 
         this.state = {
-            expectedDrivingDistance: this.props.insuranceExpectedDrivingDistance ? getIndexFromOption(this.props.insuranceExpectedDrivingDistance) : 0
+            expectedDrivingDistance: this.props.insurance.expectedDrivingDistance ? getIndexFromOption(this.props.insurance.expectedDrivingDistance) : 0
         };
     }
 
@@ -64,7 +76,7 @@ class InsuranceInformationDefinition extends React.Component {
 
         const selectedValue = optionValues[this.state.expectedDrivingDistance];
 
-        const hasPersonalNumberError = this.props.interact.insurancePersonalNumber && !validateSSN(this.props.insurancePersonalNumber);
+        const hasPersonalNumberError = this.props.interact.insurance.personalNumber && !validateSSN(this.props.insurance.personalNumber);
 
         return (
             <div className="page-main">
@@ -85,7 +97,7 @@ class InsuranceInformationDefinition extends React.Component {
                                     id="insurance-input-personalnr"
                                     name="insurancePersonalNumber"
                                     placeholder="ÅÅÅÅMMDD-XXXX"
-                                    value={this.props.insurancePersonalNumber}
+                                    value={this.props.insurance.personalNumber}
                                     onChange={this.props.onInputChange}
                                     onBlur={this.props.onInputBlur} />
                             </div>

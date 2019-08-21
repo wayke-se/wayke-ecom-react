@@ -1,10 +1,16 @@
 import React from 'react';
 
 import { validateRegistrationNumber, validateMilage } from '../utils/validation';
+import { IEcomLifecycle, IInteractData, ITradeInCarData } from '../types';
 
-const TradeInCarDefinition = (props) => {
-    const hasErrorRegistrationNumber = props.interact.registrationNumber && !validateRegistrationNumber(props.registrationNumber);
-    const hasErrorMilage = props.interact.milage && !validateMilage(props.milage);
+export interface ITradeInCarDefinitionProps extends IEcomLifecycle {
+    tradeInCar: ITradeInCarData;
+    interact: IInteractData;
+};
+
+const TradeInCarDefinition = (props: ITradeInCarDefinitionProps) => {
+    const hasErrorRegistrationNumber = props.interact.tradeInCar.registrationNumber && !validateRegistrationNumber(props.tradeInCar.registrationNumber);
+    const hasErrorMilage = props.interact.tradeInCar.milage && !validateMilage(props.tradeInCar.milage);
 
     return (
         <div className="page-main">
@@ -24,7 +30,7 @@ const TradeInCarDefinition = (props) => {
                                     id="exchange-input-regnr"
                                     name="registrationNumber"
                                     placeholder="Registreringsnummer"
-                                    value={props.registrationNumber}
+                                    value={props.tradeInCar.registrationNumber}
                                     onChange={props.onInputChange}
                                     onBlur={props.onInputBlur} />
                         </div>
@@ -38,7 +44,7 @@ const TradeInCarDefinition = (props) => {
                                     id="exchange-input-mileage"
                                     name="milage"
                                     placeholder="Miltal"
-                                    value={props.milage}
+                                    value={props.tradeInCar.milage}
                                     onChange={props.onInputChange}
                                     onBlur={props.onInputBlur} />
                         </div>

@@ -2,7 +2,11 @@ import React from 'react';
 
 import PaymentMethod from '../enums/payment-method';
 
-const PaymentMethodChooser = (props) => {
+export interface IPaymentMethodChooserProps {
+    onPaymentMethodChange: (paymentMethod: PaymentMethod) => void;
+};
+
+const PaymentMethodChooser = (props: IPaymentMethodChooserProps) => {
     return (
         <div className="page-main">
             <section className="page-section">

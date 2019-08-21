@@ -1,6 +1,12 @@
 import React from 'react';
+import { ITradeInCarData, IEcomLifecycle } from '../types';
 
-const TradeInConfirmCar = (props) => {
+export interface ITradeInConfirmCarProps extends IEcomLifecycle {
+    tradeInCar: ITradeInCarData;
+    onShowTradeInCarDefinition: () => void;
+};
+
+const TradeInConfirmCar = (props: ITradeInConfirmCarProps) => {
     return (
         <div className="page-main">
             <section className="page-section">
@@ -12,7 +18,7 @@ const TradeInConfirmCar = (props) => {
 
             <section className="page-section">
                 <div data-am-box="">
-                    <div data-am-label="">{props.registrationNumber}</div>
+                    <div data-am-label="">{props.tradeInCar.registrationNumber}</div>
                     <div className="m-t-half">
                         <span className="font-medium">Peugot 308 Sportswagon</span> 1.6 BlueHDI FAP Manual, 120hp, 2015 6-speed
                     </div>

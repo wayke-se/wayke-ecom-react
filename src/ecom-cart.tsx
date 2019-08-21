@@ -1,11 +1,8 @@
 import React from 'react';
+import { IVehicle } from './types';
 
 export interface IEcomCartProps {
-    vehicle: {
-        title: string;
-        shortDescription: string;
-        price: number;
-    }
+    vehicle: IVehicle;
 };
 
 interface ICartItemProps extends IEcomCartProps {

@@ -1,6 +1,14 @@
 import React from 'react';
+import { IInsuranceData } from '../types';
 
-const InsuranceAlternativeChooser = (props) => {
+export interface IInsuranceAlternativeChooserProps {
+    insurance: IInsuranceData;
+
+    onInsuranceAlternativeChange: (id: string) => void;
+    onShowInsuranceInformationDefinition: () => void;
+};
+
+const InsuranceAlternativeChooser = (props: IInsuranceAlternativeChooserProps) => {
     const insuranceAlternatives = [
         {
             id: 'ia1',
@@ -63,11 +71,11 @@ const InsuranceAlternativeChooser = (props) => {
                 </div>
 
                 <div className="l-inline-block m-r">
-                    <i className="icon-profile m-r-half"></i>{props.insurancePersonalNumber}
+                    <i className="icon-profile m-r-half"></i>{props.insurance.personalNumber}
                 </div>
 
                 <div className="l-inline-block">
-                    <i className="icon-mileage m-r-half"></i>{props.insuranceExpectedDrivingDistance.min}-{props.insuranceExpectedDrivingDistance.max} mil
+                    <i className="icon-mileage m-r-half"></i>{props.insurance.expectedDrivingDistance.min}-{props.insurance.expectedDrivingDistance.max} mil
                 </div>
             </section>
 
