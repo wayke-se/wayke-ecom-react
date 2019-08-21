@@ -15,7 +15,10 @@ import TradeInExistsChooser from './steps/trade-in-exists-chooser';
 
 import EcomStep from './enums/ecom-step';
 
-const EcomStepContent = (props) => {
+interface AllProps extends ITradeInExistsChooserProps {
+}
+
+const EcomStepContent = (props: AllProps) => {
     switch (props.step) {
         case EcomStep.TRADE_IN_EXISTS_CHOOSER:
             return <TradeInExistsChooser {...props} />;

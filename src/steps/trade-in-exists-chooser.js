@@ -1,6 +1,10 @@
 import React from 'react';
 
-const TradeInExistsChooser = (props) => {
+export interface ITradeInExistsChooserProps {
+    onHasTradeInCarChange: (value: boolean): void;
+}
+
+const TradeInExistsChooser = (props: ITradeInExistsChooserProps) => {
     return (
         <div className="page-main">
             <section className="page-section">

@@ -18,8 +18,23 @@ const getNewStep = (currentStep, state) => {
     }
 };
 
-class Ecom extends React.Component {
-    constructor(props) {
+interface IState {
+    registrationNumber: string;
+}
+
+export interface IEcomProps {
+    vehicle: {
+        title: string;
+        shortDescription: string;
+    }
+}
+
+class Ecom extends React.Component<IEcomProps, IState> {
+    private state: IState = {
+        registrationNumber: "",
+    };
+
+    constructor(props: IEcomProps) {
         super(props);
 
         this.componentDidTransitionForward = this.componentDidTransitionForward.bind(this);
