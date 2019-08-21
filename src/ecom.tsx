@@ -9,7 +9,9 @@ import EcomCart from './ecom-cart';
 import EcomTimeline from './ecom-timeline';
 
 import { IVehicle } from "./types";
-import { EcomProvider } from "./ecom-context-provider";
+import { EcomProvider, getDispatch, getCustomer, getInsurance, getInteract } from "./ecom-context-provider";
+import { setInteracted } from './actions/interact';
+import { updatePersonalNumber as updateCustomerPersonalNumber } from './actions/customer';
 
 export interface IEcomProps {
     vehicle: IVehicle;
@@ -30,48 +32,6 @@ const getNewStep = (currentStep: EcomStep, state): EcomStep => {
         throw 'Did not find a possible transition.';
     }
 };
-
-/*
-            hasTradeInCar: null,
-            registrationNumber: '',
-            milage: '',
-
-            paymentMethod: null,
-            financingDownPayment: '',
-            financingDuration: '',
-
-            insuranceOption: null,
-            insurancePersonalNumber: '',
-            insuranceExpectedDrivingDistance: null,
-            insuranceAlternative: null,
-
-            customerPersonalNumber: null,
-            customerInformationInputType: null,
-            customerName: '',
-            customerAdress: '',
-            customerZip: '',
-            customerCity: '',
-            customerEmail: '',
-            customerPhone: '',
-            hasAcceptedTerms: false,
-
-            deliveryType: null,
-
-            interact: {
-                registrationNumber: false,
-                milage: false,
-
-                insurancePersonalNumber: false,
-
-                customerPersonalNumber: false,
-                customerName: false,
-                customerAdress: false,
-                customerZip: false,
-                customerCity: false,
-                customerEmail: false,
-                customerPhone: false,
-                hasAcceptedTerms: false,
-            }*/
 
 class Ecom extends React.Component<IEcomProps, IState> {
     constructor(props: IEcomProps) {
@@ -94,12 +54,13 @@ class Ecom extends React.Component<IEcomProps, IState> {
     componentDidTransitionForward() {
         //Custom lifecycle event
 
-        const shouldUpdateCustomerPersonalNumber = this.state.insurancePersonalNumber && this.state.customerPersonalNumber === null;
+        const insurance = getInsurance();
+        const customer = getCustomer();
+
+        const shouldUpdateCustomerPersonalNumber = insurance.personalNumber && customer.personalNumber === null;
 
         if (shouldUpdateCustomerPersonalNumber) {
-            this.setState({
-                customerPersonalNumber: this.state.insurancePersonalNumber
-            });
+            updateCustomerPersonalNumber(getDispatch(), insurance.personalNumber);
         }
     }
 
@@ -124,35 +85,39 @@ class Ecom extends React.Component<IEcomProps, IState> {
     }
 
     handleRejectedStepForward() {
-        let interact = { ...this.state.interact };
+        const interact = { ...getInteract() };
+        const dispact = getDispatch();
 
         switch (this.state.step) {
             case EcomStep.TRADE_IN_CAR_DEFINITION:
-                interact.registrationNumber = true;
-                interact.milage = true;
-                this.setState({ interact });
+                interact.tradeInCar = {
+                    registrationNumber: true,
+                    milage: true
+                }
+                setInteracted(dispact, interact);
                 break;
 
             case EcomStep.INSURANCE_INFORMATION_DEFINITION:
-                interact.insurancePersonalNumber = true;
-                this.setState({ interact });
+                interact.insurance.personalNumber = true;
+                setInteracted(dispact, interact);
                 break;
 
             case EcomStep.CUSTOMER_INFORMATION_INITIAL:
-                interact.customerPersonalNumber = true;
-                this.setState({ interact });
+                interact.customer.personalNumber = true;
+                setInteracted(dispact, interact);
                 break;
 
             case EcomStep.CUSTOMER_INFORMATION_DETAILS:
-                interact.customerPersonalNumber = true;
-                interact.customerName = true;
-                interact.customerAdress = true;
-                interact.customerZip = true;
-                interact.customerCity = true;
-                interact.customerEmail = true;
-                interact.customerPhone = true;
-                interact.hasAcceptedTerms = true;
-                this.setState({ interact });
+                interact.customer = {
+                    personalNumber: true,
+                    name: true,
+                    adress: true,
+                    zip: true,
+                    city: true,
+                    email: true,
+                    phone: true
+                };
+                setInteracted(dispact, interact);
                 break;
         }
     }

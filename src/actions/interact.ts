@@ -1,8 +1,10 @@
-export const UPDATE_ZIP = "CUSTOMER_UPDATE_ZIP";
+export const SET_INTERACTED = "INTERACT_SET_INTERACTED";
 
-export const updateZip = (dispatch: any, zip: string) => {
+export const setInteracted = (dispatch: any, newInteract: any) => {
     dispatch({
-        type: UPDATE_ZIP,
-        data: { zip }
+        type: SET_INTERACTED,
+        data: {
+            newInteract
+        }
     });
 };
