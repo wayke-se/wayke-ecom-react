@@ -5,6 +5,13 @@ import DeliveryType from "./enums/delivery-type";
 import InsuranceOption from "./enums/insurance-option";
 import PaymentMethod from "./enums/payment-method";
 
+export interface IEcomLifecycle {
+    onNextStepClick: () => void;
+    onShowCustomerInformationInitial: () => void;
+    onShowInsuranceInformationDefinition: () => void;
+    onShowTradeInCarDefinition: () => void;
+};
+
 export interface IVehicle {
     title: string;
     shortDescription: string;
@@ -13,13 +20,6 @@ export interface IVehicle {
 
 export interface IEcomContext {
     hasAcceptedTerms: boolean;
-};
-
-export interface IEcomLifecycle {
-    onNextStepClick: () => void;
-    onShowCustomerInformationInitial: () => void;
-    onShowInsuranceInformationDefinition: () => void;
-    onShowTradeInCarDefinition: () => void;
 };
 
 export interface ITradeInCarData {
