@@ -116,7 +116,6 @@ class Slider extends React.Component<ISliderProps, IState> {
         this.setState({
             isDragging: false
         }, function() {
-            console.log("change")
             this.props.onAfterChange();
         });
     }

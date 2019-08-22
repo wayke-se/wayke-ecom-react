@@ -1,5 +1,7 @@
 import React from 'react';
+
 import { IVehicle } from './types';
+import { numberSeparator } from './utils/helpers';
 
 export interface IEcomCartProps {
     vehicle: IVehicle;
@@ -7,10 +9,6 @@ export interface IEcomCartProps {
 
 interface ICartItemProps extends IEcomCartProps {
 };
-
-const numberSeparator = (value) => {
-    return value
-}
 
 const CartItem = (props: ICartItemProps) => {
     const [ isExtended, setIsExtended ] = React.useState(false);
