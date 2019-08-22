@@ -14,10 +14,11 @@ import TradeInConfirmCar from './steps/trade-in-confirm-car';
 import TradeInExistsChooser from './steps/trade-in-exists-chooser';
 
 import EcomStep from './enums/ecom-step';
-import { IEcomLifecycle } from './types';
+import { IEcomLifecycle, IEcomData, IEcomStore } from './types';
 
-interface AllProps extends IEcomLifecycle {
+interface AllProps extends IEcomLifecycle, IEcomStore {
     step: EcomStep;
+    data: IEcomData;
 }
 
 const EcomStepContent = (props: AllProps) => {

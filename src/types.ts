@@ -1,9 +1,14 @@
-import { ChangeEvent, FocusEvent } from 'react';
-
 import CustomerInformationInputType from "./enums/customer-information-input-type";
 import DeliveryType from "./enums/delivery-type";
 import InsuranceOption from "./enums/insurance-option";
 import PaymentMethod from "./enums/payment-method";
+import StoreAction from './enums/store-action';
+
+export interface IVehicle {
+    title: string;
+    shortDescription: string;
+    price: number;
+};
 
 export interface IEcomLifecycle {
     onNextStepClick: () => void;
@@ -12,10 +17,18 @@ export interface IEcomLifecycle {
     onShowTradeInCarDefinition: () => void;
 };
 
-export interface IVehicle {
-    title: string;
-    shortDescription: string;
-    price: number;
+export interface IEcomStore {
+    dispatchStoreAction: (key: StoreAction, value: any) => void;
+};
+
+export interface IEcomData {
+    customer: ICustomerData,
+    delivery: IDeliveryData,
+    ecomContext: IEcomContext,
+    insurance: IInsuranceData,
+    interact: IInteractData,
+    payment: IPaymentData,
+    tradeInCar: ITradeInCarData
 };
 
 export interface IEcomContext {

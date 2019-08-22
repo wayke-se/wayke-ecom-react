@@ -1,0 +1,10 @@
+enum StoreAction {
+    CUSTOMER_UPDATE_PERSONAL_NUMBER,
+
+    INTERACT_SET_ALL_FOR_TYPE,
+    INTERACT_UPDATE_SPECIFIC,
+
+    TRADE_IN_UPDATE_HAS_TRADE_IN_CAR
+};
+
+export default StoreAction;
