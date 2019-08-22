@@ -1,14 +1,27 @@
 import React from 'react';
 
 import { validateRegistrationNumber, validateMilage } from '../utils/validation';
-import { IEcomLifecycle, IInteractData, ITradeInCarData } from '../types';
+import { IEcomLifecycle, IEcomStore } from '../types';
+import StoreAction from '../enums/store-action';
 
-export interface ITradeInCarDefinitionProps extends IEcomLifecycle {
+export interface ITradeInCarDefinitionProps extends IEcomStore, IEcomLifecycle {
 };
 
 const TradeInCarDefinition = (props: ITradeInCarDefinitionProps) => {
-    const hasErrorRegistrationNumber = props.interact.tradeInCar.registrationNumber && !validateRegistrationNumber(props.tradeInCar.registrationNumber);
-    const hasErrorMilage = props.interact.tradeInCar.milage && !validateMilage(props.tradeInCar.milage);
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        props.dispatchStoreAction(StoreAction.UPDATE_NAMED_VALUE, {
+            type: 'tradeInCar',
+            name: e.target.name,
+            value: e.target.value
+        });
+    };
+
+    const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+        props.dispatchStoreAction(StoreAction.INTERACT_UPDATE_SPECIFIC, { type: 'tradeInCar', name: e.target.name });
+    };
+
+    const hasErrorRegistrationNumber = props.data.interact.tradeInCar.registrationNumber && !validateRegistrationNumber(props.data.tradeInCar.registrationNumber);
+    const hasErrorMilage = props.data.interact.tradeInCar.milage && !validateMilage(props.data.tradeInCar.milage);
 
     return (
         <div className="page-main">
@@ -28,9 +41,9 @@ const TradeInCarDefinition = (props: ITradeInCarDefinitionProps) => {
                                     id="exchange-input-regnr"
                                     name="registrationNumber"
                                     placeholder="Registreringsnummer"
-                                    value={props.tradeInCar.registrationNumber}
-                                    onChange={props.onInputChange}
-                                    onBlur={props.onInputBlur} />
+                                    value={props.data.tradeInCar.registrationNumber}
+                                    onChange={handleInputChange}
+                                    onBlur={handleBlur} />
                         </div>
                         <div className="alert">Fel format.</div>
                     </div>
@@ -42,9 +55,9 @@ const TradeInCarDefinition = (props: ITradeInCarDefinitionProps) => {
                                     id="exchange-input-mileage"
                                     name="milage"
                                     placeholder="Miltal"
-                                    value={props.tradeInCar.milage}
-                                    onChange={props.onInputChange}
-                                    onBlur={props.onInputBlur} />
+                                    value={props.data.tradeInCar.milage}
+                                    onChange={handleInputChange}
+                                    onBlur={handleBlur} />
                         </div>
                         <div className="alert">Mellan 0 och 80 000 mil.</div>
                     </div>

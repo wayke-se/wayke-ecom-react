@@ -8,12 +8,11 @@ import EcomStepContent from './ecom-step-content';
 import EcomCart from './ecom-cart';
 import EcomTimeline from './ecom-timeline';
 
-import { IVehicle, IEcomData, IEcomStore } from './types';
+import { IVehicle, IEcomStore, IEcomData } from './types';
 import StoreAction from './enums/store-action';
 
 interface IEcomLifecycleProps extends IEcomStore {
     vehicle: IVehicle;
-    data: IEcomData;
 }
 
 interface IState {
@@ -22,11 +21,11 @@ interface IState {
     isBackwardsStepForbidden: boolean;
 }
 
-const getNewStep = (currentStep: EcomStep, state): EcomStep => {
+const getNewStep = (currentStep: EcomStep, data: IEcomData): EcomStep => {
     const transition = EcomStepTransitions[currentStep];
 
     if (transition) {
-        return transition(state);
+        return transition(data);
     } else {
         throw 'Did not find a possible transition.';
     }
@@ -64,7 +63,7 @@ class EcomLifecycle extends React.Component<IEcomLifecycleProps, IState> {
     }
 
     handleNextStepClick() {
-        const nextStep = getNewStep(this.state.step, this.state);
+        const nextStep = getNewStep(this.state.step, this.props.data);
 
         if (nextStep === null) {
             this.handleRejectedStepForward();
@@ -84,19 +83,17 @@ class EcomLifecycle extends React.Component<IEcomLifecycleProps, IState> {
     }
 
     handleRejectedStepForward() {
-        const interact = { ...this.props.data.interact };
-
         switch (this.state.step) {
             case EcomStep.TRADE_IN_CAR_DEFINITION:
                 this.props.dispatchStoreAction(StoreAction.INTERACT_SET_ALL_FOR_TYPE, 'tradeInCar');
                 break;
 
             case EcomStep.INSURANCE_INFORMATION_DEFINITION:
-                this.props.dispatchStoreAction(StoreAction.INTERACT_UPDATE_SPECIFIC, { insurance: { personalNumber: true }});
+                this.props.dispatchStoreAction(StoreAction.INTERACT_UPDATE_SPECIFIC, { type: 'insurance', name: 'personalNumber' });
                 break;
 
             case EcomStep.CUSTOMER_INFORMATION_INITIAL:
-                this.props.dispatchStoreAction(StoreAction.INTERACT_UPDATE_SPECIFIC, { customer: { personalNumber: true }});
+                this.props.dispatchStoreAction(StoreAction.INTERACT_UPDATE_SPECIFIC, { type: 'customer', name: 'personalNumber' });
                 break;
 
             case EcomStep.CUSTOMER_INFORMATION_DETAILS:

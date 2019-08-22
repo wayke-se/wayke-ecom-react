@@ -4,17 +4,18 @@ import InsuranceOption from './enums/insurance-option';
 import CustomerInformationInputType from './enums/customer-information-input-type';
 
 import { validateRegistrationNumber, validateMilage, validateSSN, validateZip } from './utils/validation';
+import { IEcomData } from './types';
 
 export default {
-    [EcomStep.TRADE_IN_EXISTS_CHOOSER]: (state) => {
-        if (state.hasTradeInCar) {
+    [EcomStep.TRADE_IN_EXISTS_CHOOSER]: (data: IEcomData) => {
+        if (data.tradeInCar.hasTradeInCar) {
             return EcomStep.TRADE_IN_CAR_DEFINITION;
         } else {
             return EcomStep.PAYMENT_METHOD_CHOOSER;
         }
     },
-    [EcomStep.TRADE_IN_CAR_DEFINITION]: (state) => {
-        const isValid = validateRegistrationNumber(state.registrationNumber) && validateMilage(state.milage);
+    [EcomStep.TRADE_IN_CAR_DEFINITION]: (data: IEcomData) => {
+        const isValid = validateRegistrationNumber(data.tradeInCar.registrationNumber) && validateMilage(data.tradeInCar.milage);
 
         if (isValid) {
             return EcomStep.TRADE_IN_CONFIRM_CAR;
@@ -23,23 +24,23 @@ export default {
         }
     },
     [EcomStep.TRADE_IN_CONFIRM_CAR]: () => EcomStep.PAYMENT_METHOD_CHOOSER,
-    [EcomStep.PAYMENT_METHOD_CHOOSER]: (state) => {
-        if (state.paymentMethod === PaymentMethod.FINANCING) {
+    [EcomStep.PAYMENT_METHOD_CHOOSER]: (data: IEcomData) => {
+        if (data.payment.method === PaymentMethod.FINANCING) {
             return EcomStep.PAYMENT_FINANCING_DETAILS;
         } else {
             return EcomStep.INSURANCE_TYPE_CHOOSER;
         }
     },
     [EcomStep.PAYMENT_FINANCING_DETAILS]: () => EcomStep.INSURANCE_TYPE_CHOOSER,
-    [EcomStep.INSURANCE_TYPE_CHOOSER]: (state) => {
-        if (state.insuranceOption === InsuranceOption.AUDI_INSURANCE) {
+    [EcomStep.INSURANCE_TYPE_CHOOSER]: (data: IEcomData) => {
+        if (data.insurance.insuranceOption === InsuranceOption.AUDI_INSURANCE) {
             return EcomStep.INSURANCE_INFORMATION_DEFINITION;
         } else {
             return EcomStep.CUSTOMER_INFORMATION_INITIAL;
         }
     },
-    [EcomStep.INSURANCE_INFORMATION_DEFINITION]: (state) => {
-        const isValid = validateSSN(state.insurancePersonalNumber);
+    [EcomStep.INSURANCE_INFORMATION_DEFINITION]: (data: IEcomData) => {
+        const isValid = validateSSN(data.insurance.personalNumber);
 
         if (isValid)  {
             return EcomStep.INSURANCE_ALTERNATIVE_CHOOSER;
@@ -48,12 +49,12 @@ export default {
         }
     },
     [EcomStep.INSURANCE_ALTERNATIVE_CHOOSER]: () => EcomStep.CUSTOMER_INFORMATION_INITIAL,
-    [EcomStep.CUSTOMER_INFORMATION_INITIAL]: (state) => {
-        if (state.customerInformationInputType === CustomerInformationInputType.MANUAL) {
+    [EcomStep.CUSTOMER_INFORMATION_INITIAL]: (data: IEcomData) => {
+        if (data.customer.inputType === CustomerInformationInputType.MANUAL) {
             return EcomStep.CUSTOMER_INFORMATION_DETAILS;
         }
 
-        const isValid = validateSSN(state.customerPersonalNumber);
+        const isValid = validateSSN(data.customer.personalNumber);
 
         if (isValid) {
             return EcomStep.CUSTOMER_INFORMATION_DETAILS;
@@ -61,19 +62,19 @@ export default {
             return null;
         }
     },
-    [EcomStep.CUSTOMER_INFORMATION_DETAILS]: (state) => {
-        const isValidPersonalNumber = validateSSN(state.customerPersonalNumber);
-        const isValidEmail = !!state.customerEmail;
-        const isValidPhone = !!state.customerPhone;
-        const hasAcceptedTerms = state.hasAcceptedTerms;
+    [EcomStep.CUSTOMER_INFORMATION_DETAILS]: (data: IEcomData) => {
+        const isValidPersonalNumber = validateSSN(data.customer.personalNumber);
+        const isValidEmail = !!data.customer.email;
+        const isValidPhone = !!data.customer.phone;
+        const hasAcceptedTerms = data.ecomContext.hasAcceptedTerms;
 
         let isValid = isValidPersonalNumber && isValidEmail && isValidPhone && hasAcceptedTerms;
 
-        if (state.customerInformationInputType === CustomerInformationInputType.MANUAL) {
-            const isValidName = !!state.customerName;
-            const isValidAdress = !!state.customerAdress;
-            const isValidZip = validateZip(state.customerZip);
-            const isValidCity = !!state.customerCity;
+        if (data.customer.inputType === CustomerInformationInputType.MANUAL) {
+            const isValidName = !!data.customer.name;
+            const isValidAdress = !!data.customer.adress;
+            const isValidZip = validateZip(data.customer.zip);
+            const isValidCity = !!data.customer.city;
 
             isValid = isValid && isValidName && isValidAdress && isValidZip && isValidCity;
         }

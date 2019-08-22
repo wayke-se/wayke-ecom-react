@@ -81,11 +81,32 @@ class EcomStore extends React.Component<IEcomStoreProps, IState> {
         };
     }
 
-    dispatchStoreAction(key: StoreAction, value: any) {
+    dispatchStoreAction(key: StoreAction, value: any, callback?: () => void) {
+        let stateUpdate = null;
+
         switch (key) {
+            case StoreAction.UPDATE_NAMED_VALUE:
+                const namedValueType = value.type;
+                const namedValueName = value.name;
+                const namedValueValue = value.value;
+
+                const oldContent = this.state[namedValueType];
+
+                stateUpdate = {
+                    [namedValueType]: {
+                        ...oldContent,
+                        [namedValueName]: namedValueValue
+                    }
+                };
+                break;
+
             case StoreAction.CUSTOMER_UPDATE_PERSONAL_NUMBER:
-                // @ts-ignore
-                return this.setState({ customer: { personalNumber: value }});
+                stateUpdate = {
+                    customer: {
+                        personalNumber: value
+                    }
+                };
+                break;
 
             case StoreAction.INTERACT_SET_ALL_FOR_TYPE:
                 const newInteract = {};
@@ -95,24 +116,46 @@ class EcomStore extends React.Component<IEcomStoreProps, IState> {
                     newInteract[key] = true;
                 });
 
-                // @ts-ignore
-                return this.setState({ interact: { newInteract }});
+                stateUpdate = {
+                    interact: {
+                        ...this.state.interact,
+                        [value]: {
+                            ...newInteract
+                        }
+                    }
+                };
+                break;
 
             case StoreAction.INTERACT_UPDATE_SPECIFIC:
-                return this.setState({ interact: value });
+                const interactType = value.type;
+                const interactName = value.name;
 
-            case StoreAction.TRADE_IN_UPDATE_HAS_TRADE_IN_CAR:
-                // @ts-ignore
-                return this.setState({
+                stateUpdate = {
+                    interact: {
+                        ...this.state.interact,
+                        [interactType]: {
+                            ...this.state.interact[interactType],
+                            [interactName]: true
+                        }
+                    }
+                };
+                break;
+
+            case StoreAction.TRADE_IN_CAR_UPDATE_HAS_TRADE_IN_CAR:
+                stateUpdate = {
                     tradeInCar: {
                         ...this.state.tradeInCar,
                         hasTradeInCar: value
                     }
-                });
-
-            default:
-                return;
+                };
+                break;
         };
+
+        if (stateUpdate && callback) {
+            this.setState(stateUpdate, callback);
+        } else if (stateUpdate) {
+            this.setState(stateUpdate);
+        }
     }
 
     render() {
