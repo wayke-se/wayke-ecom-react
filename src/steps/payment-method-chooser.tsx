@@ -1,11 +1,23 @@
 import React from 'react';
 
 import PaymentMethod from '../enums/payment-method';
+import { IEcomLifecycle, IEcomStore } from '../types';
+import StoreAction from '../enums/store-action';
 
-export interface IPaymentMethodChooserProps {
+export interface IPaymentMethodChooserProps extends IEcomStore, IEcomLifecycle {
 };
 
 const PaymentMethodChooser = (props: IPaymentMethodChooserProps) => {
+    const handlePaymentMethodClick = (method: PaymentMethod) => {
+        props.dispatchStoreAction(StoreAction.UPDATE_NAMED_VALUE, {
+            type: 'payment',
+            name: 'method',
+            value: method
+        }, () => {
+            props.onNextStepClick();
+        });
+    };
+
     return (
         <div className="page-main">
             <section className="page-section">
@@ -19,13 +31,13 @@ const PaymentMethodChooser = (props: IPaymentMethodChooserProps) => {
                 <div data-am-optionlist="">
                     <ul className="option-list">
                         <li className="option-list-item">
-                            <button className="option-list-action" onClick={() => props.onPaymentMethodChange(PaymentMethod.CASH)}>
+                            <button className="option-list-action" onClick={() => handlePaymentMethodClick(PaymentMethod.CASH)}>
                                 <div className="option-list-action-title">Kontant</div>
                                 <div className="option-list-action-meta">229 000 kr</div>
                             </button>
                         </li>
                         <li className="option-list-item">
-                            <button className="option-list-action" onClick={() => props.onPaymentMethodChange(PaymentMethod.FINANCING)}>
+                            <button className="option-list-action" onClick={() => handlePaymentMethodClick(PaymentMethod.FINANCING)}>
                                 <div data-am-columnrow="">
                                     <div className="column">
                                         <div className="option-list-action-title">Finansiering</div>
@@ -40,7 +52,7 @@ const PaymentMethodChooser = (props: IPaymentMethodChooserProps) => {
                             </button>
                         </li>
                         <li className="option-list-item">
-                            <button className="option-list-action" onClick={() => props.onPaymentMethodChange(PaymentMethod.LEASING)}>
+                            <button className="option-list-action" onClick={() => handlePaymentMethodClick(PaymentMethod.LEASING)}>
                                 <div className="option-list-action-title">Privatleasing</div>
                                 <div className="option-list-action-meta">4 700 kr/mån</div>
                             </button>

@@ -25,15 +25,10 @@ export interface IEcomStore {
 export interface IEcomData {
     customer: ICustomerData,
     delivery: IDeliveryData,
-    ecomContext: IEcomContext,
     insurance: IInsuranceData,
     interact: IInteractData,
     payment: IPaymentData,
     tradeInCar: ITradeInCarData
-};
-
-export interface IEcomContext {
-    hasAcceptedTerms: boolean;
 };
 
 export interface ITradeInCarData {
@@ -65,6 +60,7 @@ export interface IDeliveryData {
 };
 
 export interface ICustomerData {
+    hasAcceptedTerms: boolean;
     inputType: CustomerInformationInputType;
     personalNumber: string;
     name: string;
@@ -85,11 +81,8 @@ export interface IInteractData {
         personalNumber: boolean;
     };
 
-    context: {
-        hasAcceptedTerms: boolean;
-    };
-
     customer: {
+        hasAcceptedTerms: boolean;
         personalNumber: boolean;
         name: boolean;
         adress: boolean;

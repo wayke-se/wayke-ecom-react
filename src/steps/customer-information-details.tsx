@@ -1,19 +1,34 @@
-import React, { ChangeEvent, FocusEvent } from 'react';
+import React from 'react';
 
 import CustomerInformationInputType from '../enums/customer-information-input-type';
 import { validateEmail, validateSSN, validateZip } from '../utils/validation';
-import { ICustomerData, IEcomLifecycle, IEcomContext, IInteractData } from '../types';
+import { IEcomLifecycle, IEcomStore } from '../types';
+import StoreAction from '../enums/store-action';
 
-export interface ICustomerInformationDetailsProps extends IEcomLifecycle {
+export interface ICustomerInformationDetailsProps extends IEcomStore, IEcomLifecycle {
 };
 
-interface IAutomaticContentProps extends IEcomLifecycle {
+const handleInputChange = (props: ICustomerInformationDetailsProps, e: React.ChangeEvent<HTMLInputElement>) => {
+    props.dispatchStoreAction(StoreAction.UPDATE_NAMED_VALUE, {
+        type: 'customer',
+        name: e.target.name,
+        value: e.target.value
+    });
 };
 
-interface IManualContentProps extends IEcomLifecycle {
+const handleCheckboxChange = (props: ICustomerInformationDetailsProps, e: React.ChangeEvent<HTMLInputElement>) => {
+    props.dispatchStoreAction(StoreAction.UPDATE_NAMED_VALUE, {
+        type: 'customer',
+        name: e.target.name,
+        value: e.target.checked
+    });
+}
+
+const handleBlur = (props: ICustomerInformationDetailsProps, e: React.FocusEvent<HTMLInputElement>) => {
+    props.dispatchStoreAction(StoreAction.INTERACT_UPDATE_SPECIFIC, { type: 'customer', name: e.target.name });
 };
 
-const AutomaticContent = (props: IAutomaticContentProps) => {
+const AutomaticContent = (props: ICustomerInformationDetailsProps) => {
     return (
         <React.Fragment>
             <section className="page-section page-section-border">
@@ -63,12 +78,12 @@ const AutomaticContent = (props: IAutomaticContentProps) => {
     );
 };
 
-const ManualContent = (props: IManualContentProps) => {
-    const hasPersonalNumberError = props.interact.customer.personalNumber && !validateSSN(props.customer.personalNumber);
-    const hasNameError = props.interact.customer.name && !props.customer.name;
-    const hasAdressError = props.interact.customer.adress && !props.customer.adress;
-    const hasZipError = props.interact.customer.zip && !validateZip(props.customer.zip);
-    const hasCityError = props.interact.customer.city && !props.customer.city;
+const ManualContent = (props: ICustomerInformationDetailsProps) => {
+    const hasPersonalNumberError = props.data.interact.customer.personalNumber && !validateSSN(props.data.customer.personalNumber);
+    const hasNameError = props.data.interact.customer.name && !props.data.customer.name;
+    const hasAdressError = props.data.interact.customer.adress && !props.data.customer.adress;
+    const hasZipError = props.data.interact.customer.zip && !validateZip(props.data.customer.zip);
+    const hasCityError = props.data.interact.customer.city && !props.data.customer.city;
 
     return (
         <section className="page-section">
@@ -79,11 +94,11 @@ const ManualContent = (props: IManualContentProps) => {
                     <div data-am-inputtext="">
                         <input type="text"
                             id="information-2-input-personalnr"
-                            name="customerPersonalNumber"
+                            name="personalNumber"
                             placeholder="ÅÅÅÅMMDD-XXXX"
-                            value={props.customer.personalNumber || ''}
-                            onChange={props.onInputChange}
-                            onBlur={props.onInputBlur} />
+                            value={props.data.customer.personalNumber || ''}
+                            onChange={(e) => { handleInputChange(props, e) }}
+                            onBlur={(e) => handleBlur(props, e)} />
                     </div>
 
                     <div className="alert">Fel format</div>
@@ -95,11 +110,11 @@ const ManualContent = (props: IManualContentProps) => {
                     <div data-am-inputtext="">
                         <input type="text"
                             id="information-2-input-name"
-                            name="customerName"
+                            name="name"
                             placeholder="Förnamn Efternamn"
-                            value={props.customer.name}
-                            onChange={props.onInputChange}
-                            onBlur={props.onInputBlur} />
+                            value={props.data.customer.name}
+                            onChange={(e) => { handleInputChange(props, e) }}
+                            onBlur={(e) => handleBlur(props, e)} />
                     </div>
 
                     <div className="alert">Fel format</div>
@@ -111,11 +126,11 @@ const ManualContent = (props: IManualContentProps) => {
                     <div data-am-inputtext="">
                         <input type="text"
                             id="information-2-input-street"
-                            name="customerAdress"
+                            name="adress"
                             placeholder="Gatuadress"
-                            value={props.customer.adress}
-                            onChange={props.onInputChange}
-                            onBlur={props.onInputBlur} />
+                            value={props.data.customer.adress}
+                            onChange={(e) => { handleInputChange(props, e) }}
+                            onBlur={(e) => handleBlur(props, e)} />
                     </div>
 
                     <div className="alert">Fel format</div>
@@ -127,11 +142,11 @@ const ManualContent = (props: IManualContentProps) => {
                     <div data-am-inputtext="">
                         <input type="text"
                             id="information-2-input-zip"
-                            name="customerZip"
+                            name="zip"
                             placeholder="XXX XX"
-                            value={props.customer.zip}
-                            onChange={props.onInputChange}
-                            onBlur={props.onInputBlur} />
+                            value={props.data.customer.zip}
+                            onChange={(e) => { handleInputChange(props, e) }}
+                            onBlur={(e) => handleBlur(props, e)} />
                     </div>
 
                     <div className="alert">Fel format</div>
@@ -143,11 +158,11 @@ const ManualContent = (props: IManualContentProps) => {
                     <div data-am-inputtext="">
                         <input type="text"
                             id="information-2-input-city"
-                            name="customerCity"
+                            name="city"
                             placeholder="Postort"
-                            value={props.customer.city}
-                            onChange={props.onInputChange}
-                            onBlur={props.onInputBlur} />
+                            value={props.data.customer.city}
+                            onChange={(e) => { handleInputChange(props, e) }}
+                            onBlur={(e) => handleBlur(props, e)} />
                     </div>
 
                     <div className="alert">Fel format</div>
@@ -158,9 +173,9 @@ const ManualContent = (props: IManualContentProps) => {
 };
 
 const CustomerInformationDetails = (props: ICustomerInformationDetailsProps) => {
-    const hasEmailError = props.interact.customer.email && !validateEmail(props.customer.email);
-    const hasPhoneError = props.interact.customer.phone && !props.customer.phone;
-    const hasTermsError = props.interact.context.hasAcceptedTerms && !props.context.hasAcceptedTerms;
+    const hasEmailError = props.data.interact.customer.email && !validateEmail(props.data.customer.email);
+    const hasPhoneError = props.data.interact.customer.phone && !props.data.customer.phone;
+    const hasTermsError = props.data.interact.customer.hasAcceptedTerms && !props.data.customer.hasAcceptedTerms;
 
     return (
         <div data-am-page="">
@@ -171,11 +186,11 @@ const CustomerInformationDetails = (props: ICustomerInformationDetailsProps) => 
                 </div>
             </section>
 
-            { props.customer.inputType === CustomerInformationInputType.AUTOMATIC &&
+            { props.data.customer.inputType === CustomerInformationInputType.AUTOMATIC &&
                 <AutomaticContent {...props} />
             }
 
-            { props.customer.inputType === CustomerInformationInputType.MANUAL &&
+            { props.data.customer.inputType === CustomerInformationInputType.MANUAL &&
                 <ManualContent {...props} />
             }
 
@@ -187,11 +202,11 @@ const CustomerInformationDetails = (props: ICustomerInformationDetailsProps) => 
                         <div data-am-inputtext="">
                             <input type="text"
                                 id="information-2-input-email"
-                                name="customerEmail"
+                                name="email"
                                 placeholder="E-postadress"
-                                value={props.customer.email}
-                                onChange={props.onInputChange}
-                                onBlur={props.onInputBlur} />
+                                value={props.data.customer.email}
+                                onChange={(e) => { handleInputChange(props, e) }}
+                                onBlur={(e) => handleBlur(props, e)} />
                         </div>
 
                         <div className="alert">Fel format</div>
@@ -203,11 +218,11 @@ const CustomerInformationDetails = (props: ICustomerInformationDetailsProps) => 
                         <div data-am-inputtext="">
                             <input type="text"
                                 id="information-2-input-phone"
-                                name="customerPhone"
+                                name="phone"
                                 placeholder="Telefonnummer"
-                                value={props.customer.phone}
-                                onChange={props.onInputChange}
-                                onBlur={props.onInputBlur} />
+                                value={props.data.customer.phone}
+                                onChange={(e) => { handleInputChange(props, e) }}
+                                onBlur={(e) => handleBlur(props, e)} />
                         </div>
 
                         <div className="alert">Fel format</div>
@@ -218,9 +233,9 @@ const CustomerInformationDetails = (props: ICustomerInformationDetailsProps) => 
                             <input type="checkbox"
                                 id="information-2-checkbox"
                                 name="hasAcceptedTerms"
-                                checked={props.context.hasAcceptedTerms}
-                                onChange={props.onTermsToggle}
-                                onBlur={props.onInputBlur} />
+                                checked={props.data.customer.hasAcceptedTerms}
+                                onChange={(e) => { handleCheckboxChange(props, e) }}
+                                onBlur={(e) => handleBlur(props, e)} />
 
                             <label htmlFor="information-2-checkbox">
                                 <span className="text">Jag godkänner användarvillkoren</span>

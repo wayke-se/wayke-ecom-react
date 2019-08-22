@@ -1,15 +1,38 @@
 import React from 'react';
 
-import { validateSSN } from '../utils/validation';
 import CustomerInformationInputType from '../enums/customer-information-input-type';
+import StoreAction from '../enums/store-action';
 
-import { IInteractData, IEcomLifecycle, ICustomerData } from '../types';
+import { validateSSN } from '../utils/validation';
+import { IEcomLifecycle, IEcomStore } from '../types';
 
-export interface ICustomerInformationInitialProps extends IEcomLifecycle {
+export interface ICustomerInformationInitialProps extends IEcomStore, IEcomLifecycle {
 };
 
 const CustomerInformationInitial = (props: ICustomerInformationInitialProps) => {
-    const hasPersonalNumberError = props.interact.customer.personalNumber && !validateSSN(props.customer.personalNumber);
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        props.dispatchStoreAction(StoreAction.UPDATE_NAMED_VALUE, {
+            type: 'customer',
+            name: e.target.name,
+            value: e.target.value
+        });
+    };
+
+    const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+        props.dispatchStoreAction(StoreAction.INTERACT_UPDATE_SPECIFIC, { type: 'customer', name: e.target.name });
+    };
+
+    const handleInputTypeClick = (inputType: CustomerInformationInputType) => {
+        props.dispatchStoreAction(StoreAction.UPDATE_NAMED_VALUE, {
+            type: 'customer',
+            name: 'inputType',
+            value: inputType
+        }, () => {
+            props.onNextStepClick();
+        });
+    };
+
+    const hasPersonalNumberError = props.data.interact.customer.personalNumber && !validateSSN(props.data.customer.personalNumber);
 
     return (
         <div data-am-page="">
@@ -28,18 +51,18 @@ const CustomerInformationInitial = (props: ICustomerInformationInitialProps) => 
                         <div data-am-inputtext="">
                             <input type="text"
                                 id="information-1-input-personalnr"
-                                name="customerPersonalNumber"
+                                name="personalNumber"
                                 placeholder="ÅÅÅÅMMDD-XXXX"
-                                value={props.customer.personalNumber || ''}
-                                onChange={props.onInputChange}
-                                onBlur={props.onInputBlur} />
+                                value={props.data.customer.personalNumber || ''}
+                                onChange={handleInputChange}
+                                onBlur={handleBlur} />
                         </div>
 
                         <div className="alert">Fel format</div>
                     </div>
 
                     <div className="form-group">
-                        <div data-am-button="light full-width" onClick={() => props.onCustomerInformationInputTypeChange(CustomerInformationInputType.AUTOMATIC)}>
+                        <div data-am-button="light full-width" onClick={() => handleInputTypeClick(CustomerInformationInputType.AUTOMATIC)}>
                             Hämta uppgifter
                         </div>
                     </div>
@@ -47,7 +70,7 @@ const CustomerInformationInitial = (props: ICustomerInformationInitialProps) => 
             </section>
 
             <section className="page-section">
-                <button data-am-link="" onClick={() => props.onCustomerInformationInputTypeChange(CustomerInformationInputType.MANUAL)}>Jag vill fylla i mina uppgifter manuellt</button>
+                <button data-am-link="" onClick={() => handleInputTypeClick(CustomerInformationInputType.MANUAL)}>Jag vill fylla i mina uppgifter manuellt</button>
             </section>
         </div>
     );

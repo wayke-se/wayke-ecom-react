@@ -1,11 +1,23 @@
 import React from 'react';
 
 import InsuranceOption from '../enums/insurance-option';
+import { IEcomLifecycle, IEcomStore } from '../types';
+import StoreAction from '../enums/store-action';
 
-export interface IInsuranceTypeChooserProps {
+export interface IInsuranceTypeChooserProps extends IEcomStore, IEcomLifecycle {
 };
 
 const InsuranceTypeChooser = (props: IInsuranceTypeChooserProps) => {
+    const handleInsuranceOptionClick = (insuranceOption: InsuranceOption) => {
+        props.dispatchStoreAction(StoreAction.UPDATE_NAMED_VALUE, {
+            type: 'insurance',
+            name: 'insuranceOption',
+            value: insuranceOption
+        }, () => {
+            props.onNextStepClick();
+        });
+    };
+
     return (
         <div className="page-main">
             <section className="page-section">
@@ -19,7 +31,7 @@ const InsuranceTypeChooser = (props: IInsuranceTypeChooserProps) => {
                 <div data-am-optionlist="">
                     <ul className="option-list">
                         <li className="option-list-item">
-                            <button className="option-list-action" onClick={() => props.onInsuranceOptionChange(InsuranceOption.AUDI_INSURANCE)}>
+                            <button className="option-list-action" onClick={() => handleInsuranceOptionClick(InsuranceOption.AUDI_INSURANCE)}>
                                 <div data-am-columnrow="">
                                     <div className="column">
                                         <div className="option-list-action-title">Audi Försäkring</div>
@@ -32,7 +44,7 @@ const InsuranceTypeChooser = (props: IInsuranceTypeChooserProps) => {
                             </button>
                         </li>
                         <li className="option-list-item">
-                            <button className="option-list-action" onClick={() => props.onInsuranceOptionChange(null)}>
+                            <button className="option-list-action" onClick={() => handleInsuranceOptionClick(null)}>
                                 <div className="option-list-action-title">Hoppa över detta steg</div>
                                 <div className="option-list-action-meta">Jag har egen försäkring</div>
                             </button>

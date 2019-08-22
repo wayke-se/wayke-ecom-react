@@ -66,7 +66,7 @@ export default {
         const isValidPersonalNumber = validateSSN(data.customer.personalNumber);
         const isValidEmail = !!data.customer.email;
         const isValidPhone = !!data.customer.phone;
-        const hasAcceptedTerms = data.ecomContext.hasAcceptedTerms;
+        const hasAcceptedTerms = data.customer.hasAcceptedTerms;
 
         let isValid = isValidPersonalNumber && isValidEmail && isValidPhone && hasAcceptedTerms;
 

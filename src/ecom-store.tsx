@@ -20,6 +20,7 @@ class EcomStore extends React.Component<IEcomStoreProps, IState> {
 
         this.state = {
             customer: {
+                hasAcceptedTerms: false,
                 inputType: null,
                 personalNumber: '',
                 name: '',
@@ -32,16 +33,10 @@ class EcomStore extends React.Component<IEcomStoreProps, IState> {
             delivery: {
                 type: null
             },
-            ecomContext: {
-                hasAcceptedTerms: false
-            },
             insurance: {
                 insuranceOption: null,
                 personalNumber: '',
-                expectedDrivingDistance: {
-                    min: null,
-                    max: null
-                },
+                expectedDrivingDistance: null,
                 alternative: ''
             },
             interact: {
@@ -54,11 +49,8 @@ class EcomStore extends React.Component<IEcomStoreProps, IState> {
                     personalNumber: false,
                 },
 
-                context: {
-                    hasAcceptedTerms: false,
-                },
-
                 customer: {
+                    hasAcceptedTerms: false,
                     personalNumber: false,
                     name: false,
                     adress: false,

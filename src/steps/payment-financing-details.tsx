@@ -1,9 +1,9 @@
 import React from 'react';
 
 import { validateNumberInRange } from '../utils/validation';
-import { IPaymentData, IEcomLifecycle } from '../types';
+import { IEcomLifecycle, IEcomStore } from '../types';
 
-export interface IPaymentFinancingDetailsProps extends IEcomLifecycle {
+export interface IPaymentFinancingDetailsProps extends IEcomStore, IEcomLifecycle {
 };
 
 interface IState {

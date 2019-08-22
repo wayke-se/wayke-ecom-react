@@ -1,11 +1,23 @@
 import React from 'react';
 
 import DeliveryType from '../enums/delivery-type';
+import { IEcomStore, IEcomLifecycle } from '../types';
+import StoreAction from '../enums/store-action';
 
-export interface IDeliveryTypeChooserProps {
+export interface IDeliveryTypeChooserProps extends IEcomStore, IEcomLifecycle {
 };
 
 const DeliveryTypeChooser = (props: IDeliveryTypeChooserProps) => {
+    const handleDeliveryTypeClick = (type: DeliveryType) => {
+        props.dispatchStoreAction(StoreAction.UPDATE_NAMED_VALUE, {
+            type: 'delivery',
+            name: 'type',
+            value: type
+        }, () => {
+            props.onNextStepClick();
+        });
+    };
+
     return (
         <div data-am-page="">
             <section className="page-section">
@@ -19,14 +31,14 @@ const DeliveryTypeChooser = (props: IDeliveryTypeChooserProps) => {
                 <div data-am-optionlist="">
                     <ul className="option-list">
                         <li className="option-list-item">
-                            <button className="option-list-action" onClick={() => props.onDeliveryTypeChange(DeliveryType.HOME_DELIVERY)}>
+                            <button className="option-list-action" onClick={() => handleDeliveryTypeClick(DeliveryType.HOME_DELIVERY)}>
                                 <div className="option-list-action-title">Hemleverans</div>
                                 <div className="option-list-action-meta">5 - 6 dagar</div>
                             </button>
                         </li>
 
                         <li className="option-list-item">
-                            <button className="option-list-action" onClick={() => props.onDeliveryTypeChange(DeliveryType.SELF_PICKUP)}>
+                            <button className="option-list-action" onClick={() => handleDeliveryTypeClick(DeliveryType.SELF_PICKUP)}>
                                 <div className="option-list-action-title">Hämta hos oss</div>
                                 <div className="option-list-action-meta">Idag</div>
                             </button>

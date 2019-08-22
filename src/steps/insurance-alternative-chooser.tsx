@@ -1,7 +1,8 @@
 import React from 'react';
-import { IInsuranceData, IEcomLifecycle } from '../types';
+import { IEcomLifecycle, IEcomStore } from '../types';
+import StoreAction from '../enums/store-action';
 
-export interface IInsuranceAlternativeChooserProps extends IEcomLifecycle {
+export interface IInsuranceAlternativeChooserProps extends IEcomStore, IEcomLifecycle {
 };
 
 const InsuranceAlternativeChooser = (props: IInsuranceAlternativeChooserProps) => {
@@ -20,6 +21,16 @@ const InsuranceAlternativeChooser = (props: IInsuranceAlternativeChooserProps) =
         },
     ];
 
+    const handleAlternativeClick = (alternativeId: string) => {
+        props.dispatchStoreAction(StoreAction.UPDATE_NAMED_VALUE, {
+            type: 'insurance',
+            name: 'alternative',
+            value: alternativeId
+        }, () => {
+            props.onNextStepClick();
+        });
+    };
+
     const insuranceAlternativeItems = insuranceAlternatives.map((i, index) => (
         <div className="repeat-m-half" key={index}>
             <div data-am-box="light">
@@ -36,7 +47,7 @@ const InsuranceAlternativeChooser = (props: IInsuranceAlternativeChooserProps) =
                         </div>
 
                         <div className="column">
-                            <div data-am-button="small" onClick={() => props.onInsuranceAlternativeChange(i.id)}>
+                            <div data-am-button="small" onClick={() => handleAlternativeClick(i.id)}>
                                 Välj
                             </div>
                         </div>
@@ -45,6 +56,9 @@ const InsuranceAlternativeChooser = (props: IInsuranceAlternativeChooserProps) =
             </div>
         </div>
     ));
+
+    const min = props.data.insurance.expectedDrivingDistance.min;
+    const max = props.data.insurance.expectedDrivingDistance.max;
 
     return (
         <div className="page-main">
@@ -67,11 +81,11 @@ const InsuranceAlternativeChooser = (props: IInsuranceAlternativeChooserProps) =
                 </div>
 
                 <div className="l-inline-block m-r">
-                    <i className="icon-profile m-r-half"></i>{props.insurance.personalNumber}
+                    <i className="icon-profile m-r-half"></i>{props.data.insurance.personalNumber}
                 </div>
 
                 <div className="l-inline-block">
-                    <i className="icon-mileage m-r-half"></i>{props.insurance.expectedDrivingDistance.min}-{props.insurance.expectedDrivingDistance.max} mil
+                    <i className="icon-mileage m-r-half"></i>{min}{max ? '-' + max : '+'} mil
                 </div>
             </section>
 
