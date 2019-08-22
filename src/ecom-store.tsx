@@ -141,6 +141,15 @@ class EcomStore extends React.Component<IEcomStoreProps, IState> {
                     }
                 };
                 break;
+
+            case StoreAction.PAYMENT_UPDATE_FINANCING_INFORMATION:
+                stateUpdate = {
+                    payment: {
+                        ...this.state.payment,
+                        ...value
+                    }
+                };
+                break;
         };
 
         if (stateUpdate && callback) {

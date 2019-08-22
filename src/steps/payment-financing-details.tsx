@@ -2,6 +2,8 @@ import React from 'react';
 
 import { validateNumberInRange } from '../utils/validation';
 import { IEcomLifecycle, IEcomStore } from '../types';
+import StoreAction from '../enums/store-action';
+import Slider from '../components/slider';
 
 export interface IPaymentFinancingDetailsProps extends IEcomStore, IEcomLifecycle {
 };
@@ -9,11 +11,6 @@ export interface IPaymentFinancingDetailsProps extends IEcomStore, IEcomLifecycl
 interface IState {
     downPayment: string;
     duration: number;
-};
-
-//import Slider from 'rc-slider';
-const Slider = (props) => {
-    return <div></div>
 };
 
 const downPaymentMin = 50000;
@@ -41,8 +38,8 @@ class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsPr
         this.handleProceedClick = this.handleProceedClick.bind(this);
 
         this.state = {
-            downPayment: props.payment.financingDownPayment ? '' + props.payment.financingDownPayment : '100000',
-            duration: props.payment.financingDuration ? getIndexFromDuration(props.payment.financingDuration) : 1
+            downPayment: props.data.payment.financingDownPayment ? '' + props.data.payment.financingDownPayment : '100000',
+            duration: props.data.payment.financingDuration ? getIndexFromDuration(props.data.payment.financingDuration) : 1
         };
     }
 
@@ -76,7 +73,10 @@ class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsPr
         const downPayment = validateNumberInRange(this.state.downPayment, downPaymentMin, downPaymentMax) ? parseInt(this.state.downPayment) : null;
         const duration = getDurationFromIndex(this.state.duration);
 
-        this.props.onFinancingValuesChange(downPayment, duration);
+        this.props.dispatchStoreAction(StoreAction.PAYMENT_UPDATE_FINANCING_INFORMATION, {
+            financingDownPayment: downPayment,
+            financingDuration: duration
+        });
     }
 
     handleProceedClick() {
@@ -136,7 +136,7 @@ class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsPr
                                                 min={downPaymentMin}
                                                 max={downPaymentMax}
                                                 step={1000}
-                                                value={parseInt(this.state.downPayment) || downPaymentMin}
+                                                initialValue={parseInt(this.state.downPayment) || downPaymentMin}
                                                 onChange={this.handleDownPaymentSliderChange}
                                                 onAfterChange={this.handleValueUpdated} />
                                         }
@@ -161,9 +161,9 @@ class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsPr
                                             min={0}
                                             max={durationCount - 1}
                                             step={1}
-                                            value={this.state.duration}
+                                            initialValue={this.state.duration}
                                             onChange={this.handleDurationSliderChange}
-                                            onAfterChange={this.handleValueUpdated} />
+                                            onAfterChange={this.handleValueUpdated} />}
                                     </div>
                                 </div>
                             </div>
