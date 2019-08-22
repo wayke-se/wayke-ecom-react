@@ -17,7 +17,7 @@ const CartItem = (props: ICartItemProps) => {
         <div data-am-cart="" className={isExtended ? 'is-extended' : ''}>
             <button className="cart-header" onClick={() => setIsExtended(!isExtended)}>
                 <div className="cart-header-img-section">
-                    <div className="cart-header-img" style={{ backgroundImage: 'url(/assets/toolkit/images/cart-preview.jpg)' }}></div>
+                    <div className="cart-header-img" style={{ backgroundImage: 'url(images/cart-preview.jpg)' }}></div>
                 </div>
                 <div className="cart-header-content-section">
                     <div className="cart-header-content-info">

@@ -59,11 +59,11 @@ const Item = (props: IItemProps) => {
 
 const EcomTimeline = (props: IEcomTimelineProps) => {
     const currentStep = props.step;
-    const ecomStepValues = Object.values(EcomStep);
 
     const timelineObjects = [];
+    let index = 0;
 
-    ecomStepValues.forEach((v, index) => {
+    for (let v in EcomStep) {
         const label = StepLabels[v];
 
         timelineObjects.push({
@@ -72,7 +72,9 @@ const EcomTimeline = (props: IEcomTimelineProps) => {
             isPassed: index < currentStep,
             isCurrent: currentStep === index
         });
-    });
+
+        index++;
+    }
 
     const items = timelineObjects.map((v, index) => <Item key={index} {...v} />);
 
