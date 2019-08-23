@@ -3,7 +3,9 @@ import React from 'react';
 import EcomStep from './enums/ecom-step';
 
 export interface IEcomTimelineProps {
-    step: number;
+    currentStep: EcomStep;
+    historicalSteps: EcomStep[];
+    futureSteps: EcomStep[];
 };
 
 interface IItemProps {
@@ -14,23 +16,23 @@ interface IItemProps {
 };
 
 const StepLabels = {
-    [EcomStep.TRADE_IN_EXISTS_CHOOSER]: '1. Inbyte',
+    [EcomStep.TRADE_IN_EXISTS_CHOOSER]: 'Inbyte',
     [EcomStep.TRADE_IN_CAR_DEFINITION]: null,
     [EcomStep.TRADE_IN_CONFIRM_CAR]: null,
 
-    [EcomStep.PAYMENT_METHOD_CHOOSER]: '2. Betalsätt',
+    [EcomStep.PAYMENT_METHOD_CHOOSER]: 'Betalsätt',
     [EcomStep.PAYMENT_FINANCING_DETAILS ]: null,
 
-    [EcomStep.INSURANCE_TYPE_CHOOSER]: '3. Försäkring',
+    [EcomStep.INSURANCE_TYPE_CHOOSER]: 'Försäkring',
     [EcomStep.INSURANCE_INFORMATION_DEFINITION]: null,
     [EcomStep.INSURANCE_ALTERNATIVE_CHOOSER]: null,
 
-    [EcomStep.CUSTOMER_INFORMATION_INITIAL]: '4. Uppgifter',
+    [EcomStep.CUSTOMER_INFORMATION_INITIAL]: 'Uppgifter',
     [EcomStep.CUSTOMER_INFORMATION_DETAILS]: null,
 
-    [EcomStep.DELIVERY_TYPE_CHOOSER]: '5. Leverans',
+    [EcomStep.DELIVERY_TYPE_CHOOSER]: 'Leverans',
 
-    [EcomStep.FINAL_CONFIRMATION]: '6. Bekräftelse',
+    [EcomStep.FINAL_CONFIRMATION]: 'Bekräftelse',
 };
 
 const Item = (props: IItemProps) => {
@@ -58,25 +60,41 @@ const Item = (props: IItemProps) => {
 };
 
 const EcomTimeline = (props: IEcomTimelineProps) => {
-    const currentStep = props.step;
+    const timelineObjects = [
+        ...props.historicalSteps.map((s) => ({
+            step: s,
+            label: null,
+            shouldHide: null,
+            isPassed: true,
+            isCurrent: false
+        })),
 
-    const timelineObjects = [];
-    let index = 0;
+        {
+            step: props.currentStep,
+            label: null,
+            shouldHide: null,
+            isPassed: false,
+            isCurrent: true
+        },
 
-    for (let v in EcomStep) {
-        const label = StepLabels[v];
+        ...props.futureSteps.map((s) => ({
+            step: s,
+            label: null,
+            shouldHide: null,
+            isPassed: false,
+            isCurrent: false
+        })),
+    ];
 
-        timelineObjects.push({
-            label,
-            shouldHide: currentStep !== index && !label,
-            isPassed: index < currentStep,
-            isCurrent: currentStep === index
-        });
+    for (let i = 0; i < timelineObjects.length; i++) {
+        const object = timelineObjects[i];
+        const label = StepLabels[object.step];
 
-        index++;
+        object.label = (i + 1) + '. ' + label;
+        object.shouldHide = !label && !object.isCurrent;
     }
 
-    const items = timelineObjects.map((v, index) => <Item key={index} {...v} />);
+    const items = timelineObjects.map((o, index) => <Item key={index} {...o} />);
 
     return (
         <div data-am-timeline="">

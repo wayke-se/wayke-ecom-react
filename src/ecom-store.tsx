@@ -1,11 +1,11 @@
 import React from 'react';
 
 import EcomLifecycle from './ecom-lifecycle';
-import { IVehicle, IEcomData } from './types';
+import { IVehicle, IEcomData, IEcomOptions } from './types';
 
 import StoreAction from './enums/store-action';
 
-interface IEcomStoreProps {
+interface IEcomStoreProps extends IEcomOptions {
     vehicle: IVehicle;
 };
 
@@ -162,7 +162,7 @@ class EcomStore extends React.Component<IEcomStoreProps, IState> {
     render() {
         return (
             <EcomLifecycle
-                    vehicle={this.props.vehicle}
+                    {...this.props}
                     data={this.state}
                     dispatchStoreAction={this.dispatchStoreAction} />
         );

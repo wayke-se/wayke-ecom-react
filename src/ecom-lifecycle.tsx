@@ -8,10 +8,11 @@ import EcomStepContent from './ecom-step-content';
 import EcomCart from './ecom-cart';
 import EcomTimeline from './ecom-timeline';
 
-import { IVehicle, IEcomStore, IEcomData } from './types';
+import { IVehicle, IEcomStore, IEcomData, IEcomOptions } from './types';
 import StoreAction from './enums/store-action';
+import { getAllEnumValues } from './utils/enum';
 
-interface IEcomLifecycleProps extends IEcomStore {
+interface IEcomLifecycleProps extends IEcomOptions, IEcomStore {
     vehicle: IVehicle;
 }
 
@@ -43,10 +44,27 @@ class EcomLifecycle extends React.Component<IEcomLifecycleProps, IState> {
         this.handleSpecificStepClick = this.handleSpecificStepClick.bind(this);
 
         this.state = {
-            step: EcomStep.TRADE_IN_EXISTS_CHOOSER,
-            stepHistory: [ EcomStep.TRADE_IN_EXISTS_CHOOSER ],
+            step: null,
+            stepHistory: [],
             isBackwardsStepForbidden: false
         };
+    }
+
+    componentDidUpdate() {
+        const hasOptions = this.props.options;
+        const hasNoStep = this.state.step === null;
+
+        const shouldSetInitialStep = hasOptions && hasNoStep;
+
+        if (shouldSetInitialStep) {
+            const shouldStartAtTradeIn = this.props.options.isTradeInAllowed;
+            const initialStep = shouldStartAtTradeIn ? EcomStep.TRADE_IN_EXISTS_CHOOSER : EcomStep.PAYMENT_METHOD_CHOOSER;
+
+            this.setState({
+                stepHistory: [ initialStep ],
+                step: initialStep
+            });
+        }
     }
 
     componentDidTransitionForward() {
@@ -142,6 +160,9 @@ class EcomLifecycle extends React.Component<IEcomLifecycleProps, IState> {
     render() {
         const canPressBackButton = this.state.stepHistory.length > 1 && !this.state.isBackwardsStepForbidden;
 
+        const historicalSteps = this.state.stepHistory.length === 0 ? [] : [...this.state.stepHistory].slice(0, this.state.stepHistory.length - 1);
+        const futureSteps = this.state.step === null ? [] : getAllEnumValues(EcomStep).filter(s => s > this.state.step);
+
         return (
             <div data-am-frame="" style={{ marginBottom: '200px'}}>
                 <div className="frame-body">
@@ -149,7 +170,7 @@ class EcomLifecycle extends React.Component<IEcomLifecycleProps, IState> {
                         canPressBackButton={canPressBackButton}
                         onPreviousStepClick={this.handlePreviousStepClick} />
 
-                    <EcomTimeline step={this.state.step} />
+                    <EcomTimeline currentStep={this.state.step} historicalSteps={historicalSteps} futureSteps={futureSteps} />
 
                     <div data-am-page="">
                         <EcomStepContent
@@ -159,7 +180,7 @@ class EcomLifecycle extends React.Component<IEcomLifecycleProps, IState> {
                             onNextStepClick={this.handleNextStepClick}
                             onShowCustomerInformationInitial={() => this.handleSpecificStepClick(EcomStep.CUSTOMER_INFORMATION_INITIAL)}
                             onShowInsuranceInformationDefinition={() => this.handleSpecificStepClick(EcomStep.INSURANCE_INFORMATION_DEFINITION)}
-                            onShowTradeInCarDefinition={() => this.handleSpecificStepClick(EcomStep.TRADE_IN_CAR_DEFINITION)} />*
+                            onShowTradeInCarDefinition={() => this.handleSpecificStepClick(EcomStep.TRADE_IN_CAR_DEFINITION)} />
                     </div>
                 </div>
 

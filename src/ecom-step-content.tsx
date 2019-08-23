@@ -14,9 +14,9 @@ import TradeInConfirmCar from './steps/trade-in-confirm-car';
 import TradeInExistsChooser from './steps/trade-in-exists-chooser';
 
 import EcomStep from './enums/ecom-step';
-import { IEcomLifecycle, IEcomStore } from './types';
+import { IEcomLifecycle, IEcomStore, IEcomOptions } from './types';
 
-interface AllProps extends IEcomLifecycle, IEcomStore {
+interface AllProps extends IEcomOptions, IEcomLifecycle, IEcomStore {
     step: EcomStep;
 }
 
@@ -59,7 +59,7 @@ const EcomStepContent = (props: AllProps) => {
             return <FinalConfirmation />;
 
         default:
-            return <div>Unknown step</div>;
+            return <div></div>;
     }
 };
 

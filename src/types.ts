@@ -5,9 +5,16 @@ import PaymentMethod from "./enums/payment-method";
 import StoreAction from './enums/store-action';
 
 export interface IVehicle {
+    id: string;
     title: string;
     shortDescription: string;
     price: number;
+};
+
+export interface IEcomOptions {
+    options: {
+        isTradeInAllowed: boolean;
+    }
 };
 
 export interface IEcomLifecycle {

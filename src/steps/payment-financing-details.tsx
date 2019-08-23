@@ -163,7 +163,7 @@ class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsPr
                                             step={1}
                                             initialValue={this.state.duration}
                                             onChange={this.handleDurationSliderChange}
-                                            onAfterChange={this.handleValueUpdated} />}
+                                            onAfterChange={this.handleValueUpdated} />
                                     </div>
                                 </div>
                             </div>

@@ -1,9 +1,9 @@
 import React from 'react';
 
-import { IEcomStore, IEcomLifecycle } from '../types';
+import { IEcomStore, IEcomLifecycle, IEcomOptions } from '../types';
 import StoreAction from '../enums/store-action';
 
-export interface ITradeInExistsChooserProps extends IEcomStore, IEcomLifecycle {
+export interface ITradeInExistsChooserProps extends IEcomOptions, IEcomStore, IEcomLifecycle {
 }
 
 const TradeInExistsChooser = (props: ITradeInExistsChooserProps) => {
