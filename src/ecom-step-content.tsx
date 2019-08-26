@@ -14,9 +14,11 @@ import TradeInConfirmCar from './steps/trade-in-confirm-car';
 import TradeInExistsChooser from './steps/trade-in-exists-chooser';
 
 import EcomStep from './enums/ecom-step';
-import { IEcomLifecycle, IEcomStore, IEcomOptions } from './types';
+import { IEcomLifecycle, IEcomStore } from './types';
+import { IOrderOptionsResponse } from 'wayke-ecom';
 
-interface AllProps extends IEcomOptions, IEcomLifecycle, IEcomStore {
+interface AllProps extends IEcomLifecycle, IEcomStore {
+    options: IOrderOptionsResponse | undefined;
     step: EcomStep;
 }
 

@@ -1,11 +1,13 @@
 import React from 'react';
 
 import EcomLifecycle from './ecom-lifecycle';
-import { IVehicle, IEcomData, IEcomOptions } from './types';
+import { IVehicle, IEcomData } from './types';
 
 import StoreAction from './enums/store-action';
+import { IOrderOptionsResponse } from 'wayke-ecom';
 
-interface IEcomStoreProps extends IEcomOptions {
+interface IEcomStoreProps {
+    options: IOrderOptionsResponse | undefined;
     vehicle: IVehicle;
 };
 

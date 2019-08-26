@@ -3,15 +3,14 @@ import React from "react";
 import { IVehicle } from "./types";
 import EcomStore from './ecom-store';
 import { getInitialData } from "./sdk/ecom-sdk-actions";
+import { IOrderOptionsResponse } from "wayke-ecom";
 
 export interface IEcomProps {
     vehicle: IVehicle;
 }
 
 interface IState {
-    options: {
-        isTradeInAllowed: boolean;
-    };
+    options: IOrderOptionsResponse | undefined;
 };
 
 class Ecom extends React.Component<IEcomProps, IState> {
@@ -19,16 +18,14 @@ class Ecom extends React.Component<IEcomProps, IState> {
         super(props);
 
         this.state = {
-            options: null
+            options: undefined
         };
     }
 
     componentDidMount() {
-        getInitialData(this.props.vehicle.id, (response) => {
+        getInitialData(this.props.vehicle.id, (response: IOrderOptionsResponse) => {
             this.setState({
-                options: {
-                    isTradeInAllowed: !response.allowsTradeIn()
-                }
+                options: response
             });
         });
     }

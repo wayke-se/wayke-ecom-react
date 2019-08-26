@@ -11,7 +11,6 @@
     "prebuild:tsc": "npm run prepare && npm run clean",
     "clean": "rimraf ./dist ./pkg",
     "lint": "tslint -c ./tslint.json -p ./tsconfig.json -e 'src/__test__/**/*' -e 'src/**/*.spec.{ts}' 'src/**/*.{ts}'",
-    "prettify": "prettier --write 'src/**/*.{ts,tsx}'",
     "prepare": "npm run prettify && npm run type-check && npm run lint && npm run test",
     "test": "jest --coverage --verbose",
     "pretest": "rimraf ./coverage",
@@ -45,7 +44,6 @@
     "coveralls": "^3.0.6",
     "jest": "^24.9.0",
     "parcel-bundler": "^1.12.3",
-    "prettier": "^1.18.2",
     "react": "^16.8.0",
     "react-dom": "^16.8.0",
     "rimraf": "^3.0.0",
@@ -102,6 +100,6 @@
     "dist-*/"
   ],
   "dependencies": {
-    "wayke-ecom": "^1.0.0-alpha"
+    "wayke-ecom": "^1.0.0-beta-2"
   }
 }

@@ -11,12 +11,6 @@ export interface IVehicle {
     price: number;
 };
 
-export interface IEcomOptions {
-    options: {
-        isTradeInAllowed: boolean;
-    }
-};
-
 export interface IEcomLifecycle {
     onNextStepClick: () => void;
     onShowCustomerInformationInitial: () => void;
