@@ -23,11 +23,11 @@ interface IState {
     isBackwardsStepForbidden: boolean;
 }
 
-const getNewStep = (currentStep: EcomStep, data: IEcomData): EcomStep => {
+const getNewStep = (currentStep: EcomStep, data: IEcomData, options: IOrderOptionsResponse): EcomStep => {
     const transition = getAllTransitions()[currentStep];
 
     if (transition) {
-        return transition(data);
+        return transition(data, options);
     } else {
         throw 'Did not find a possible transition.';
     }
@@ -81,7 +81,7 @@ class EcomLifecycle extends React.Component<IEcomLifecycleProps, IState> {
     }
 
     handleNextStepClick() {
-        const nextStep = getNewStep(this.state.step, this.props.data);
+        const nextStep = getNewStep(this.state.step, this.props.data, this.props.options);
 
         if (nextStep === null) {
             this.handleRejectedStepForward();

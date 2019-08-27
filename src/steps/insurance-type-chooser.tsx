@@ -1,10 +1,15 @@
 import React from 'react';
 
 import InsuranceOption from '../enums/insurance-option';
-import { IEcomLifecycle, IEcomStore } from '../types';
 import StoreAction from '../enums/store-action';
 
+import { IEcomLifecycle, IEcomStore } from '../types';
+import { IOrderOptionsResponse } from 'wayke-ecom';
+
+import { addSizeQuery } from '../utils/image';
+
 export interface IInsuranceTypeChooserProps extends IEcomStore, IEcomLifecycle {
+    options: IOrderOptionsResponse;
 };
 
 const InsuranceTypeChooser = (props: IInsuranceTypeChooserProps) => {
@@ -17,6 +22,9 @@ const InsuranceTypeChooser = (props: IInsuranceTypeChooserProps) => {
             props.onNextStepClick();
         });
     };
+
+    const insuranceOption = props.options.getInsuranceOption();
+    const scaledImage = addSizeQuery(insuranceOption.logo, 100, 60);
 
     return (
         <div className="page-main">
@@ -34,12 +42,15 @@ const InsuranceTypeChooser = (props: IInsuranceTypeChooserProps) => {
                             <button className="option-list-action" onClick={() => handleInsuranceOptionClick(InsuranceOption.AUDI_INSURANCE)}>
                                 <div data-ecom-columnrow="">
                                     <div className="column">
-                                        <div className="option-list-action-title">Audi Försäkring</div>
-                                        <div className="option-list-action-subtitle">Audi financial services</div>
+                                        <div className="option-list-action-title">{insuranceOption.title}</div>
+                                        { insuranceOption.description && <div className="option-list-action-subtitle">{insuranceOption.description}</div> }
                                     </div>
-                                    <div className="column valign-top minimal">
-                                        <img src="images/audi-logo.png" alt="Audi logotype" className="l-block" />
-                                    </div>
+
+                                    { scaledImage &&
+                                        <div className="column valign-top minimal">
+                                            <img src={scaledImage} alt="Audi logotype" className="l-block" />
+                                        </div>
+                                    }
                                 </div>
                             </button>
                         </li>

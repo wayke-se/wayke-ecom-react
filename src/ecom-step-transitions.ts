@@ -18,8 +18,16 @@ export const getPrimarySteps = (options: IOrderOptionsResponse): EcomStep[] => {
     }
 
     result.push(
-        EcomStep.PAYMENT_METHOD_CHOOSER,
-        EcomStep.INSURANCE_TYPE_CHOOSER,
+        EcomStep.PAYMENT_METHOD_CHOOSER
+    );
+
+    if (options.getInsuranceOption()) {
+        result.push(
+            EcomStep.INSURANCE_TYPE_CHOOSER
+        );
+    }
+
+    result.push(
         EcomStep.CUSTOMER_INFORMATION_INITIAL,
         EcomStep.DELIVERY_TYPE_CHOOSER,
         EcomStep.FINAL_CONFIRMATION
@@ -46,14 +54,22 @@ export const getAllTransitions = () => ({
         }
     },
     [EcomStep.TRADE_IN_CONFIRM_CAR]: () => EcomStep.PAYMENT_METHOD_CHOOSER,
-    [EcomStep.PAYMENT_METHOD_CHOOSER]: (data: IEcomData) => {
+    [EcomStep.PAYMENT_METHOD_CHOOSER]: (data: IEcomData, options: IOrderOptionsResponse) => {
         if (data.payment.paymentOption.type === PaymentType.Loan) {
             return EcomStep.PAYMENT_FINANCING_DETAILS;
+        } else if (!options.getInsuranceOption()) {
+            return EcomStep.CUSTOMER_INFORMATION_INITIAL;
         } else {
             return EcomStep.INSURANCE_TYPE_CHOOSER;
         }
     },
-    [EcomStep.PAYMENT_FINANCING_DETAILS]: () => EcomStep.INSURANCE_TYPE_CHOOSER,
+    [EcomStep.PAYMENT_FINANCING_DETAILS]: (data: IEcomData, options: IOrderOptionsResponse) => {
+        if (!options.getInsuranceOption()) {
+            return EcomStep.CUSTOMER_INFORMATION_INITIAL;
+        } else {
+            return EcomStep.INSURANCE_TYPE_CHOOSER;
+        }
+    },
     [EcomStep.INSURANCE_TYPE_CHOOSER]: (data: IEcomData) => {
         if (data.insurance.insuranceOption === InsuranceOption.AUDI_INSURANCE) {
             return EcomStep.INSURANCE_INFORMATION_DEFINITION;
