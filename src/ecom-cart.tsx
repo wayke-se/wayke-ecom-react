@@ -14,7 +14,7 @@ const CartItem = (props: ICartItemProps) => {
     const [ isExtended, setIsExtended ] = React.useState(false);
 
     return (
-        <div data-am-cart="" className={isExtended ? 'is-extended' : ''}>
+        <div data-ecom-cart="" className={isExtended ? 'is-extended' : ''}>
             <button className="cart-header" onClick={() => setIsExtended(!isExtended)}>
                 <div className="cart-header-img-section">
                     <div className="cart-header-img" style={{ backgroundImage: 'url(images/cart-preview.jpg)' }}></div>
@@ -41,7 +41,7 @@ const CartItem = (props: ICartItemProps) => {
 
 const EcomCart = (props: IEcomCartProps) => {
     return (
-        <div data-am-footer="">
+        <div data-ecom-footer="">
             <CartItem vehicle={props.vehicle} />
         </div>
     );

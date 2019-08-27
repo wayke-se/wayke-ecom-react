@@ -97,17 +97,17 @@ class InsuranceInformationDefinition extends React.Component<IInsuranceInformati
             <div className="page-main">
                 <section className="page-section">
                     <h1 className="h6">Audi Försäkring</h1>
-                    <div data-am-content="">
+                    <div data-ecom-content="">
                         <p>Skriv in ditt personnummer och din uppskattade körsträcka för att se din försäkringskostna</p>
                     </div>
                 </section>
 
                 <section className="page-section">
-                    <div data-am-form="">
+                    <div data-ecom-form="">
                         <div className={`form-group ${hasPersonalNumberError ? ' has-error' : ''}`}>
-                            <label data-am-inputlabel="" htmlFor="insurance-input-personalnr">Personnummer</label>
+                            <label data-ecom-inputlabel="" htmlFor="insurance-input-personalnr">Personnummer</label>
 
-                            <div data-am-inputtext="">
+                            <div data-ecom-inputtext="">
                                 <input type="text"
                                     id="insurance-input-personalnr"
                                     name="personalNumber"
@@ -117,12 +117,12 @@ class InsuranceInformationDefinition extends React.Component<IInsuranceInformati
                                     onBlur={this.handleBlur} />
                             </div>
 
-                            <div className="alert">Fel format</div>
+                            <div className="form-alert">Fel format</div>
                         </div>
 
                         <div className="form-group">
-                            <label data-am-inputlabel="" htmlFor="insurance-input-mileage">Uppskattad körsträcka per år</label>
-                            <div data-am-select="">
+                            <label data-ecom-inputlabel="" htmlFor="insurance-input-mileage">Uppskattad körsträcka per år</label>
+                            <div data-ecom-select="">
                                 <select className="select"
                                         value={selectedValue}
                                         onChange={this.handleExpectedDrivingDistanceChange}>
@@ -132,7 +132,7 @@ class InsuranceInformationDefinition extends React.Component<IInsuranceInformati
                         </div>
 
                         <div className="form-group">
-                            <div data-am-button="light full-width" onClick={this.handleProceedClick}>
+                            <div data-ecom-button="light full-width" onClick={this.handleProceedClick}>
                                 Visa försäkringar
                             </div>
                         </div>

@@ -166,28 +166,38 @@ class EcomLifecycle extends React.Component<IEcomLifecycleProps, IState> {
         const futureSteps = this.state.step === undefined ? [] : getAllEnumValues(EcomStep).filter(s => s > this.state.step);
 
         return (
-            <div data-am-frame="" style={{ marginBottom: '200px'}}>
-                <div className="frame-body">
-                    <EcomHeader
-                        canPressBackButton={canPressBackButton}
-                        onPreviousStepClick={this.handlePreviousStepClick} />
+          <div data-ecom-modal="" className="wayke-ecom">
+              <div className="modal-container">
+                  <div className="modal-center">
+                      <div className="modal-dialog">
+                          <div className="modal-dialog-main">
+                              <div data-ecom-frame="" style={{ marginBottom: '200px'}}>
+                                  <div className="frame-body">
+                                      <EcomHeader
+                                          canPressBackButton={canPressBackButton}
+                                          onPreviousStepClick={this.handlePreviousStepClick} />
 
-                    <EcomTimeline currentStep={this.state.step} historicalSteps={historicalSteps} futureSteps={futureSteps} />
+                                      <EcomTimeline currentStep={this.state.step} historicalSteps={historicalSteps} futureSteps={futureSteps} />
 
-                    <div data-am-page="">
-                        <EcomStepContent
-                            step={this.state.step}
-                            {...this.props}
+                                      <div data-ecom-page="">
+                                          <EcomStepContent
+                                              step={this.state.step}
+                                              {...this.props}
 
-                            onNextStepClick={this.handleNextStepClick}
-                            onShowCustomerInformationInitial={() => this.handleSpecificStepClick(EcomStep.CUSTOMER_INFORMATION_INITIAL)}
-                            onShowInsuranceInformationDefinition={() => this.handleSpecificStepClick(EcomStep.INSURANCE_INFORMATION_DEFINITION)}
-                            onShowTradeInCarDefinition={() => this.handleSpecificStepClick(EcomStep.TRADE_IN_CAR_DEFINITION)} />
-                    </div>
-                </div>
+                                              onNextStepClick={this.handleNextStepClick}
+                                              onShowCustomerInformationInitial={() => this.handleSpecificStepClick(EcomStep.CUSTOMER_INFORMATION_INITIAL)}
+                                              onShowInsuranceInformationDefinition={() => this.handleSpecificStepClick(EcomStep.INSURANCE_INFORMATION_DEFINITION)}
+                                              onShowTradeInCarDefinition={() => this.handleSpecificStepClick(EcomStep.TRADE_IN_CAR_DEFINITION)} />
+                                      </div>
+                                  </div>
 
-                <EcomCart vehicle={this.props.vehicle} />
-            </div>
+                                  <EcomCart vehicle={this.props.vehicle} />
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
         );
     }
 };

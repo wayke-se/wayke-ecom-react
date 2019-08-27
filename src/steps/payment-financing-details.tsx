@@ -100,7 +100,7 @@ class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsPr
         return (
             <div className="page-main">
                 <section className="page-section">
-                    <div data-am-columnrow="">
+                    <div data-ecom-columnrow="">
                         <div className="column">
                             <h1 className="h6 no-margin">Betalsätt</h1>
                             <div className="font-size-small">Audi Financial Services</div>
@@ -113,11 +113,11 @@ class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsPr
                 </section>
 
                 <section className="page-section">
-                    <div data-am-form="">
+                    <div data-ecom-form="">
                         <div className={`form-group ${hasDownPaymentError ? ' has-error' : ''}`}>
-                            <label data-am-inputlabel="" htmlFor="payment-input-downpayment">Kontantinsats (kr)</label>
+                            <label data-ecom-inputlabel="" htmlFor="payment-input-downpayment">Kontantinsats (kr)</label>
 
-                            <div data-am-inputtext="">
+                            <div data-ecom-inputtext="">
                                 <input type="text"
                                     id="payment-input-downpayment"
                                     placeholder="Kontantinsats"
@@ -126,10 +126,10 @@ class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsPr
                                     onBlur={this.handleValueUpdated} />
                             </div>
 
-                            <div className="alert">Mellan 50 000kr och 500 000kr.</div>
+                            <div className="form-alert">Mellan 50 000kr och 500 000kr.</div>
 
                             <div className="m-t">
-                                <div data-am-rangeslider="">
+                                <div data-ecom-rangeslider="">
                                     <div className="range-slider">
                                         { !hasDownPaymentError &&
                                             <Slider
@@ -146,16 +146,16 @@ class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsPr
                         </div>
 
                         <div className="form-group">
-                            <label data-am-inputlabel="" htmlFor="payment-input-installment">Avbetalning (mil)</label>
+                            <label data-ecom-inputlabel="" htmlFor="payment-input-installment">Avbetalning (mil)</label>
 
-                            <div data-am-select="">
+                            <div data-ecom-select="">
                                 <select className="select" value={durationValue} onChange={this.handleDurationChange}>
                                     {optionItems}
                                 </select>
                             </div>
 
                             <div className="m-t">
-                                <div data-am-rangeslider="">
+                                <div data-ecom-rangeslider="">
                                     <div className="range-slider">
                                         <Slider
                                             min={0}
@@ -175,14 +175,14 @@ class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsPr
                     <div className="h6 m-b-mini">5 700 kr/mån</div>
                     <div className="font-size-small">Beräknat på 4,65% ränta (effektivt 4,75%)</div>
                     <div className="m-t-half">
-                        <button data-am-link="" className="l-block">Detaljer</button>
+                        <button data-ecom-link="" className="l-block">Detaljer</button>
                     </div>
                 </section>
 
                 <section className="page-section page-section-bottom">
-                    <div data-am-buttonnav="">
+                    <div data-ecom-buttonnav="">
                         <div className="button-nav-item" onClick={this.handleProceedClick}>
-                            <div data-am-button="full-width">
+                            <div data-ecom-button="full-width">
                                 Välj finansiering
                             </div>
                         </div>

@@ -35,20 +35,20 @@ const CustomerInformationInitial = (props: ICustomerInformationInitialProps) => 
     const hasPersonalNumberError = props.data.interact.customer.personalNumber && !validateSSN(props.data.customer.personalNumber);
 
     return (
-        <div data-am-page="">
+        <div data-ecom-page="">
             <section className="page-section">
                 <h1 className="h6">Kunduppgifter</h1>
-                <div data-am-content="">
+                <div data-ecom-content="">
                     <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod.</p>
                 </div>
             </section>
 
             <section className="page-section">
-                <div data-am-form="">
+                <div data-ecom-form="">
                     <div className={`form-group ${hasPersonalNumberError ? ' has-error' : ''}`}>
-                        <label data-am-inputlabel="" htmlFor="information-1-input-personalnr">Personnummer</label>
+                        <label data-ecom-inputlabel="" htmlFor="information-1-input-personalnr">Personnummer</label>
 
-                        <div data-am-inputtext="">
+                        <div data-ecom-inputtext="">
                             <input type="text"
                                 id="information-1-input-personalnr"
                                 name="personalNumber"
@@ -58,11 +58,11 @@ const CustomerInformationInitial = (props: ICustomerInformationInitialProps) => 
                                 onBlur={handleBlur} />
                         </div>
 
-                        <div className="alert">Fel format</div>
+                        <div className="form-alert">Fel format</div>
                     </div>
 
                     <div className="form-group">
-                        <div data-am-button="light full-width" onClick={() => handleInputTypeClick(CustomerInformationInputType.AUTOMATIC)}>
+                        <div data-ecom-button="light full-width" onClick={() => handleInputTypeClick(CustomerInformationInputType.AUTOMATIC)}>
                             Hämta uppgifter
                         </div>
                     </div>
@@ -70,7 +70,7 @@ const CustomerInformationInitial = (props: ICustomerInformationInitialProps) => 
             </section>
 
             <section className="page-section">
-                <button data-am-link="" onClick={() => handleInputTypeClick(CustomerInformationInputType.MANUAL)}>Jag vill fylla i mina uppgifter manuellt</button>
+                <button data-ecom-link="" onClick={() => handleInputTypeClick(CustomerInformationInputType.MANUAL)}>Jag vill fylla i mina uppgifter manuellt</button>
             </section>
         </div>
     );

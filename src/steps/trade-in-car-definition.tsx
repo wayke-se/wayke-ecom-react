@@ -27,16 +27,16 @@ const TradeInCarDefinition = (props: ITradeInCarDefinitionProps) => {
         <div className="page-main">
             <section className="page-section">
                 <h1 className="h6">Inbytesbil</h1>
-                <div data-am-content="">
+                <div data-ecom-content="">
                     <p>Har du en bil du vill byta in när du köper din nya bil?</p>
                 </div>
             </section>
 
             <section className="page-section">
-                <div data-am-form="">
+                <div data-ecom-form="">
                     <div className={`form-group ${hasErrorRegistrationNumber ? ' has-error' : ''}`}>
-                        <label data-am-inputlabel="" htmlFor="exchange-input-regnr">Registreringsnummer</label>
-                        <div data-am-inputtext="">
+                        <label data-ecom-inputlabel="" htmlFor="exchange-input-regnr">Registreringsnummer</label>
+                        <div data-ecom-inputtext="">
                             <input type="text"
                                     id="exchange-input-regnr"
                                     name="registrationNumber"
@@ -45,12 +45,12 @@ const TradeInCarDefinition = (props: ITradeInCarDefinitionProps) => {
                                     onChange={handleInputChange}
                                     onBlur={handleBlur} />
                         </div>
-                        <div className="alert">Fel format.</div>
+                        <div className="form-alert">Fel format.</div>
                     </div>
 
                     <div className={`form-group ${hasErrorMilage ? ' has-error' : ''}`}>
-                        <label data-am-inputlabel="" htmlFor="exchange-input-mileage">Miltal (mil)</label>
-                        <div data-am-inputtext="">
+                        <label data-ecom-inputlabel="" htmlFor="exchange-input-mileage">Miltal (mil)</label>
+                        <div data-ecom-inputtext="">
                             <input type="text"
                                     id="exchange-input-mileage"
                                     name="milage"
@@ -59,15 +59,15 @@ const TradeInCarDefinition = (props: ITradeInCarDefinitionProps) => {
                                     onChange={handleInputChange}
                                     onBlur={handleBlur} />
                         </div>
-                        <div className="alert">Mellan 0 och 80 000 mil.</div>
+                        <div className="form-alert">Mellan 0 och 80 000 mil.</div>
                     </div>
                 </div>
             </section>
 
             <section className="page-section page-section-bottom">
-                <div data-am-buttonnav="">
+                <div data-ecom-buttonnav="">
                     <div className="button-nav-item" onClick={props.onNextStepClick}>
-                        <div data-am-button="full-width">
+                        <div data-ecom-button="full-width">
                             Gå vidare
                         </div>
                     </div>
