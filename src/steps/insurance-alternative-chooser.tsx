@@ -33,21 +33,21 @@ const InsuranceAlternativeChooser = (props: IInsuranceAlternativeChooserProps) =
 
     const insuranceAlternativeItems = insuranceAlternatives.map((i, index) => (
         <div className="repeat-m-half" key={index}>
-            <div data-am-box="light">
+            <div data-ecom-box="light">
                 <h2 className="h6">{i.price}</h2>
 
-                <div data-am-content="">
+                <div data-ecom-content="">
                     <p>Helförsäkring med finansiering via Audi financial services</p>
                 </div>
 
                 <div className="box-footer">
-                    <div data-am-columnrow="">
+                    <div data-ecom-columnrow="">
                         <div className="column font-size-small">
-                            <button data-am-link="action font-size-inherit" className="l-block">Mer information<i className="icon-chevron-down m-l-mini"></i></button>
+                            <button data-ecom-link="action font-size-inherit" className="l-block">Mer information<i className="icon-chevron-down m-l-mini"></i></button>
                         </div>
 
                         <div className="column">
-                            <div data-am-button="small" onClick={() => handleAlternativeClick(i.id)}>
+                            <div data-ecom-button="small" onClick={() => handleAlternativeClick(i.id)}>
                                 Välj
                             </div>
                         </div>
@@ -64,19 +64,19 @@ const InsuranceAlternativeChooser = (props: IInsuranceAlternativeChooserProps) =
         <div className="page-main">
             <section className="page-section">
                 <h1 className="h6">Audi Försäkring</h1>
-                <div data-am-content="">
+                <div data-ecom-content="">
                     <p>Skriv in ditt personnummer och din uppskattade körsträcka för att se din försäkringskostna</p>
                 </div>
             </section>
 
             <section className="page-section">
-                <div data-am-columnrow="" className="font-size-small m-b-half">
+                <div data-ecom-columnrow="" className="font-size-small m-b-half">
                     <div className="column">
                         <div className="font-medium">Uppgifter</div>
                     </div>
 
                     <div className="column">
-                        <button data-am-link="font-inerit" onClick={props.onShowInsuranceInformationDefinition}>Ändra</button>
+                        <button data-ecom-link="font-inerit" onClick={props.onShowInsuranceInformationDefinition}>Ändra</button>
                     </div>
                 </div>
 
@@ -85,7 +85,7 @@ const InsuranceAlternativeChooser = (props: IInsuranceAlternativeChooserProps) =
                 </div>
 
                 <div className="l-inline-block">
-                    <i className="icon-mileage m-r-half"></i>{min}{max ? '-' + max : '+'} mil
+                    <i className="icon-mileage m-r-half"></i><span>{min}{max ? '-' + max : '+'} mil</span>
                 </div>
             </section>
 

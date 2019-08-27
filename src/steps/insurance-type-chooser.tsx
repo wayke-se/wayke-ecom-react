@@ -22,17 +22,17 @@ const InsuranceTypeChooser = (props: IInsuranceTypeChooserProps) => {
         <div className="page-main">
             <section className="page-section">
                 <h1 className="h6">Försäkring</h1>
-                <div data-am-content="">
+                <div data-ecom-content="">
                     <p>Vill du teckna försäkring på din nya bil?</p>
                 </div>
             </section>
 
             <section className="page-section">
-                <div data-am-optionlist="">
+                <div data-ecom-optionlist="">
                     <ul className="option-list">
                         <li className="option-list-item">
                             <button className="option-list-action" onClick={() => handleInsuranceOptionClick(InsuranceOption.AUDI_INSURANCE)}>
-                                <div data-am-columnrow="">
+                                <div data-ecom-columnrow="">
                                     <div className="column">
                                         <div className="option-list-action-title">Audi Försäkring</div>
                                         <div className="option-list-action-subtitle">Audi financial services</div>

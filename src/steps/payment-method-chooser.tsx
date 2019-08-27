@@ -22,13 +22,13 @@ const PaymentMethodChooser = (props: IPaymentMethodChooserProps) => {
         <div className="page-main">
             <section className="page-section">
                 <h1 className="h6">Betalsätt</h1>
-                <div data-am-content="">
+                <div data-ecom-content="">
                     <p>Hur vill du betala för din Audi A6 AVANT?</p>
                 </div>
             </section>
 
             <section className="page-section">
-                <div data-am-optionlist="">
+                <div data-ecom-optionlist="">
                     <ul className="option-list">
                         <li className="option-list-item">
                             <button className="option-list-action" onClick={() => handlePaymentMethodClick(PaymentMethod.CASH)}>
@@ -38,7 +38,7 @@ const PaymentMethodChooser = (props: IPaymentMethodChooserProps) => {
                         </li>
                         <li className="option-list-item">
                             <button className="option-list-action" onClick={() => handlePaymentMethodClick(PaymentMethod.FINANCING)}>
-                                <div data-am-columnrow="">
+                                <div data-ecom-columnrow="">
                                     <div className="column">
                                         <div className="option-list-action-title">Finansiering</div>
                                         <div className="option-list-action-subtitle">Audi financial services</div>
@@ -62,7 +62,7 @@ const PaymentMethodChooser = (props: IPaymentMethodChooserProps) => {
             </section>
 
             <section className="page-section">
-                <div data-am-alert="">
+                <div data-ecom-alert="">
                     <div className="alert-icon-section">
                         <div className="alert-icon">
                             <i className="icon-info no-margin"></i>
