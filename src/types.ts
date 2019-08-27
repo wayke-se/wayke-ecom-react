@@ -2,8 +2,7 @@ import CustomerInformationInputType from "./enums/customer-information-input-typ
 import DeliveryType from "./enums/delivery-type";
 import InsuranceOption from "./enums/insurance-option";
 import StoreAction from './enums/store-action';
-import { PaymentType } from "wayke-ecom";
-import { IPaymentOption } from "wayke-ecom/dist-types/orders/types";
+import { IPaymentOption, IOrderOptionsResponse } from "wayke-ecom/dist-types/orders/types";
 
 export interface IVehicle {
     id: string;
@@ -11,6 +10,11 @@ export interface IVehicle {
     shortDescription: string;
     price: number;
 };
+
+export interface IEcomContext {
+    vehicle: IVehicle;
+    options: IOrderOptionsResponse;
+}
 
 export interface IEcomLifecycle {
     onNextStepClick: () => void;

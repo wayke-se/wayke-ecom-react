@@ -1,22 +1,19 @@
 import React from 'react';
 
-import { IEcomLifecycle, IEcomStore, IVehicle } from '../types';
+import { IEcomContext, IEcomLifecycle, IEcomStore } from '../types';
 import StoreAction from '../enums/store-action';
 
-import { IOrderOptionsResponse, PaymentType } from 'wayke-ecom';
+import { PaymentType } from 'wayke-ecom';
 import { IPaymentOption } from 'wayke-ecom/dist-types/orders/types';
 
 import { formatPrice } from '../utils/helpers';
 import { addSizeQuery } from '../utils/image';
 import { getLoanInformation, getDefaultDuration, getDefaultDeposit } from '../utils/loan';
 
-export interface IPaymentMethodChooserProps extends IEcomStore, IEcomLifecycle {
-    vehicle: IVehicle;
-    options: IOrderOptionsResponse;
+export interface IPaymentMethodChooserProps extends IEcomContext, IEcomStore, IEcomLifecycle {
 };
 
-interface IPaymentMethodItemProps extends IEcomStore, IEcomLifecycle {
-    vehicle: IVehicle;
+interface IPaymentMethodItemProps extends IEcomContext, IEcomStore, IEcomLifecycle {
     paymentOption: IPaymentOption;
 };
 

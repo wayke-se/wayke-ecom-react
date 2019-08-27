@@ -1,7 +1,6 @@
 import React from 'react';
 
-import { IOrderOptionsResponse } from 'wayke-ecom';
-import { IEcomLifecycle, IEcomStore, IVehicle } from '../types';
+import { IEcomContext, IEcomLifecycle, IEcomStore } from '../types';
 
 import StoreAction from '../enums/store-action';
 import Slider from '../components/slider';
@@ -11,9 +10,7 @@ import { addSizeQuery } from '../utils/image';
 import { getDefaultDeposit, getMinDeposit, getMaxDeposit, getDefaultDuration, getMinDuration, getMaxDuration, getDurationStep, getLoanInformation } from '../utils/loan';
 import { formatPrice } from '../utils/helpers';
 
-export interface IPaymentFinancingDetailsProps extends IEcomStore, IEcomLifecycle {
-    options: IOrderOptionsResponse;
-    vehicle: IVehicle;
+export interface IPaymentFinancingDetailsProps extends IEcomContext, IEcomStore, IEcomLifecycle {
 };
 
 interface IState {

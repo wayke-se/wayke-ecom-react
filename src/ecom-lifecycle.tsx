@@ -8,13 +8,11 @@ import EcomStepContent from './ecom-step-content';
 import EcomCart from './ecom-cart';
 import EcomTimeline from './ecom-timeline';
 
-import { IVehicle, IEcomStore, IEcomData } from './types';
+import { IEcomContext, IEcomStore, IEcomData } from './types';
 import StoreAction from './enums/store-action';
 import { IOrderOptionsResponse } from 'wayke-ecom';
 
-interface IEcomLifecycleProps extends IEcomStore {
-    options: IOrderOptionsResponse | undefined;
-    vehicle: IVehicle;
+interface IEcomLifecycleProps extends IEcomContext, IEcomStore {
 }
 
 interface IState {

@@ -3,13 +3,11 @@ import React from 'react';
 import InsuranceOption from '../enums/insurance-option';
 import StoreAction from '../enums/store-action';
 
-import { IEcomLifecycle, IEcomStore } from '../types';
-import { IOrderOptionsResponse } from 'wayke-ecom';
+import { IEcomContext, IEcomLifecycle, IEcomStore } from '../types';
 
 import { addSizeQuery } from '../utils/image';
 
-export interface IInsuranceTypeChooserProps extends IEcomStore, IEcomLifecycle {
-    options: IOrderOptionsResponse;
+export interface IInsuranceTypeChooserProps extends IEcomContext, IEcomStore, IEcomLifecycle {
 };
 
 const InsuranceTypeChooser = (props: IInsuranceTypeChooserProps) => {

@@ -88,10 +88,11 @@ class InsuranceInformationDefinition extends React.Component<IInsuranceInformati
     render() {
         const optionValues = options.map(o => o.min + (o.max ? '-' + o.max : '+') + ' mil');
         const optionItems = optionValues.map((v, index) => <option key={index}>{v}</option>);
-
         const selectedValue = optionValues[this.state.expectedDrivingDistance];
 
         const hasPersonalNumberError = this.props.data.interact.insurance.personalNumber && !validateSSN(this.props.data.insurance.personalNumber);
+
+        const insuranceOptions = this.props.op
 
         return (
             <div className="page-main">
