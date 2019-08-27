@@ -1,100 +1,94 @@
 import React from 'react';
 
 import EcomStep from './enums/ecom-step';
+import { IOrderOptionsResponse } from 'wayke-ecom';
+import { getPrimarySteps } from './ecom-step-transitions';
 
 export interface IEcomTimelineProps {
+    options: IOrderOptionsResponse;
     currentStep: EcomStep;
-    historicalSteps: EcomStep[];
-    futureSteps: EcomStep[];
 };
 
 interface IItemProps {
     label: string;
-    shouldHide: boolean;
-    isPassed: boolean;
-    isCurrent: boolean;
-};
-
-const StepLabels = {
-    [EcomStep.TRADE_IN_EXISTS_CHOOSER]: 'Inbyte',
-    [EcomStep.TRADE_IN_CAR_DEFINITION]: null,
-    [EcomStep.TRADE_IN_CONFIRM_CAR]: null,
-
-    [EcomStep.PAYMENT_METHOD_CHOOSER]: 'Betalsätt',
-    [EcomStep.PAYMENT_FINANCING_DETAILS ]: null,
-
-    [EcomStep.INSURANCE_TYPE_CHOOSER]: 'Försäkring',
-    [EcomStep.INSURANCE_INFORMATION_DEFINITION]: null,
-    [EcomStep.INSURANCE_ALTERNATIVE_CHOOSER]: null,
-
-    [EcomStep.CUSTOMER_INFORMATION_INITIAL]: 'Uppgifter',
-    [EcomStep.CUSTOMER_INFORMATION_DETAILS]: null,
-
-    [EcomStep.DELIVERY_TYPE_CHOOSER]: 'Leverans',
-
-    [EcomStep.FINAL_CONFIRMATION]: 'Bekräftelse',
+    isActive: boolean;
+    isInbetweenStepActive: boolean;
 };
 
 const Item = (props: IItemProps) => {
-    if (props.shouldHide) {
-        return (null);
-    }
-
-    let extraClassName = '';
-
-    if (props.isPassed) {
-        extraClassName = 'is-active is-stepped';
-    } else if (props.isCurrent) {
-        extraClassName = 'timeline-item-step';
-    }
-
     return (
-        <li className={`timeline-item ${extraClassName}`}>
+        <li className={`timeline-item ${props.isActive ? 'is-active' : ''} ${props.isInbetweenStepActive ? 'is-stepped' : ''}`}>
             <div className="timeline-indicator"></div>
-
-            { props.label &&
-                <div className="timeline-label">{props.label}</div>
-            }
+            <div className="timeline-label">{props.label}</div>
         </li>
     );
 };
 
+const InbetweenItem = () => {
+    return (
+        <li className="timeline-item timeline-item-step">
+            <div className="timeline-indicator"></div>
+        </li>
+    );
+};
+
+const getLabel = (step: EcomStep): string => {
+    switch (step) {
+        case EcomStep.TRADE_IN_EXISTS_CHOOSER:
+            return 'Inbyte';
+        case EcomStep.PAYMENT_METHOD_CHOOSER:
+            return 'Betalsätt';
+        case EcomStep.INSURANCE_TYPE_CHOOSER:
+            return 'Försäkring';
+        case EcomStep.CUSTOMER_INFORMATION_INITIAL:
+            return 'Uppgifter';
+        case EcomStep.DELIVERY_TYPE_CHOOSER:
+            return 'Leverans';
+        case EcomStep.FINAL_CONFIRMATION:
+            return 'Bekräftelse';
+        default:
+            return '';
+    }
+}
+
 const EcomTimeline = (props: IEcomTimelineProps) => {
-    const timelineObjects = [
-        ...props.historicalSteps.map((s) => ({
-            step: s,
-            label: null,
-            shouldHide: null,
-            isPassed: true,
-            isCurrent: false
-        })),
-
-        {
-            step: props.currentStep,
-            label: null,
-            shouldHide: null,
-            isPassed: false,
-            isCurrent: true
-        },
-
-        ...props.futureSteps.map((s) => ({
-            step: s,
-            label: null,
-            shouldHide: null,
-            isPassed: false,
-            isCurrent: false
-        })),
-    ];
-
-    for (let i = 0; i < timelineObjects.length; i++) {
-        const object = timelineObjects[i];
-        const label = StepLabels[object.step];
-
-        object.label = (i + 1) + '. ' + label;
-        object.shouldHide = !label && !object.isCurrent;
+    if (!props.options) {
+        return <div></div>;
     }
 
-    const items = timelineObjects.map((o, index) => <Item key={index} {...o} />);
+    const primarySteps = getPrimarySteps(props.options);
+    const items = [];
+
+    var timelineItemKey = 0;
+
+    for (var i = 0; i < primarySteps.length; i++) {
+        const primaryStep = primarySteps[i];
+
+        const nextStepIndex = i + 1;
+        const nextStep = nextStepIndex < primarySteps.length ? primarySteps[nextStepIndex] : null;
+
+        const label = getLabel(primaryStep);
+        const fullLabel = label ? `${i + 1}. ${label}` : null;
+
+        var isActive: boolean;
+        var isInbetweenStepActive: boolean;
+
+        if (nextStep) {
+            isActive = props.currentStep >= primaryStep && props.currentStep < nextStep;
+            isInbetweenStepActive = props.currentStep > primaryStep && props.currentStep < nextStep;
+        } else {
+            isActive = props.currentStep === primaryStep;
+            isInbetweenStepActive = false;
+        }
+
+        items.push(<Item key={timelineItemKey} label={fullLabel} isActive={isActive} isInbetweenStepActive={isInbetweenStepActive} />);
+        timelineItemKey += 1;
+
+        if (nextStep) {
+            items.push(<InbetweenItem key={timelineItemKey} />);
+            timelineItemKey += 1;
+        }
+    }
 
     return (
         <div data-ecom-timeline="">

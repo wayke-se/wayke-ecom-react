@@ -4,9 +4,31 @@ import CustomerInformationInputType from './enums/customer-information-input-typ
 
 import { validateRegistrationNumber, validateMilage, validateSSN, validateZip } from './utils/validation';
 import { IEcomData } from './types';
-import { PaymentType } from 'wayke-ecom';
+import { PaymentType, IOrderOptionsResponse } from 'wayke-ecom';
 
-export default {
+export const getInitialStep = (options: IOrderOptionsResponse): EcomStep => {
+    return options.allowsTradeIn() ? EcomStep.TRADE_IN_EXISTS_CHOOSER : EcomStep.PAYMENT_METHOD_CHOOSER;
+};
+
+export const getPrimarySteps = (options: IOrderOptionsResponse): EcomStep[] => {
+    const result = [];
+
+    if (options.allowsTradeIn()) {
+        result.push(EcomStep.TRADE_IN_EXISTS_CHOOSER);
+    }
+
+    result.push(
+        EcomStep.PAYMENT_METHOD_CHOOSER,
+        EcomStep.INSURANCE_TYPE_CHOOSER,
+        EcomStep.CUSTOMER_INFORMATION_INITIAL,
+        EcomStep.DELIVERY_TYPE_CHOOSER,
+        EcomStep.FINAL_CONFIRMATION
+    );
+
+    return result;
+};
+
+export const getAllTransitions = () => ({
     [EcomStep.TRADE_IN_EXISTS_CHOOSER]: (data: IEcomData) => {
         if (data.tradeInCar.hasTradeInCar) {
             return EcomStep.TRADE_IN_CAR_DEFINITION;
@@ -82,4 +104,4 @@ export default {
         return isValid ? EcomStep.DELIVERY_TYPE_CHOOSER : null;
     },
     [EcomStep.DELIVERY_TYPE_CHOOSER]: () => EcomStep.FINAL_CONFIRMATION,
-};
+});

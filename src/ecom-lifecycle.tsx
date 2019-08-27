@@ -1,7 +1,7 @@
 import React from 'react';
 
 import EcomStep from './enums/ecom-step';
-import EcomStepTransitions from './ecom-step-transitions';
+import { getAllTransitions, getInitialStep } from './ecom-step-transitions';
 
 import EcomHeader from './ecom-header';
 import EcomStepContent from './ecom-step-content';
@@ -10,7 +10,6 @@ import EcomTimeline from './ecom-timeline';
 
 import { IVehicle, IEcomStore, IEcomData } from './types';
 import StoreAction from './enums/store-action';
-import { getAllEnumValues } from './utils/enum';
 import { IOrderOptionsResponse } from 'wayke-ecom';
 
 interface IEcomLifecycleProps extends IEcomStore {
@@ -25,7 +24,7 @@ interface IState {
 }
 
 const getNewStep = (currentStep: EcomStep, data: IEcomData): EcomStep => {
-    const transition = EcomStepTransitions[currentStep];
+    const transition = getAllTransitions()[currentStep];
 
     if (transition) {
         return transition(data);
@@ -59,8 +58,7 @@ class EcomLifecycle extends React.Component<IEcomLifecycleProps, IState> {
         const shouldSetInitialStep = hasOptions && hasNoStep;
 
         if (shouldSetInitialStep) {
-            const shouldStartAtTradeIn = this.props.options.allowsTradeIn();
-            const initialStep = shouldStartAtTradeIn ? EcomStep.TRADE_IN_EXISTS_CHOOSER : EcomStep.PAYMENT_METHOD_CHOOSER;
+            const initialStep = getInitialStep(this.props.options);
 
             this.setState({
                 stepHistory: [ initialStep ],
@@ -162,9 +160,6 @@ class EcomLifecycle extends React.Component<IEcomLifecycleProps, IState> {
     render() {
         const canPressBackButton = this.state.stepHistory.length > 1 && !this.state.isBackwardsStepForbidden;
 
-        const historicalSteps = this.state.stepHistory.length === 0 ? [] : [...this.state.stepHistory].slice(0, this.state.stepHistory.length - 1);
-        const futureSteps = this.state.step === undefined ? [] : getAllEnumValues(EcomStep).filter(s => s > this.state.step);
-
         return (
           <div data-ecom-modal="" className="wayke-ecom">
               <div className="modal-container">
@@ -177,7 +172,7 @@ class EcomLifecycle extends React.Component<IEcomLifecycleProps, IState> {
                                           canPressBackButton={canPressBackButton}
                                           onPreviousStepClick={this.handlePreviousStepClick} />
 
-                                      <EcomTimeline currentStep={this.state.step} historicalSteps={historicalSteps} futureSteps={futureSteps} />
+                                      <EcomTimeline currentStep={this.state.step} options={this.props.options} />
 
                                       <div data-ecom-page="">
                                           <EcomStepContent
