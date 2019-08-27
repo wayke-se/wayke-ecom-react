@@ -5,6 +5,7 @@ import { IEcomLifecycle, IEcomStore } from '../types';
 import StoreAction from '../enums/store-action';
 import Slider from '../components/slider';
 import { IOrderOptionsResponse } from 'wayke-ecom';
+import { addSizeQuery } from '../utils/image';
 
 export interface IPaymentFinancingDetailsProps extends IEcomStore, IEcomLifecycle {
     options: IOrderOptionsResponse;
@@ -99,6 +100,8 @@ class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsPr
 
         const hasDownPaymentError = !validateNumberInRange(this.state.downPayment, downPaymentMin, downPaymentMax);
         const paymentOption = this.props.data.payment.paymentOption;
+
+        const scaledImage = addSizeQuery(paymentOption.logo, 100, 60);
         console.log(paymentOption);
 
         return (
@@ -112,7 +115,7 @@ class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsPr
 
                         { paymentOption.logo &&
                             <div className="column valign-top minimal">
-                                <img src={paymentOption.logo} alt="Audi logotype" className="l-block" />
+                                <img src={scaledImage} alt="Audi logotype" className="l-block" />
                             </div>
                         }
                     </div>

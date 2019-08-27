@@ -5,6 +5,7 @@ import StoreAction from '../enums/store-action';
 import { IOrderOptionsResponse, PaymentType } from 'wayke-ecom';
 import { IPaymentOption } from 'wayke-ecom/dist-types/orders/types';
 import { numberSeparator } from '../utils/helpers';
+import { addSizeQuery } from '../utils/image';
 
 export interface IPaymentMethodChooserProps extends IEcomStore, IEcomLifecycle {
     options: IOrderOptionsResponse;
@@ -40,8 +41,8 @@ const PaymentMethodItem = (props: IPaymentMethodItemProps) => {
 
     const title = getPaymentMethodTitle(props.paymentOption.type);
     const interest = props.paymentOption.loanDetails ? props.paymentOption.loanDetails.interest : null;
-
     const price = numberSeparator(props.paymentOption.price);
+    const scaledImage = addSizeQuery(props.paymentOption.logo, 100, 60);
 
     return (
         <li className="option-list-item">
@@ -55,7 +56,7 @@ const PaymentMethodItem = (props: IPaymentMethodItemProps) => {
 
                     { props.paymentOption.logo &&
                         <div className="column valign-top minimal">
-                            <img src={props.paymentOption.logo} alt="logotype" className="l-block" />
+                            <img src={scaledImage} alt="logotype" className="l-block" />
                         </div>
                     }
                 </div>
