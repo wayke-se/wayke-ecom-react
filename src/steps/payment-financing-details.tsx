@@ -17,6 +17,7 @@ export interface IPaymentFinancingDetailsProps extends IEcomStore, IEcomLifecycl
 };
 
 interface IState {
+    isShowingDetails: boolean;
     deposit: string;
     durationIndex: number;
 };
@@ -47,12 +48,11 @@ class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsPr
     constructor(props: IPaymentFinancingDetailsProps) {
         super(props);
 
+        this.handleDetailsClick = this.handleDetailsClick.bind(this);
         this.handleDurationChange = this.handleDurationChange.bind(this);
         this.handleDurationSliderChange = this.handleDurationSliderChange.bind(this);
-
         this.handleDepositChange = this.handleDepositChange.bind(this);
         this.handleDepositSliderChange = this.handleDepositSliderChange.bind(this);
-
         this.handleValueUpdated = this.handleValueUpdated.bind(this);
         this.handleProceedClick = this.handleProceedClick.bind(this);
 
@@ -62,9 +62,16 @@ class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsPr
         const durationIndex = getIndexFromDuration(duration);
 
         this.state = {
+            isShowingDetails: false,
             deposit: deposit + '',
             durationIndex
         };
+    }
+
+    handleDetailsClick() {
+        this.setState({
+            isShowingDetails: !this.state.isShowingDetails
+        });
     }
 
     handleDurationChange(e) {
@@ -133,6 +140,9 @@ class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsPr
         const formattedPrice = formatPrice(loanInformation.monthlyCost);
         const formattedInterest = formatPrice(loanInformation.interest);
         const formattedEffectiveInterest = formatPrice(loanInformation.effectiveInterest);
+        const formattedSetupFee = formatPrice(loanInformation.setupFee);
+        const formattedAdministrationFee = formatPrice(loanInformation.administrationFee);
+        const formattedTotalCreditCost = formatPrice(loanInformation.totalCreditCost);
 
         return (
             <div className="page-main">
@@ -214,8 +224,42 @@ class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsPr
                     <div className="h6 m-b-mini">{formattedPrice} kr/mån</div>
                     <div className="font-size-small">Beräknat på {formattedInterest}% ränta (effektivt {formattedEffectiveInterest}%)</div>
                     <div className="m-t-half">
-                        <button data-ecom-link="" className="l-block">Detaljer</button>
+                        <button data-ecom-link="" className="l-block" onClick={this.handleDetailsClick}>{this.state.isShowingDetails ? 'Färre detaljer' : 'Detaljer'}</button>
                     </div>
+                    { this.state.isShowingDetails &&
+                        <div className="m-t">
+                            <div data-ecom-columnrow="" className="repeat-m-half">
+                                <div className="column">
+                                    <div className="font-medium font-size-small">Ränta</div>
+                                </div>
+                                <div className="column">{formattedInterest}%</div>
+                            </div>
+                            <div data-ecom-columnrow="" className="repeat-m-half">
+                                <div className="column">
+                                    <div className="font-medium font-size-small">Effektiv ränta	</div>
+                                </div>
+                                <div className="column">{formattedEffectiveInterest}%</div>
+                            </div>
+                            <div data-ecom-columnrow="" className="repeat-m-half">
+                                <div className="column">
+                                    <div className="font-medium font-size-small">Uppläggningskostnad</div>
+                                </div>
+                                <div className="column">{formattedSetupFee}kr</div>
+                            </div>
+                            <div data-ecom-columnrow="" className="repeat-m-half">
+                                <div className="column">
+                                    <div className="font-medium font-size-small">Administrativa avgifter</div>
+                                </div>
+                                <div className="column">{formattedAdministrationFee}kr/mån</div>
+                            </div>
+                            <div data-ecom-columnrow="" className="repeat-m-half">
+                                <div className="column">
+                                    <div className="font-medium font-size-small">Total kreditkostnad</div>
+                                </div>
+                                <div className="column">{formattedTotalCreditCost}kr</div>
+                            </div>
+                        </div>
+                    }
                 </section>
 
                 <section className="page-section page-section-bottom">

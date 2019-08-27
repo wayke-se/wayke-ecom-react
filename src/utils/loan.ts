@@ -119,9 +119,14 @@ export const getLoanInformation = (vehiclePrice: number, duration: number, depos
     const monthlyCost = getMonthlyCost(interestInDecimal, duration, loan, residual, false);
     const effectiveInterest = getEffectiveRate(interestInDecimal, duration, loan, residual, administrationFee, setupFee, false);
 
+    const totalCreditCost = getCreditCost(interestInDecimal, duration, loan, residual, administrationFee, setupFee, false);
+
     return {
         monthlyCost,
         interest,
-        effectiveInterest
+        effectiveInterest,
+        setupFee,
+        administrationFee,
+        totalCreditCost
     };
 }
