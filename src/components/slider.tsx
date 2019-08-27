@@ -71,12 +71,23 @@ class Slider extends React.Component<ISliderProps, IState> {
 
         this.sliderRef = React.createRef();
 
-        const initialValue = convertExternalValueToFraction(props.initialValue, props.min, props.max) || 0;
-
         this.state = {
             isDragging: false,
-            value: initialValue
+            value: 0
         };
+    }
+
+    static getDerivedStateFromProps(props: ISliderProps, state: IState) {
+        const value = convertExternalValueToFraction(props.initialValue, props.min, props.max) || 0;
+
+        if (value !== state.value) {
+            return {
+                ...state,
+                value
+            };
+        } else {
+            return null;
+        }
     }
 
     componentDidMount() {
@@ -171,13 +182,13 @@ class Slider extends React.Component<ISliderProps, IState> {
     }
 
     render() {
+        const handlePercentagePosition = this.getPercentagePositionFromFraction(this.state.value);
+
         const trackStyle = {
             visibility: 'visible',
             left: '0%',
-            width: '100%'
+            width: `${handlePercentagePosition}%`
         } as React.CSSProperties;
-
-        const handlePercentagePosition = this.getPercentagePositionFromFraction(this.state.value);
 
         const handleStyle = {
             left: `${handlePercentagePosition}%`

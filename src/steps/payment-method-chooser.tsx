@@ -1,17 +1,22 @@
 import React from 'react';
 
-import { IEcomLifecycle, IEcomStore } from '../types';
+import { IEcomLifecycle, IEcomStore, IVehicle } from '../types';
 import StoreAction from '../enums/store-action';
+
 import { IOrderOptionsResponse, PaymentType } from 'wayke-ecom';
 import { IPaymentOption } from 'wayke-ecom/dist-types/orders/types';
-import { numberSeparator } from '../utils/helpers';
+
+import { formatPrice } from '../utils/helpers';
 import { addSizeQuery } from '../utils/image';
+import { getLoanInformation, getDefaultDuration, getDefaultDeposit } from '../utils/loan';
 
 export interface IPaymentMethodChooserProps extends IEcomStore, IEcomLifecycle {
+    vehicle: IVehicle;
     options: IOrderOptionsResponse;
 };
 
 interface IPaymentMethodItemProps extends IEcomStore, IEcomLifecycle {
+    vehicle: IVehicle;
     paymentOption: IPaymentOption;
 };
 
@@ -40,9 +45,25 @@ const PaymentMethodItem = (props: IPaymentMethodItemProps) => {
     };
 
     const title = getPaymentMethodTitle(props.paymentOption.type);
-    const interest = props.paymentOption.loanDetails ? props.paymentOption.loanDetails.interest : null;
-    const price = numberSeparator(props.paymentOption.price);
     const scaledImage = addSizeQuery(props.paymentOption.logo, 100, 60);
+
+    const isLoan = props.paymentOption.type === PaymentType.Loan;
+
+    var formattedPrice = null;
+    var formattedInterest = null;
+
+    if (isLoan) {
+        const duration = getDefaultDuration();
+        const deposit = getDefaultDeposit(props.vehicle.price);
+
+        const loanDetails = props.paymentOption.loanDetails;
+        const loanInformation = getLoanInformation(props.vehicle.price, duration, deposit, loanDetails.interest, loanDetails.administrationFee, loanDetails.setupFee);
+
+        formattedPrice = formatPrice(loanInformation.monthlyCost);
+        formattedInterest = formatPrice(loanInformation.interest);
+    } else {
+        formattedPrice = props.paymentOption.price;
+    }
 
     return (
         <li className="option-list-item">
@@ -51,7 +72,7 @@ const PaymentMethodItem = (props: IPaymentMethodItemProps) => {
                     <div className="column">
                         <div className="option-list-action-title">{title}</div>
                         <div className="option-list-action-subtitle">{props.paymentOption.name}</div>
-                        <div className="option-list-action-meta">{price} {props.paymentOption.unit} {interest !== null && <span className="text-dark-lighten">Ränta {interest} %</span>}</div>
+                        <div className="option-list-action-meta">{formattedPrice} {props.paymentOption.unit} {formattedInterest !== null && <span className="text-dark-lighten">Ränta {formattedInterest}%</span>}</div>
                     </div>
 
                     { props.paymentOption.logo &&

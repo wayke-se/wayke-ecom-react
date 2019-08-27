@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { IVehicle } from './types';
-import { numberSeparator } from './utils/helpers';
+import { formatPrice } from './utils/helpers';
 
 export interface IEcomCartProps {
     vehicle: IVehicle;
@@ -24,7 +24,7 @@ const CartItem = (props: ICartItemProps) => {
                         <div className="cart-header-title">
                         <span className="font-medium">{props.vehicle.title}</span> {props.vehicle.shortDescription}
                         </div>
-                        <div className="cart-header-price">{numberSeparator(props.vehicle.price)} kr</div>
+                        <div className="cart-header-price">{formatPrice(props.vehicle.price)} kr</div>
                     </div>
                     <div className="cart-header-content-icon-container">
                         <div className="cart-header-content-icon"></div>

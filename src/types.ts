@@ -41,7 +41,7 @@ export interface ITradeInCarData {
 
 export interface IPaymentData {
     paymentOption: IPaymentOption;
-    financingDownPayment: string;
+    financingDeposit: string;
     financingDuration: number;
 };
 

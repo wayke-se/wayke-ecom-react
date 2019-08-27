@@ -64,7 +64,7 @@ class EcomStore extends React.Component<IEcomStoreProps, IState> {
             },
             payment: {
                 paymentOption: null,
-                financingDownPayment: '',
+                financingDeposit: '',
                 financingDuration: null
             },
             tradeInCar: {

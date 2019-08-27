@@ -1,30 +1,46 @@
 import React from 'react';
 
-import { validateNumberInRange } from '../utils/validation';
-import { IEcomLifecycle, IEcomStore } from '../types';
+import { IOrderOptionsResponse } from 'wayke-ecom';
+import { IEcomLifecycle, IEcomStore, IVehicle } from '../types';
+
 import StoreAction from '../enums/store-action';
 import Slider from '../components/slider';
-import { IOrderOptionsResponse } from 'wayke-ecom';
+
+import { validateNumberInRange } from '../utils/validation';
 import { addSizeQuery } from '../utils/image';
+import { getDefaultDeposit, getMinDeposit, getMaxDeposit, getDefaultDuration, getMinDuration, getMaxDuration, getDurationStep, getLoanInformation } from '../utils/loan';
+import { formatPrice } from '../utils/helpers';
 
 export interface IPaymentFinancingDetailsProps extends IEcomStore, IEcomLifecycle {
     options: IOrderOptionsResponse;
+    vehicle: IVehicle;
 };
 
 interface IState {
-    downPayment: string;
-    duration: number;
+    deposit: string;
+    durationIndex: number;
 };
 
-const downPaymentMin = 50000;
-const downPaymentMax = 500000;
+const getAllDurationSteps = () => {
+    const difference = getMaxDuration() - getMinDuration();
+    const numberOfSteps = difference / getDurationStep();
+
+    const result = [];
+
+    for (var i = 0; i <= numberOfSteps; i++) {
+        const value = getMinDuration() + i * getDurationStep();
+        result.push(value);
+    }
+
+    return result;
+};
 
 const getIndexFromDuration = (duration: number): number => {
-    return duration / 24 - 1;
+    return getAllDurationSteps().findIndex(s => s === duration);
 };
 
 const getDurationFromIndex = (index: number): number => {
-    return (index + 1) * 24;
+    return getAllDurationSteps().find((s, i) => i === index);
 };
 
 class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsProps, IState> {
@@ -34,21 +50,26 @@ class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsPr
         this.handleDurationChange = this.handleDurationChange.bind(this);
         this.handleDurationSliderChange = this.handleDurationSliderChange.bind(this);
 
-        this.handleDownPaymentChange = this.handleDownPaymentChange.bind(this);
-        this.handleDownPaymentSliderChange = this.handleDownPaymentSliderChange.bind(this);
+        this.handleDepositChange = this.handleDepositChange.bind(this);
+        this.handleDepositSliderChange = this.handleDepositSliderChange.bind(this);
 
         this.handleValueUpdated = this.handleValueUpdated.bind(this);
         this.handleProceedClick = this.handleProceedClick.bind(this);
 
+        const deposit = props.data.payment.financingDeposit ? props.data.payment.financingDeposit : getDefaultDeposit(props.vehicle.price);
+        const duration = props.data.payment.financingDuration ? props.data.payment.financingDuration : getDefaultDuration();
+
+        const durationIndex = getIndexFromDuration(duration);
+
         this.state = {
-            downPayment: props.data.payment.financingDownPayment ? '' + props.data.payment.financingDownPayment : '100000',
-            duration: props.data.payment.financingDuration ? getIndexFromDuration(props.data.payment.financingDuration) : 1
+            deposit: deposit + '',
+            durationIndex
         };
     }
 
     handleDurationChange(e) {
         this.setState({
-            duration: e.target.selectedIndex
+            durationIndex: e.target.selectedIndex
         }, () => {
             this.handleValueUpdated();
         });
@@ -56,28 +77,31 @@ class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsPr
 
     handleDurationSliderChange(e) {
         this.setState({
-            duration: e
+            durationIndex: e
         });
     }
 
-    handleDownPaymentChange(e) {
+    handleDepositChange(e) {
         this.setState({
-            downPayment: e.target.value
+            deposit: e.target.value
         });
     }
 
-    handleDownPaymentSliderChange(e) {
+    handleDepositSliderChange(e) {
         this.setState({
-            downPayment: e
+            deposit: e
         });
     }
 
     handleValueUpdated() {
-        const downPayment = validateNumberInRange(this.state.downPayment, downPaymentMin, downPaymentMax) ? parseInt(this.state.downPayment) : null;
-        const duration = getDurationFromIndex(this.state.duration);
+        const depositMin = getMinDeposit(this.props.vehicle.price);
+        const depositMax = getMaxDeposit(this.props.vehicle.price);
+
+        const deposit = validateNumberInRange(this.state.deposit, depositMin, depositMax) ? parseInt(this.state.deposit) : null;
+        const duration = getDurationFromIndex(this.state.durationIndex);
 
         this.props.dispatchStoreAction(StoreAction.PAYMENT_UPDATE_FINANCING_INFORMATION, {
-            financingDownPayment: downPayment,
+            financingDeposit: deposit,
             financingDuration: duration
         });
     }
@@ -88,21 +112,27 @@ class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsPr
     }
 
     render() {
-        const durationCount = 10;
-        const options = [];
-
-        for (let i = 0; i < durationCount; i++) {
-            options.push(getDurationFromIndex(i) + 'mån');
-        }
+        const options = getAllDurationSteps().map(s => s + 'mån');
 
         const optionItems = options.map((o, index) => <option key={index}>{o}</option>);
-        const durationValue = options[this.state.duration];
+        const durationValue = options[this.state.durationIndex];
 
-        const hasDownPaymentError = !validateNumberInRange(this.state.downPayment, downPaymentMin, downPaymentMax);
+        const depositMin = getMinDeposit(this.props.vehicle.price);
+        const depositMax = getMaxDeposit(this.props.vehicle.price);
+
+        const hasDownPaymentError = !validateNumberInRange(this.state.deposit, depositMin, depositMax);
         const paymentOption = this.props.data.payment.paymentOption;
 
         const scaledImage = addSizeQuery(paymentOption.logo, 100, 60);
-        console.log(paymentOption);
+
+        const loanDetails = paymentOption.loanDetails;
+        const deposit = parseInt(this.state.deposit);
+        const duration = getDurationFromIndex(this.state.durationIndex);
+        const loanInformation = getLoanInformation(this.props.vehicle.price, duration, deposit, loanDetails.interest, loanDetails.administrationFee, loanDetails.setupFee);
+
+        const formattedPrice = formatPrice(loanInformation.monthlyCost);
+        const formattedInterest = formatPrice(loanInformation.interest);
+        const formattedEffectiveInterest = formatPrice(loanInformation.effectiveInterest);
 
         return (
             <div className="page-main">
@@ -130,23 +160,23 @@ class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsPr
                                 <input type="text"
                                     id="payment-input-downpayment"
                                     placeholder="Kontantinsats"
-                                    value={this.state.downPayment}
-                                    onChange={this.handleDownPaymentChange}
+                                    value={this.state.deposit}
+                                    onChange={this.handleDepositChange}
                                     onBlur={this.handleValueUpdated} />
                             </div>
 
-                            <div className="form-alert">Mellan 50 000kr och 500 000kr.</div>
+                            <div className="form-alert">Mellan {formatPrice(depositMin)}kr och {formatPrice(depositMax)}kr.</div>
 
                             <div className="m-t">
                                 <div data-ecom-rangeslider="">
                                     <div className="range-slider">
                                         { !hasDownPaymentError &&
                                             <Slider
-                                                min={downPaymentMin}
-                                                max={downPaymentMax}
-                                                step={1000}
-                                                initialValue={parseInt(this.state.downPayment) || downPaymentMin}
-                                                onChange={this.handleDownPaymentSliderChange}
+                                                min={depositMin}
+                                                max={depositMax}
+                                                step={10}
+                                                initialValue={parseInt(this.state.deposit)}
+                                                onChange={this.handleDepositSliderChange}
                                                 onAfterChange={this.handleValueUpdated} />
                                         }
                                     </div>
@@ -168,9 +198,9 @@ class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsPr
                                     <div className="range-slider">
                                         <Slider
                                             min={0}
-                                            max={durationCount - 1}
+                                            max={options.length - 1}
                                             step={1}
-                                            initialValue={this.state.duration}
+                                            initialValue={this.state.durationIndex}
                                             onChange={this.handleDurationSliderChange}
                                             onAfterChange={this.handleValueUpdated} />
                                     </div>
@@ -181,8 +211,8 @@ class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsPr
                 </section>
 
                 <section className="page-section">
-                    <div className="h6 m-b-mini">5 700 kr/mån</div>
-                    <div className="font-size-small">Beräknat på 4,65% ränta (effektivt 4,75%)</div>
+                    <div className="h6 m-b-mini">{formattedPrice} kr/mån</div>
+                    <div className="font-size-small">Beräknat på {formattedInterest}% ränta (effektivt {formattedEffectiveInterest}%)</div>
                     <div className="m-t-half">
                         <button data-ecom-link="" className="l-block">Detaljer</button>
                     </div>
