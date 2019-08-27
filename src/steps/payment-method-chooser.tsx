@@ -46,7 +46,7 @@ const PaymentMethodItem = (props: IPaymentMethodItemProps) => {
     return (
         <li className="option-list-item">
             <button className="option-list-action" onClick={() => handlePaymentMethodClick()}>
-                <div data-am-columnrow="">
+                <div data-ecom-columnrow="">
                     <div className="column">
                         <div className="option-list-action-title">{title}</div>
                         <div className="option-list-action-subtitle">{props.paymentOption.name}</div>
@@ -55,7 +55,7 @@ const PaymentMethodItem = (props: IPaymentMethodItemProps) => {
 
                     { props.paymentOption.logo &&
                         <div className="column valign-top minimal">
-                            <img src={props.paymentOption.logo} alt="Audi logotype" className="l-block" />
+                            <img src={props.paymentOption.logo} alt="logotype" className="l-block" />
                         </div>
                     }
                 </div>
@@ -71,13 +71,13 @@ const PaymentMethodChooser = (props: IPaymentMethodChooserProps) => {
         <div className="page-main">
             <section className="page-section">
                 <h1 className="h6">Betalsätt</h1>
-                <div data-am-content="">
+                <div data-ecom-content="">
                     <p>Hur vill du betala för din Audi A6 AVANT?</p>
                 </div>
             </section>
 
             <section className="page-section">
-                <div data-am-optionlist="">
+                <div data-ecom-optionlist="">
                     <ul className="option-list">
                         {items}
                     </ul>
@@ -85,7 +85,7 @@ const PaymentMethodChooser = (props: IPaymentMethodChooserProps) => {
             </section>
 
             <section className="page-section">
-                <div data-am-alert="">
+                <div data-ecom-alert="">
                     <div className="alert-icon-section">
                         <div className="alert-icon">
                             <i className="icon-info no-margin"></i>

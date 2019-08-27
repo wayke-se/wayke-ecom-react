@@ -17,13 +17,13 @@ const TradeInExistsChooser = (props: ITradeInExistsChooserProps) => {
         <div className="page-main">
             <section className="page-section">
                 <h1 className="h6">Har du inbytesbil?</h1>
-                <div data-am-content="">
+                <div data-ecom-content="">
                     <p>Har du en bil du vill byta in när du köper din nya bil?</p>
                 </div>
             </section>
 
             <section className="page-section">
-                <div data-am-optionlist="">
+                <div data-ecom-optionlist="">
                     <ul className="option-list">
                         <li className="option-list-item">
                             <button className="option-list-action" onClick={() => handleHasTradeInCarClick(true)}>

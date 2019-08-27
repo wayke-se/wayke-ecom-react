@@ -32,12 +32,12 @@ const AutomaticContent = (props: ICustomerInformationDetailsProps) => {
     return (
         <React.Fragment>
             <section className="page-section page-section-border">
-                <div data-am-columnrow="" className="font-size-small m-b-half">
+                <div data-ecom-columnrow="" className="font-size-small m-b-half">
                     <div className="column">
                         <div className="font-medium">Personnummer</div>
                     </div>
                     <div className="column">
-                        <button data-am-link="font-inerit" onClick={() => props.onShowCustomerInformationInitial()}>Ändra</button>
+                        <button data-ecom-link="font-inerit" onClick={() => props.onShowCustomerInformationInitial()}>Ändra</button>
                     </div>
                 </div>
                 <div className="m-t-half">
@@ -46,28 +46,28 @@ const AutomaticContent = (props: ICustomerInformationDetailsProps) => {
             </section>
 
             <section className="page-section page-section-border">
-                <div data-am-columnrow="" className="repeat-m-half">
+                <div data-ecom-columnrow="" className="repeat-m-half">
                     <div className="column">
                         <div className="font-medium font-size-small">För- och efternamn</div>
                     </div>
                     <div className="column">J*** D**</div>
                 </div>
 
-                <div data-am-columnrow="" className="repeat-m-half">
+                <div data-ecom-columnrow="" className="repeat-m-half">
                     <div className="column">
                         <div className="font-medium font-size-small">Gatuadress</div>
                     </div>
                     <div className="column">B******* 5</div>
                 </div>
 
-                <div data-am-columnrow="" className="repeat-m-half">
+                <div data-ecom-columnrow="" className="repeat-m-half">
                     <div className="column">
                         <div className="font-medium font-size-small">Postnummer</div>
                     </div>
                     <div className="column">*** 55</div>
                 </div>
 
-                <div data-am-columnrow="" className="repeat-m-half">
+                <div data-ecom-columnrow="" className="repeat-m-half">
                     <div className="column">
                         <div className="font-medium font-size-small">Postort</div>
                     </div>
@@ -87,11 +87,11 @@ const ManualContent = (props: ICustomerInformationDetailsProps) => {
 
     return (
         <section className="page-section">
-            <div data-am-form="">
+            <div data-ecom-form="">
                 <div className={`form-group ${hasPersonalNumberError ? ' has-error' : ''}`}>
-                    <label data-am-inputlabel="" htmlFor="information-2-input-personalnr">Personnummer</label>
+                    <label data-ecom-inputlabel="" htmlFor="information-2-input-personalnr">Personnummer</label>
 
-                    <div data-am-inputtext="">
+                    <div data-ecom-inputtext="">
                         <input type="text"
                             id="information-2-input-personalnr"
                             name="personalNumber"
@@ -101,13 +101,13 @@ const ManualContent = (props: ICustomerInformationDetailsProps) => {
                             onBlur={(e) => handleBlur(props, e)} />
                     </div>
 
-                    <div className="alert">Fel format</div>
+                    <div className="form-alert">Fel format</div>
                 </div>
 
                 <div className={`form-group ${hasNameError ? ' has-error' : ''}`}>
-                    <label data-am-inputlabel="" htmlFor="information-2-input-name">För- och efternamn</label>
+                    <label data-ecom-inputlabel="" htmlFor="information-2-input-name">För- och efternamn</label>
 
-                    <div data-am-inputtext="">
+                    <div data-ecom-inputtext="">
                         <input type="text"
                             id="information-2-input-name"
                             name="name"
@@ -117,13 +117,13 @@ const ManualContent = (props: ICustomerInformationDetailsProps) => {
                             onBlur={(e) => handleBlur(props, e)} />
                     </div>
 
-                    <div className="alert">Fel format</div>
+                    <div className="form-alert">Fel format</div>
                 </div>
 
                 <div className={`form-group ${hasAdressError ? ' has-error' : ''}`}>
-                    <label data-am-inputlabel="" htmlFor="information-2-input-street">Gatuadress</label>
+                    <label data-ecom-inputlabel="" htmlFor="information-2-input-street">Gatuadress</label>
 
-                    <div data-am-inputtext="">
+                    <div data-ecom-inputtext="">
                         <input type="text"
                             id="information-2-input-street"
                             name="adress"
@@ -133,13 +133,13 @@ const ManualContent = (props: ICustomerInformationDetailsProps) => {
                             onBlur={(e) => handleBlur(props, e)} />
                     </div>
 
-                    <div className="alert">Fel format</div>
+                    <div className="form-alert">Fel format</div>
                 </div>
 
                 <div className={`form-group ${hasZipError ? ' has-error' : ''}`}>
-                    <label data-am-inputlabel="" htmlFor="information-2-input-zip">Postnummer</label>
+                    <label data-ecom-inputlabel="" htmlFor="information-2-input-zip">Postnummer</label>
 
-                    <div data-am-inputtext="">
+                    <div data-ecom-inputtext="">
                         <input type="text"
                             id="information-2-input-zip"
                             name="zip"
@@ -149,13 +149,13 @@ const ManualContent = (props: ICustomerInformationDetailsProps) => {
                             onBlur={(e) => handleBlur(props, e)} />
                     </div>
 
-                    <div className="alert">Fel format</div>
+                    <div className="form-alert">Fel format</div>
                 </div>
 
                 <div className={`form-group ${hasCityError ? ' has-error' : ''}`}>
-                    <label data-am-inputlabel="" htmlFor="information-2-input-city">Postort</label>
+                    <label data-ecom-inputlabel="" htmlFor="information-2-input-city">Postort</label>
 
-                    <div data-am-inputtext="">
+                    <div data-ecom-inputtext="">
                         <input type="text"
                             id="information-2-input-city"
                             name="city"
@@ -165,7 +165,7 @@ const ManualContent = (props: ICustomerInformationDetailsProps) => {
                             onBlur={(e) => handleBlur(props, e)} />
                     </div>
 
-                    <div className="alert">Fel format</div>
+                    <div className="form-alert">Fel format</div>
                 </div>
             </div>
         </section>
@@ -178,10 +178,10 @@ const CustomerInformationDetails = (props: ICustomerInformationDetailsProps) => 
     const hasTermsError = props.data.interact.customer.hasAcceptedTerms && !props.data.customer.hasAcceptedTerms;
 
     return (
-        <div data-am-page="">
+        <div data-ecom-page="">
             <section className="page-section">
                 <h1 className="h6">Kunduppgifter</h1>
-                <div data-am-content="">
+                <div data-ecom-content="">
                     <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod.</p>
                 </div>
             </section>
@@ -195,11 +195,11 @@ const CustomerInformationDetails = (props: ICustomerInformationDetailsProps) => 
             }
 
             <section className="page-section">
-                <div data-am-form="">
+                <div data-ecom-form="">
                     <div className={`form-group ${hasEmailError ? ' has-error' : ''}`}>
-                        <label data-am-inputlabel="" htmlFor="information-2-input-email">E-post</label>
+                        <label data-ecom-inputlabel="" htmlFor="information-2-input-email">E-post</label>
 
-                        <div data-am-inputtext="">
+                        <div data-ecom-inputtext="">
                             <input type="text"
                                 id="information-2-input-email"
                                 name="email"
@@ -209,13 +209,13 @@ const CustomerInformationDetails = (props: ICustomerInformationDetailsProps) => 
                                 onBlur={(e) => handleBlur(props, e)} />
                         </div>
 
-                        <div className="alert">Fel format</div>
+                        <div className="form-alert">Fel format</div>
                     </div>
 
                     <div className={`form-group ${hasPhoneError ? ' has-error' : ''}`}>
-                        <label data-am-inputlabel="" htmlFor="information-2-input-phone">Telefonnummer</label>
+                        <label data-ecom-inputlabel="" htmlFor="information-2-input-phone">Telefonnummer</label>
 
-                        <div data-am-inputtext="">
+                        <div data-ecom-inputtext="">
                             <input type="text"
                                 id="information-2-input-phone"
                                 name="phone"
@@ -225,11 +225,11 @@ const CustomerInformationDetails = (props: ICustomerInformationDetailsProps) => 
                                 onBlur={(e) => handleBlur(props, e)} />
                         </div>
 
-                        <div className="alert">Fel format</div>
+                        <div className="form-alert">Fel format</div>
                     </div>
 
                     <div className={`form-group ${hasTermsError ? ' has-error' : ''}`}>
-                        <div data-am-inputselection="checkbox">
+                        <div data-ecom-inputselection="checkbox">
                             <input type="checkbox"
                                 id="information-2-checkbox"
                                 name="hasAcceptedTerms"
@@ -241,16 +241,16 @@ const CustomerInformationDetails = (props: ICustomerInformationDetailsProps) => 
                                 <span className="text">Jag godkänner användarvillkoren</span>
                             </label>
 
-                            <div className="alert">Användarvillkoren behöver godkännas för att gå vidare</div>
+                            <div className="form-alert">Användarvillkoren behöver godkännas för att gå vidare</div>
                         </div>
                     </div>
                 </div>
             </section>
 
             <section className="page-section page-section-bottom">
-                <div data-am-buttonnav="">
+                <div data-ecom-buttonnav="">
                     <div className="button-nav-item">
-                        <div data-am-button="full-width" onClick={props.onNextStepClick}>
+                        <div data-ecom-button="full-width" onClick={props.onNextStepClick}>
                             Gå vidare
                         </div>
                     </div>

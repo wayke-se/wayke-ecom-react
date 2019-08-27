@@ -97,7 +97,7 @@ const EcomTimeline = (props: IEcomTimelineProps) => {
     const items = timelineObjects.map((o, index) => <Item key={index} {...o} />);
 
     return (
-        <div data-am-timeline="">
+        <div data-ecom-timeline="">
             <div className="timeline">
                 <ul className="timeline-list">
                     {items}

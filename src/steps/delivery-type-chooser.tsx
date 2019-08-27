@@ -19,16 +19,16 @@ const DeliveryTypeChooser = (props: IDeliveryTypeChooserProps) => {
     };
 
     return (
-        <div data-am-page="">
+        <div data-ecom-page="">
             <section className="page-section">
                 <h1 className="h6">Leverans</h1>
-                <div data-am-content="">
+                <div data-ecom-content="">
                     <p>Hur vill du ha din nya bil levererad?</p>
                 </div>
             </section>
 
             <section className="page-section">
-                <div data-am-optionlist="">
+                <div data-ecom-optionlist="">
                     <ul className="option-list">
                         <li className="option-list-item">
                             <button className="option-list-action" onClick={() => handleDeliveryTypeClick(DeliveryType.HOME_DELIVERY)}>
