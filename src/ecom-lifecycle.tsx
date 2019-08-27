@@ -166,7 +166,7 @@ class EcomLifecycle extends React.Component<IEcomLifecycleProps, IState> {
                   <div className="modal-center">
                       <div className="modal-dialog">
                           <div className="modal-dialog-main">
-                              <div data-ecom-frame="" style={{ marginBottom: '200px'}}>
+                              <div data-ecom-frame="">
                                   <div className="frame-body">
                                       <EcomHeader
                                           canPressBackButton={canPressBackButton}
