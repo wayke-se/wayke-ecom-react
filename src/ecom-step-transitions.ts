@@ -1,10 +1,10 @@
 import EcomStep from './enums/ecom-step';
-import PaymentMethod from './enums/payment-method';
 import InsuranceOption from './enums/insurance-option';
 import CustomerInformationInputType from './enums/customer-information-input-type';
 
 import { validateRegistrationNumber, validateMilage, validateSSN, validateZip } from './utils/validation';
 import { IEcomData } from './types';
+import { PaymentType } from 'wayke-ecom';
 
 export default {
     [EcomStep.TRADE_IN_EXISTS_CHOOSER]: (data: IEcomData) => {
@@ -25,7 +25,7 @@ export default {
     },
     [EcomStep.TRADE_IN_CONFIRM_CAR]: () => EcomStep.PAYMENT_METHOD_CHOOSER,
     [EcomStep.PAYMENT_METHOD_CHOOSER]: (data: IEcomData) => {
-        if (data.payment.method === PaymentMethod.FINANCING) {
+        if (data.payment.paymentOption.type === PaymentType.Loan) {
             return EcomStep.PAYMENT_FINANCING_DETAILS;
         } else {
             return EcomStep.INSURANCE_TYPE_CHOOSER;

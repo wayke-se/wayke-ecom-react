@@ -59,7 +59,7 @@ class EcomLifecycle extends React.Component<IEcomLifecycleProps, IState> {
         const shouldSetInitialStep = hasOptions && hasNoStep;
 
         if (shouldSetInitialStep) {
-            const shouldStartAtTradeIn = this.props.options.tradeIn;
+            const shouldStartAtTradeIn = this.props.options.allowsTradeIn();
             const initialStep = shouldStartAtTradeIn ? EcomStep.TRADE_IN_EXISTS_CHOOSER : EcomStep.PAYMENT_METHOD_CHOOSER;
 
             this.setState({

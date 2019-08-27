@@ -63,7 +63,7 @@ class EcomStore extends React.Component<IEcomStoreProps, IState> {
                 }
             },
             payment: {
-                method: null,
+                paymentOption: null,
                 financingDownPayment: '',
                 financingDuration: null
             },

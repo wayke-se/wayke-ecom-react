@@ -4,8 +4,10 @@ import { validateNumberInRange } from '../utils/validation';
 import { IEcomLifecycle, IEcomStore } from '../types';
 import StoreAction from '../enums/store-action';
 import Slider from '../components/slider';
+import { IOrderOptionsResponse } from 'wayke-ecom';
 
 export interface IPaymentFinancingDetailsProps extends IEcomStore, IEcomLifecycle {
+    options: IOrderOptionsResponse;
 };
 
 interface IState {
@@ -96,6 +98,8 @@ class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsPr
         const durationValue = options[this.state.duration];
 
         const hasDownPaymentError = !validateNumberInRange(this.state.downPayment, downPaymentMin, downPaymentMax);
+        const paymentOption = this.props.data.payment.paymentOption;
+        console.log(paymentOption);
 
         return (
             <div className="page-main">
@@ -103,12 +107,14 @@ class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsPr
                     <div data-am-columnrow="">
                         <div className="column">
                             <h1 className="h6 no-margin">Betalsätt</h1>
-                            <div className="font-size-small">Audi Financial Services</div>
+                            <div className="font-size-small">{paymentOption.name}</div>
                         </div>
 
-                        <div className="column valign-top minimal">
-                            <img src="images/audi-logo.png" alt="Audi logotype" className="l-block" />
-                        </div>
+                        { paymentOption.logo &&
+                            <div className="column valign-top minimal">
+                                <img src={paymentOption.logo} alt="Audi logotype" className="l-block" />
+                            </div>
+                        }
                     </div>
                 </section>
 

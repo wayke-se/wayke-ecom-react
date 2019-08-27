@@ -1,8 +1,9 @@
 import CustomerInformationInputType from "./enums/customer-information-input-type";
 import DeliveryType from "./enums/delivery-type";
 import InsuranceOption from "./enums/insurance-option";
-import PaymentMethod from "./enums/payment-method";
 import StoreAction from './enums/store-action';
+import { PaymentType } from "wayke-ecom";
+import { IPaymentOption } from "wayke-ecom/dist-types/orders/types";
 
 export interface IVehicle {
     id: string;
@@ -39,7 +40,7 @@ export interface ITradeInCarData {
 };
 
 export interface IPaymentData {
-    method: PaymentMethod;
+    paymentOption: IPaymentOption;
     financingDownPayment: string;
     financingDuration: number;
 };
