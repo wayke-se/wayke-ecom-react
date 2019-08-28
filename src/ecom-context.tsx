@@ -1,12 +1,11 @@
 import React from "react";
 
-import { IVehicle, IEcomStore } from "./types";
+import { IEcomExternalProps, IEcomStore } from "./types";
 import EcomLifecycle from './ecom-lifecycle';
 import { getInitialData, getInsuranceOptions, getVehicleLookup } from "./sdk/ecom-sdk-actions";
 import { IOrderOptionsResponse, IInsuranceOptionsResponse, IVehicleLookupResponse } from "wayke-ecom";
 
-export interface IEcomProps extends IEcomStore {
-    vehicle: IVehicle;
+export interface IEcomContextProps extends IEcomExternalProps, IEcomStore {
 }
 
 interface IState {
@@ -15,8 +14,8 @@ interface IState {
     vehicleLookup: IVehicleLookupResponse;
 };
 
-class Ecom extends React.Component<IEcomProps, IState> {
-    constructor(props: IEcomProps) {
+class Ecom extends React.Component<IEcomContextProps, IState> {
+    constructor(props: IEcomContextProps) {
         super(props);
 
         this.handleFetchInsuranceOptions = this.handleFetchInsuranceOptions.bind(this);

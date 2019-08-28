@@ -1,6 +1,7 @@
 import React from 'react';
 
 export interface IEcomHeaderProps {
+    serviceLogotypeUrl: string;
     canPressBackButton: boolean;
     onPreviousStepClick: () => void;
 };
@@ -22,7 +23,7 @@ const EcomHeader = (props: IEcomHeaderProps) => {
                     </button>
                 </div>
                 <div className="header-logo-container">
-                    <img src="http://placehold.it/54x32" alt="Wayke logotype" className="header-logo" />
+                    <img src={props.serviceLogotypeUrl} alt="Logotype" className="header-logo" />
                 </div>
             </div>
         </header>

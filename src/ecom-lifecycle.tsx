@@ -8,11 +8,11 @@ import EcomStepContent from './ecom-step-content';
 import EcomCart from './ecom-cart';
 import EcomTimeline from './ecom-timeline';
 
-import { IEcomContext, IEcomStore, IEcomData } from './types';
+import { IEcomExternalProps, IEcomContext, IEcomStore, IEcomData } from './types';
 import StoreAction from './enums/store-action';
 import { IOrderOptionsResponse } from 'wayke-ecom';
 
-interface IEcomLifecycleProps extends IEcomContext, IEcomStore {
+interface IEcomLifecycleProps extends IEcomExternalProps, IEcomContext, IEcomStore {
 }
 
 interface IState {
@@ -159,38 +159,39 @@ class EcomLifecycle extends React.Component<IEcomLifecycleProps, IState> {
         const canPressBackButton = this.state.stepHistory.length > 1 && !this.state.isBackwardsStepForbidden;
 
         return (
-          <div data-ecom-modal="" className="wayke-ecom">
-              <div className="modal-container">
-                  <div className="modal-center">
-                      <div className="modal-dialog">
-                          <div className="modal-dialog-main">
-                              <div data-ecom-frame="">
-                                  <div className="frame-body">
-                                      <EcomHeader
-                                          canPressBackButton={canPressBackButton}
-                                          onPreviousStepClick={this.handlePreviousStepClick} />
+            <div data-ecom-modal="" className="wayke-ecom">
+                <div className="modal-container">
+                    <div className="modal-center">
+                        <div className="modal-dialog">
+                            <div className="modal-dialog-main">
+                                <div data-ecom-frame="">
+                                    <div className="frame-body">
+                                        <EcomHeader
+                                            serviceLogotypeUrl={this.props.serviceLogotypeUrl}
+                                            canPressBackButton={canPressBackButton}
+                                            onPreviousStepClick={this.handlePreviousStepClick} />
 
-                                      <EcomTimeline currentStep={this.state.step} options={this.props.orderOptions} />
+                                        <EcomTimeline currentStep={this.state.step} options={this.props.orderOptions} />
 
-                                      <div data-ecom-page="">
-                                          <EcomStepContent
-                                              step={this.state.step}
-                                              {...this.props}
+                                        <div data-ecom-page="">
+                                            <EcomStepContent
+                                                step={this.state.step}
+                                                {...this.props}
 
-                                              onNextStepClick={this.handleNextStepClick}
-                                              onShowCustomerInformationInitial={() => this.handleSpecificStepClick(EcomStep.CUSTOMER_INFORMATION_INITIAL)}
-                                              onShowInsuranceInformationDefinition={() => this.handleSpecificStepClick(EcomStep.INSURANCE_INFORMATION_DEFINITION)}
-                                              onShowTradeInCarDefinition={() => this.handleSpecificStepClick(EcomStep.TRADE_IN_CAR_DEFINITION)} />
-                                      </div>
-                                  </div>
+                                                onNextStepClick={this.handleNextStepClick}
+                                                onShowCustomerInformationInitial={() => this.handleSpecificStepClick(EcomStep.CUSTOMER_INFORMATION_INITIAL)}
+                                                onShowInsuranceInformationDefinition={() => this.handleSpecificStepClick(EcomStep.INSURANCE_INFORMATION_DEFINITION)}
+                                                onShowTradeInCarDefinition={() => this.handleSpecificStepClick(EcomStep.TRADE_IN_CAR_DEFINITION)} />
+                                        </div>
+                                    </div>
 
-                                  <EcomCart vehicle={this.props.vehicle} />
-                              </div>
-                          </div>
-                      </div>
-                  </div>
-              </div>
-          </div>
+                                    <EcomCart vehicle={this.props.vehicle} />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         );
     }
 };

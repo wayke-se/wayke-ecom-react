@@ -1,12 +1,11 @@
 import React from 'react';
 
 import EcomContext from './ecom-context';
-import { IEcomData, IVehicle } from './types';
+import { IEcomExternalProps, IEcomData } from './types';
 
 import StoreAction from './enums/store-action';
 
-interface IEcomStoreProps {
-    vehicle: IVehicle;
+interface IEcomStoreProps extends IEcomExternalProps {
 };
 
 interface IState extends IEcomData {

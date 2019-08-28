@@ -1,13 +1,9 @@
 import React from "react";
 
-import { IVehicle } from "./types";
+import { IEcomExternalProps } from "./types";
 import EcomStore from './ecom-store';
 
-export interface IEcomProps {
-    vehicle: IVehicle;
-}
-
-const Ecom = (props: IEcomProps) => {
+const Ecom = (props: IEcomExternalProps) => {
     return <EcomStore {...props} />;
 }
 

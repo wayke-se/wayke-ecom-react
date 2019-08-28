@@ -12,8 +12,12 @@ export interface IVehicle {
     price: number;
 };
 
-export interface IEcomContext {
+export interface IEcomExternalProps {
     vehicle: IVehicle;
+    serviceLogotypeUrl: string;
+}
+
+export interface IEcomContext {
     orderOptions: IOrderOptionsResponse;
     insuranceOptions: IInsuranceOptionsResponse;
 
