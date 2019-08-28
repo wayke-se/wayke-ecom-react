@@ -15,12 +15,17 @@ import TradeInExistsChooser from './steps/trade-in-exists-chooser';
 
 import EcomStep from './enums/ecom-step';
 import { IEcomContext, IEcomLifecycle, IEcomStore } from './types';
+import Alert from './components/alert';
 
 interface AllProps extends IEcomContext, IEcomStore, IEcomLifecycle {
     step: EcomStep;
 }
 
 const EcomStepContent = (props: AllProps) => {
+    if (props.orderOptionsError) {
+        return <Alert message="Ett oväntat fel har uppstått. Prova igen senare." />;
+    }
+
     switch (props.step) {
         case EcomStep.TRADE_IN_EXISTS_CHOOSER:
             return <TradeInExistsChooser {...props} />;

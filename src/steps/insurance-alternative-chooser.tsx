@@ -1,6 +1,7 @@
 import React from 'react';
 import { IEcomLifecycle, IEcomStore, IEcomContext } from '../types';
 import StoreAction from '../enums/store-action';
+import Alert from '../components/alert';
 
 export interface IInsuranceAlternativeChooserProps extends IEcomContext, IEcomStore, IEcomLifecycle {
 };
@@ -13,20 +14,7 @@ class InsuranceAlternativeChooser extends React.Component<IInsuranceAlternativeC
     }
 
     componentDidMount() {
-        const personalNumberUsedForLookup = this.props.data.insurance.personalNumberUsedForLookup;
-        const personalNumber = this.props.data.insurance.personalNumber;
-
-        const shouldFetch = personalNumberUsedForLookup === null || personalNumberUsedForLookup !== personalNumber;
-
-        if (shouldFetch) {
-            this.props.onFetchInsuranceOptions(() => {
-                this.props.dispatchStoreAction(StoreAction.UPDATE_NAMED_VALUE, {
-                    type: 'insurance',
-                    name: 'personalNumberUsedForLookup',
-                    value: personalNumber
-                });
-            });
-        }
+        this.props.onFetchInsuranceOptions();
     }
 
     handleHasAddedInsuranceClick(value: boolean) {
@@ -40,6 +28,10 @@ class InsuranceAlternativeChooser extends React.Component<IInsuranceAlternativeC
     }
 
     render() {
+        if (this.props.insuranceOptionsError) {
+            return <Alert message="Tyvärr kan vi inte visa försäkringar för det angivna personnumret." />;
+        }
+
         if (!this.props.insuranceOptions) {
             return <div></div>;
         }

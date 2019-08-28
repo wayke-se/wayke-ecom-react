@@ -1,42 +1,20 @@
 import { orders, insurances, vehicles, IOrderOptionsResponse, IInsuranceOptionsResponse, IVehicleLookupResponse } from 'wayke-ecom';
 import { IPaymentOption } from 'wayke-ecom/dist-types/orders/types';
 
-//This is used for development purposes
-class CustomResponse implements IOrderOptionsResponse {
-    response = null;
-
-    constructor(response: IOrderOptionsResponse) {
-        this.response = response;
-    }
-
-    getPaymentOptions(): import("wayke-ecom/dist-types/orders/types").IPaymentOption[] {
-        return this.response.getPaymentOptions();
-    }
-    getDeliveryOptions(): import("wayke-ecom/dist-types/orders/types").IDeliveryOption[] {
-        return this.response.getDeliveryOptions();
-    }
-    getInsuranceOption(): import("wayke-ecom").IAvailableInsuranceOption {
-        return this.response.getInsuranceOption();
-    }
-    getOrderConditions(): string {
-        return this.response.getOrderConditions();
-    }
-    allowsTradeIn(): boolean {
-        return this.response.allowsTradeIn();
-    }
-}
-
-export const getInitialData = (vehicleId: string, callback: (options: IOrderOptionsResponse) => void) => {
+export const getOrderOptions = (
+        vehicleId: string,
+        callback: (isSuccessful: boolean, options: IOrderOptionsResponse) => void
+) => {
     const request = orders.newOptionsRequest()
         .forVehicle(vehicleId)
         .build();
 
     orders.getOptions(request)
         .then((response: IOrderOptionsResponse) => {
-            callback(new CustomResponse(response));
+            callback(true, response);
         })
         .catch((e) => {
-            throw e;
+            callback(false, null);
         });
 };
 
@@ -45,7 +23,7 @@ export const getInsuranceOptions = (
         vehicleId: string,
         paymentType: IPaymentOption,
         drivingDistance: number,
-        callback: (options: IInsuranceOptionsResponse) => void
+        callback: (isSuccessful: boolean, options: IInsuranceOptionsResponse) => void
 ) => {
     const request = insurances.newInsuranceOptionsRequest()
                         .forCustomer(personalNumber)
@@ -55,20 +33,27 @@ export const getInsuranceOptions = (
                         .build();
 
     insurances.getOptions(request)
-        .then(callback)
+        .then((response: IInsuranceOptionsResponse) => {
+            callback(true, response);
+        })
         .catch((e) => {
-            throw e;
+            callback(false, null);
         });
 }
 
-export const getVehicleLookup = (registrationNumber: string, callback: (lookup: IVehicleLookupResponse) => void) => {
+export const getVehicleLookup = (
+        registrationNumber: string,
+        callback: (isSuccessful: boolean, lookup: IVehicleLookupResponse) => void
+) => {
     const request = vehicles.newLookupRequest()
         .withRegistrationNumber(registrationNumber)
         .build();
 
     vehicles.lookupVehicle(request)
-        .then(callback)
+        .then((response: IVehicleLookupResponse) => {
+            callback(true, response);
+        })
         .catch((e) => {
-            throw e;
+            callback(false, null);
         });
 }

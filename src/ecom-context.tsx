@@ -1,9 +1,11 @@
 import React from "react";
 
-import { IEcomExternalProps, IEcomStore } from "./types";
+import { IEcomExternalProps, IEcomStore, IExpectedDrivingDistance } from "./types";
 import EcomLifecycle from './ecom-lifecycle';
-import { getInitialData, getInsuranceOptions, getVehicleLookup } from "./sdk/ecom-sdk-actions";
+import { getOrderOptions, getInsuranceOptions, getVehicleLookup } from "./sdk/ecom-sdk-actions";
+
 import { IOrderOptionsResponse, IInsuranceOptionsResponse, IVehicleLookupResponse } from "wayke-ecom";
+import { IPaymentOption } from "wayke-ecom/dist-types/orders/types";
 
 export interface IEcomContextProps extends IEcomExternalProps, IEcomStore {
 }
@@ -12,81 +14,154 @@ interface IState {
     orderOptions: IOrderOptionsResponse;
     insuranceOptions: IInsuranceOptionsResponse;
     vehicleLookup: IVehicleLookupResponse;
+
+    orderOptionsError: boolean;
+    insuranceOptionsError: boolean;
+    vehicleLookupError: boolean;
+
+    insuranceOptionsRequestInformation: {
+        personalNumber: string;
+        paymentOption: IPaymentOption;
+        expectedDrivingDistance: IExpectedDrivingDistance;
+    },
+
+    vehicleLookupRequestInformation: {
+        registrationNumber: string;
+    }
 };
 
-class Ecom extends React.Component<IEcomContextProps, IState> {
+class EcomContext extends React.Component<IEcomContextProps, IState> {
     constructor(props: IEcomContextProps) {
         super(props);
 
+        this.handleFetchOrderOptions = this.handleFetchOrderOptions.bind(this);
+        this.handleFetchOrderOptionsResponse = this.handleFetchOrderOptionsResponse.bind(this);
+
+        this.shouldFetchInsuranceOptions = this.shouldFetchInsuranceOptions.bind(this);
         this.handleFetchInsuranceOptions = this.handleFetchInsuranceOptions.bind(this);
+        this.handleFetchInsuranceOptionsResponse = this.handleFetchInsuranceOptionsResponse.bind(this);
+
+        this.shouldFetchVehicleInformation = this.shouldFetchVehicleInformation.bind(this);
         this.handleFetchVehicleInformation = this.handleFetchVehicleInformation.bind(this);
+        this.handleFetchVehicleInformationResponse = this.handleFetchVehicleInformationResponse.bind(this);
 
         this.state = {
             orderOptions: null,
             insuranceOptions: null,
-            vehicleLookup: null
+            vehicleLookup: null,
+
+            orderOptionsError: false,
+            insuranceOptionsError: false,
+            vehicleLookupError: false,
+
+            insuranceOptionsRequestInformation: null,
+            vehicleLookupRequestInformation: null
         };
     }
 
     componentDidMount() {
-        getInitialData(this.props.vehicle.id, (response: IOrderOptionsResponse) => {
-            this.setState({
-                orderOptions: response
-            });
+        this.handleFetchOrderOptions();
+    }
+
+    handleFetchOrderOptions() {
+        getOrderOptions(this.props.vehicle.id, this.handleFetchOrderOptionsResponse);
+    }
+
+    handleFetchOrderOptionsResponse(isSuccessful: boolean, response: IOrderOptionsResponse) {
+        this.setState({
+            orderOptions: response,
+            orderOptionsError: !isSuccessful
         });
     }
 
-    handleFetchInsuranceOptions(callback?: () => void) {
+    shouldFetchInsuranceOptions() {
+        if (this.state.insuranceOptionsRequestInformation === null) {
+            return true;
+        }
+
+        const information = this.state.insuranceOptionsRequestInformation;
+
+        const isSamePersonalNumber = information.personalNumber === this.props.data.insurance.personalNumber;
+        const isSamePaymentOption = information.paymentOption === this.props.data.payment.paymentOption;
+        const isSameExpectedDrivingDistance = information.expectedDrivingDistance === this.props.data.insurance.expectedDrivingDistance;
+
+        return !isSamePersonalNumber || !isSamePaymentOption || !isSameExpectedDrivingDistance;
+    }
+
+    handleFetchInsuranceOptions() {
         const hasPersonalNumber = this.props.data.insurance && this.props.data.insurance.personalNumber;
         const hasVehicleId = this.props.vehicle.id;
         const hasPaymentOption = this.props.data.payment && this.props.data.payment.paymentOption;
-        const hasDrivingDistance = this.props.data.insurance && this.props.data.insurance.expectedDrivingDistance;
+        const hasExpectedDrivingDistance = this.props.data.insurance && this.props.data.insurance.expectedDrivingDistance;
 
-        const hasAllData = hasPersonalNumber && hasVehicleId && hasPaymentOption && hasDrivingDistance;
+        const hasAllData = hasPersonalNumber && hasVehicleId && hasPaymentOption && hasExpectedDrivingDistance;
 
         if (!hasAllData) {
-            if (callback) {
-                callback();
-            }
-
             return;
         }
+
+        const shouldFetch = this.shouldFetchInsuranceOptions();
+
+        if (!shouldFetch) {
+            return;
+        }
+
+        console.log(shouldFetch);
 
         const personalNumber = this.props.data.insurance.personalNumber;
         const vehicleId = this.props.vehicle.id;
         const paymentOption = this.props.data.payment.paymentOption;
-        const drivingDistance = this.props.data.insurance.expectedDrivingDistance.optionIndex;
+        const expectedDrivingDistance = this.props.data.insurance.expectedDrivingDistance.optionIndex;
 
         getInsuranceOptions(
             personalNumber,
             vehicleId,
             paymentOption,
-            drivingDistance,
-            (response: IInsuranceOptionsResponse) => {
-                this.setState({
-                    insuranceOptions: response
-                }, callback);
-            }
+            expectedDrivingDistance,
+            this.handleFetchInsuranceOptionsResponse
         );
     }
 
-    handleFetchVehicleInformation(callback?: () => void) {
+    handleFetchInsuranceOptionsResponse(isSuccessful: boolean, response: IInsuranceOptionsResponse) {
+        this.setState({
+            insuranceOptions: response,
+            insuranceOptionsError: !isSuccessful,
+            insuranceOptionsRequestInformation: {
+                personalNumber: this.props.data.insurance.personalNumber,
+                paymentOption: this.props.data.payment.paymentOption,
+                expectedDrivingDistance: this.props.data.insurance.expectedDrivingDistance
+            }
+        });
+    }
+
+    shouldFetchVehicleInformation() {
+        return this.state.vehicleLookupRequestInformation === null || this.state.vehicleLookupRequestInformation.registrationNumber !== this.props.data.tradeInCar.registrationNumber;
+    }
+
+    handleFetchVehicleInformation() {
         const hasRegistrationNumber = this.props.data.tradeInCar && this.props.data.tradeInCar.registrationNumber;
 
         if (!hasRegistrationNumber) {
-            if (callback) {
-                callback();
-            }
+            return;
+        }
 
+        const shouldFetch = this.shouldFetchVehicleInformation();
+
+        if (!shouldFetch) {
             return;
         }
 
         const registrationNumber = this.props.data.tradeInCar.registrationNumber;
+        getVehicleLookup(registrationNumber, this.handleFetchVehicleInformationResponse);
+    }
 
-        getVehicleLookup(registrationNumber, (response: IVehicleLookupResponse) => {
-            this.setState({
-                vehicleLookup: response,
-            }, callback);
+    handleFetchVehicleInformationResponse(isSuccessful: boolean, response: IVehicleLookupResponse) {
+        this.setState({
+            vehicleLookup: response,
+            vehicleLookupError: !isSuccessful,
+            vehicleLookupRequestInformation: {
+                registrationNumber: this.props.data.tradeInCar.registrationNumber
+            }
         });
     }
 
@@ -101,4 +176,4 @@ class Ecom extends React.Component<IEcomContextProps, IState> {
     }
 };
 
-export default Ecom;
+export default EcomContext;

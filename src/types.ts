@@ -3,7 +3,7 @@ import DeliveryType from "./enums/delivery-type";
 import InsuranceOption from "./enums/insurance-option";
 import StoreAction from './enums/store-action';
 import { IPaymentOption, IOrderOptionsResponse } from "wayke-ecom/dist-types/orders/types";
-import { IInsuranceOptionsResponse } from "wayke-ecom";
+import { IInsuranceOptionsResponse, IVehicleLookupResponse } from "wayke-ecom";
 
 export interface IVehicle {
     id: string;
@@ -20,9 +20,14 @@ export interface IEcomExternalProps {
 export interface IEcomContext {
     orderOptions: IOrderOptionsResponse;
     insuranceOptions: IInsuranceOptionsResponse;
+    vehicleLookup: IVehicleLookupResponse;
 
-    onFetchInsuranceOptions: (callback?: () => void) => void;
-    onFetchVehicleInformation: (callback?: () => void) => void;
+    orderOptionsError: boolean;
+    insuranceOptionsError: boolean;
+    vehicleLookupError: boolean;
+
+    onFetchInsuranceOptions: () => void;
+    onFetchVehicleInformation: () => void;
 }
 
 export interface IEcomLifecycle {
@@ -67,7 +72,6 @@ export interface IExpectedDrivingDistance {
 export interface IInsuranceData {
     insuranceOption: InsuranceOption;
     personalNumber: string;
-    personalNumberUsedForLookup: string;
     expectedDrivingDistance: IExpectedDrivingDistance;
     hasAddedInsurance: boolean;
 };
