@@ -13,11 +13,12 @@ import TradeInConfirmCar from './steps/trade-in-confirm-car';
 import TradeInExistsChooser from './steps/trade-in-exists-chooser';
 
 import EcomStep from './enums/ecom-step';
-import { IEcomContext, IEcomLifecycle, IEcomStore } from './types';
+import { IEcomExternalProps, IEcomContext, IEcomLifecycle, IEcomStore } from './types';
 import Alert from './components/alert';
 import Spinner from './components/spinner';
+import ConfirmOrder from './steps/confirm-order';
 
-interface AllProps extends IEcomContext, IEcomStore, IEcomLifecycle {
+interface AllProps extends IEcomExternalProps, IEcomContext, IEcomStore, IEcomLifecycle {
     step: EcomStep;
 }
 
@@ -60,6 +61,9 @@ const EcomStepContent = (props: AllProps) => {
 
         case EcomStep.CUSTOMER_INFORMATION_DETAILS:
             return <CustomerInformationDetails {...props} />;
+
+        case EcomStep.CONFIRM_ORDER:
+            return <ConfirmOrder {...props} />;
 
         case EcomStep.FINAL_CONFIRMATION:
             return <FinalConfirmation />;

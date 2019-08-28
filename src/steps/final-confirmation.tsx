@@ -1,6 +1,12 @@
 import React from 'react';
+import CustomerInformationSummary from '../components/customer-information-summary';
+import OrderSummary from '../components/order-summary';
+import { IEcomStore } from '../types';
 
-const FinalConfirmation = () => {
+interface IFinalConfirmationProps extends IEcomStore {
+};
+
+const FinalConfirmation = (props: IFinalConfirmationProps) => {
     return (
         <div data-ecom-page="">
             <section className="page-section">
@@ -15,53 +21,14 @@ const FinalConfirmation = () => {
                 <div className="page-section-accent-content">
                     <h2 className="h6">Din order</h2>
                 </div>
-                Product Card
+
+                <OrderSummary {...props} />
             </section>
 
             <section className="page-section">
                 <h2 className="h6">Kunduppgifter</h2>
 
-                <div data-ecom-columnrow="" className="repeat-m-half">
-                    <div className="column">
-                        <div className="font-medium font-size-small">För- och efternamn</div>
-                    </div>
-                    <div className="column">J*** D**</div>
-                </div>
-
-                <div data-ecom-columnrow="" className="repeat-m-half">
-                    <div className="column">
-                        <div className="font-medium font-size-small">Gatuadress</div>
-                    </div>
-                    <div className="column">B******* 5</div>
-                </div>
-
-                <div data-ecom-columnrow="" className="repeat-m-half">
-                    <div className="column">
-                        <div className="font-medium font-size-small">Postnummer</div>
-                    </div>
-                    <div className="column">*** 55</div>
-                </div>
-
-                <div data-ecom-columnrow="" className="repeat-m-half">
-                    <div className="column">
-                        <div className="font-medium font-size-small">Postort</div>
-                    </div>
-                    <div className="column">G*******</div>
-                </div>
-
-                <div data-ecom-columnrow="" className="repeat-m-half">
-                    <div className="column">
-                        <div className="font-medium font-size-small">E-post</div>
-                    </div>
-                    <div className="column">jane.doe@gmail.com</div>
-                </div>
-
-                <div data-ecom-columnrow="" className="repeat-m-half">
-                    <div className="column">
-                        <div className="font-medium font-size-small">Telefonnummer</div>
-                    </div>
-                    <div className="column">076 399 58 21</div>
-                </div>
+                <CustomerInformationSummary {...props} />
             </section>
 
             <section className="page-section">

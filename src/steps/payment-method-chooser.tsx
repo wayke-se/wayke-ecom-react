@@ -14,7 +14,7 @@ import { getPaymentMethodTitle } from '../utils/payment';
 export interface IPaymentMethodChooserProps extends IEcomExternalProps, IEcomContext, IEcomStore, IEcomLifecycle {
 };
 
-interface IPaymentMethodItemProps extends IEcomContext, IEcomStore, IEcomLifecycle {
+interface IPaymentMethodItemProps extends IEcomExternalProps, IEcomContext, IEcomStore, IEcomLifecycle {
     paymentOption: IPaymentOption;
 };
 

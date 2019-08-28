@@ -31,6 +31,16 @@ const getNewStep = (currentStep: EcomStep, data: IEcomData, options: IOrderOptio
     }
 };
 
+const shouldShowCart = (step: EcomStep) => {
+    switch(step) {
+        case EcomStep.CONFIRM_ORDER:
+        case EcomStep.FINAL_CONFIRMATION:
+            return false;
+        default:
+            return true;
+    }
+}
+
 class EcomLifecycle extends React.Component<IEcomLifecycleProps, IState> {
     constructor(props: IEcomLifecycleProps) {
         super(props);
@@ -157,6 +167,7 @@ class EcomLifecycle extends React.Component<IEcomLifecycleProps, IState> {
 
     render() {
         const canPressBackButton = this.state.stepHistory.length > 1 && !this.state.isBackwardsStepForbidden;
+        const showCart = shouldShowCart(this.state.step);
 
         return (
             <div data-ecom-modal="" className="wayke-ecom">
@@ -185,7 +196,7 @@ class EcomLifecycle extends React.Component<IEcomLifecycleProps, IState> {
                                         </div>
                                     </div>
 
-                                    <EcomCart {...this.props} />
+                                    { showCart && <EcomCart {...this.props} /> }
                                 </div>
                             </div>
                         </div>
