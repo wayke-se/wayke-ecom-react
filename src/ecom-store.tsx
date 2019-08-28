@@ -36,8 +36,9 @@ class EcomStore extends React.Component<IEcomStoreProps, IState> {
             insurance: {
                 insuranceOption: null,
                 personalNumber: '',
+                personalNumberUsedForLookup: null,
                 expectedDrivingDistance: null,
-                alternative: ''
+                hasAddedInsurance: false
             },
             interact: {
                 tradeInCar: {

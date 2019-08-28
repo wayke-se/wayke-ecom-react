@@ -37,7 +37,7 @@ class Ecom extends React.Component<IEcomProps, IState> {
         });
     }
 
-    handleFetchInsuranceOptions() {
+    handleFetchInsuranceOptions(callback?: () => void) {
         const hasPersonalNumber = this.props.data.insurance && this.props.data.insurance.personalNumber;
         const hasVehicleId = this.props.vehicle.id;
         const hasPaymentOption = this.props.data.payment && this.props.data.payment.paymentOption;
@@ -46,6 +46,10 @@ class Ecom extends React.Component<IEcomProps, IState> {
         const hasAllData = hasPersonalNumber && hasVehicleId && hasPaymentOption && hasDrivingDistance;
 
         if (!hasAllData) {
+            if (callback) {
+                callback();
+            }
+
             return;
         }
 
@@ -62,15 +66,19 @@ class Ecom extends React.Component<IEcomProps, IState> {
             (response: IInsuranceOptionsResponse) => {
                 this.setState({
                     insuranceOptions: response
-                });
+                }, callback);
             }
         );
     }
 
-    handleFetchVehicleInformation() {
+    handleFetchVehicleInformation(callback?: () => void) {
         const hasRegistrationNumber = this.props.data.tradeInCar && this.props.data.tradeInCar.registrationNumber;
 
         if (!hasRegistrationNumber) {
+            if (callback) {
+                callback();
+            }
+
             return;
         }
 
@@ -79,7 +87,7 @@ class Ecom extends React.Component<IEcomProps, IState> {
         getVehicleLookup(registrationNumber, (response: IVehicleLookupResponse) => {
             this.setState({
                 vehicleLookup: response,
-            });
+            }, callback);
         });
     }
 

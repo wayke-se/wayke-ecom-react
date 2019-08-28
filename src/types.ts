@@ -17,8 +17,8 @@ export interface IEcomContext {
     orderOptions: IOrderOptionsResponse;
     insuranceOptions: IInsuranceOptionsResponse;
 
-    onFetchInsuranceOptions: () => void;
-    onFetchVehicleInformation: () => void;
+    onFetchInsuranceOptions: (callback?: () => void) => void;
+    onFetchVehicleInformation: (callback?: () => void) => void;
 }
 
 export interface IEcomLifecycle {
@@ -63,8 +63,9 @@ export interface IExpectedDrivingDistance {
 export interface IInsuranceData {
     insuranceOption: InsuranceOption;
     personalNumber: string;
+    personalNumberUsedForLookup: string;
     expectedDrivingDistance: IExpectedDrivingDistance;
-    alternative: string;
+    hasAddedInsurance: boolean;
 };
 
 export interface IDeliveryData {
