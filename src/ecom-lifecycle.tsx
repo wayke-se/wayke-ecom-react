@@ -178,7 +178,7 @@ class EcomLifecycle extends React.Component<IEcomLifecycleProps, IState> {
                                 <div data-ecom-frame="">
                                     <div className="frame-body">
                                         <EcomHeader
-                                            serviceLogotypeUrl={this.props.serviceLogotypeUrl}
+                                            {...this.props}
                                             canPressBackButton={canPressBackButton}
                                             onPreviousStepClick={this.handlePreviousStepClick} />
 

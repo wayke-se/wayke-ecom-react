@@ -10,11 +10,18 @@ export interface IVehicle {
     shortDescription: string;
     price: number;
     imageUrl: string;
+    retailerName: string;
+    modelYear: number;
+    milage: string;
+    gearBox: string;
+    fuelType: string;
 };
 
 export interface IEcomExternalProps {
     vehicle: IVehicle;
     serviceLogotypeUrl: string;
+
+    onExit: () => void;
 }
 
 export interface IEcomContext {

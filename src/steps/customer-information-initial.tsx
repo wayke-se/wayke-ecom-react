@@ -39,7 +39,7 @@ const CustomerInformationInitial = (props: ICustomerInformationInitialProps) => 
             <section className="page-section">
                 <h1 className="h6">Kunduppgifter</h1>
                 <div data-ecom-content="">
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod.</p>
+                    <p>Hämta dina uppgifter via personnummer eller skriv in dem manuellt.</p>
                 </div>
             </section>
 

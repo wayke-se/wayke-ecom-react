@@ -1,60 +1,102 @@
 import React from 'react';
-import { IEcomStore } from '../types';
 
-interface IOrderSummaryProps extends IEcomStore {
+import { IEcomStore, IEcomContext, IEcomExternalProps } from '../types';
+import { PaymentType } from 'wayke-ecom';
+
+import { formatPrice } from '../utils/helpers';
+import { getPaymentMethodTitle } from '../utils/payment';
+import { getVehicleFullTitle } from '../utils/trade-in-car';
+
+interface IOrderSummaryProps extends IEcomExternalProps, IEcomContext, IEcomStore {
 };
 
+interface IProductItemProps extends IEcomStore {
+    title: string;
+    description: string;
+    price: number;
+    unit: string;
+};
+
+const ProductItem = (props: IProductItemProps) => {
+    return (
+        <div className="product-card-content">
+            <div data-ecom-columnrow="">
+                <div className="column">
+                    <div className="font-medium">{props.title}</div>
+                </div>
+
+                <div className="column">
+                    {formatPrice(props.price)}{props.unit}
+                </div>
+            </div>
+
+            <div className="font-size-small">
+                {props.description}
+            </div>
+        </div>
+    );
+}
+
 const OrderSummary = (props: IOrderSummaryProps) => {
+    const products = [];
+
+    const hasTradeIn = props.data.tradeInCar.hasTradeInCar && props.data.tradeInCar.registrationNumber && props.vehicleLookup !== null;
+    const hasLoan = props.data.payment.paymentOption && props.data.payment.paymentOption.type === PaymentType.Loan;
+    const hasInsurance = props.data.insurance.hasAddedInsurance;
+
+    if (hasTradeIn) {
+        const vehicleInformation = props.vehicleLookup.getVehicle();
+
+        products.push({
+            title: 'Inbytesbil',
+            description: getVehicleFullTitle(props.data.tradeInCar.registrationNumber, vehicleInformation),
+            price: '',
+            unit: ''
+        });
+    }
+
+    if (hasLoan) {
+        products.push({
+            title: getPaymentMethodTitle(PaymentType.Loan),
+            description: props.data.payment.paymentOption.name,
+            price: props.data.payment.paymentOption.price,
+            unit: props.data.payment.paymentOption.unit
+        });
+    }
+
+    if (hasInsurance) {
+        const insuranceOption = props.insuranceOptions.getInsuranceOption();
+
+        products.push({
+            title: 'Försäkring',
+            description: insuranceOption.brand.name + ' - ' + insuranceOption.name,
+            price: insuranceOption.price,
+            unit: insuranceOption.unit
+        });
+    }
+
+    const items = products.map((p, index) => <ProductItem key={index} {...p} />);
+
     return (
         <div data-ecom-productcard="">
             <div className="prodcut-card-image-section">
-                <div className="product-card-image" style={{ backgroundImage: `url(/assets/toolkit/images/product-card.jpg);` }}></div>
+                <div className="product-card-image" style={{ backgroundImage: `url(${props.vehicle.imageUrl})` }}></div>
             </div>
 
             <div className="product-card-content-section">
                 <div className="product-card-content">
-                    <div className="product-card-retailer">Börjessons bil Ängelholm</div>
-                    <div className="product-card-title">Audi A6 AVANT 50 TDI 286HK quattro S-Tronic</div>
+                    <div className="product-card-retailer">{props.vehicle.retailerName}</div>
+                    <div className="product-card-title">{props.vehicle.title} {props.vehicle.shortDescription}</div>
 
                     <ul className="product-card-usp-list">
-                        <li className="product-card-usp-item">2017</li>
-                        <li className="product-card-usp-item">2 595 mil</li>
-                        <li className="product-card-usp-item">Automat</li>
-                        <li className="product-card-usp-item">Diesel</li>
+                        <li className="product-card-usp-item">{props.vehicle.modelYear}</li>
+                        <li className="product-card-usp-item">{props.vehicle.milage}</li>
+                        <li className="product-card-usp-item">{props.vehicle.gearBox}</li>
+                        <li className="product-card-usp-item">{props.vehicle.fuelType}</li>
                     </ul>
                 </div>
 
-                <div className="product-card-content">
-                    <div data-ecom-columnrow="">
-                        <div className="column">
-                            <div className="font-medium">Finansiering</div>
-                        </div>
-
-                        <div className="column">
-                            5 700 kr/mån
-                        </div>
-                    </div>
-
-                    <div className="font-size-small">
-                        Audi Financial Services
-                    </div>
-                </div>
-
-                <div className="product-card-content">
-                    <div data-ecom-columnrow="">
-                        <div className="column">
-                            <div className="font-medium">Halvförsäkring</div>
-                        </div>
-
-                        <div className="column">
-                            427 kr/mån
-                        </div>
-                    </div>
-
-                    <div className="font-size-small">
-                        Audi Financial Services
-                    </div>
-                </div>
+                {items}
             </div>
         </div>
     );

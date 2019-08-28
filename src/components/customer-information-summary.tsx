@@ -11,42 +11,42 @@ const CustomerInformationSummary = (props: ICustomerInformationSummaryProps) => 
                 <div className="column">
                     <div className="font-medium font-size-small">För- och efternamn</div>
                 </div>
-                <div className="column">J*** D**</div>
+                <div className="column">{props.data.customer.name}</div>
             </div>
 
             <div data-ecom-columnrow="" className="repeat-m-half">
                 <div className="column">
                     <div className="font-medium font-size-small">Gatuadress</div>
                 </div>
-                <div className="column">B******* 5</div>
+                <div className="column">{props.data.customer.adress}</div>
             </div>
 
             <div data-ecom-columnrow="" className="repeat-m-half">
                 <div className="column">
                     <div className="font-medium font-size-small">Postnummer</div>
                 </div>
-                <div className="column">*** 55</div>
+                <div className="column">{props.data.customer.zip}</div>
             </div>
 
             <div data-ecom-columnrow="" className="repeat-m-half">
                 <div className="column">
                     <div className="font-medium font-size-small">Postort</div>
                 </div>
-                <div className="column">G*******</div>
+                <div className="column">{props.data.customer.city}</div>
             </div>
 
             <div data-ecom-columnrow="" className="repeat-m-half">
                 <div className="column">
                     <div className="font-medium font-size-small">E-post</div>
                 </div>
-                <div className="column">jane.doe@gmail.com</div>
+                <div className="column">{props.data.customer.email}</div>
             </div>
 
             <div data-ecom-columnrow="" className="repeat-m-half">
                 <div className="column">
                     <div className="font-medium font-size-small">Telefonnummer</div>
                 </div>
-                <div className="column">076 399 58 21</div>
+                <div className="column">{props.data.customer.phone}</div>
             </div>
         </React.Fragment>
     );

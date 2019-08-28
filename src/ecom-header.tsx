@@ -1,7 +1,7 @@
 import React from 'react';
+import { IEcomExternalProps } from './types';
 
-export interface IEcomHeaderProps {
-    serviceLogotypeUrl: string;
+export interface IEcomHeaderProps extends IEcomExternalProps {
     canPressBackButton: boolean;
     onPreviousStepClick: () => void;
 };
@@ -18,7 +18,7 @@ const EcomHeader = (props: IEcomHeaderProps) => {
                   }
                 </div>
                 <div className="header-action">
-                    <button className="header-action-btn" title="Stäng">
+                    <button className="header-action-btn" title="Stäng" onClick={props.onExit}>
                         <i className="icon-close no-margin"></i>
                     </button>
                 </div>

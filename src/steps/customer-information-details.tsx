@@ -181,9 +181,6 @@ const CustomerInformationDetails = (props: ICustomerInformationDetailsProps) => 
         <div data-ecom-page="">
             <section className="page-section">
                 <h1 className="h6">Kunduppgifter</h1>
-                <div data-ecom-content="">
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod.</p>
-                </div>
             </section>
 
             { props.data.customer.inputType === CustomerInformationInputType.AUTOMATIC &&

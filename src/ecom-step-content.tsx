@@ -66,7 +66,7 @@ const EcomStepContent = (props: AllProps) => {
             return <ConfirmOrder {...props} />;
 
         case EcomStep.FINAL_CONFIRMATION:
-            return <FinalConfirmation />;
+            return <FinalConfirmation {...props} />;
 
         default:
             return <div></div>;
