@@ -20,8 +20,8 @@ export const formatPrice = (value: number, decimalSymbol = ',') => {
         return;
     }
 
-    const roundedValue = value.toFixed(2);
-    const stringValue = ('' + roundedValue).replace('.00', '');
+    const roundedValue = Math.round(value);
+    const stringValue = roundedValue + '';
 
     const parts = stringValue.split('.');
     const valueBeforeDecimal = parts[0];

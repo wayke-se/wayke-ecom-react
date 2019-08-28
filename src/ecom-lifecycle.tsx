@@ -185,7 +185,7 @@ class EcomLifecycle extends React.Component<IEcomLifecycleProps, IState> {
                                         </div>
                                     </div>
 
-                                    <EcomCart vehicle={this.props.vehicle} />
+                                    <EcomCart {...this.props} />
                                 </div>
                             </div>
                         </div>

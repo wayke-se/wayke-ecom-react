@@ -9,6 +9,7 @@ export interface IVehicle {
     title: string;
     shortDescription: string;
     price: number;
+    imageUrl: string;
 };
 
 export interface IEcomExternalProps {

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { IEcomContext, IEcomLifecycle, IEcomStore } from '../types';
+import { IEcomContext, IEcomLifecycle, IEcomStore, IEcomExternalProps } from '../types';
 import StoreAction from '../enums/store-action';
 
 import { PaymentType } from 'wayke-ecom';
@@ -9,26 +9,14 @@ import { IPaymentOption } from 'wayke-ecom/dist-types/orders/types';
 import { formatPrice } from '../utils/helpers';
 import { addSizeQuery } from '../utils/image';
 import { getLoanInformation, getDefaultDuration, getDefaultDeposit } from '../utils/loan';
+import { getPaymentMethodTitle } from '../utils/payment';
 
-export interface IPaymentMethodChooserProps extends IEcomContext, IEcomStore, IEcomLifecycle {
+export interface IPaymentMethodChooserProps extends IEcomExternalProps, IEcomContext, IEcomStore, IEcomLifecycle {
 };
 
 interface IPaymentMethodItemProps extends IEcomContext, IEcomStore, IEcomLifecycle {
     paymentOption: IPaymentOption;
 };
-
-const getPaymentMethodTitle = (type: PaymentType) => {
-    switch(type) {
-        case PaymentType.Lease:
-            return 'Privatleasing';
-        case PaymentType.Loan:
-            return 'Financiering';
-        case PaymentType.Cash:
-            return 'Kontant';
-        default:
-            return '';
-    }
-}
 
 const PaymentMethodItem = (props: IPaymentMethodItemProps) => {
     const handlePaymentMethodClick = () => {
@@ -91,7 +79,7 @@ const PaymentMethodChooser = (props: IPaymentMethodChooserProps) => {
             <section className="page-section">
                 <h1 className="h6">Betalsätt</h1>
                 <div data-ecom-content="">
-                    <p>Hur vill du betala för din Audi A6 AVANT?</p>
+                    <p>Hur vill du betala för din {props.vehicle.title}?</p>
                 </div>
             </section>
 

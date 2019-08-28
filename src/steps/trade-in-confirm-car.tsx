@@ -3,6 +3,7 @@ import React from 'react';
 import { IEcomLifecycle, IEcomStore, IEcomContext } from '../types';
 import Alert from '../components/alert';
 import Spinner from '../components/spinner';
+import { getVehicleTitle, getVehicleDescription } from '../utils/trade-in-car';
 
 export interface ITradeInConfirmCarProps extends IEcomContext, IEcomStore, IEcomLifecycle {
 };
@@ -26,8 +27,10 @@ class TradeInConfirmCar extends React.Component<ITradeInConfirmCarProps> {
         }
 
         const vehicle = this.props.vehicleLookup.getVehicle();
+        const registrationNumber = this.props.data.tradeInCar.registrationNumber;
 
-        console.log(vehicle);
+        const vehicleTitle = getVehicleTitle(vehicle);
+        const vehicleDecsription = getVehicleDescription(vehicle);
 
         return (
             <div className="page-main">
@@ -40,9 +43,9 @@ class TradeInConfirmCar extends React.Component<ITradeInConfirmCarProps> {
 
                 <section className="page-section">
                     <div data-ecom-box="">
-                        <div data-ecom-label="">{this.props.data.tradeInCar.registrationNumber}</div>
+                        <div data-ecom-label="">{registrationNumber}</div>
                         <div className="m-t-half">
-                            <span className="font-medium">Peugot 308 Sportswagon</span> 1.6 BlueHDI FAP Manual, 120hp, 2015 6-speed
+                            <span className="font-medium">{vehicleTitle}</span> {vehicleDecsription}
                         </div>
                     </div>
                 </section>
