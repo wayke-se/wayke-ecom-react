@@ -17,13 +17,8 @@ export interface IEcomContext {
     orderOptions: IOrderOptionsResponse;
     insuranceOptions: IInsuranceOptionsResponse;
 
-    onFetchInsuranceOptions: (
-        personalNumber: string,
-        vehicleId: string,
-        paymentType: IPaymentOption,
-        drivingDistance: number,
-        callback: () => void
-    ) => void;
+    onFetchInsuranceOptions: () => void;
+    onFetchVehicleInformation: () => void;
 }
 
 export interface IEcomLifecycle {
@@ -60,6 +55,7 @@ export interface IPaymentData {
 };
 
 export interface IExpectedDrivingDistance {
+    optionIndex: number;
     min: number;
     max: number;
 };
