@@ -106,20 +106,24 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
             return;
         }
 
-        console.log(shouldFetch);
-
         const personalNumber = this.props.data.insurance.personalNumber;
         const vehicleId = this.props.vehicle.id;
         const paymentOption = this.props.data.payment.paymentOption;
         const expectedDrivingDistance = this.props.data.insurance.expectedDrivingDistance.optionIndex;
 
-        getInsuranceOptions(
-            personalNumber,
-            vehicleId,
-            paymentOption,
-            expectedDrivingDistance,
-            this.handleFetchInsuranceOptionsResponse
-        );
+        this.setState({
+            insuranceOptions: null,
+            insuranceOptionsError: false,
+            insuranceOptionsRequestInformation: null
+        }, () => {
+            getInsuranceOptions(
+                personalNumber,
+                vehicleId,
+                paymentOption,
+                expectedDrivingDistance,
+                this.handleFetchInsuranceOptionsResponse
+            );
+        });
     }
 
     handleFetchInsuranceOptionsResponse(isSuccessful: boolean, response: IInsuranceOptionsResponse) {
@@ -152,7 +156,14 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
         }
 
         const registrationNumber = this.props.data.tradeInCar.registrationNumber;
-        getVehicleLookup(registrationNumber, this.handleFetchVehicleInformationResponse);
+
+        this.setState({
+            vehicleLookup: null,
+            vehicleLookupError: false,
+            vehicleLookupRequestInformation: null
+        }, () => {
+            getVehicleLookup(registrationNumber, this.handleFetchVehicleInformationResponse);
+        });
     }
 
     handleFetchVehicleInformationResponse(isSuccessful: boolean, response: IVehicleLookupResponse) {

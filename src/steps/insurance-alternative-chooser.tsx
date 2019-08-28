@@ -2,6 +2,7 @@ import React from 'react';
 import { IEcomLifecycle, IEcomStore, IEcomContext } from '../types';
 import StoreAction from '../enums/store-action';
 import Alert from '../components/alert';
+import Spinner from '../components/spinner';
 
 export interface IInsuranceAlternativeChooserProps extends IEcomContext, IEcomStore, IEcomLifecycle {
 };
@@ -33,7 +34,7 @@ class InsuranceAlternativeChooser extends React.Component<IInsuranceAlternativeC
         }
 
         if (!this.props.insuranceOptions) {
-            return <div></div>;
+            return <Spinner />;
         }
 
         const insuranceOption = this.props.insuranceOptions.getInsuranceOption();

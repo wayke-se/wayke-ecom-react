@@ -16,6 +16,7 @@ import TradeInExistsChooser from './steps/trade-in-exists-chooser';
 import EcomStep from './enums/ecom-step';
 import { IEcomContext, IEcomLifecycle, IEcomStore } from './types';
 import Alert from './components/alert';
+import Spinner from './components/spinner';
 
 interface AllProps extends IEcomContext, IEcomStore, IEcomLifecycle {
     step: EcomStep;
@@ -24,6 +25,10 @@ interface AllProps extends IEcomContext, IEcomStore, IEcomLifecycle {
 const EcomStepContent = (props: AllProps) => {
     if (props.orderOptionsError) {
         return <Alert message="Ett oväntat fel har uppstått. Prova igen senare." />;
+    }
+
+    if (!props.orderOptions) {
+        return <Spinner />;
     }
 
     switch (props.step) {

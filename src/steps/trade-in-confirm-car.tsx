@@ -2,6 +2,7 @@ import React from 'react';
 
 import { IEcomLifecycle, IEcomStore, IEcomContext } from '../types';
 import Alert from '../components/alert';
+import Spinner from '../components/spinner';
 
 export interface ITradeInConfirmCarProps extends IEcomContext, IEcomStore, IEcomLifecycle {
 };
@@ -21,7 +22,7 @@ class TradeInConfirmCar extends React.Component<ITradeInConfirmCarProps> {
         }
 
         if (!this.props.vehicleLookup) {
-            return <div></div>;
+            return <Spinner />;
         }
 
         const vehicle = this.props.vehicleLookup.getVehicle();
