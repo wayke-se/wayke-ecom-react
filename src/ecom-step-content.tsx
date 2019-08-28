@@ -2,7 +2,6 @@ import React from 'react';
 
 import CustomerInformationDetails from './steps/customer-information-details';
 import CustomerInformationInitial from './steps/customer-information-initial';
-import DeliveryTypeChooser from './steps/delivery-type-chooser';
 import FinalConfirmation from './steps/final-confirmation';
 import InsuranceAlternativeChooser from './steps/insurance-alternative-chooser';
 import InsuranceInformationDefinition from './steps/insurance-information-definition';
@@ -61,9 +60,6 @@ const EcomStepContent = (props: AllProps) => {
 
         case EcomStep.CUSTOMER_INFORMATION_DETAILS:
             return <CustomerInformationDetails {...props} />;
-
-        case EcomStep.DELIVERY_TYPE_CHOOSER:
-            return <DeliveryTypeChooser {...props} />;
 
         case EcomStep.FINAL_CONFIRMATION:
             return <FinalConfirmation />;

@@ -1,5 +1,4 @@
 import CustomerInformationInputType from "./enums/customer-information-input-type";
-import DeliveryType from "./enums/delivery-type";
 import InsuranceOption from "./enums/insurance-option";
 import StoreAction from './enums/store-action';
 import { IPaymentOption, IOrderOptionsResponse } from "wayke-ecom/dist-types/orders/types";
@@ -44,7 +43,6 @@ export interface IEcomStore {
 
 export interface IEcomData {
     customer: ICustomerData,
-    delivery: IDeliveryData,
     insurance: IInsuranceData,
     interact: IInteractData,
     payment: IPaymentData,
@@ -74,10 +72,6 @@ export interface IInsuranceData {
     personalNumber: string;
     expectedDrivingDistance: IExpectedDrivingDistance;
     hasAddedInsurance: boolean;
-};
-
-export interface IDeliveryData {
-    type: DeliveryType;
 };
 
 export interface ICustomerData {

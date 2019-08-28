@@ -29,7 +29,6 @@ export const getPrimarySteps = (options: IOrderOptionsResponse): EcomStep[] => {
 
     result.push(
         EcomStep.CUSTOMER_INFORMATION_INITIAL,
-        EcomStep.DELIVERY_TYPE_CHOOSER,
         EcomStep.FINAL_CONFIRMATION
     );
 
@@ -117,7 +116,6 @@ export const getAllTransitions = () => ({
             isValid = isValid && isValidName && isValidAdress && isValidZip && isValidCity;
         }
 
-        return isValid ? EcomStep.DELIVERY_TYPE_CHOOSER : null;
+        return isValid ? EcomStep.FINAL_CONFIRMATION : null;
     },
-    [EcomStep.DELIVERY_TYPE_CHOOSER]: () => EcomStep.FINAL_CONFIRMATION,
 });

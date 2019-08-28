@@ -29,13 +29,9 @@ class EcomStore extends React.Component<IEcomStoreProps, IState> {
                 email: '',
                 phone: ''
             },
-            delivery: {
-                type: null
-            },
             insurance: {
                 insuranceOption: null,
                 personalNumber: '',
-                personalNumberUsedForLookup: null,
                 expectedDrivingDistance: null,
                 hasAddedInsurance: false
             },
@@ -68,7 +64,6 @@ class EcomStore extends React.Component<IEcomStoreProps, IState> {
             tradeInCar: {
                 hasTradeInCar: null,
                 registrationNumber: '',
-                registrationNumberUserForLookup: null,
                 milage: ''
             }
         };
