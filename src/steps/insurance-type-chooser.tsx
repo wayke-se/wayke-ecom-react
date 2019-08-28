@@ -21,7 +21,7 @@ const InsuranceTypeChooser = (props: IInsuranceTypeChooserProps) => {
         });
     };
 
-    const insuranceOption = props.options.getInsuranceOption();
+    const insuranceOption = props.orderOptions.getInsuranceOption();
     const scaledImage = addSizeQuery(insuranceOption.logo, 100, 60);
 
     return (

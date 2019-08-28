@@ -1,14 +1,14 @@
 import React from 'react';
 
 import { validateSSN } from '../utils/validation';
-import { IEcomLifecycle, IExpectedDrivingDistance, IEcomStore } from '../types';
+import { IEcomLifecycle, IExpectedDrivingDistance, IEcomStore, IEcomContext } from '../types';
 import StoreAction from '../enums/store-action';
 
-export interface IInsuranceInformationDefinitionProps extends IEcomStore, IEcomLifecycle {
+export interface IInsuranceInformationDefinitionProps extends IEcomContext, IEcomStore, IEcomLifecycle {
 };
 
 interface IState {
-    expectedDrivingDistance: number;
+    expectedDrivingDistanceIndex: number;
 };
 
 const options = [
@@ -47,18 +47,18 @@ class InsuranceInformationDefinition extends React.Component<IInsuranceInformati
         this.handleBlur = this.handleBlur.bind(this);
 
         this.state = {
-            expectedDrivingDistance: this.props.data.insurance.expectedDrivingDistance ? getIndexFromOption(this.props.data.insurance.expectedDrivingDistance) : 0
+            expectedDrivingDistanceIndex: this.props.data.insurance.expectedDrivingDistance ? getIndexFromOption(this.props.data.insurance.expectedDrivingDistance) : 0
         };
     }
 
     handleExpectedDrivingDistanceChange(e: React.ChangeEvent<HTMLSelectElement>) {
         this.setState({
-            expectedDrivingDistance: e.target.selectedIndex
+            expectedDrivingDistanceIndex: e.target.selectedIndex
         }, () => {
             this.props.dispatchStoreAction(StoreAction.UPDATE_NAMED_VALUE, {
                 type: 'insurance',
                 name: 'expectedDrivingDistance',
-                value: options[this.state.expectedDrivingDistance]
+                value: options[this.state.expectedDrivingDistanceIndex]
             });
         });
     }
@@ -67,9 +67,15 @@ class InsuranceInformationDefinition extends React.Component<IInsuranceInformati
         this.props.dispatchStoreAction(StoreAction.UPDATE_NAMED_VALUE, {
             type: 'insurance',
             name: 'expectedDrivingDistance',
-            value: options[this.state.expectedDrivingDistance]
+            value: options[this.state.expectedDrivingDistanceIndex]
         }, () => {
-            this.props.onNextStepClick();
+            this.props.onFetchInsuranceAlternatives(
+                this.props.data.insurance.personalNumber,
+                this.props.vehicle.id,
+                this.props.data.payment.paymentOption,
+                this.state.expectedDrivingDistanceIndex,
+                this.props.onNextStepClick
+            )
         });
     }
 
@@ -88,11 +94,9 @@ class InsuranceInformationDefinition extends React.Component<IInsuranceInformati
     render() {
         const optionValues = options.map(o => o.min + (o.max ? '-' + o.max : '+') + ' mil');
         const optionItems = optionValues.map((v, index) => <option key={index}>{v}</option>);
-        const selectedValue = optionValues[this.state.expectedDrivingDistance];
+        const selectedValue = optionValues[this.state.expectedDrivingDistanceIndex];
 
         const hasPersonalNumberError = this.props.data.interact.insurance.personalNumber && !validateSSN(this.props.data.insurance.personalNumber);
-
-        const insuranceOptions = this.props.op
 
         return (
             <div className="page-main">

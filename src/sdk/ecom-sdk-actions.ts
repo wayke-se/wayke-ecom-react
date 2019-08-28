@@ -1,4 +1,5 @@
-import { orders, IOrderOptionsResponse } from 'wayke-ecom';
+import { orders, insurances, IOrderOptionsResponse, PaymentType, IInsuranceOptionsResponse } from 'wayke-ecom';
+import { IPaymentOption } from 'wayke-ecom/dist-types/orders/types';
 
 //This is used for development purposes
 class CustomResponse implements IOrderOptionsResponse {
@@ -38,3 +39,24 @@ export const getInitialData = (vehicleId: string, callback: (options: IOrderOpti
             throw e;
         });
 };
+
+export const getInsuranceAlternatives = (
+        personalNumber: string,
+        vehicleId: string,
+        paymentType: IPaymentOption,
+        drivingDistance: number,
+        callback: (options: IInsuranceOptionsResponse) => void
+) => {
+    const request = insurances.newInsuranceOptionsRequest()
+                        .forCustomer(personalNumber)
+                        .forVehicle(vehicleId)
+                        .withPayment(paymentType)
+                        .withDrivingDistance(drivingDistance)
+                        .build();
+
+    insurances.getOptions(request)
+        .then(callback)
+        .catch((e) => {
+            throw e
+        });
+}

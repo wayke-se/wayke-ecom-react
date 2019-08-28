@@ -50,13 +50,13 @@ class EcomLifecycle extends React.Component<IEcomLifecycleProps, IState> {
     }
 
     componentDidUpdate() {
-        const hasOptions = this.props.options;
+        const hasOrderOptions = this.props.orderOptions;
         const hasNoStep = this.state.step === undefined;
 
-        const shouldSetInitialStep = hasOptions && hasNoStep;
+        const shouldSetInitialStep = hasOrderOptions && hasNoStep;
 
         if (shouldSetInitialStep) {
-            const initialStep = getInitialStep(this.props.options);
+            const initialStep = getInitialStep(this.props.orderOptions);
 
             this.setState({
                 stepHistory: [ initialStep ],
@@ -79,7 +79,7 @@ class EcomLifecycle extends React.Component<IEcomLifecycleProps, IState> {
     }
 
     handleNextStepClick() {
-        const nextStep = getNewStep(this.state.step, this.props.data, this.props.options);
+        const nextStep = getNewStep(this.state.step, this.props.data, this.props.orderOptions);
 
         if (nextStep === null) {
             this.handleRejectedStepForward();
@@ -170,7 +170,7 @@ class EcomLifecycle extends React.Component<IEcomLifecycleProps, IState> {
                                           canPressBackButton={canPressBackButton}
                                           onPreviousStepClick={this.handlePreviousStepClick} />
 
-                                      <EcomTimeline currentStep={this.state.step} options={this.props.options} />
+                                      <EcomTimeline currentStep={this.state.step} options={this.props.orderOptions} />
 
                                       <div data-ecom-page="">
                                           <EcomStepContent

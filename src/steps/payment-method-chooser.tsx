@@ -84,7 +84,7 @@ const PaymentMethodItem = (props: IPaymentMethodItemProps) => {
 }
 
 const PaymentMethodChooser = (props: IPaymentMethodChooserProps) => {
-    const items = props.options.getPaymentOptions().map((o, index) => <PaymentMethodItem key={index} paymentOption={o} {...props} />);
+    const items = props.orderOptions.getPaymentOptions().map((o, index) => <PaymentMethodItem key={index} paymentOption={o} {...props} />);
 
     return (
         <div className="page-main">
