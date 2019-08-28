@@ -69,8 +69,8 @@ const EcomCart = (props: IEcomCartProps) => {
         const insuranceOption = props.insuranceOptions.getInsuranceOption();
 
         cartContent.push({
-            title: insuranceOption.name,
-            description: insuranceOption.brand.name,
+            title: 'Försäkring',
+            description: insuranceOption.brand.name + ' - ' + insuranceOption.name,
             price: insuranceOption.price,
             unit: insuranceOption.unit
         });

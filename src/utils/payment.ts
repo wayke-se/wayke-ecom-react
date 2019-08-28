@@ -5,7 +5,7 @@ export const getPaymentMethodTitle = (type: PaymentType) => {
         case PaymentType.Lease:
             return 'Privatleasing';
         case PaymentType.Loan:
-            return 'Financiering';
+            return 'Finansiering';
         case PaymentType.Cash:
             return 'Kontant';
         default:
