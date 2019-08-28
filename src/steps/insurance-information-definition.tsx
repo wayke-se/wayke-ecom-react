@@ -69,7 +69,7 @@ class InsuranceInformationDefinition extends React.Component<IInsuranceInformati
             name: 'expectedDrivingDistance',
             value: options[this.state.expectedDrivingDistanceIndex]
         }, () => {
-            this.props.onFetchInsuranceAlternatives(
+            this.props.onFetchInsuranceOptions(
                 this.props.data.insurance.personalNumber,
                 this.props.vehicle.id,
                 this.props.data.payment.paymentOption,

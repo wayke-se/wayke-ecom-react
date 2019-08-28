@@ -2,8 +2,8 @@ import React from "react";
 
 import { IVehicle } from "./types";
 import EcomStore from './ecom-store';
-import { getInitialData, getInsuranceAlternatives } from "./sdk/ecom-sdk-actions";
-import { IOrderOptionsResponse, IInsuranceOptionsResponse } from "wayke-ecom";
+import { getInitialData, getInsuranceOptions, getVehicleLookup } from "./sdk/ecom-sdk-actions";
+import { IOrderOptionsResponse, IInsuranceOptionsResponse, IVehicleLookupResponse } from "wayke-ecom";
 import { IPaymentOption } from "wayke-ecom/dist-types/orders/types";
 
 export interface IEcomProps {
@@ -13,17 +13,19 @@ export interface IEcomProps {
 interface IState {
     orderOptions: IOrderOptionsResponse;
     insuranceOptions: IInsuranceOptionsResponse;
+    vehicleLookup: IVehicleLookupResponse;
 };
 
 class Ecom extends React.Component<IEcomProps, IState> {
     constructor(props: IEcomProps) {
         super(props);
 
-        this.handleFetchInsuranceAlternatives = this.handleFetchInsuranceAlternatives.bind(this);
+        this.handleFetchInsuranceOptions = this.handleFetchInsuranceOptions.bind(this);
 
         this.state = {
             orderOptions: null,
-            insuranceOptions: null
+            insuranceOptions: null,
+            vehicleLookup: null
         };
     }
 
@@ -35,14 +37,14 @@ class Ecom extends React.Component<IEcomProps, IState> {
         });
     }
 
-    handleFetchInsuranceAlternatives(
+    handleFetchInsuranceOptions(
             personalNumber: string,
             vehicleId: string,
             paymentOption: IPaymentOption,
             drivingDistance: number,
             callback: () => void
     ) {
-        getInsuranceAlternatives(
+        getInsuranceOptions(
             personalNumber,
             vehicleId,
             paymentOption,
@@ -55,9 +57,17 @@ class Ecom extends React.Component<IEcomProps, IState> {
         );
     }
 
+    handleFetchVehicleInformation(registrationNumber: string, callback: () => void) {
+        getVehicleLookup(registrationNumber, (response: IVehicleLookupResponse) => {
+            this.setState({
+                vehicleLookup: response,
+            }, callback);
+        });
+    }
+
     render() {
         return (
-            <EcomStore onFetchInsuranceAlternatives={this.handleFetchInsuranceAlternatives} {...this.state} {...this.props} />
+            <EcomStore onFetchInsuranceOptions={this.handleFetchInsuranceOptions} {...this.state} {...this.props} />
         );
     }
 };

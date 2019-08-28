@@ -17,7 +17,7 @@ export interface IEcomContext {
     orderOptions: IOrderOptionsResponse;
     insuranceOptions: IInsuranceOptionsResponse;
 
-    onFetchInsuranceAlternatives: (
+    onFetchInsuranceOptions: (
         personalNumber: string,
         vehicleId: string,
         paymentType: IPaymentOption,

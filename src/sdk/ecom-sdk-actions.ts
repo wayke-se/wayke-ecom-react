@@ -1,4 +1,4 @@
-import { orders, insurances, IOrderOptionsResponse, PaymentType, IInsuranceOptionsResponse } from 'wayke-ecom';
+import { orders, insurances, vehicles, IOrderOptionsResponse, IInsuranceOptionsResponse, IVehicleLookupResponse } from 'wayke-ecom';
 import { IPaymentOption } from 'wayke-ecom/dist-types/orders/types';
 
 //This is used for development purposes
@@ -40,7 +40,7 @@ export const getInitialData = (vehicleId: string, callback: (options: IOrderOpti
         });
 };
 
-export const getInsuranceAlternatives = (
+export const getInsuranceOptions = (
         personalNumber: string,
         vehicleId: string,
         paymentType: IPaymentOption,
@@ -57,6 +57,18 @@ export const getInsuranceAlternatives = (
     insurances.getOptions(request)
         .then(callback)
         .catch((e) => {
-            throw e
+            throw e;
+        });
+}
+
+export const getVehicleLookup = (registrationNumber: string, callback: (lookup: IVehicleLookupResponse) => void) => {
+    const request = vehicles.newLookupRequest()
+        .withRegistrationNumber(registrationNumber)
+        .build();
+
+    vehicles.lookupVehicle(request)
+        .then(callback)
+        .catch((e) => {
+            throw e;
         });
 }
