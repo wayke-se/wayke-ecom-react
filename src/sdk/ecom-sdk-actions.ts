@@ -1,4 +1,4 @@
-import { orders, insurances, vehicles, IOrderOptionsResponse, IInsuranceOptionsResponse, IVehicleLookupResponse } from 'wayke-ecom';
+import { orders, insurances, vehicles, customers, IOrderOptionsResponse, IInsuranceOptionsResponse, IVehicleLookupResponse, IAddressLookupResponse } from 'wayke-ecom';
 import { IPaymentOption } from 'wayke-ecom/dist-types/orders/types';
 
 export const getOrderOptions = (
@@ -13,7 +13,7 @@ export const getOrderOptions = (
         .then((response: IOrderOptionsResponse) => {
             callback(true, response);
         })
-        .catch((e) => {
+        .catch(() => {
             callback(false, null);
         });
 };
@@ -36,10 +36,10 @@ export const getInsuranceOptions = (
         .then((response: IInsuranceOptionsResponse) => {
             callback(true, response);
         })
-        .catch((e) => {
+        .catch(() => {
             callback(false, null);
         });
-}
+};
 
 export const getVehicleLookup = (
         registrationNumber: string,
@@ -53,7 +53,24 @@ export const getVehicleLookup = (
         .then((response: IVehicleLookupResponse) => {
             callback(true, response);
         })
-        .catch((e) => {
+        .catch(() => {
             callback(false, null);
         });
-}
+};
+
+export const getAddressLookup = (
+        personalNumber: string,
+        callback: (isSuccessful: boolean, lookup: IAddressLookupResponse) => void
+) => {
+    const request = customers.newAddressLookupRequest()
+        .forCustomer(personalNumber)
+        .build();
+
+    customers.lookupAddress(request)
+        .then((response: IAddressLookupResponse) => {
+            callback(true, response);
+        })
+        .catch(() => {
+            callback(false, null);
+        });
+};

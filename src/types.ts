@@ -2,7 +2,7 @@ import CustomerInformationInputType from "./enums/customer-information-input-typ
 import InsuranceOption from "./enums/insurance-option";
 import StoreAction from './enums/store-action';
 import { IPaymentOption, IOrderOptionsResponse } from "wayke-ecom/dist-types/orders/types";
-import { IInsuranceOptionsResponse, IVehicleLookupResponse } from "wayke-ecom";
+import { IInsuranceOptionsResponse, IVehicleLookupResponse, IAddressLookupResponse } from "wayke-ecom";
 
 export interface IVehicle {
     id: string;
@@ -28,13 +28,16 @@ export interface IEcomContext {
     orderOptions: IOrderOptionsResponse;
     insuranceOptions: IInsuranceOptionsResponse;
     vehicleLookup: IVehicleLookupResponse;
+    addressLookup: IAddressLookupResponse;
 
     orderOptionsError: boolean;
     insuranceOptionsError: boolean;
     vehicleLookupError: boolean;
+    addressLookupError: boolean;
 
     onFetchInsuranceOptions: () => void;
     onFetchVehicleInformation: () => void;
+    onFetchAddressInformation: () => void;
 }
 
 export interface IEcomLifecycle {
@@ -87,7 +90,7 @@ export interface ICustomerData {
     inputType: CustomerInformationInputType;
     personalNumber: string;
     name: string;
-    adress: string;
+    address: string;
     zip: string;
     city: string;
     email: string;
@@ -108,7 +111,7 @@ export interface IInteractData {
         hasAcceptedTerms: boolean;
         personalNumber: boolean;
         name: boolean;
-        adress: boolean;
+        address: boolean;
         zip: boolean;
         city: boolean;
         email: boolean;

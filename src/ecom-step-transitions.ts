@@ -110,11 +110,11 @@ export const getAllTransitions = () => ({
 
         if (data.customer.inputType === CustomerInformationInputType.MANUAL) {
             const isValidName = !!data.customer.name;
-            const isValidAdress = !!data.customer.adress;
+            const isValidAddress = !!data.customer.address;
             const isValidZip = validateZip(data.customer.zip);
             const isValidCity = !!data.customer.city;
 
-            isValid = isValid && isValidName && isValidAdress && isValidZip && isValidCity;
+            isValid = isValid && isValidName && isValidAddress && isValidZip && isValidCity;
         }
 
         return isValid ? EcomStep.CONFIRM_ORDER : null;
