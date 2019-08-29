@@ -83,9 +83,10 @@ export interface IExpectedDrivingDistance {
 };
 
 export interface IInsuranceData {
+    wantsToSeeInsuranceOptions: boolean;
+    hasAddedInsurance: boolean;
     personalNumber: string;
     expectedDrivingDistance: IExpectedDrivingDistance;
-    hasAddedInsurance: boolean;
 };
 
 export interface ICustomerData {

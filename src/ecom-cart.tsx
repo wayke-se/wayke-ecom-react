@@ -43,7 +43,11 @@ const EcomCart = (props: IEcomCartProps) => {
 
     const hasTradeIn = props.data.tradeInCar.hasTradeInCar && props.data.tradeInCar.registrationNumber && props.vehicleLookup !== null;
     const hasLoan = props.data.payment.paymentOption && props.data.payment.paymentOption.type === PaymentType.Loan;
-    const hasInsurance = props.data.insurance.hasAddedInsurance && props.data.insurance.personalNumber && props.data.insurance.expectedDrivingDistance && props.insuranceOptions !== null;
+    const hasInsurance = props.data.insurance.wantsToSeeInsuranceOptions &&
+            props.data.insurance.hasAddedInsurance &&
+            props.data.insurance.personalNumber &&
+            props.data.insurance.expectedDrivingDistance &&
+            props.insuranceOptions !== null;
 
     if (hasTradeIn) {
         const vehicleInformation = props.vehicleLookup.getVehicle();

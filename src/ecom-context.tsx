@@ -263,7 +263,7 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
         var paymentResidualValue = 0;
 
         if (paymentType === PaymentType.Loan) {
-            paymentLoanDeposit = parseInt(payment.loanDeposit);
+            paymentLoanDeposit = payment.loanDeposit;
             paymentLoanDuration = payment.loanDuration;
         }
 

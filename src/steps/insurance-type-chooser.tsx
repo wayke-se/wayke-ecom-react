@@ -1,21 +1,19 @@
 import React from 'react';
 
-import InsuranceOption from '../constants/insurance-option';
-import StoreAction from '../constants/store-action';
-
 import { IEcomContext, IEcomLifecycle, IEcomStore } from '../types';
 
+import StoreAction from '../constants/store-action';
 import { addSizeQuery } from '../utils/image';
 
 export interface IInsuranceTypeChooserProps extends IEcomContext, IEcomStore, IEcomLifecycle {
 };
 
 const InsuranceTypeChooser = (props: IInsuranceTypeChooserProps) => {
-    const handleInsuranceOptionClick = (insuranceOption: InsuranceOption) => {
+    const handleInsuranceOptionClick = (wantsToSeeInsuranceOptions: boolean) => {
         props.dispatchStoreAction(StoreAction.UPDATE_NAMED_VALUE, {
             type: 'insurance',
-            name: 'insuranceOption',
-            value: insuranceOption
+            name: 'wantsToSeeInsuranceOptions',
+            value: wantsToSeeInsuranceOptions
         }, () => {
             props.onNextStepClick();
         });
@@ -37,7 +35,7 @@ const InsuranceTypeChooser = (props: IInsuranceTypeChooserProps) => {
                 <div data-ecom-optionlist="">
                     <ul className="option-list">
                         <li className="option-list-item">
-                            <button className="option-list-action" onClick={() => handleInsuranceOptionClick(InsuranceOption.AUDI_INSURANCE)}>
+                            <button className="option-list-action" onClick={() => handleInsuranceOptionClick(true)}>
                                 <div data-ecom-columnrow="">
                                     <div className="column">
                                         <div className="option-list-action-title">{insuranceOption.title}</div>
@@ -46,14 +44,14 @@ const InsuranceTypeChooser = (props: IInsuranceTypeChooserProps) => {
 
                                     { scaledImage &&
                                         <div className="column valign-top minimal">
-                                            <img src={scaledImage} alt="Audi logotype" className="l-block" />
+                                            <img src={scaledImage} alt="Logotype" className="l-block" />
                                         </div>
                                     }
                                 </div>
                             </button>
                         </li>
                         <li className="option-list-item">
-                            <button className="option-list-action" onClick={() => handleInsuranceOptionClick(null)}>
+                            <button className="option-list-action" onClick={() => handleInsuranceOptionClick(false)}>
                                 <div className="option-list-action-title">Hoppa över detta steg</div>
                                 <div className="option-list-action-meta">Jag har egen försäkring</div>
                             </button>

@@ -9,7 +9,6 @@ import EcomCart from './ecom-cart';
 import EcomTimeline from './ecom-timeline';
 
 import { IEcomExternalProps, IEcomContext, IEcomStore, IEcomData } from './types';
-import StoreAction from './constants/store-action';
 import { IOrderOptionsResponse } from 'wayke-ecom';
 
 interface IEcomLifecycleProps extends IEcomExternalProps, IEcomContext, IEcomStore {
@@ -21,7 +20,7 @@ interface IState {
     isBackwardsStepForbidden: boolean;
 }
 
-const getNewStep = (currentStep: EcomStep, data: IEcomData, options: IOrderOptionsResponse): EcomStep => {
+const getNextStep = (currentStep: EcomStep, data: IEcomData, options: IOrderOptionsResponse): EcomStep => {
     const transition = getAllTransitions()[currentStep];
 
     if (transition) {
@@ -45,10 +44,7 @@ class EcomLifecycle extends React.Component<IEcomLifecycleProps, IState> {
     constructor(props: IEcomLifecycleProps) {
         super(props);
 
-        this.componentDidTransitionForward = this.componentDidTransitionForward.bind(this);
-
         this.handleNextStepClick = this.handleNextStepClick.bind(this);
-        this.handleRejectedStepForward = this.handleRejectedStepForward.bind(this);
         this.handlePreviousStepClick = this.handlePreviousStepClick.bind(this);
         this.handleSpecificStepClick = this.handleSpecificStepClick.bind(this);
 
@@ -75,28 +71,10 @@ class EcomLifecycle extends React.Component<IEcomLifecycleProps, IState> {
         }
     }
 
-    componentDidTransitionForward() {
-        //Custom lifecycle event
-
-        const insurance = this.props.data.insurance;
-        const customer = this.props.data.customer;
-
-        const shouldUpdateCustomerPersonalNumber = insurance.personalNumber && !customer.personalNumber;
-
-        if (shouldUpdateCustomerPersonalNumber) {
-            this.props.dispatchStoreAction(StoreAction.UPDATE_NAMED_VALUE, {
-                type: 'customer',
-                name: 'personalNumber',
-                value: insurance.personalNumber
-            });
-        }
-    }
-
     handleNextStepClick() {
-        const nextStep = getNewStep(this.state.step, this.props.data, this.props.orderOptions);
+        const nextStep = getNextStep(this.state.step, this.props.data, this.props.orderOptions);
 
-        if (nextStep === null) {
-            this.handleRejectedStepForward();
+        if (!nextStep) {
             return;
         }
 
@@ -107,29 +85,7 @@ class EcomLifecycle extends React.Component<IEcomLifecycleProps, IState> {
             step: nextStep,
             stepHistory: newHistory,
             isBackwardsStepForbidden: nextStep === EcomStep.FINAL_CONFIRMATION
-        }, () => {
-            this.componentDidTransitionForward();
         });
-    }
-
-    handleRejectedStepForward() {
-        switch (this.state.step) {
-            case EcomStep.TRADE_IN_CAR_DEFINITION:
-                this.props.dispatchStoreAction(StoreAction.INTERACT_SET_ALL_FOR_TYPE, 'tradeInCar');
-                break;
-
-            case EcomStep.INSURANCE_INFORMATION_DEFINITION:
-                this.props.dispatchStoreAction(StoreAction.INTERACT_UPDATE_SPECIFIC, { type: 'insurance', name: 'personalNumber' });
-                break;
-
-            case EcomStep.CUSTOMER_INFORMATION_INITIAL:
-                this.props.dispatchStoreAction(StoreAction.INTERACT_UPDATE_SPECIFIC, { type: 'customer', name: 'personalNumber' });
-                break;
-
-            case EcomStep.CUSTOMER_INFORMATION_DETAILS:
-                this.props.dispatchStoreAction(StoreAction.INTERACT_SET_ALL_FOR_TYPE, 'customer');
-                break;
-        }
     }
 
     handlePreviousStepClick() {
