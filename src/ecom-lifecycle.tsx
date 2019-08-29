@@ -81,10 +81,16 @@ class EcomLifecycle extends React.Component<IEcomLifecycleProps, IState> {
         const insurance = this.props.data.insurance;
         const customer = this.props.data.customer;
 
-        const shouldUpdateCustomerPersonalNumber = insurance.personalNumber && customer.personalNumber === null;
+        const shouldUpdateCustomerPersonalNumber = insurance.personalNumber && !customer.personalNumber;
+
+        console.log(shouldUpdateCustomerPersonalNumber);
 
         if (shouldUpdateCustomerPersonalNumber) {
-            this.props.dispatchStoreAction(StoreAction.CUSTOMER_UPDATE_PERSONAL_NUMBER, insurance.personalNumber);
+            this.props.dispatchStoreAction(StoreAction.UPDATE_NAMED_VALUE, {
+                type: 'customer',
+                name: 'personalNumber',
+                value: insurance.personalNumber
+            });
         }
     }
 

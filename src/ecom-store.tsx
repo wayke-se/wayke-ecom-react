@@ -88,14 +88,6 @@ class EcomStore extends React.Component<IEcomStoreProps, IState> {
                 };
                 break;
 
-            case StoreAction.CUSTOMER_UPDATE_PERSONAL_NUMBER:
-                stateUpdate = {
-                    customer: {
-                        personalNumber: value
-                    }
-                };
-                break;
-
             case StoreAction.INTERACT_SET_ALL_FOR_TYPE:
                 const newInteract = {};
                 const keys = Object.keys(this.state.interact[value]);
