@@ -1,21 +1,21 @@
 import { orders, insurances, vehicles, customers, IOrderOptionsResponse, IInsuranceOptionsResponse, IVehicleLookupResponse, IAddressLookupResponse, IOrderCreateResponse } from 'wayke-ecom';
 import { IOrderOptionsData, IInsuranceOptionsData, IVehicleLookupData, IAddressLookupData, ICreateOrderData } from '../types';
 
-export const getOrderOptions = (data: IOrderOptionsData, callback: (isSuccessful: boolean, options: IOrderOptionsResponse) => void) => {
+export const getOrderOptions = (data: IOrderOptionsData, callback: (options: IOrderOptionsResponse) => void) => {
     const request = orders.newOptionsRequest()
         .forVehicle(data.vehicleId)
         .build();
 
     orders.getOptions(request)
         .then((response: IOrderOptionsResponse) => {
-            callback(true, response);
+            callback(response);
         })
         .catch(() => {
-            callback(false, null);
+            callback(null);
         });
 };
 
-export const getInsuranceOptions = (data: IInsuranceOptionsData, callback: (isSuccessful: boolean, options: IInsuranceOptionsResponse) => void) => {
+export const getInsuranceOptions = (data: IInsuranceOptionsData, callback: (options: IInsuranceOptionsResponse) => void) => {
     const request = insurances.newInsuranceOptionsRequest()
                         .forCustomer(data.personalNumber)
                         .forVehicle(data.vehicleId)
@@ -25,42 +25,42 @@ export const getInsuranceOptions = (data: IInsuranceOptionsData, callback: (isSu
 
     insurances.getOptions(request)
         .then((response: IInsuranceOptionsResponse) => {
-            callback(true, response);
+            callback(response);
         })
         .catch(() => {
-            callback(false, null);
+            callback(null);
         });
 };
 
-export const getVehicleLookup = (data: IVehicleLookupData, callback: (isSuccessful: boolean, lookup: IVehicleLookupResponse) => void) => {
+export const getVehicleLookup = (data: IVehicleLookupData, callback: (lookup: IVehicleLookupResponse) => void) => {
     const request = vehicles.newLookupRequest()
         .withRegistrationNumber(data.registrationNumber)
         .build();
 
     vehicles.lookupVehicle(request)
         .then((response: IVehicleLookupResponse) => {
-            callback(true, response);
+            callback(response);
         })
         .catch(() => {
-            callback(false, null);
+            callback(null);
         });
 };
 
-export const getAddressLookup = (data: IAddressLookupData, callback: (isSuccessful: boolean, lookup: IAddressLookupResponse) => void) => {
+export const getAddressLookup = (data: IAddressLookupData, callback: (lookup: IAddressLookupResponse) => void) => {
     const request = customers.newAddressLookupRequest()
         .forCustomer(data.personalNumber)
         .build();
 
     customers.lookupAddress(request)
         .then((response: IAddressLookupResponse) => {
-            callback(true, response);
+            callback(response);
         })
         .catch(() => {
-            callback(false, null);
+            callback(null);
         });
 };
 
-export const createOrder = (data: ICreateOrderData, callback: (isSuccessful: boolean, response: IOrderCreateResponse) => void) => {
+export const createOrder = (data: ICreateOrderData, callback: (response: IOrderCreateResponse) => void) => {
     const customer = customers.newCustomer()
         .withAddress(data.customerAddress)
         .withPersonalNumber(data.customerPersonalNumber)
@@ -98,9 +98,9 @@ export const createOrder = (data: ICreateOrderData, callback: (isSuccessful: boo
 
     orders.create(request)
         .then((response: IOrderCreateResponse) => {
-            callback(true, response);
+            callback(response);
         })
         .catch(() => {
-            callback(false, null);
+            callback(null);
         });
 }

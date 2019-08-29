@@ -28,43 +28,43 @@ const addRequestToCache = <T>(requestType: RequestType, requestIdentifier: strin
 };
 
 const makeRequest = <S, T>(
-        requestAction: (data: S, actionCallback: (isSuccessful: boolean, response: T) => void) => void,
+        requestAction: (data: S, actionCallback: (response: T) => void) => void,
         requestType: RequestType,
         data: S,
-        callback: (isSuccessful: boolean, response: T) => void
+        callback: (response: T) => void
 ) => {
     const requestIdentifier = getRequestIdentifier(data);
     const cachedRequestResponse = getCachedRequestResponse<T>(requestType, requestIdentifier);
 
     if (cachedRequestResponse) {
-        return callback(true, cachedRequestResponse);
+        return callback(cachedRequestResponse);
     }
 
-    requestAction(data, (isSuccessful: boolean, response: T) => {
-        if (isSuccessful) {
+    requestAction(data, (response: T) => {
+        if (response) {
             addRequestToCache(requestType, requestIdentifier, response);
         }
 
-        callback(isSuccessful, response);
+        callback(response);
     });
 };
 
-export const makeOrderOptionsRequest = (data: IOrderOptionsData, callback: (isSuccessful: boolean, response: IOrderOptionsResponse) => void) => {
+export const makeOrderOptionsRequest = (data: IOrderOptionsData, callback: (response: IOrderOptionsResponse) => void) => {
     makeRequest(getOrderOptions, RequestType.GET_ORDER_OPTIONS, data, callback);
 };
 
-export const makeVehicleLookupRequest = (data: IVehicleLookupData, callback: (isSuccessful: boolean, response: IVehicleLookupResponse) => void) => {
+export const makeVehicleLookupRequest = (data: IVehicleLookupData, callback: (response: IVehicleLookupResponse) => void) => {
     makeRequest(getVehicleLookup, RequestType.GET_VEHICLE_LOOKUP, data, callback);
 };
 
-export const makeInsuranceOptionsRequest = (data: IInsuranceOptionsData, callback: (isSuccessful: boolean, response: IInsuranceOptionsResponse) => void) => {
+export const makeInsuranceOptionsRequest = (data: IInsuranceOptionsData, callback: (response: IInsuranceOptionsResponse) => void) => {
     makeRequest(getInsuranceOptions, RequestType.GET_INSURANCE_OPTIONS, data, callback);
 };
 
-export const makeAddressLookupRequest = (data: IAddressLookupData, callback: (isSuccessful: boolean, response: IAddressLookupResponse) => void) => {
+export const makeAddressLookupRequest = (data: IAddressLookupData, callback: (response: IAddressLookupResponse) => void) => {
     makeRequest(getAddressLookup, RequestType.GET_ADDRESS_LOOKUP, data, callback);
 };
 
-export const makeCreateOrderRequest = (data: ICreateOrderData, callback: (isSuccessful: boolean, response: IOrderCreateResponse) => void) => {
+export const makeCreateOrderRequest = (data: ICreateOrderData, callback: (response: IOrderCreateResponse) => void) => {
     makeRequest(createOrder, RequestType.CREATE_ORDER, data, callback);
 };

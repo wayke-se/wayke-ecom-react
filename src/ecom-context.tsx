@@ -45,14 +45,27 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
     }
 
     componentDidMount() {
+        const request = () => {
+            makeOrderOptionsRequest({
+                vehicleId: this.props.vehicle.id
+            }, (response: IOrderOptionsResponse) => {
+                this.saveResponse({
+                    orderOptions: response
+                });
+            });
+        }
+
+        this.makeRequest(request);
     }
 
     handleFetchVehicleInformation() {
         const request = () => {
             makeVehicleLookupRequest({
                 registrationNumber: this.props.data.tradeInCar.registrationNumber
-            }, (isSuccessful: boolean, response: IVehicleLookupResponse) => {
-                this.saveResponse(response);
+            }, (response: IVehicleLookupResponse) => {
+                this.saveResponse({
+                    vehicleLookup: response
+                });
             });
         }
 
@@ -60,22 +73,34 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
     }
 
     handleFetchInsuranceOptions() {
-        makeInsuranceOptionsRequest({
-            personalNumber: this.props.data.insurance.personalNumber,
-            vehicleId: this.props.vehicle.id,
-            paymentType: this.props.data.payment.paymentOption,
-            drivingDistance: this.props.data.insurance.expectedDrivingDistance.optionIndex
-        }, (isSuccessful: boolean, response: IInsuranceOptionsResponse) => {
+        const request = () => {
+            makeInsuranceOptionsRequest({
+                personalNumber: this.props.data.insurance.personalNumber,
+                vehicleId: this.props.vehicle.id,
+                paymentType: this.props.data.payment.paymentOption,
+                drivingDistance: this.props.data.insurance.expectedDrivingDistance.optionIndex
+            }, (response: IInsuranceOptionsResponse) => {
+                this.saveResponse({
+                    insuranceOptions: response
+                });
+            });
+        }
 
-        });
+        this.makeRequest(request);
     }
 
     handleFetchAddressInformation() {
-        makeAddressLookupRequest({
-            personalNumber: this.props.data.customer.personalNumber
-        }, (isSuccessful: boolean, response: IAddressLookupResponse) => {
+        const request = () => {
+            makeAddressLookupRequest({
+                personalNumber: this.props.data.customer.personalNumber
+            }, (response: IAddressLookupResponse) => {
+                this.saveResponse({
+                    addressLookup: response
+                });
+            });
+        }
 
-        });
+        this.makeRequest(request);
     }
 
     handleCreateOrder() {
