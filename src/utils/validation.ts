@@ -1,30 +1,49 @@
-const regexReg = /[a-zA-Z]{3}\d{2}(d||[a-zA-Z]){1}/;
-const regexSsn = /^(19|20)?(\d{6}(-|\s)\d{4}|(?!19|20)\d{10})$/;
+const regexRegistrationNumber = /[a-zA-Z]{3}\d{2}(d||[a-zA-Z]){1}/;
+const regexPersonalNumber = /^(19|20)?(\d{6}(-|\s)\d{4}|(?!19|20)\d{10})$/;
 const regexEmail = /\S+@\S+\.\S+/;
 const regexZip = /^[0-9]{3} [0-9]{2}$/;
 
-export const validateRegistrationNumber = (registrationNumber) => {
-    if (!registrationNumber)
+export const validateRegistrationNumber = (registrationNumber: string) => {
+    if (!registrationNumber) {
         return false;
-    let reg = registrationNumber.replace(' ', '');
-    if (reg.length === 6 && regexReg.test(reg))
-        return true;
-    return false;
+    }
+
+    const trimmed = registrationNumber.replace(' ', '');
+
+    const hasCorrectLength = trimmed.length === 6;
+    const isRegexMatch = regexRegistrationNumber.test(trimmed)
+
+    return hasCorrectLength && isRegexMatch;
 };
 
-export const validateSSN = (ssn) => {
-    return regexSsn.test(ssn) && (ssn.length === 13 || ssn.length === 12);
+export const validatePersonalNumber = (personalNumber: string) => {
+    if (!personalNumber) {
+        return false;
+    }
+
+    const hasCorrectLength = personalNumber.length === 13 || personalNumber.length === 12;
+    const isRegexMatch = regexPersonalNumber.test(personalNumber);
+
+    return isRegexMatch && hasCorrectLength;
 };
 
-export const validateEmail = (email) => {
+export const validateEmail = (email: string) => {
+    if (!email) {
+        return false;
+    }
+
     return regexEmail.test(email);
 };
 
-export const validateZip = (zip) => {
+export const validateZip = (zip: string) => {
+    if (!zip) {
+        return false;
+    }
+
     return regexZip.test(zip);
 };
 
-export const validateNumberInRange = (value, from, to) => {
+export const validateNumberInRange = (value: string, from: number, to: number) => {
     if (!value) {
         return false;
     }
@@ -38,6 +57,6 @@ export const validateNumberInRange = (value, from, to) => {
     return number >= from && number <= to;
 };
 
-export const validateMilage = (milage) => {
+export const validateMilage = (milage: string) => {
     return validateNumberInRange(milage, 0, 80000);
 };

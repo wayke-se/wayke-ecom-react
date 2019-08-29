@@ -3,7 +3,7 @@ import React from 'react';
 import CustomerInformationInputType from '../enums/customer-information-input-type';
 import StoreAction from '../enums/store-action';
 
-import { validateSSN } from '../utils/validation';
+import { validatePersonalNumber } from '../utils/validation';
 import { IEcomLifecycle, IEcomStore } from '../types';
 
 export interface ICustomerInformationInitialProps extends IEcomStore, IEcomLifecycle {
@@ -32,7 +32,7 @@ const CustomerInformationInitial = (props: ICustomerInformationInitialProps) => 
         });
     };
 
-    const hasPersonalNumberError = props.data.interact.customer.personalNumber && !validateSSN(props.data.customer.personalNumber);
+    const hasPersonalNumberError = props.data.interact.customer.personalNumber && !validatePersonalNumber(props.data.customer.personalNumber);
 
     return (
         <div data-ecom-page="">

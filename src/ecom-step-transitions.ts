@@ -2,7 +2,7 @@ import EcomStep from './enums/ecom-step';
 import InsuranceOption from './enums/insurance-option';
 import CustomerInformationInputType from './enums/customer-information-input-type';
 
-import { validateRegistrationNumber, validateMilage, validateSSN, validateZip } from './utils/validation';
+import { validateRegistrationNumber, validateMilage, validatePersonalNumber, validateZip } from './utils/validation';
 import { IEcomData } from './types';
 import { PaymentType, IOrderOptionsResponse } from 'wayke-ecom';
 
@@ -78,7 +78,7 @@ export const getAllTransitions = () => ({
         }
     },
     [EcomStep.INSURANCE_INFORMATION_DEFINITION]: (data: IEcomData) => {
-        const isValid = validateSSN(data.insurance.personalNumber);
+        const isValid = validatePersonalNumber(data.insurance.personalNumber);
 
         if (isValid)  {
             return EcomStep.INSURANCE_ALTERNATIVE_CHOOSER;
@@ -92,7 +92,7 @@ export const getAllTransitions = () => ({
             return EcomStep.CUSTOMER_INFORMATION_DETAILS;
         }
 
-        const isValid = validateSSN(data.customer.personalNumber);
+        const isValid = validatePersonalNumber(data.customer.personalNumber);
 
         if (isValid) {
             return EcomStep.CUSTOMER_INFORMATION_DETAILS;
@@ -101,7 +101,7 @@ export const getAllTransitions = () => ({
         }
     },
     [EcomStep.CUSTOMER_INFORMATION_DETAILS]: (data: IEcomData) => {
-        const isValidPersonalNumber = validateSSN(data.customer.personalNumber);
+        const isValidPersonalNumber = validatePersonalNumber(data.customer.personalNumber);
         const isValidEmail = !!data.customer.email;
         const isValidPhone = !!data.customer.phone;
         const hasAcceptedTerms = data.customer.hasAcceptedTerms;

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { validateSSN } from '../utils/validation';
+import { validatePersonalNumber } from '../utils/validation';
 import { IEcomLifecycle, IExpectedDrivingDistance, IEcomStore, IEcomContext } from '../types';
 import StoreAction from '../enums/store-action';
 
@@ -95,7 +95,7 @@ class InsuranceInformationDefinition extends React.Component<IInsuranceInformati
         const optionItems = optionValues.map((v, index) => <option key={index}>{v}</option>);
         const selectedValue = optionValues[this.state.expectedDrivingDistanceIndex];
 
-        const hasPersonalNumberError = this.props.data.interact.insurance.personalNumber && !validateSSN(this.props.data.insurance.personalNumber);
+        const hasPersonalNumberError = this.props.data.interact.insurance.personalNumber && !validatePersonalNumber(this.props.data.insurance.personalNumber);
 
         return (
             <div className="page-main">

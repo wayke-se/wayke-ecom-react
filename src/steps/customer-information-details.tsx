@@ -3,7 +3,7 @@ import React from 'react';
 import CustomerInformationInputType from '../enums/customer-information-input-type';
 import StoreAction from '../enums/store-action';
 
-import { validateEmail, validateSSN, validateZip } from '../utils/validation';
+import { validateEmail, validatePersonalNumber, validateZip } from '../utils/validation';
 import { IEcomLifecycle, IEcomStore, IEcomContext } from '../types';
 
 import Alert from '../components/alert';
@@ -85,7 +85,7 @@ const AutomaticContent = (props: ICustomerInformationDetailsProps) => {
 };
 
 const ManualContent = (props: ICustomerInformationDetailsProps) => {
-    const hasPersonalNumberError = props.data.interact.customer.personalNumber && !validateSSN(props.data.customer.personalNumber);
+    const hasPersonalNumberError = props.data.interact.customer.personalNumber && !validatePersonalNumber(props.data.customer.personalNumber);
     const hasNameError = props.data.interact.customer.name && !props.data.customer.name;
     const hasAddressError = props.data.interact.customer.address && !props.data.customer.address;
     const hasZipError = props.data.interact.customer.zip && !validateZip(props.data.customer.zip);
