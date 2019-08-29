@@ -1,7 +1,7 @@
 import CustomerInformationInputType from "./constants/customer-information-input-type";
 import StoreAction from './constants/store-action';
 import { IPaymentOption, IOrderCreateResponse } from "wayke-ecom/dist-types/orders/types";
-import { IInsuranceOptionsResponse, IVehicleLookupResponse, IAddressLookupResponse, IOrderOptionsResponse } from "wayke-ecom";
+import { IInsuranceOptionsResponse, IVehicleLookupResponse, IAddressLookupResponse, IOrderOptionsResponse, IAddress, PaymentType, VehicleCondition, DeliveryType } from "wayke-ecom";
 
 export interface IVehicle {
     id: string;
@@ -145,4 +145,46 @@ export interface ILoanSpecification {
     depositMax: number;
     depositStep: number;
     depositDefault: number;
+};
+
+export interface IOrderOptionsData {
+    vehicleId: string;
+};
+
+export interface IInsuranceOptionsData {
+    personalNumber: string,
+    vehicleId: string,
+    paymentType: IPaymentOption,
+    drivingDistance: number,
+};
+
+export interface IVehicleLookupData {
+    registrationNumber: string;
+};
+
+export interface IAddressLookupData {
+    personalNumber: string;
+};
+
+export interface ICreateOrderData {
+    customerAddress: IAddress,
+    customerPersonalNumber: string,
+    customerEmail: string,
+    customerPhone: string,
+
+    paymentType: PaymentType,
+    paymentLoanDeposit: number,
+    paymentLoanDuration: number,
+    paymentResidualValue: number,
+
+    insuranceExpectedDrivingDistance: number,
+    insuranceAddOns: string[],
+
+    tradeInRegistrationNumber: string,
+    tradeInMilage: number,
+    tradeInCondition: VehicleCondition,
+    tradeInComment: string,
+
+    vehicleId: string,
+    deliveryType: DeliveryType,
 };

@@ -1,12 +1,9 @@
-import { orders, insurances, vehicles, customers, IOrderOptionsResponse, IInsuranceOptionsResponse, IVehicleLookupResponse, IAddressLookupResponse, VehicleCondition, IAddress, PaymentType, DeliveryType, IOrderCreateResponse } from 'wayke-ecom';
-import { IPaymentOption } from 'wayke-ecom/dist-types/orders/types';
+import { orders, insurances, vehicles, customers, IOrderOptionsResponse, IInsuranceOptionsResponse, IVehicleLookupResponse, IAddressLookupResponse, IOrderCreateResponse } from 'wayke-ecom';
+import { IOrderOptionsData, IInsuranceOptionsData, IVehicleLookupData, IAddressLookupData, ICreateOrderData } from '../types';
 
-export const getOrderOptions = (
-        vehicleId: string,
-        callback: (isSuccessful: boolean, options: IOrderOptionsResponse) => void
-) => {
+export const getOrderOptions = (data: IOrderOptionsData, callback: (isSuccessful: boolean, options: IOrderOptionsResponse) => void) => {
     const request = orders.newOptionsRequest()
-        .forVehicle(vehicleId)
+        .forVehicle(data.vehicleId)
         .build();
 
     orders.getOptions(request)
@@ -18,18 +15,12 @@ export const getOrderOptions = (
         });
 };
 
-export const getInsuranceOptions = (
-        personalNumber: string,
-        vehicleId: string,
-        paymentType: IPaymentOption,
-        drivingDistance: number,
-        callback: (isSuccessful: boolean, options: IInsuranceOptionsResponse) => void
-) => {
+export const getInsuranceOptions = (data: IInsuranceOptionsData, callback: (isSuccessful: boolean, options: IInsuranceOptionsResponse) => void) => {
     const request = insurances.newInsuranceOptionsRequest()
-                        .forCustomer(personalNumber)
-                        .forVehicle(vehicleId)
-                        .withPayment(paymentType)
-                        .withDrivingDistance(drivingDistance)
+                        .forCustomer(data.personalNumber)
+                        .forVehicle(data.vehicleId)
+                        .withPayment(data.paymentType)
+                        .withDrivingDistance(data.drivingDistance)
                         .build();
 
     insurances.getOptions(request)
@@ -41,12 +32,9 @@ export const getInsuranceOptions = (
         });
 };
 
-export const getVehicleLookup = (
-        registrationNumber: string,
-        callback: (isSuccessful: boolean, lookup: IVehicleLookupResponse) => void
-) => {
+export const getVehicleLookup = (data: IVehicleLookupData, callback: (isSuccessful: boolean, lookup: IVehicleLookupResponse) => void) => {
     const request = vehicles.newLookupRequest()
-        .withRegistrationNumber(registrationNumber)
+        .withRegistrationNumber(data.registrationNumber)
         .build();
 
     vehicles.lookupVehicle(request)
@@ -58,12 +46,9 @@ export const getVehicleLookup = (
         });
 };
 
-export const getAddressLookup = (
-        personalNumber: string,
-        callback: (isSuccessful: boolean, lookup: IAddressLookupResponse) => void
-) => {
+export const getAddressLookup = (data: IAddressLookupData, callback: (isSuccessful: boolean, lookup: IAddressLookupResponse) => void) => {
     const request = customers.newAddressLookupRequest()
-        .forCustomer(personalNumber)
+        .forCustomer(data.personalNumber)
         .build();
 
     customers.lookupAddress(request)
@@ -75,61 +60,38 @@ export const getAddressLookup = (
         });
 };
 
-export const createOrder = (
-    customerAddress: IAddress,
-    customerPersonalNumber: string,
-    customerEmail: string,
-    customerPhone: string,
-
-    paymentType: PaymentType,
-    paymentLoanDeposit: number,
-    paymentLoanDuration: number,
-    paymentResidualValue: number,
-
-    insuranceExpectedDrivingDistance: number,
-    insuranceAddOns: string[],
-
-    tradeInRegistrationNumber: string,
-    tradeInMilage: number,
-    tradeInCondition: VehicleCondition,
-    tradeInComment: string,
-
-    vehicleId: string,
-    deliveryType: DeliveryType,
-
-    callback: (isSuccessful: boolean, response: IOrderCreateResponse) => void
-) => {
+export const createOrder = (data: ICreateOrderData, callback: (isSuccessful: boolean, response: IOrderCreateResponse) => void) => {
     const customer = customers.newCustomer()
-        .withAddress(customerAddress)
-        .withPersonalNumber(customerPersonalNumber)
-        .withEmail(customerEmail)
-        .withPhoneNumber(customerPhone)
+        .withAddress(data.customerAddress)
+        .withPersonalNumber(data.customerPersonalNumber)
+        .withEmail(data.customerEmail)
+        .withPhoneNumber(data.customerPhone)
         .build();
 
     const payment = orders.newPayment()
-        .withType(paymentType)
-        .withDownPayment(paymentLoanDeposit)
-        .withDuration(paymentLoanDuration)
-        .withResidualValue(paymentResidualValue)
+        .withType(data.paymentType)
+        .withDownPayment(data.paymentLoanDeposit)
+        .withDuration(data.paymentLoanDuration)
+        .withResidualValue(data.paymentResidualValue)
         .build();
 
     const insurance = orders.newInsurance()
-        .withDrivingDistance(insuranceExpectedDrivingDistance)
-        .withAddOns(insuranceAddOns)
+        .withDrivingDistance(data.insuranceExpectedDrivingDistance)
+        .withAddOns(data.insuranceAddOns)
         .build();
 
     const tradeIn = vehicles.newVehicleTrade()
-        .forVehicle(tradeInRegistrationNumber)
-        .withMileage(tradeInMilage)
-        .withCondition(tradeInCondition)
-        .withComment(tradeInComment)
+        .forVehicle(data.tradeInRegistrationNumber)
+        .withMileage(data.tradeInMilage)
+        .withCondition(data.tradeInCondition)
+        .withComment(data.tradeInComment)
         .build();
 
     const request = orders.newCreateRequest()
-        .forVehicle(vehicleId)
+        .forVehicle(data.vehicleId)
         .withCustomer(customer)
         .withPayment(payment)
-        .withDeliveryType(deliveryType)
+        .withDeliveryType(data.deliveryType)
         .withInsurance(insurance)
         .withTradeIn(tradeIn)
         .build();
