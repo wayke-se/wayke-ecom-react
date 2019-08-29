@@ -1,12 +1,10 @@
 import React from "react";
 
 import { IEcomExternalProps, IEcomStore } from "./types";
-import EcomLifecycle from './ecom-lifecycle';
-
 import { IOrderOptionsResponse, IInsuranceOptionsResponse, IVehicleLookupResponse, IAddressLookupResponse, IOrderCreateResponse } from "wayke-ecom";
 
+import EcomLifecycle from './ecom-lifecycle';
 import { makeOrderOptionsRequest, makeVehicleLookupRequest, makeInsuranceOptionsRequest, makeAddressLookupRequest, makeCreateOrderRequest } from './tools/request-service';
-import RequestType from "./constants/request-type";
 
 export interface IEcomContextProps extends IEcomExternalProps, IEcomStore {
 }
@@ -104,7 +102,36 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
     }
 
     handleCreateOrder() {
-        //TODO
+        const request = () => {
+            makeCreateOrderRequest({
+                customerAddress: null,
+                customerPersonalNumber: null,
+                customerEmail: null,
+                customerPhone: null,
+
+                paymentType: null,
+                paymentLoanDeposit: null,
+                paymentLoanDuration: null,
+                paymentResidualValue: null,
+
+                insuranceExpectedDrivingDistance: null,
+                insuranceAddOns: null,
+
+                tradeInRegistrationNumber: null,
+                tradeInMilage: null,
+                tradeInCondition: null,
+                tradeInComment: null,
+
+                vehicleId: null,
+                deliveryType: null
+            }, (response: IOrderCreateResponse) => {
+                this.saveResponse({
+                    orderCreate: response
+                });
+            });
+        }
+
+        this.makeRequest(request);
     }
 
     makeRequest(callback: () => void) {

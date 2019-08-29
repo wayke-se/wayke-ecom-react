@@ -2,7 +2,6 @@ import React from 'react';
 import { IEcomLifecycle, IEcomStore, IEcomContext } from '../types';
 import StoreAction from '../constants/store-action';
 import Alert from '../components/alert';
-import Spinner from '../components/spinner';
 
 export interface IInsuranceAlternativeChooserProps extends IEcomContext, IEcomStore, IEcomLifecycle {
 };
@@ -31,10 +30,6 @@ class InsuranceAlternativeChooser extends React.Component<IInsuranceAlternativeC
     render() {
         if (this.props.insuranceOptionsError) {
             return <Alert message="Tyvärr kan vi inte visa försäkringar för det angivna personnumret." />;
-        }
-
-        if (!this.props.insuranceOptions) {
-            return <Spinner />;
         }
 
         const insuranceOption = this.props.insuranceOptions.getInsuranceOption();

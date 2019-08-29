@@ -7,7 +7,6 @@ import { validateEmail, validatePersonalNumber, validateZip } from '../utils/val
 import { IEcomLifecycle, IEcomStore, IEcomContext } from '../types';
 
 import Alert from '../components/alert';
-import Spinner from '../components/spinner';
 
 export interface ICustomerInformationDetailsProps extends IEcomContext, IEcomStore, IEcomLifecycle {
 };
@@ -196,10 +195,6 @@ class CustomerInformationDetails extends React.Component<ICustomerInformationDet
 
         if (isAutomatic && this.props.addressLookupError) {
             return <Alert message="Tyvärr kunde vi inte hitta information baserat på angivet personnummer." />;
-        }
-
-        if (isAutomatic && !this.props.addressLookup) {
-            return <Spinner />;
         }
 
         const hasEmailError = this.props.data.interact.customer.email && !validateEmail(this.props.data.customer.email);

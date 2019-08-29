@@ -4,7 +4,6 @@ import OrderSummary from '../components/order-summary';
 import { IEcomStore, IEcomContext, IEcomExternalProps } from '../types';
 
 import Alert from '../components/alert';
-import Spinner from '../components/spinner';
 
 interface IFinalConfirmationProps extends IEcomExternalProps, IEcomContext, IEcomStore {
 };
@@ -21,10 +20,6 @@ class FinalConfirmation extends React.Component<IFinalConfirmationProps> {
     render() {
         if (this.props.orderCreateError) {
             return <Alert message="Tyvärr kunde vi inte lägga beställningen." />;
-        }
-
-        if (!this.props.orderCreate) {
-            return <Spinner />;
         }
 
         return (

@@ -15,20 +15,29 @@ import TradeInExistsChooser from './steps/trade-in-exists-chooser';
 import EcomStep from './constants/ecom-step';
 import { IEcomExternalProps, IEcomContext, IEcomLifecycle, IEcomStore } from './types';
 import Alert from './components/alert';
-import Spinner from './components/spinner';
 import ConfirmOrder from './steps/confirm-order';
 
 interface AllProps extends IEcomExternalProps, IEcomContext, IEcomStore, IEcomLifecycle {
     step: EcomStep;
 }
 
+const Spinner = () => {
+    return (
+        <section className="page-section">
+            <div data-ecom-spinner="center">
+                <div className="spinner"></div>
+            </div>
+        </section>
+    );
+}
+
 const EcomStepContent = (props: AllProps) => {
-    if (props.orderOptionsError) {
-        return <Alert message="Ett oväntat fel har uppstått. Prova igen senare." />;
+    if (props.isWaitingForResponse) {
+        return <Spinner />;
     }
 
     if (!props.orderOptions) {
-        return <Spinner />;
+        return <Alert message="Ett oväntat fel har uppstått. Prova igen senare." />;
     }
 
     switch (props.step) {

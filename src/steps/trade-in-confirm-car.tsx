@@ -2,7 +2,6 @@ import React from 'react';
 
 import { IEcomLifecycle, IEcomStore, IEcomContext } from '../types';
 import Alert from '../components/alert';
-import Spinner from '../components/spinner';
 import { getVehicleTitle, getVehicleDescription } from '../utils/trade-in-car';
 
 export interface ITradeInConfirmCarProps extends IEcomContext, IEcomStore, IEcomLifecycle {
@@ -20,10 +19,6 @@ class TradeInConfirmCar extends React.Component<ITradeInConfirmCarProps> {
     render() {
         if (this.props.vehicleLookupError) {
             return <Alert message={`Din sökning på registreringsnummer ${this.props.data.tradeInCar.registrationNumber} gav tyvärr ingen träff. Prova på nytt med ett annat registreringsnummer.`} />
-        }
-
-        if (!this.props.vehicleLookup) {
-            return <Spinner />;
         }
 
         const vehicle = this.props.vehicleLookup.getVehicle();

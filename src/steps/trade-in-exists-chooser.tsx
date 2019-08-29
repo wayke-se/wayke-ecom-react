@@ -8,7 +8,11 @@ export interface ITradeInExistsChooserProps extends IEcomStore, IEcomLifecycle {
 
 const TradeInExistsChooser = (props: ITradeInExistsChooserProps) => {
     const handleHasTradeInCarClick = (value: boolean) => {
-        props.dispatchStoreAction(StoreAction.TRADE_IN_CAR_UPDATE_HAS_TRADE_IN_CAR, value, () => {
+        props.dispatchStoreAction(StoreAction.UPDATE_NAMED_VALUE, {
+            type: 'tradeInCar',
+            name: 'hasTradeInCar',
+            value
+        }, () => {
             props.onNextStepClick();
         });
     };

@@ -24,17 +24,13 @@ export interface IEcomExternalProps {
 }
 
 export interface IEcomContext {
+    isWaitingForResponse: boolean;
+
     orderOptions: IOrderOptionsResponse;
     insuranceOptions: IInsuranceOptionsResponse;
     vehicleLookup: IVehicleLookupResponse;
     addressLookup: IAddressLookupResponse;
     orderCreate: IOrderCreateResponse;
-
-    orderOptionsError: boolean;
-    insuranceOptionsError: boolean;
-    vehicleLookupError: boolean;
-    addressLookupError: boolean;
-    orderCreateError: boolean;
 
     onFetchInsuranceOptions: () => void;
     onFetchVehicleInformation: () => void;
@@ -152,10 +148,10 @@ export interface IOrderOptionsData {
 };
 
 export interface IInsuranceOptionsData {
-    personalNumber: string,
-    vehicleId: string,
-    paymentType: IPaymentOption,
-    drivingDistance: number,
+    personalNumber: string;
+    vehicleId: string;
+    paymentType: IPaymentOption;
+    drivingDistance: number;
 };
 
 export interface IVehicleLookupData {
@@ -167,24 +163,24 @@ export interface IAddressLookupData {
 };
 
 export interface ICreateOrderData {
-    customerAddress: IAddress,
-    customerPersonalNumber: string,
-    customerEmail: string,
-    customerPhone: string,
+    customerAddress: IAddress;
+    customerPersonalNumber: string;
+    customerEmail: string;
+    customerPhone: string;
 
-    paymentType: PaymentType,
-    paymentLoanDeposit: number,
-    paymentLoanDuration: number,
-    paymentResidualValue: number,
+    paymentType: PaymentType;
+    paymentLoanDeposit: number;
+    paymentLoanDuration: number;
+    paymentResidualValue: number;
 
-    insuranceExpectedDrivingDistance: number,
-    insuranceAddOns: string[],
+    insuranceExpectedDrivingDistance: number;
+    insuranceAddOns: string[];
 
-    tradeInRegistrationNumber: string,
-    tradeInMilage: number,
-    tradeInCondition: VehicleCondition,
-    tradeInComment: string,
+    tradeInRegistrationNumber: string;
+    tradeInMilage: number;
+    tradeInCondition: VehicleCondition;
+    tradeInComment: string;
 
-    vehicleId: string,
-    deliveryType: DeliveryType,
+    vehicleId: string;
+    deliveryType: DeliveryType;
 };

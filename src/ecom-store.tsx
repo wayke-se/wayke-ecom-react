@@ -121,15 +121,6 @@ class EcomStore extends React.Component<IEcomStoreProps, IState> {
                 };
                 break;
 
-            case StoreAction.TRADE_IN_CAR_UPDATE_HAS_TRADE_IN_CAR:
-                stateUpdate = {
-                    tradeInCar: {
-                        ...this.state.tradeInCar,
-                        hasTradeInCar: value
-                    }
-                };
-                break;
-
             case StoreAction.PAYMENT_UPDATE_FINANCING_INFORMATION:
                 stateUpdate = {
                     payment: {
