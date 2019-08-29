@@ -1,4 +1,4 @@
-import { orders, insurances, vehicles, customers, IOrderOptionsResponse, IInsuranceOptionsResponse, IVehicleLookupResponse, IAddressLookupResponse } from 'wayke-ecom';
+import { orders, insurances, vehicles, customers, IOrderOptionsResponse, IInsuranceOptionsResponse, IVehicleLookupResponse, IAddressLookupResponse, VehicleCondition, IAddress, PaymentType, DeliveryType, IOrderCreateResponse } from 'wayke-ecom';
 import { IPaymentOption } from 'wayke-ecom/dist-types/orders/types';
 
 export const getOrderOptions = (
@@ -74,3 +74,71 @@ export const getAddressLookup = (
             callback(false, null);
         });
 };
+
+export const createOrder = (
+    customerAddress: IAddress,
+    customerPersonalNumber: string,
+    customerEmail: string,
+    customerPhone: string,
+
+    paymentType: PaymentType,
+    paymentFinancingDeposit: number,
+    paymentFinancingDuration: number,
+    paymentResidualValue: number,
+
+    insuranceExpectedDrivingDistance: number,
+    insuranceAddOns: string[],
+
+    tradeInRegistrationNumber: string,
+    tradeInMilage: number,
+    tradeInCondition: VehicleCondition,
+    tradeInComment: string,
+
+    vehicleId: string,
+    deliveryType: DeliveryType,
+
+    callback: (isSuccessful: boolean, response: IOrderCreateResponse) => void
+) => {
+    const customer = customers.newCustomer()
+        .withAddress(customerAddress)
+        .withPersonalNumber(customerPersonalNumber)
+        .withEmail(customerEmail)
+        .withPhoneNumber(customerPhone)
+        .build();
+
+    const payment = orders.newPayment()
+        .withType(paymentType)
+        .withDownPayment(paymentFinancingDeposit)
+        .withDuration(paymentFinancingDuration)
+        .withResidualValue(paymentResidualValue)
+        .build();
+
+    const insurance = orders.newInsurance()
+        .withDrivingDistance(insuranceExpectedDrivingDistance)
+        .withAddOns(insuranceAddOns)
+        .build();
+
+    const tradeIn = vehicles.newVehicleTrade()
+        .forVehicle(tradeInRegistrationNumber)
+        .withMileage(tradeInMilage)
+        .withCondition(tradeInCondition)
+        .withComment(tradeInComment)
+        .build();
+
+    const request = orders.newCreateRequest()
+        .forVehicle(vehicleId)
+        .withCustomer(customer)
+        .withPayment(payment)
+        .withDeliveryType(deliveryType)
+        .withInsurance(insurance)
+        .withTradeIn(tradeIn)
+        .build();
+
+    orders.create(request)
+        .then((response: IOrderCreateResponse) => {
+            callback(true, response);
+        })
+        .catch(() => {
+            callback(false, null);
+        });
+}

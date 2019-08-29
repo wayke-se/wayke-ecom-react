@@ -2,9 +2,9 @@ import React from "react";
 
 import { IEcomExternalProps, IEcomStore, IExpectedDrivingDistance } from "./types";
 import EcomLifecycle from './ecom-lifecycle';
-import { getOrderOptions, getInsuranceOptions, getVehicleLookup, getAddressLookup } from "./sdk/ecom-sdk-actions";
+import { getOrderOptions, getInsuranceOptions, getVehicleLookup, getAddressLookup, createOrder } from "./sdk/ecom-sdk-actions";
 
-import { IOrderOptionsResponse, IInsuranceOptionsResponse, IVehicleLookupResponse, IAddressLookupResponse } from "wayke-ecom";
+import { IOrderOptionsResponse, IInsuranceOptionsResponse, IVehicleLookupResponse, IAddressLookupResponse, VehicleCondition, IAddress, PaymentType, DeliveryType, IOrderCreateResponse } from "wayke-ecom";
 import { IPaymentOption } from "wayke-ecom/dist-types/orders/types";
 
 export interface IEcomContextProps extends IEcomExternalProps, IEcomStore {
@@ -15,11 +15,13 @@ interface IState {
     insuranceOptions: IInsuranceOptionsResponse;
     vehicleLookup: IVehicleLookupResponse;
     addressLookup: IAddressLookupResponse;
+    orderCreate: IOrderCreateResponse;
 
     orderOptionsError: boolean;
     insuranceOptionsError: boolean;
     vehicleLookupError: boolean;
     addressLookupError: boolean;
+    orderCreateError: boolean;
 
     insuranceOptionsRequestInformation: {
         personalNumber: string;
@@ -55,16 +57,21 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
         this.handleFetchAddressInformation = this.handleFetchAddressInformation.bind(this);
         this.handleFetchAddressInformationResponse = this.handleFetchAddressInformationResponse.bind(this);
 
+        this.handleCreateOrder = this.handleCreateOrder.bind(this);
+        this.handleCreateOrderResponse = this.handleCreateOrderResponse.bind(this);
+
         this.state = {
             orderOptions: null,
             insuranceOptions: null,
             vehicleLookup: null,
             addressLookup: null,
+            orderCreate: null,
 
             orderOptionsError: false,
             insuranceOptionsError: false,
             vehicleLookupError: false,
             addressLookupError: false,
+            orderCreateError: false,
 
             insuranceOptionsRequestInformation: null,
             vehicleLookupRequestInformation: null,
@@ -227,12 +234,104 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
         });
     }
 
+    handleCreateOrder() {
+        var customer = this.props.data.customer;
+        var insurance = this.props.data.insurance;
+        var payment = this.props.data.payment;
+        var tradeInCar = this.props.data.tradeInCar;
+
+        var customerAddress = null;
+        var customerPersonalNumber = customer.personalNumber;
+        var customerEmail = customer.email;
+        var customerPhone = customer.phone;
+
+        if (this.state.addressLookup) {
+            customerAddress = this.state.addressLookup.getAddress();
+        } else {
+            customerAddress = {
+                city: customer.city,
+                name: customer.name,
+                postalCode: customer.zip,
+                street: customer.address,
+                street2: ''
+            } as IAddress;
+        }
+
+        var paymentType = payment.paymentOption.type;
+        var paymentFinancingDeposit = 0;
+        var paymentFinancingDuration = 0;
+        var paymentResidualValue = 0;
+
+        if (paymentType === PaymentType.Loan) {
+            paymentFinancingDeposit = parseInt(payment.financingDeposit);
+            paymentFinancingDuration = payment.financingDuration;
+        }
+
+        var insuranceExpectedDrivingDistance = 0;
+        var insuranceAddOns: string[] = [];
+
+        if (insurance.hasAddedInsurance) {
+            insuranceExpectedDrivingDistance = insurance.expectedDrivingDistance.optionIndex;
+        }
+
+        var tradeInRegistrationNumber = null;
+        var tradeInMilage = null;
+        var tradeInCondition = VehicleCondition.Ok;
+        var tradeInComment = '';
+
+        if (tradeInCar.hasTradeInCar) {
+            tradeInRegistrationNumber = tradeInCar.registrationNumber;
+            tradeInMilage = tradeInCar.milage;
+        }
+
+        var vehicleId = this.props.vehicle.id;
+        var deliveryType = DeliveryType.Pickup;
+
+        this.setState({
+            orderCreate: null,
+            orderCreateError: false,
+        }, () => {
+            createOrder(
+                customerAddress,
+                customerPersonalNumber,
+                customerEmail,
+                customerPhone,
+
+                paymentType,
+                paymentFinancingDeposit,
+                paymentFinancingDuration,
+                paymentResidualValue,
+
+                insuranceExpectedDrivingDistance,
+                insuranceAddOns,
+
+                tradeInRegistrationNumber,
+                tradeInMilage,
+                tradeInCondition,
+                tradeInComment,
+
+                vehicleId,
+                deliveryType,
+
+                this.handleCreateOrderResponse
+            );
+        });
+    }
+
+    handleCreateOrderResponse(isSuccessful: boolean, response: IOrderCreateResponse) {
+        this.setState({
+            orderCreate: response,
+            orderCreateError: !isSuccessful
+        });
+    }
+
     render() {
         return (
             <EcomLifecycle
                 onFetchInsuranceOptions={this.handleFetchInsuranceOptions}
                 onFetchVehicleInformation={this.handleFetchVehicleInformation}
                 onFetchAddressInformation={this.handleFetchAddressInformation}
+                onCreateOrder={this.handleCreateOrder}
                 {...this.state}
                 {...this.props} />
         );
