@@ -1,16 +1,16 @@
 import React from 'react';
 
-import { IEcomContext, IEcomLifecycle, IEcomStore } from '../types';
+import { IEcomContext, IEcomLifecycle, IEcomStore, IEcomExternalProps, ILoanSpecification } from '../types';
 
-import StoreAction from '../enums/store-action';
+import StoreAction from '../constants/store-action';
 import Slider from '../components/slider';
 
-import { validateNumberInRange } from '../utils/validation';
+import { validateStringNumberInRange } from '../utils/validation';
 import { addSizeQuery } from '../utils/image';
-import { getDefaultDeposit, getMinDeposit, getMaxDeposit, getDefaultDuration, getMinDuration, getMaxDuration, getDurationStep, getLoanInformation } from '../utils/loan';
+import { getLoanInformation } from '../utils/loan';
 import { formatPrice } from '../utils/helpers';
 
-export interface IPaymentFinancingDetailsProps extends IEcomContext, IEcomStore, IEcomLifecycle {
+export interface IPaymentFinancingDetailsProps extends IEcomExternalProps, IEcomContext, IEcomStore, IEcomLifecycle {
 };
 
 interface IState {
@@ -19,26 +19,26 @@ interface IState {
     durationIndex: number;
 };
 
-const getAllDurationSteps = () => {
-    const difference = getMaxDuration() - getMinDuration();
-    const numberOfSteps = difference / getDurationStep();
+const getAllDurationSteps = (loanSpecification: ILoanSpecification) => {
+    const difference = loanSpecification.durationMax - loanSpecification.durationMin;
+    const numberOfSteps = difference / loanSpecification.durationStep;
 
     const result = [];
 
     for (var i = 0; i <= numberOfSteps; i++) {
-        const value = getMinDuration() + i * getDurationStep();
+        const value = loanSpecification.durationMin + i * loanSpecification.durationStep;
         result.push(value);
     }
 
     return result;
 };
 
-const getIndexFromDuration = (duration: number): number => {
-    return getAllDurationSteps().findIndex(s => s === duration);
+const getIndexFromDuration = (duration: number, loanSpecification: ILoanSpecification): number => {
+    return getAllDurationSteps(loanSpecification).findIndex(s => s === duration);
 };
 
-const getDurationFromIndex = (index: number): number => {
-    return getAllDurationSteps().find((s, i) => i === index);
+const getDurationFromIndex = (index: number, loanSpecification: ILoanSpecification): number => {
+    return getAllDurationSteps(loanSpecification).find((s, i) => i === index);
 };
 
 class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsProps, IState> {
@@ -53,10 +53,12 @@ class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsPr
         this.handleValueUpdated = this.handleValueUpdated.bind(this);
         this.handleProceedClick = this.handleProceedClick.bind(this);
 
-        const deposit = props.data.payment.financingDeposit ? props.data.payment.financingDeposit : getDefaultDeposit(props.vehicle.price);
-        const duration = props.data.payment.financingDuration ? props.data.payment.financingDuration : getDefaultDuration();
+        const loanSpecification = props.loanSpecification;
 
-        const durationIndex = getIndexFromDuration(duration);
+        const deposit = props.data.payment.loanDeposit ? props.data.payment.loanDeposit : loanSpecification.depositDefault;
+        const duration = props.data.payment.loanDuration ? props.data.payment.loanDuration : loanSpecification.durationDefault;
+
+        const durationIndex = getIndexFromDuration(duration, loanSpecification);
 
         this.state = {
             isShowingDetails: false,
@@ -98,15 +100,17 @@ class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsPr
     }
 
     handleValueUpdated() {
-        const depositMin = getMinDeposit(this.props.vehicle.price);
-        const depositMax = getMaxDeposit(this.props.vehicle.price);
+        const loanSpecification = this.props.loanSpecification;
 
-        const deposit = validateNumberInRange(this.state.deposit, depositMin, depositMax) ? parseInt(this.state.deposit) : null;
-        const duration = getDurationFromIndex(this.state.durationIndex);
+        const depositMin = loanSpecification.depositMin
+        const depositMax = loanSpecification.depositMax;
+
+        const deposit = validateStringNumberInRange(this.state.deposit, depositMin, depositMax) ? parseInt(this.state.deposit) : null;
+        const duration = getDurationFromIndex(this.state.durationIndex, loanSpecification);
 
         this.props.dispatchStoreAction(StoreAction.PAYMENT_UPDATE_FINANCING_INFORMATION, {
-            financingDeposit: deposit,
-            financingDuration: duration
+            loanDeposit: deposit,
+            loanDuration: duration
         });
     }
 
@@ -116,22 +120,24 @@ class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsPr
     }
 
     render() {
-        const options = getAllDurationSteps().map(s => s + 'mån');
+        const loanSpecification = this.props.loanSpecification;
+
+        const options = getAllDurationSteps(loanSpecification).map(s => s + 'mån');
 
         const optionItems = options.map((o, index) => <option key={index}>{o}</option>);
         const durationValue = options[this.state.durationIndex];
 
-        const depositMin = getMinDeposit(this.props.vehicle.price);
-        const depositMax = getMaxDeposit(this.props.vehicle.price);
+        const depositMin = loanSpecification.depositMin;
+        const depositMax = loanSpecification.depositMax;
 
-        const hasDownPaymentError = !validateNumberInRange(this.state.deposit, depositMin, depositMax);
+        const hasDownPaymentError = !validateStringNumberInRange(this.state.deposit, depositMin, depositMax);
         const paymentOption = this.props.data.payment.paymentOption;
 
         const scaledImage = addSizeQuery(paymentOption.logo, 100, 60);
 
         const loanDetails = paymentOption.loanDetails;
         const deposit = parseInt(this.state.deposit);
-        const duration = getDurationFromIndex(this.state.durationIndex);
+        const duration = getDurationFromIndex(this.state.durationIndex, loanSpecification);
         const loanInformation = getLoanInformation(this.props.vehicle.price, duration, deposit, loanDetails.interest, loanDetails.administrationFee, loanDetails.setupFee);
 
         const formattedPrice = formatPrice(loanInformation.monthlyCost);

@@ -1,7 +1,7 @@
 import React from 'react';
 
-import CustomerInformationInputType from '../enums/customer-information-input-type';
-import StoreAction from '../enums/store-action';
+import CustomerInformationInputType from '../constants/customer-information-input-type';
+import StoreAction from '../constants/store-action';
 
 import { validatePersonalNumber } from '../utils/validation';
 import { IEcomLifecycle, IEcomStore } from '../types';

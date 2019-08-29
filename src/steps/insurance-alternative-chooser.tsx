@@ -1,6 +1,6 @@
 import React from 'react';
 import { IEcomLifecycle, IEcomStore, IEcomContext } from '../types';
-import StoreAction from '../enums/store-action';
+import StoreAction from '../constants/store-action';
 import Alert from '../components/alert';
 import Spinner from '../components/spinner';
 

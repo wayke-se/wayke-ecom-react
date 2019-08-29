@@ -1,6 +1,6 @@
 import React from 'react';
 
-import EcomStep from './enums/ecom-step';
+import EcomStep from './constants/ecom-step';
 import { getAllTransitions, getInitialStep } from './ecom-step-transitions';
 
 import EcomHeader from './ecom-header';
@@ -9,7 +9,7 @@ import EcomCart from './ecom-cart';
 import EcomTimeline from './ecom-timeline';
 
 import { IEcomExternalProps, IEcomContext, IEcomStore, IEcomData } from './types';
-import StoreAction from './enums/store-action';
+import StoreAction from './constants/store-action';
 import { IOrderOptionsResponse } from 'wayke-ecom';
 
 interface IEcomLifecycleProps extends IEcomExternalProps, IEcomContext, IEcomStore {

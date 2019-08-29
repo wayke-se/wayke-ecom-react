@@ -1,7 +1,7 @@
 import React from 'react';
 
-import InsuranceOption from '../enums/insurance-option';
-import StoreAction from '../enums/store-action';
+import InsuranceOption from '../constants/insurance-option';
+import StoreAction from '../constants/store-action';
 
 import { IEcomContext, IEcomLifecycle, IEcomStore } from '../types';
 

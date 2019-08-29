@@ -12,7 +12,7 @@ import TradeInCarDefinition from './steps/trade-in-car-definition';
 import TradeInConfirmCar from './steps/trade-in-confirm-car';
 import TradeInExistsChooser from './steps/trade-in-exists-chooser';
 
-import EcomStep from './enums/ecom-step';
+import EcomStep from './constants/ecom-step';
 import { IEcomExternalProps, IEcomContext, IEcomLifecycle, IEcomStore } from './types';
 import Alert from './components/alert';
 import Spinner from './components/spinner';

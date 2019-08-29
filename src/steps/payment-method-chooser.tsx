@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { IEcomContext, IEcomLifecycle, IEcomStore, IEcomExternalProps } from '../types';
-import StoreAction from '../enums/store-action';
+import StoreAction from '../constants/store-action';
 
 import { PaymentType } from 'wayke-ecom';
 import { IPaymentOption } from 'wayke-ecom/dist-types/orders/types';

@@ -2,7 +2,7 @@ import React from 'react';
 
 import { validateRegistrationNumber, validateMilage } from '../utils/validation';
 import { IEcomLifecycle, IEcomStore } from '../types';
-import StoreAction from '../enums/store-action';
+import StoreAction from '../constants/store-action';
 
 export interface ITradeInCarDefinitionProps extends IEcomStore, IEcomLifecycle {
 };

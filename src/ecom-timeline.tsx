@@ -1,6 +1,6 @@
 import React from 'react';
 
-import EcomStep from './enums/ecom-step';
+import EcomStep from './constants/ecom-step';
 import { IOrderOptionsResponse } from 'wayke-ecom';
 import { getPrimarySteps } from './ecom-step-transitions';
 

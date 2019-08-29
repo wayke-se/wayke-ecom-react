@@ -1,15 +1,4 @@
-export const getDurationStep = (): number => 12;
-export const getDefaultDuration = (): number => 60;
-export const getMinDuration = (): number => 12;
-export const getMaxDuration = (): number => 72;
 const base365 = 365.25 / 360; //1.013888888888889;
-
-export const getDefaultDeposit = (price: number): number => getMinDeposit(price);
-export const getMinDeposit = (price: number): number => Math.floor((price / 100) * 20);
-export const getMaxDeposit = (price: number): number => (price - (price % 1000)) * 0.8;
-
-const getTotalLoanAmount = (price: number, deposit: number): number => price - deposit;
-
 
 const getResidualValue = (price: number, deposit: number, residualValuePercentage: number,): number =>
     residualValuePercentage * 0.01 * price;
@@ -103,11 +92,6 @@ const getCreditCost = (interest: number, periods: number, loan: number, residual
     const valueTotalCostEffectiveRate = totalCostEffectiveRate(periods, monthly + avi, startFee, residual, effectiveRate);
 
     return valueTotalCost - valueTotalCostEffectiveRate;
-};
-
-const getLoanAmount = (price: number, deposit: number, residualValuePercentage: number, ): number => {
-    const residual = getResidualValue(price, deposit, residualValuePercentage,);
-    return price - deposit - residual;
 };
 
 export const getLoanInformation = (vehiclePrice: number, duration: number, deposit: number, interest: number, administrationFee: number, setupFee: number) => {

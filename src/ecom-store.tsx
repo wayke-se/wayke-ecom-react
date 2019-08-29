@@ -1,11 +1,12 @@
 import React from 'react';
 
 import EcomContext from './ecom-context';
-import { IEcomExternalProps, IEcomData } from './types';
+import { IEcomExternalProps, IEcomData, ILoanSpecification } from './types';
 
-import StoreAction from './enums/store-action';
+import StoreAction from './constants/store-action';
 
 interface IEcomStoreProps extends IEcomExternalProps {
+    loanSpecification: ILoanSpecification;
 };
 
 interface IState extends IEcomData {
@@ -30,7 +31,6 @@ class EcomStore extends React.Component<IEcomStoreProps, IState> {
                 phone: ''
             },
             insurance: {
-                insuranceOption: null,
                 personalNumber: '',
                 expectedDrivingDistance: null,
                 hasAddedInsurance: false
@@ -58,8 +58,8 @@ class EcomStore extends React.Component<IEcomStoreProps, IState> {
             },
             payment: {
                 paymentOption: null,
-                financingDeposit: '',
-                financingDuration: null
+                loanDeposit: null,
+                loanDuration: null
             },
             tradeInCar: {
                 hasTradeInCar: null,

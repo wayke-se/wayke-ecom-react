@@ -1,6 +1,5 @@
-import CustomerInformationInputType from "./enums/customer-information-input-type";
-import InsuranceOption from "./enums/insurance-option";
-import StoreAction from './enums/store-action';
+import CustomerInformationInputType from "./constants/customer-information-input-type";
+import StoreAction from './constants/store-action';
 import { IPaymentOption, IOrderCreateResponse } from "wayke-ecom/dist-types/orders/types";
 import { IInsuranceOptionsResponse, IVehicleLookupResponse, IAddressLookupResponse, IOrderOptionsResponse } from "wayke-ecom";
 
@@ -52,6 +51,8 @@ export interface IEcomLifecycle {
 
 export interface IEcomStore {
     data: IEcomData;
+    loanSpecification: ILoanSpecification;
+
     dispatchStoreAction: (key: StoreAction, value: any, callback?: () => void) => void;
 };
 
@@ -71,8 +72,8 @@ export interface ITradeInCarData {
 
 export interface IPaymentData {
     paymentOption: IPaymentOption;
-    financingDeposit: string;
-    financingDuration: number;
+    loanDeposit: number;
+    loanDuration: number;
 };
 
 export interface IExpectedDrivingDistance {
@@ -82,7 +83,6 @@ export interface IExpectedDrivingDistance {
 };
 
 export interface IInsuranceData {
-    insuranceOption: InsuranceOption;
     personalNumber: string;
     expectedDrivingDistance: IExpectedDrivingDistance;
     hasAddedInsurance: boolean;
@@ -98,6 +98,18 @@ export interface ICustomerData {
     city: string;
     email: string;
     phone: string;
+};
+
+export interface ICustomerObject {
+    isMasked: boolean;
+    isAutomaticLookup: boolean;
+    personalNumber: string;
+    email: string;
+    phone: string;
+    name: string;
+    address: string;
+    zip: string;
+    city: string;
 };
 
 export interface IInteractData {
@@ -120,4 +132,16 @@ export interface IInteractData {
         email: boolean;
         phone: boolean;
     };
+};
+
+export interface ILoanSpecification {
+    durationMin: number;
+    durationMax: number;
+    durationStep: number;
+    durationDefault: number;
+
+    depositMin: number;
+    depositMax: number;
+    depositStep: number;
+    depositDefault: number;
 };

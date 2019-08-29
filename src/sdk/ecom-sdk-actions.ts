@@ -82,8 +82,8 @@ export const createOrder = (
     customerPhone: string,
 
     paymentType: PaymentType,
-    paymentFinancingDeposit: number,
-    paymentFinancingDuration: number,
+    paymentLoanDeposit: number,
+    paymentLoanDuration: number,
     paymentResidualValue: number,
 
     insuranceExpectedDrivingDistance: number,
@@ -108,8 +108,8 @@ export const createOrder = (
 
     const payment = orders.newPayment()
         .withType(paymentType)
-        .withDownPayment(paymentFinancingDeposit)
-        .withDuration(paymentFinancingDuration)
+        .withDownPayment(paymentLoanDeposit)
+        .withDuration(paymentLoanDuration)
         .withResidualValue(paymentResidualValue)
         .build();
 

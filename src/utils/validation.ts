@@ -2,6 +2,7 @@ const regexRegistrationNumber = /[a-zA-Z]{3}\d{2}(d||[a-zA-Z]){1}/;
 const regexPersonalNumber = /^(19|20)?(\d{6}(-|\s)\d{4}|(?!19|20)\d{10})$/;
 const regexEmail = /\S+@\S+\.\S+/;
 const regexZip = /^[0-9]{3} [0-9]{2}$/;
+const regexPhoneNumber = /^[0-9]{3}[\-]?[0-9]{7}$/;
 
 export const validateRegistrationNumber = (registrationNumber: string) => {
     if (!registrationNumber) {
@@ -43,7 +44,7 @@ export const validateZip = (zip: string) => {
     return regexZip.test(zip);
 };
 
-export const validateNumberInRange = (value: string, from: number, to: number) => {
+export const validateStringNumberInRange = (value: string, from: number, to: number) => {
     if (!value) {
         return false;
     }
@@ -57,6 +58,25 @@ export const validateNumberInRange = (value: string, from: number, to: number) =
     return number >= from && number <= to;
 };
 
-export const validateMilage = (milage: string) => {
-    return validateNumberInRange(milage, 0, 80000);
+export const validateNumberInRange = (value: number, from: number, to: number) => {
+    if (isNaN(value)) {
+        return false;
+    }
+
+    return value >= from && value <= to;
 };
+
+export const validateMilage = (milage: string) => {
+    return validateStringNumberInRange(milage, 0, 80000);
+};
+
+export const validatePhoneNumber = (phoneNumber: string) => {
+    if (!phoneNumber) {
+        return false;
+    }
+
+    const hasCorrectLength = phoneNumber.length === 10 || phoneNumber.length === 11;
+    const isRegexMatch = regexPhoneNumber.test(phoneNumber);
+
+    return isRegexMatch && hasCorrectLength;
+}

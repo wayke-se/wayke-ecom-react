@@ -1,6 +1,6 @@
-import EcomStep from './enums/ecom-step';
-import InsuranceOption from './enums/insurance-option';
-import CustomerInformationInputType from './enums/customer-information-input-type';
+import EcomStep from './constants/ecom-step';
+import InsuranceOption from './constants/insurance-option';
+import CustomerInformationInputType from './constants/customer-information-input-type';
 
 import { validateRegistrationNumber, validateMilage, validatePersonalNumber, validateZip } from './utils/validation';
 import { IEcomData } from './types';

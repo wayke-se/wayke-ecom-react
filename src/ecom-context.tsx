@@ -258,13 +258,13 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
         }
 
         var paymentType = payment.paymentOption.type;
-        var paymentFinancingDeposit = 0;
-        var paymentFinancingDuration = 0;
+        var paymentLoanDeposit = 0;
+        var paymentLoanDuration = 0;
         var paymentResidualValue = 0;
 
         if (paymentType === PaymentType.Loan) {
-            paymentFinancingDeposit = parseInt(payment.financingDeposit);
-            paymentFinancingDuration = payment.financingDuration;
+            paymentLoanDeposit = parseInt(payment.loanDeposit);
+            paymentLoanDuration = payment.loanDuration;
         }
 
         var insuranceExpectedDrivingDistance = 0;
@@ -298,8 +298,8 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
                 customerPhone,
 
                 paymentType,
-                paymentFinancingDeposit,
-                paymentFinancingDuration,
+                paymentLoanDeposit,
+                paymentLoanDuration,
                 paymentResidualValue,
 
                 insuranceExpectedDrivingDistance,
