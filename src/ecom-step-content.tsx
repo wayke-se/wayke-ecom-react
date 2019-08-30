@@ -21,22 +21,8 @@ interface AllProps extends IEcomExternalProps, IEcomContext, IEcomStore, IEcomLi
     step: EcomStep;
 }
 
-const Spinner = () => {
-    return (
-        <section className="page-section">
-            <div data-ecom-spinner="center">
-                <div className="spinner"></div>
-            </div>
-        </section>
-    );
-}
-
 const EcomStepContent = (props: AllProps) => {
-    if (props.isWaitingForResponse) {
-        return <Spinner />;
-    }
-
-    if (!props.orderOptions) {
+    if (!props.orderOptions && !props.isWaitingForResponse) {
         return <Alert message="Ett oväntat fel har uppstått. Prova igen senare." />;
     }
 

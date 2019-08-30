@@ -13,7 +13,7 @@ const TradeInExistsChooser = (props: ITradeInExistsChooserProps) => {
             name: 'hasTradeInCar',
             value
         }, () => {
-            props.onNextStepClick();
+            props.onProceedToNextStep();
         });
     };
 

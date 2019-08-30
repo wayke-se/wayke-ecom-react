@@ -44,7 +44,7 @@ class EcomLifecycle extends React.Component<IEcomLifecycleProps, IState> {
     constructor(props: IEcomLifecycleProps) {
         super(props);
 
-        this.handleNextStepClick = this.handleNextStepClick.bind(this);
+        this.handleProceedToNextStep = this.handleProceedToNextStep.bind(this);
         this.handlePreviousStepClick = this.handlePreviousStepClick.bind(this);
         this.handleSpecificStepClick = this.handleSpecificStepClick.bind(this);
 
@@ -71,7 +71,7 @@ class EcomLifecycle extends React.Component<IEcomLifecycleProps, IState> {
         }
     }
 
-    handleNextStepClick() {
+    handleProceedToNextStep() {
         const nextStep = getNextStep(this.state.step, this.props.data, this.props.orderOptions);
 
         if (!nextStep) {
@@ -149,7 +149,7 @@ class EcomLifecycle extends React.Component<IEcomLifecycleProps, IState> {
                                                 step={this.state.step}
                                                 {...this.props}
 
-                                                onNextStepClick={this.handleNextStepClick}
+                                                onProceedToNextStep={this.handleProceedToNextStep}
                                                 onShowCustomerInformationInitial={() => this.handleSpecificStepClick(EcomStep.CUSTOMER_INFORMATION_INITIAL)}
                                                 onShowInsuranceInformationDefinition={() => this.handleSpecificStepClick(EcomStep.INSURANCE_INFORMATION_DEFINITION)}
                                                 onShowTradeInCarDefinition={() => this.handleSpecificStepClick(EcomStep.TRADE_IN_CAR_DEFINITION)} />

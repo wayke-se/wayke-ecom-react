@@ -49,20 +49,22 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
             }, (response: IOrderOptionsResponse) => {
                 this.saveResponse({
                     orderOptions: response
-                });
+                }, () => {});
             });
         }
 
         this.makeRequest(request);
     }
 
-    handleFetchVehicleInformation() {
+    handleFetchVehicleInformation(callback: (isSuccessful: boolean) => void) {
         const request = () => {
             makeVehicleLookupRequest({
                 registrationNumber: this.props.data.tradeInCar.registrationNumber
             }, (response: IVehicleLookupResponse) => {
                 this.saveResponse({
                     vehicleLookup: response
+                }, () => {
+                    callback(!!response);
                 });
             });
         }
@@ -70,7 +72,7 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
         this.makeRequest(request);
     }
 
-    handleFetchInsuranceOptions() {
+    handleFetchInsuranceOptions(callback: (isSuccessful: boolean) => void) {
         const request = () => {
             makeInsuranceOptionsRequest({
                 personalNumber: this.props.data.insurance.personalNumber,
@@ -80,6 +82,8 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
             }, (response: IInsuranceOptionsResponse) => {
                 this.saveResponse({
                     insuranceOptions: response
+                }, () => {
+                    callback(!!response);
                 });
             });
         }
@@ -87,13 +91,15 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
         this.makeRequest(request);
     }
 
-    handleFetchAddressInformation() {
+    handleFetchAddressInformation(callback: (isSuccessful: boolean) => void) {
         const request = () => {
             makeAddressLookupRequest({
                 personalNumber: this.props.data.customer.personalNumber
             }, (response: IAddressLookupResponse) => {
                 this.saveResponse({
                     addressLookup: response
+                }, () => {
+                    callback(!!response);
                 });
             });
         }
@@ -101,7 +107,7 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
         this.makeRequest(request);
     }
 
-    handleCreateOrder() {
+    handleCreateOrder(callback: (isSuccessful: boolean) => void) {
         const request = () => {
             makeCreateOrderRequest({
                 customerAddress: null,
@@ -127,6 +133,8 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
             }, (response: IOrderCreateResponse) => {
                 this.saveResponse({
                     orderCreate: response
+                }, () => {
+                    callback(!!response);
                 });
             });
         }
@@ -140,11 +148,11 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
         }, callback);
     }
 
-    saveResponse(responseState: any) {
+    saveResponse(responseState: any, callback: () => void) {
         this.setState({
             ...responseState,
             isWaitingForResponse: false
-        });
+        }, callback);
     }
 
     render() {

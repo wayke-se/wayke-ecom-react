@@ -32,14 +32,14 @@ export interface IEcomContext {
     addressLookup: IAddressLookupResponse;
     orderCreate: IOrderCreateResponse;
 
-    onFetchInsuranceOptions: () => void;
-    onFetchVehicleInformation: () => void;
-    onFetchAddressInformation: () => void;
-    onCreateOrder: () => void;
+    onFetchInsuranceOptions: (callback: (isSuccessful: boolean) => void) => void;
+    onFetchVehicleInformation: (callback: (isSuccessful: boolean) => void) => void;
+    onFetchAddressInformation: (callback: (isSuccessful: boolean) => void) => void;
+    onCreateOrder: (callback: (isSuccessful: boolean) => void) => void;
 }
 
 export interface IEcomLifecycle {
-    onNextStepClick: () => void;
+    onProceedToNextStep: () => void;
     onShowCustomerInformationInitial: () => void;
     onShowInsuranceInformationDefinition: () => void;
     onShowTradeInCarDefinition: () => void;

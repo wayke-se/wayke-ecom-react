@@ -1,14 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { validateRegistrationNumber, validateMilage } from '../utils/validation';
-import { IEcomLifecycle, IEcomStore } from '../types';
+import { IEcomLifecycle, IEcomStore, IEcomContext } from '../types';
 import StoreAction from '../constants/store-action';
+import { validateTradeIn } from '../tools/data-validation';
 
-export interface ITradeInCarDefinitionProps extends IEcomStore, IEcomLifecycle {
+import Alert from '../components/alert';
+import Spinner from '../components/spinner';
+
+export interface ITradeInCarDefinitionProps extends IEcomContext, IEcomStore, IEcomLifecycle {
 };
 
 const TradeInCarDefinition = (props: ITradeInCarDefinitionProps) => {
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const [hasRequestError, setHasRequestError] = useState(false);
+
+    const handleInputChange = (e) => {
         props.dispatchStoreAction(StoreAction.UPDATE_NAMED_VALUE, {
             type: 'tradeInCar',
             name: e.target.name,
@@ -16,8 +22,26 @@ const TradeInCarDefinition = (props: ITradeInCarDefinitionProps) => {
         });
     };
 
-    const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+    const handleBlur = (e) => {
         props.dispatchStoreAction(StoreAction.INTERACT_UPDATE_SPECIFIC, { type: 'tradeInCar', name: e.target.name });
+    };
+
+    const handleNextStepClick = () => {
+        const isValidData = validateTradeIn(props.data.tradeInCar);
+
+        if (!isValidData) {
+            return props.dispatchStoreAction(StoreAction.INTERACT_SET_ALL_FOR_TYPE, 'tradeInCar');
+        }
+
+        setHasRequestError(false);
+
+        props.onFetchVehicleInformation((isSuccessful: boolean) => {
+            if (isSuccessful) {
+                props.onProceedToNextStep();
+            } else {
+                setHasRequestError(true);
+            }
+        });
     };
 
     const hasErrorRegistrationNumber = props.data.interact.tradeInCar.registrationNumber && !validateRegistrationNumber(props.data.tradeInCar.registrationNumber);
@@ -64,15 +88,29 @@ const TradeInCarDefinition = (props: ITradeInCarDefinitionProps) => {
                 </div>
             </section>
 
-            <section className="page-section page-section-bottom">
-                <div data-ecom-buttonnav="">
-                    <div className="button-nav-item" onClick={props.onNextStepClick}>
-                        <div data-ecom-button="full-width">
-                            Gå vidare
+            { hasRequestError &&
+                <section className="page-section">
+                    <Alert message={`Tyvärr fick vi ingen träff på registreringsnumret ${props.data.tradeInCar.registrationNumber}. Prova gärna med ett annat registreringsnummer.`} />
+                </section>
+            }
+
+            { !props.isWaitingForResponse &&
+                <section className="page-section page-section-bottom">
+                    <div data-ecom-buttonnav="">
+                        <div className="button-nav-item" onClick={handleNextStepClick}>
+                            <div data-ecom-button="full-width">
+                                Gå vidare
+                            </div>
                         </div>
                     </div>
-                </div>
-            </section>
+                </section>
+            }
+
+            { props.isWaitingForResponse &&
+                <section className="page-section">
+                    <Spinner />
+                </section>
+            }
         </div>
     );
 };
