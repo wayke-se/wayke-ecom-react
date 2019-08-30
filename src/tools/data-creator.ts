@@ -1,5 +1,6 @@
 import { ICustomerData, ICustomerObject } from "../types";
-import { IAddressLookupResponse } from "wayke-ecom";
+import { IAddressLookupResponse } from 'wayke-ecom';
+import CustomerInformationInputType from "../constants/customer-information-input-type";
 
 export const createCustomerObject = (customer: ICustomerData, addressLookupResponse: IAddressLookupResponse | undefined): ICustomerObject => {
     const personalNumber = customer.personalNumber;
@@ -8,14 +9,17 @@ export const createCustomerObject = (customer: ICustomerData, addressLookupRespo
 
     var name: string, address: string, zip: string, city: string;
 
-    if (addressLookupResponse) {
+    const isAutomatic = customer.inputType === CustomerInformationInputType.AUTOMATIC;
+    const isManual = customer.inputType === CustomerInformationInputType.MANUAL;
+
+    if (isAutomatic && addressLookupResponse) {
         const addressLookup = addressLookupResponse.getAddress();
 
         name = addressLookup.name;
         address = addressLookup.street;
         zip = addressLookup.postalCode;
         city = addressLookup.city;
-    } else {
+    } else if (isManual) {
         name = customer.name;
         address = customer.address;
         zip = customer.zip;
@@ -23,8 +27,8 @@ export const createCustomerObject = (customer: ICustomerData, addressLookupRespo
     }
 
     return {
-        isMasked: !!addressLookupResponse,
-        isAutomaticLookup: !!addressLookupResponse,
+        isMasked: isAutomatic,
+        isAutomaticLookup: isAutomatic,
         personalNumber,
         email,
         phone,

@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { validatePersonalNumber } from '../utils/validation';
-import { IEcomLifecycle, IExpectedDrivingDistance, IEcomStore, IEcomContext } from '../types';
+import { IEcomLifecycle, IExpectedDrivingDistance, IEcomStore, IEcomContext, IEcomData } from '../types';
 
 import StoreAction from '../constants/store-action';
 import options from '../constants/driving-distance-options';
@@ -55,13 +55,13 @@ class InsuranceInformationDefinition extends React.Component<IInsuranceInformati
             type: 'insurance',
             name: 'expectedDrivingDistance',
             value: options[this.state.expectedDrivingDistanceIndex]
-        }, () => {
-            this.handleProceedAfterUpdate();
+        }, (state: IEcomData) => {
+            this.handleProceedAfterUpdate(state);
         });
     }
 
-    handleProceedAfterUpdate() {
-        const isValidInsurance = validateInsurance(this.props.data.insurance);
+    handleProceedAfterUpdate(state: IEcomData) {
+        const isValidInsurance = validateInsurance(state.insurance);
 
         if (!isValidInsurance) {
             return this.props.dispatchStoreAction(StoreAction.INTERACT_SET_ALL_FOR_TYPE, 'insurance');

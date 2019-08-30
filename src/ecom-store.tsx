@@ -70,7 +70,7 @@ class EcomStore extends React.Component<IEcomStoreProps, IState> {
         };
     }
 
-    dispatchStoreAction(key: StoreAction, value: any, callback?: () => void) {
+    dispatchStoreAction(key: StoreAction, value: any, callback?: (state : IEcomData) => void) {
         let stateUpdate = null;
 
         switch (key) {
@@ -133,7 +133,9 @@ class EcomStore extends React.Component<IEcomStoreProps, IState> {
         };
 
         if (stateUpdate && callback) {
-            this.setState(stateUpdate, callback);
+            this.setState(stateUpdate, () => {
+                callback(this.state);
+            });
         } else if (stateUpdate) {
             this.setState(stateUpdate);
         }

@@ -1,10 +1,10 @@
-import { PaymentType } from "wayke-ecom";
-import { ITradeInCarData, IPaymentData, IInsuranceData, ICustomerData, ICustomerObject, IEcomData, ILoanSpecification } from "../types";
+import { PaymentType, IAddressLookupResponse } from "wayke-ecom";
+import { ITradeInCarData, IPaymentData, IInsuranceData, ICustomerObject, IEcomData, ILoanSpecification } from "../types";
 
 import { validateMilage, validateRegistrationNumber, validateNumberInRange, validatePersonalNumber, validateEmail, validatePhoneNumber, validateZip } from "../utils/validation";
-import { createCustomerObject } from "./data-creator";
 
 import drivingDistanceOptions from '../constants/driving-distance-options';
+import { createCustomerObject } from "./data-creator";
 
 var loanSpecification: ILoanSpecification = null;
 
@@ -12,11 +12,13 @@ export const initialize = (specification: ILoanSpecification) => {
     loanSpecification = specification;
 }
 
-export const isValidEcomData = (data: IEcomData) => {
+export const isValidEcomData = (data: IEcomData, addressLookup: IAddressLookupResponse) => {
     const isValidTradeIn = validateTradeIn(data.tradeInCar);
     const isValidPayment = validatePayment(data.payment);
     const isValidInsurance = validateInsurance(data.insurance);
-    const isValidCustomer = validateCustomer(data.customer);
+
+    const customerObject = createCustomerObject(data.customer, addressLookup);
+    const isValidCustomer = validateCustomerObject(customerObject);
 
     return isValidTradeIn && isValidPayment && isValidInsurance && isValidCustomer;
 }
@@ -67,18 +69,26 @@ export const validateInsurance = (data: IInsuranceData) => {
     return isValidPersonalNumber && isValidExpectedDrivingDistance;
 };
 
-export const validateCustomer = (data: ICustomerData) => {
-    return validateCustomerObject(createCustomerObject(data, null))
+export const validateCustomerObjectPersonalNumber = (customerObject: ICustomerObject) => {
+    return customerObject.isAutomaticLookup ? validatePersonalNumber(customerObject.personalNumber) : true;
 }
 
 export const validateCustomerObject = (customerObject: ICustomerObject) => {
-    const isValidPersonalNumber = customerObject.isAutomaticLookup ? validatePersonalNumber(customerObject.personalNumber) : true;
+    const isValidPersonalNumber = validateCustomerObjectPersonalNumber(customerObject);
     const isValidEmail = validateEmail(customerObject.email);
     const isValidPhone = validatePhoneNumber(customerObject.phone);
+
     const isValidName = !!customerObject.name;
     const isValidAddress = !!customerObject.address;
-    const isValidZip = validateZip(customerObject.zip);
     const isValidCity = !!customerObject.city;
+
+    var isValidZip: boolean;
+
+    if (customerObject.isMasked) {
+        isValidZip = !!customerObject.zip;
+    } else {
+        isValidZip = validateZip(customerObject.zip);
+    }
 
     return isValidPersonalNumber && isValidEmail && isValidPhone && isValidName && isValidAddress && isValidZip && isValidCity;
 };

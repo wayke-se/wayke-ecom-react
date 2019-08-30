@@ -1,104 +1,141 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import CustomerInformationInputType from '../constants/customer-information-input-type';
 import StoreAction from '../constants/store-action';
 
 import { validatePersonalNumber } from '../utils/validation';
-import { IEcomLifecycle, IEcomStore } from '../types';
+import { IEcomLifecycle, IEcomStore, IEcomData, IEcomContext } from '../types';
 
-export interface ICustomerInformationInitialProps extends IEcomStore, IEcomLifecycle {
+import { createCustomerObject } from '../tools/data-creator';
+import { validateCustomerObjectPersonalNumber } from '../tools/data-validation';
+
+import Alert from '../components/alert';
+import Spinner from '../components/spinner';
+
+export interface ICustomerInformationInitialProps extends IEcomContext, IEcomStore, IEcomLifecycle {
 };
 
-class CustomerInformationInitial extends React.Component<ICustomerInformationInitialProps> {
-    constructor(props: ICustomerInformationInitialProps) {
-        super(props);
+const CustomerInformationInitial = (props: ICustomerInformationInitialProps) => {
+    const [hasRequestError, setHasRequestError] = useState(false);
 
-        this.handleInputChange = this.handleInputChange.bind(this);
-        this.handleBlur = this.handleBlur.bind(this);
-        this.handleInputTypeClick = this.handleInputTypeClick.bind(this);
-    }
-
-    componentDidMount() {
-        const insurance = this.props.data.insurance;
-        const customer = this.props.data.customer;
+    useEffect(() => {
+        const insurance = props.data.insurance;
+        const customer = props.data.customer;
 
         const shouldUpdateCustomerPersonalNumber = insurance.personalNumber && !customer.personalNumber;
 
         if (shouldUpdateCustomerPersonalNumber) {
-            this.props.dispatchStoreAction(StoreAction.UPDATE_NAMED_VALUE, {
+            props.dispatchStoreAction(StoreAction.UPDATE_NAMED_VALUE, {
                 type: 'customer',
                 name: 'personalNumber',
                 value: insurance.personalNumber
             });
         }
-    }
+    });
 
-    handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
-        this.props.dispatchStoreAction(StoreAction.UPDATE_NAMED_VALUE, {
+    const handleInputChange = (e) => {
+        props.dispatchStoreAction(StoreAction.UPDATE_NAMED_VALUE, {
             type: 'customer',
             name: e.target.name,
             value: e.target.value
         });
     };
 
-    handleBlur(e: React.FocusEvent<HTMLInputElement>) {
-        this.props.dispatchStoreAction(StoreAction.INTERACT_UPDATE_SPECIFIC, { type: 'customer', name: e.target.name });
+    const handleBlur = (e) => {
+        props.dispatchStoreAction(StoreAction.INTERACT_UPDATE_SPECIFIC, { type: 'customer', name: e.target.name });
     };
 
-    handleInputTypeClick(inputType: CustomerInformationInputType) {
-        this.props.dispatchStoreAction(StoreAction.UPDATE_NAMED_VALUE, {
-            type: 'customer',
-            name: 'inputType',
-            value: inputType
-        }, () => {
-            this.props.onNextStepClick();
+    const handleProceedWithAutomaticLookup = (state: IEcomData) => {
+        const customerObject = createCustomerObject(state.customer, null);
+        const isValidPersonalNumber = validateCustomerObjectPersonalNumber(customerObject);
+
+        if (!isValidPersonalNumber) {
+            return props.dispatchStoreAction(StoreAction.INTERACT_UPDATE_SPECIFIC, { type: 'customer', name: 'personalNumber' });
+        }
+
+        setHasRequestError(false);
+
+        props.onFetchAddressInformation((isSuccessful: boolean) => {
+            if (isSuccessful) {
+                props.onProceedToNextStep();
+            } else {
+                setHasRequestError(true);
+            }
         });
     };
 
-    render () {
-        const hasPersonalNumberError = this.props.data.interact.customer.personalNumber && !validatePersonalNumber(this.props.data.customer.personalNumber);
+    const handleInputTypeClick = (inputType: CustomerInformationInputType) => {
+        props.dispatchStoreAction(StoreAction.UPDATE_NAMED_VALUE, {
+            type: 'customer',
+            name: 'inputType',
+            value: inputType
+        }, (state: IEcomData) => {
+            const isAutomatic = inputType === CustomerInformationInputType.AUTOMATIC;
 
-        return (
-            <div data-ecom-page="">
-                <section className="page-section">
-                    <h1 className="h6">Kunduppgifter</h1>
-                    <div data-ecom-content="">
-                        <p>Hämta dina uppgifter via personnummer eller skriv in dem manuellt.</p>
-                    </div>
-                </section>
+            if (isAutomatic) {
+                handleProceedWithAutomaticLookup(state);
+            } else {
+                props.onProceedToNextStep();
+            }
+        });
+    };
 
-                <section className="page-section">
-                    <div data-ecom-form="">
-                        <div className={`form-group ${hasPersonalNumberError ? ' has-error' : ''}`}>
-                            <label data-ecom-inputlabel="" htmlFor="information-1-input-personalnr">Personnummer</label>
+    const hasPersonalNumberError = props.data.interact.customer.personalNumber && !validatePersonalNumber(props.data.customer.personalNumber);
 
-                            <div data-ecom-inputtext="">
-                                <input type="text"
-                                    id="information-1-input-personalnr"
-                                    name="personalNumber"
-                                    placeholder="ÅÅÅÅMMDD-XXXX"
-                                    value={this.props.data.customer.personalNumber || ''}
-                                    onChange={this.handleInputChange}
-                                    onBlur={this.handleBlur} />
-                            </div>
+    return (
+        <div data-ecom-page="">
+            <section className="page-section">
+                <h1 className="h6">Kunduppgifter</h1>
+                <div data-ecom-content="">
+                    <p>Hämta dina uppgifter via personnummer eller skriv in dem manuellt.</p>
+                </div>
+            </section>
 
-                            <div className="form-alert">Fel format</div>
+            <section className="page-section">
+                <div data-ecom-form="">
+                    <div className={`form-group ${hasPersonalNumberError ? ' has-error' : ''}`}>
+                        <label data-ecom-inputlabel="" htmlFor="information-1-input-personalnr">Personnummer</label>
+
+                        <div data-ecom-inputtext="">
+                            <input type="text"
+                                id="information-1-input-personalnr"
+                                name="personalNumber"
+                                placeholder="ÅÅÅÅMMDD-XXXX"
+                                value={props.data.customer.personalNumber || ''}
+                                onChange={handleInputChange}
+                                onBlur={handleBlur} />
                         </div>
 
+                        <div className="form-alert">Fel format</div>
+                    </div>
+
+                    { hasRequestError &&
                         <div className="form-group">
-                            <div data-ecom-button="light full-width" onClick={() => this.handleInputTypeClick(CustomerInformationInputType.AUTOMATIC)}>
+                            <Alert message={`Tyvärr fick vi ingen träff på personnumret du angav.`} />
+                        </div>
+                    }
+
+                    { !props.isWaitingForResponse &&
+                        <div className="form-group">
+                            <div data-ecom-button="light full-width" onClick={() => handleInputTypeClick(CustomerInformationInputType.AUTOMATIC)}>
                                 Hämta uppgifter
                             </div>
                         </div>
-                    </div>
-                </section>
+                    }
 
-                <section className="page-section">
-                    <button data-ecom-link="" onClick={() => this.handleInputTypeClick(CustomerInformationInputType.MANUAL)}>Jag vill fylla i mina uppgifter manuellt</button>
-                </section>
-            </div>
-        );
-    }
+                    { props.isWaitingForResponse &&
+                        <div className="form-group">
+                            <Spinner />
+                        </div>
+                    }
+                </div>
+            </section>
+
+            <section className="page-section">
+                <button data-ecom-link="" onClick={() => handleInputTypeClick(CustomerInformationInputType.MANUAL)}>Jag vill fylla i mina uppgifter manuellt</button>
+            </section>
+        </div>
+    );
 };
 
 export default CustomerInformationInitial;

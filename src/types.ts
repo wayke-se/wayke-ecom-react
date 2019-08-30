@@ -49,7 +49,7 @@ export interface IEcomStore {
     data: IEcomData;
     loanSpecification: ILoanSpecification;
 
-    dispatchStoreAction: (key: StoreAction, value: any, callback?: () => void) => void;
+    dispatchStoreAction: (key: StoreAction, value: any, callback?: (state : IEcomData) => void) => void;
 };
 
 export interface IEcomData {

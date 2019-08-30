@@ -3,10 +3,10 @@ import React from 'react';
 import CustomerInformationInputType from '../constants/customer-information-input-type';
 import StoreAction from '../constants/store-action';
 
-import { validateEmail, validatePersonalNumber, validateZip } from '../utils/validation';
+import { validateEmail, validateZip, validatePhoneNumber } from '../utils/validation';
 import { IEcomLifecycle, IEcomStore, IEcomContext } from '../types';
-
-import Alert from '../components/alert';
+import { validateCustomerObject } from '../tools/data-validation';
+import { createCustomerObject } from '../tools/data-creator';
 
 export interface ICustomerInformationDetailsProps extends IEcomContext, IEcomStore, IEcomLifecycle {
 };
@@ -160,109 +160,102 @@ const ManualContent = (props: ICustomerInformationDetailsProps) => {
     );
 };
 
-class CustomerInformationDetails extends React.Component<ICustomerInformationDetailsProps> {
-    constructor(props) {
-        super(props);
-    }
+const CustomerInformationDetails = (props: ICustomerInformationDetailsProps) => {
+    const handleNextStepClick = () => {
+        const customerObject = createCustomerObject(props.data.customer, props.addressLookup);
+        const isValidCustomer = validateCustomerObject(customerObject);
 
-    componentDidMount() {
-        const isAutomatic = this.props.data.customer.inputType === CustomerInformationInputType.AUTOMATIC;
-
-        if (isAutomatic) {
-            this.props.onFetchAddressInformation();
-        }
-    }
-
-    render() {
-        const isAutomatic = this.props.data.customer.inputType === CustomerInformationInputType.AUTOMATIC;
-
-        if (isAutomatic && this.props.addressLookupError) {
-            return <Alert message="Tyvärr kunde vi inte hitta information baserat på angivet personnummer." />;
+        if (!isValidCustomer) {
+            return props.dispatchStoreAction(StoreAction.INTERACT_SET_ALL_FOR_TYPE, 'customer');
         }
 
-        const hasEmailError = this.props.data.interact.customer.email && !validateEmail(this.props.data.customer.email);
-        const hasPhoneError = this.props.data.interact.customer.phone && !this.props.data.customer.phone;
-        const hasTermsError = this.props.data.interact.customer.hasAcceptedTerms && !this.props.data.customer.hasAcceptedTerms;
+        props.onProceedToNextStep();
+    };
 
-        return (
-            <div data-ecom-page="">
-                <section className="page-section">
-                    <h1 className="h6">Kunduppgifter</h1>
-                </section>
+    const isAutomatic = props.data.customer.inputType === CustomerInformationInputType.AUTOMATIC;
 
-                { isAutomatic &&
-                    <AutomaticContent {...this.props} />
-                }
+    const hasEmailError = props.data.interact.customer.email && !validateEmail(props.data.customer.email);
+    const hasPhoneError = props.data.interact.customer.phone && !validatePhoneNumber( props.data.customer.phone);
+    const hasTermsError = props.data.interact.customer.hasAcceptedTerms && !props.data.customer.hasAcceptedTerms;
 
-                { !isAutomatic &&
-                    <ManualContent {...this.props} />
-                }
+    return (
+        <div data-ecom-page="">
+            <section className="page-section">
+                <h1 className="h6">Kunduppgifter</h1>
+            </section>
 
-                <section className="page-section">
-                    <div data-ecom-form="">
-                        <div className={`form-group ${hasEmailError ? ' has-error' : ''}`}>
-                            <label data-ecom-inputlabel="" htmlFor="information-2-input-email">E-post</label>
+            { isAutomatic &&
+                <AutomaticContent {...props} />
+            }
 
-                            <div data-ecom-inputtext="">
-                                <input type="text"
-                                    id="information-2-input-email"
-                                    name="email"
-                                    placeholder="E-postadress"
-                                    value={this.props.data.customer.email}
-                                    onChange={(e) => { handleInputChange(this.props, e) }}
-                                    onBlur={(e) => handleBlur(this.props, e)} />
-                            </div>
+            { !isAutomatic &&
+                <ManualContent {...props} />
+            }
 
-                            <div className="form-alert">Fel format</div>
+            <section className="page-section">
+                <div data-ecom-form="">
+                    <div className={`form-group ${hasEmailError ? ' has-error' : ''}`}>
+                        <label data-ecom-inputlabel="" htmlFor="information-2-input-email">E-post</label>
+
+                        <div data-ecom-inputtext="">
+                            <input type="text"
+                                id="information-2-input-email"
+                                name="email"
+                                placeholder="E-postadress"
+                                value={props.data.customer.email}
+                                onChange={(e) => { handleInputChange(props, e) }}
+                                onBlur={(e) => handleBlur(props, e)} />
                         </div>
 
-                        <div className={`form-group ${hasPhoneError ? ' has-error' : ''}`}>
-                            <label data-ecom-inputlabel="" htmlFor="information-2-input-phone">Telefonnummer</label>
+                        <div className="form-alert">Fel format</div>
+                    </div>
 
-                            <div data-ecom-inputtext="">
-                                <input type="text"
-                                    id="information-2-input-phone"
-                                    name="phone"
-                                    placeholder="Telefonnummer"
-                                    value={this.props.data.customer.phone}
-                                    onChange={(e) => { handleInputChange(this.props, e) }}
-                                    onBlur={(e) => handleBlur(this.props, e)} />
-                            </div>
+                    <div className={`form-group ${hasPhoneError ? ' has-error' : ''}`}>
+                        <label data-ecom-inputlabel="" htmlFor="information-2-input-phone">Telefonnummer</label>
 
-                            <div className="form-alert">Fel format</div>
+                        <div data-ecom-inputtext="">
+                            <input type="text"
+                                id="information-2-input-phone"
+                                name="phone"
+                                placeholder="07X-XXXXXXX"
+                                value={props.data.customer.phone}
+                                onChange={(e) => { handleInputChange(props, e) }}
+                                onBlur={(e) => handleBlur(props, e)} />
                         </div>
 
-                        <div className={`form-group ${hasTermsError ? ' has-error' : ''}`}>
-                            <div data-ecom-inputselection="checkbox">
-                                <input type="checkbox"
-                                    id="information-2-checkbox"
-                                    name="hasAcceptedTerms"
-                                    checked={this.props.data.customer.hasAcceptedTerms}
-                                    onChange={(e) => { handleCheckboxChange(this.props, e) }}
-                                    onBlur={(e) => handleBlur(this.props, e)} />
+                        <div className="form-alert">Fel format</div>
+                    </div>
 
-                                <label htmlFor="information-2-checkbox">
-                                    <span className="text">Jag godkänner användarvillkoren</span>
-                                </label>
+                    <div className={`form-group ${hasTermsError ? ' has-error' : ''}`}>
+                        <div data-ecom-inputselection="checkbox">
+                            <input type="checkbox"
+                                id="information-2-checkbox"
+                                name="hasAcceptedTerms"
+                                checked={props.data.customer.hasAcceptedTerms}
+                                onChange={(e) => { handleCheckboxChange(props, e) }}
+                                onBlur={(e) => handleBlur(props, e)} />
 
-                                <div className="form-alert">Användarvillkoren behöver godkännas för att gå vidare</div>
-                            </div>
+                            <label htmlFor="information-2-checkbox">
+                                <span className="text">Jag godkänner användarvillkoren</span>
+                            </label>
+
+                            <div className="form-alert">Användarvillkoren behöver godkännas för att gå vidare</div>
                         </div>
                     </div>
-                </section>
+                </div>
+            </section>
 
-                <section className="page-section page-section-bottom">
-                    <div data-ecom-buttonnav="">
-                        <div className="button-nav-item">
-                            <div data-ecom-button="full-width" onClick={this.props.onNextStepClick}>
-                                Gå vidare
-                            </div>
+            <section className="page-section page-section-bottom">
+                <div data-ecom-buttonnav="">
+                    <div className="button-nav-item">
+                        <div data-ecom-button="full-width" onClick={handleNextStepClick}>
+                            Gå vidare
                         </div>
                     </div>
-                </section>
-            </div>
-        );
-    }
+                </div>
+            </section>
+        </div>
+    );
 };
 
 export default CustomerInformationDetails;
