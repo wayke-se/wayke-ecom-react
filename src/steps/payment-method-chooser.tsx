@@ -8,7 +8,7 @@ import { IPaymentOption } from 'wayke-ecom/dist-types/orders/types';
 
 import { formatPrice } from '../utils/helpers';
 import { addSizeQuery } from '../utils/image';
-import { getLoanInformation, getDefaultDuration, getDefaultDeposit } from '../utils/loan';
+import { getLoanInformation } from '../utils/loan';
 import { getPaymentMethodTitle } from '../utils/payment';
 
 export interface IPaymentMethodChooserProps extends IEcomExternalProps, IEcomContext, IEcomStore, IEcomLifecycle {
@@ -25,7 +25,7 @@ const PaymentMethodItem = (props: IPaymentMethodItemProps) => {
             name: 'paymentOption',
             value: props.paymentOption
         }, () => {
-            props.onNextStepClick();
+            props.onProceedToNextStep();
         });
     };
 
@@ -38,8 +38,8 @@ const PaymentMethodItem = (props: IPaymentMethodItemProps) => {
     var formattedInterest = null;
 
     if (isLoan) {
-        const duration = getDefaultDuration();
-        const deposit = getDefaultDeposit(props.vehicle.price);
+        const duration = props.loanSpecification.durationDefault;
+        const deposit = props.loanSpecification.depositDefault;
 
         const loanDetails = props.paymentOption.loanDetails;
         const loanInformation = getLoanInformation(props.vehicle.price, duration, deposit, loanDetails.interest, loanDetails.administrationFee, loanDetails.setupFee);

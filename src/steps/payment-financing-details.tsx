@@ -9,6 +9,7 @@ import { validateStringNumberInRange } from '../utils/validation';
 import { addSizeQuery } from '../utils/image';
 import { getLoanInformation } from '../utils/loan';
 import { formatPrice } from '../utils/helpers';
+import { validatePayment } from '../tools/data-validation';
 
 export interface IPaymentFinancingDetailsProps extends IEcomExternalProps, IEcomContext, IEcomStore, IEcomLifecycle {
 };
@@ -115,8 +116,14 @@ class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsPr
     }
 
     handleProceedClick() {
+        const isValidPayment = validatePayment(this.props.data.payment);
+
+        if (!isValidPayment) {
+            return;
+        }
+
         this.handleValueUpdated();
-        this.props.onNextStepClick();
+        this.props.onProceedToNextStep();
     }
 
     render() {
