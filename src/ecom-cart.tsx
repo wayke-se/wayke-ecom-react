@@ -96,7 +96,7 @@ const EcomCart = (props: IEcomCartProps) => {
     return (
         <div data-ecom-footer="">
             <div data-ecom-cart="" className={isExtended && hasContent ? 'is-extended' : ''}>
-                <button className="cart-header" onClick={handleCartClick}>
+                <button className={`cart-header ${hasContent ? '' : 'cursor-default'}`} onClick={handleCartClick}>
                     <div className="cart-header-img-section">
                         <div className="cart-header-img" style={{ backgroundImage: `url(${props.vehicle.imageUrl})` }}></div>
                     </div>
