@@ -15,7 +15,7 @@ const InsuranceTypeChooser = (props: IInsuranceTypeChooserProps) => {
             name: 'wantsToSeeInsuranceOptions',
             value: wantsToSeeInsuranceOptions
         }, () => {
-            props.onNextStepClick();
+            props.onProceedToNextStep();
         });
     };
 

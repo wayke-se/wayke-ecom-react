@@ -55,8 +55,7 @@ export const validatePayment = (data: IPaymentData) => {
 };
 
 export const validateInsurance = (data: IInsuranceData) => {
-    //numberOfDrivingDistanceOptions: number
-    if (!data.hasAddedInsurance) {
+    if (!data.wantsToSeeInsuranceOptions) {
         return true;
     }
 

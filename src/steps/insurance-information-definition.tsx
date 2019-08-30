@@ -5,12 +5,17 @@ import { IEcomLifecycle, IExpectedDrivingDistance, IEcomStore, IEcomContext } fr
 
 import StoreAction from '../constants/store-action';
 import options from '../constants/driving-distance-options';
+import { validateInsurance } from '../tools/data-validation';
+
+import Alert from '../components/alert';
+import Spinner from '../components/spinner';
 
 export interface IInsuranceInformationDefinitionProps extends IEcomContext, IEcomStore, IEcomLifecycle {
 };
 
 interface IState {
     expectedDrivingDistanceIndex: number;
+    hasRequestError: boolean;
 };
 
 const getIndexFromOption = (option: IExpectedDrivingDistance): number => {
@@ -23,11 +28,13 @@ class InsuranceInformationDefinition extends React.Component<IInsuranceInformati
 
         this.handleExpectedDrivingDistanceChange = this.handleExpectedDrivingDistanceChange.bind(this);
         this.handleProceedClick = this.handleProceedClick.bind(this);
+        this.handleProceedAfterUpdate = this.handleProceedAfterUpdate.bind(this);
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleBlur = this.handleBlur.bind(this);
 
         this.state = {
-            expectedDrivingDistanceIndex: this.props.data.insurance.expectedDrivingDistance ? getIndexFromOption(this.props.data.insurance.expectedDrivingDistance) : 0
+            expectedDrivingDistanceIndex: this.props.data.insurance.expectedDrivingDistance ? getIndexFromOption(this.props.data.insurance.expectedDrivingDistance) : 0,
+            hasRequestError: false
         };
     }
 
@@ -49,7 +56,27 @@ class InsuranceInformationDefinition extends React.Component<IInsuranceInformati
             name: 'expectedDrivingDistance',
             value: options[this.state.expectedDrivingDistanceIndex]
         }, () => {
-            this.props.onNextStepClick();
+            this.handleProceedAfterUpdate();
+        });
+    }
+
+    handleProceedAfterUpdate() {
+        const isValidInsurance = validateInsurance(this.props.data.insurance);
+
+        if (!isValidInsurance) {
+            return this.props.dispatchStoreAction(StoreAction.INTERACT_SET_ALL_FOR_TYPE, 'insurance');
+        }
+
+        this.setState({
+            hasRequestError: false
+        }, () => {
+            this.props.onFetchInsuranceOptions((isSuccessful: boolean) => {
+                if (isSuccessful) {
+                    this.props.onProceedToNextStep();
+                } else {
+                    this.setState({ hasRequestError: true });
+                }
+            });
         });
     }
 
@@ -110,11 +137,27 @@ class InsuranceInformationDefinition extends React.Component<IInsuranceInformati
                             </div>
                         </div>
 
-                        <div className="form-group">
-                            <div data-ecom-button="light full-width" onClick={this.handleProceedClick}>
-                                Visa försäkringar
+
+
+                        { this.state.hasRequestError &&
+                            <div className="form-group">
+                                <Alert message="Tyvärr hittades inga försäkringsalternativ för det angivna personnumret." />
                             </div>
-                        </div>
+                        }
+
+                        { !this.props.isWaitingForResponse &&
+                            <div className="form-group">
+                                <div data-ecom-button="light full-width" onClick={this.handleProceedClick}>
+                                    Visa försäkringar
+                                </div>
+                            </div>
+                        }
+
+                        { this.props.isWaitingForResponse &&
+                            <div className="form-group">
+                                <Spinner />
+                            </div>
+                        }
                     </div>
                 </section>
             </div>
