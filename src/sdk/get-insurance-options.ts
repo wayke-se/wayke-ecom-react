@@ -1,4 +1,4 @@
-import { insurances, IInsuranceOptionsResponse, PaymentType } from 'wayke-ecom';
+import { insurances, IInsuranceOptionsResponse } from 'wayke-ecom';
 import { IInsuranceData, IInsuranceOptionsSdkData } from '../types';
 import { validateInsurance } from '../tools/data-validation';
 
@@ -18,8 +18,8 @@ export const getInsuranceOptions = (data: IInsuranceOptionsSdkData, callback: (o
     const request = insurances.newInsuranceOptionsRequest()
                         .forCustomer(data.ecomData.personalNumber)
                         .forVehicle(data.vehicleId)
-                        .withPayment(data.paymentType)
-                        .withDrivingDistance(data.ecomData.expectedDrivingDistance.optionIndex)
+                        .withPaymentType(data.paymentType)
+                        .withDrivingDistance(data.ecomData.expectedDrivingDistance)
                         .build();
 
     insurances.getOptions(request)

@@ -45,7 +45,9 @@ export const getAllTransitions = () => ({
     [EcomStep.TRADE_IN_CAR_DEFINITION]: () => EcomStep.TRADE_IN_CONFIRM_CAR,
     [EcomStep.TRADE_IN_CONFIRM_CAR]: () => EcomStep.PAYMENT_METHOD_CHOOSER,
     [EcomStep.PAYMENT_METHOD_CHOOSER]: (data: IEcomData, options: IOrderOptionsResponse) => {
-        if (data.payment.paymentOption.type === PaymentType.Loan) {
+        const isLoan = data.payment.paymentType === PaymentType.Loan;
+
+        if (isLoan) {
             return EcomStep.PAYMENT_FINANCING_DETAILS;
         } else if (!options.getInsuranceOption()) {
             return EcomStep.CUSTOMER_INFORMATION_INITIAL;

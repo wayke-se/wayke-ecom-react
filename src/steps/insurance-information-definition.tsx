@@ -1,14 +1,14 @@
 import React from 'react';
 
 import { validatePersonalNumber } from '../utils/validation';
-import { IEcomLifecycle, IExpectedDrivingDistance, IEcomStore, IEcomContext, IEcomData } from '../types';
+import { IEcomLifecycle, IEcomStore, IEcomContext, IEcomData } from '../types';
 
 import StoreAction from '../constants/store-action';
-import options from '../constants/driving-distance-options';
 import { validateInsurance } from '../tools/data-validation';
 
 import Alert from '../components/alert';
 import Spinner from '../components/spinner';
+import { DrivingDistance } from 'wayke-ecom';
 
 export interface IInsuranceInformationDefinitionProps extends IEcomContext, IEcomStore, IEcomLifecycle {
 };
@@ -18,8 +18,32 @@ interface IState {
     hasRequestError: boolean;
 };
 
-const getIndexFromOption = (option: IExpectedDrivingDistance): number => {
-    return options.indexOf(option);
+const drivingDistanceOptions = Object.keys(DrivingDistance);
+
+const getIndexFromOption = (option: DrivingDistance): number => {
+    return drivingDistanceOptions.indexOf(option);
+};
+
+const getLabel = (drivingDistance: DrivingDistance): string => {
+    switch (drivingDistance) {
+        case DrivingDistance.Between0And1000:
+            return '0-1000 mil';
+
+        case DrivingDistance.Between1000And1500:
+            return '1000-1500 mil';
+
+        case DrivingDistance.Between1500And2000:
+            return '1500-2000 mil';
+
+        case DrivingDistance.Between2000And2500:
+            return '2000-2500 mil';
+
+        case DrivingDistance.Over2500:
+            return '2500+ mil';
+
+        default:
+            return '';
+    }
 };
 
 class InsuranceInformationDefinition extends React.Component<IInsuranceInformationDefinitionProps, IState> {
@@ -45,7 +69,7 @@ class InsuranceInformationDefinition extends React.Component<IInsuranceInformati
             this.props.dispatchStoreAction(StoreAction.UPDATE_NAMED_VALUE, {
                 type: 'insurance',
                 name: 'expectedDrivingDistance',
-                value: options[this.state.expectedDrivingDistanceIndex]
+                value: drivingDistanceOptions[this.state.expectedDrivingDistanceIndex]
             });
         });
     }
@@ -54,7 +78,7 @@ class InsuranceInformationDefinition extends React.Component<IInsuranceInformati
         this.props.dispatchStoreAction(StoreAction.UPDATE_NAMED_VALUE, {
             type: 'insurance',
             name: 'expectedDrivingDistance',
-            value: options[this.state.expectedDrivingDistanceIndex]
+            value: drivingDistanceOptions[this.state.expectedDrivingDistanceIndex]
         }, (state: IEcomData) => {
             this.handleProceedAfterUpdate(state);
         });
@@ -93,7 +117,8 @@ class InsuranceInformationDefinition extends React.Component<IInsuranceInformati
     }
 
     render() {
-        const optionValues = options.map(o => o.min + (o.max ? '-' + o.max : '+') + ' mil');
+        const optionValues = drivingDistanceOptions.map((o: DrivingDistance) => getLabel(o));
+
         const optionItems = optionValues.map((v, index) => <option key={index}>{v}</option>);
         const selectedValue = optionValues[this.state.expectedDrivingDistanceIndex];
 

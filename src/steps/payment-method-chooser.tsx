@@ -3,8 +3,7 @@ import React from 'react';
 import { IEcomContext, IEcomLifecycle, IEcomStore, IEcomExternalProps } from '../types';
 import StoreAction from '../constants/store-action';
 
-import { PaymentType } from 'wayke-ecom';
-import { IPaymentOption } from 'wayke-ecom/dist-types/orders/types';
+import { PaymentType, IPaymentOption } from 'wayke-ecom';
 
 import { formatPrice } from '../utils/helpers';
 import { addSizeQuery } from '../utils/image';
@@ -22,8 +21,8 @@ const PaymentMethodItem = (props: IPaymentMethodItemProps) => {
     const handlePaymentMethodClick = () => {
         props.dispatchStoreAction(StoreAction.UPDATE_NAMED_VALUE, {
             type: 'payment',
-            name: 'paymentOption',
-            value: props.paymentOption
+            name: 'paymentType',
+            value: props.paymentOption.type
         }, () => {
             props.onProceedToNextStep();
         });

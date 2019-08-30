@@ -77,7 +77,7 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
             makeInsuranceOptionsRequest({
                 ecomData: this.props.data.insurance,
                 vehicleId: this.props.vehicle.id,
-                paymentType: this.props.data.payment.paymentOption
+                paymentType: this.props.data.payment.paymentType
             }, (response: IInsuranceOptionsResponse) => {
                 this.saveResponse({
                     insuranceOptions: response

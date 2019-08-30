@@ -42,7 +42,7 @@ const EcomCart = (props: IEcomCartProps) => {
     const cartContent = [];
 
     const hasTradeIn = props.data.tradeInCar.hasTradeInCar && props.data.tradeInCar.registrationNumber && props.vehicleLookup !== null;
-    const hasLoan = props.data.payment.paymentOption && props.data.payment.paymentOption.type === PaymentType.Loan;
+    const hasLoan = props.data.payment.paymentType && props.data.payment.paymentType === PaymentType.Loan;
     const hasInsurance = props.data.insurance.wantsToSeeInsuranceOptions &&
             props.data.insurance.hasAddedInsurance &&
             props.data.insurance.personalNumber &&
@@ -61,11 +61,13 @@ const EcomCart = (props: IEcomCartProps) => {
     }
 
     if (hasLoan) {
+        const paymentOption = props.orderOptions.getPaymentOptions().find(p => p.type === PaymentType.Loan);
+
         cartContent.push({
             title: getPaymentMethodTitle(PaymentType.Loan),
-            description: props.data.payment.paymentOption.name,
-            price: props.data.payment.paymentOption.price,
-            unit: props.data.payment.paymentOption.unit
+            description: paymentOption.name,
+            price: paymentOption.price,
+            unit: paymentOption.unit
         });
     }
 

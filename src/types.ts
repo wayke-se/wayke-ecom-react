@@ -1,7 +1,6 @@
 import CustomerInformationInputType from "./constants/customer-information-input-type";
 import StoreAction from './constants/store-action';
-import { IPaymentOption, PaymentType, DeliveryType } from "wayke-ecom/dist-types/orders/types";
-import { IInsuranceOptionsResponse, IVehicleLookupResponse, IAddressLookupResponse, IOrderOptionsResponse, IOrderCreateResponse, IAddress, VehicleCondition } from "wayke-ecom";
+import { IInsuranceOptionsResponse, IVehicleLookupResponse, IAddressLookupResponse, IOrderOptionsResponse, IOrderCreateResponse, IAddress, VehicleCondition, DrivingDistance, PaymentType } from "wayke-ecom";
 
 export interface IVehicle {
     id: string;
@@ -67,22 +66,16 @@ export interface ITradeInCarData {
 };
 
 export interface IPaymentData {
-    paymentOption: IPaymentOption;
+    paymentType: PaymentType;
     loanDeposit: number;
     loanDuration: number;
-};
-
-export interface IExpectedDrivingDistance {
-    optionIndex: number;
-    min: number;
-    max: number;
 };
 
 export interface IInsuranceData {
     wantsToSeeInsuranceOptions: boolean;
     hasAddedInsurance: boolean;
     personalNumber: string;
-    expectedDrivingDistance: IExpectedDrivingDistance;
+    expectedDrivingDistance: DrivingDistance;
 };
 
 export interface ICustomerData {
@@ -149,7 +142,7 @@ export interface IOrderOptionsSdkData {
 
 export interface IInsuranceOptionsSdkData {
     vehicleId: string;
-    paymentType: IPaymentOption;
+    paymentType: PaymentType;
     ecomData: IInsuranceData;
 };
 

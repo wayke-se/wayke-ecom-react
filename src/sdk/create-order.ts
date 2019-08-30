@@ -21,7 +21,7 @@ export const createOrder = (data: ICreateOrderSdkData, callback: (response: IOrd
     }
 
     const isAutomaticCustomerInfo = ecomData.customer.inputType === CustomerInformationInputType.AUTOMATIC;
-    const isLoan = ecomData.payment.paymentOption.type === PaymentType.Loan;
+    const isLoan = ecomData.payment.paymentType === PaymentType.Loan;
     const hasSelectedInsurance = ecomData.insurance.wantsToSeeInsuranceOptions && ecomData.insurance.hasAddedInsurance;
     const hasTradeIn = ecomData.tradeInCar.hasTradeInCar;
 
@@ -30,7 +30,7 @@ export const createOrder = (data: ICreateOrderSdkData, callback: (response: IOrd
         .withPhoneNumber(ecomData.customer.phone);
 
     const paymentBuilder = orders.newPayment()
-        .withType(ecomData.payment.paymentOption.type);
+        .withType(ecomData.payment.paymentType);
 
     if (isAutomaticCustomerInfo) {
         customerBuilder.withPersonalNumber(ecomData.customer.personalNumber);
@@ -60,7 +60,7 @@ export const createOrder = (data: ICreateOrderSdkData, callback: (response: IOrd
 
     if (hasSelectedInsurance) {
         insurance = orders.newInsurance()
-            .withDrivingDistance(ecomData.insurance.expectedDrivingDistance.optionIndex)
+            .withDrivingDistance(ecomData.insurance.expectedDrivingDistance)
             .withAddOns([])
             .build();
     }

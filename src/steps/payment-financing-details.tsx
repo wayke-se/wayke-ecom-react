@@ -10,6 +10,7 @@ import { addSizeQuery } from '../utils/image';
 import { getLoanInformation } from '../utils/loan';
 import { formatPrice } from '../utils/helpers';
 import { validatePayment } from '../tools/data-validation';
+import { PaymentType } from 'wayke-ecom';
 
 export interface IPaymentFinancingDetailsProps extends IEcomExternalProps, IEcomContext, IEcomStore, IEcomLifecycle {
 };
@@ -100,7 +101,7 @@ class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsPr
         });
     }
 
-    handleValueUpdated(callback: (state: IEcomData) => void) {
+    handleValueUpdated(callback?: (state: IEcomData) => void) {
         const loanSpecification = this.props.loanSpecification;
 
         const depositMin = loanSpecification.depositMin
@@ -139,7 +140,7 @@ class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsPr
         const depositMax = loanSpecification.depositMax;
 
         const hasDownPaymentError = !validateStringNumberInRange(this.state.deposit, depositMin, depositMax);
-        const paymentOption = this.props.data.payment.paymentOption;
+        const paymentOption = this.props.orderOptions.getPaymentOptions().find(p => p.type === PaymentType.Loan);
 
         const scaledImage = addSizeQuery(paymentOption.logo, 100, 60);
 

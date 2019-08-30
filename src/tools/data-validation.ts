@@ -1,10 +1,10 @@
-import { PaymentType, IAddressLookupResponse } from "wayke-ecom";
+import { PaymentType, IAddressLookupResponse, DrivingDistance } from "wayke-ecom";
 import { ITradeInCarData, IPaymentData, IInsuranceData, ICustomerObject, IEcomData, ILoanSpecification } from "../types";
 
 import { validateMilage, validateRegistrationNumber, validateNumberInRange, validatePersonalNumber, validateEmail, validatePhoneNumber, validateZip } from "../utils/validation";
 
-import drivingDistanceOptions from '../constants/driving-distance-options';
 import { createCustomerObject } from "./data-creator";
+import { containsValue } from "../utils/enum";
 
 var loanSpecification: ILoanSpecification = null;
 
@@ -40,11 +40,11 @@ export const validatePayment = (data: IPaymentData) => {
     const durationMin = loanSpecification.durationMin;
     const durationMax = loanSpecification.durationMax;
 
-    if (!data.paymentOption) {
+    if (!data.paymentType) {
         return false;
     }
 
-    const isLoan = data.paymentOption.type === PaymentType.Loan;
+    const isLoan = data.paymentType === PaymentType.Loan;
 
     if (!isLoan) {
         return true;
@@ -61,10 +61,8 @@ export const validateInsurance = (data: IInsuranceData) => {
         return true;
     }
 
-    const numberOfDrivingDistanceOptions = drivingDistanceOptions.length;
-
     const isValidPersonalNumber = validatePersonalNumber(data.personalNumber);
-    const isValidExpectedDrivingDistance = data.expectedDrivingDistance && validateNumberInRange(data.expectedDrivingDistance.optionIndex, 0, numberOfDrivingDistanceOptions - 1);
+    const isValidExpectedDrivingDistance = data.expectedDrivingDistance && containsValue(DrivingDistance, data.expectedDrivingDistance);
 
     return isValidPersonalNumber && isValidExpectedDrivingDistance;
 };
