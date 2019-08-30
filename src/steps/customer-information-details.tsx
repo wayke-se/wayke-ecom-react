@@ -84,7 +84,6 @@ const AutomaticContent = (props: ICustomerInformationDetailsProps) => {
 };
 
 const ManualContent = (props: ICustomerInformationDetailsProps) => {
-    const hasPersonalNumberError = props.data.interact.customer.personalNumber && !validatePersonalNumber(props.data.customer.personalNumber);
     const hasNameError = props.data.interact.customer.name && !props.data.customer.name;
     const hasAddressError = props.data.interact.customer.address && !props.data.customer.address;
     const hasZipError = props.data.interact.customer.zip && !validateZip(props.data.customer.zip);
@@ -93,22 +92,6 @@ const ManualContent = (props: ICustomerInformationDetailsProps) => {
     return (
         <section className="page-section">
             <div data-ecom-form="">
-                <div className={`form-group ${hasPersonalNumberError ? ' has-error' : ''}`}>
-                    <label data-ecom-inputlabel="" htmlFor="information-2-input-personalnr">Personnummer</label>
-
-                    <div data-ecom-inputtext="">
-                        <input type="text"
-                            id="information-2-input-personalnr"
-                            name="personalNumber"
-                            placeholder="ÅÅÅÅMMDD-XXXX"
-                            value={props.data.customer.personalNumber || ''}
-                            onChange={(e) => { handleInputChange(props, e) }}
-                            onBlur={(e) => handleBlur(props, e)} />
-                    </div>
-
-                    <div className="form-alert">Fel format</div>
-                </div>
-
                 <div className={`form-group ${hasNameError ? ' has-error' : ''}`}>
                     <label data-ecom-inputlabel="" htmlFor="information-2-input-name">För- och efternamn</label>
 
