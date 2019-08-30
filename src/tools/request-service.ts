@@ -1,7 +1,13 @@
 import RequestType from "../constants/request-type";
-import { getOrderOptions, getInsuranceOptions, getVehicleLookup, getAddressLookup, createOrder } from "../sdk/ecom-sdk-actions";
-import { IOrderOptionsData, IVehicleLookupData, IInsuranceOptionsData, IAddressLookupData, ICreateOrderData } from "../types";
+
 import { IOrderOptionsResponse, IInsuranceOptionsResponse, IVehicleLookupResponse, IAddressLookupResponse, IOrderCreateResponse } from "wayke-ecom";
+
+import { getOrderOptions } from "../sdk/get-order-options";
+import { getVehicleLookup } from "../sdk/get-vehicle-lookup";
+import { getInsuranceOptions } from "../sdk/get-insurance-options";
+import { getAddressLookup } from "../sdk/get-address-lookup";
+import { createOrder } from "../sdk/create-order";
+import { IOrderOptionsSdkData, IVehicleLookupSdkData, IInsuranceOptionsSdkData, IAddressLookupSdkData, ICreateOrderSdkData } from "../types";
 
 const requestCache = {};
 
@@ -49,22 +55,22 @@ const makeRequest = <S, T>(
     });
 };
 
-export const makeOrderOptionsRequest = (data: IOrderOptionsData, callback: (response: IOrderOptionsResponse) => void) => {
+export const makeOrderOptionsRequest = (data: IOrderOptionsSdkData, callback: (response: IOrderOptionsResponse) => void) => {
     makeRequest(getOrderOptions, RequestType.GET_ORDER_OPTIONS, data, callback);
 };
 
-export const makeVehicleLookupRequest = (data: IVehicleLookupData, callback: (response: IVehicleLookupResponse) => void) => {
+export const makeVehicleLookupRequest = (data: IVehicleLookupSdkData, callback: (response: IVehicleLookupResponse) => void) => {
     makeRequest(getVehicleLookup, RequestType.GET_VEHICLE_LOOKUP, data, callback);
 };
 
-export const makeInsuranceOptionsRequest = (data: IInsuranceOptionsData, callback: (response: IInsuranceOptionsResponse) => void) => {
+export const makeInsuranceOptionsRequest = (data: IInsuranceOptionsSdkData, callback: (response: IInsuranceOptionsResponse) => void) => {
     makeRequest(getInsuranceOptions, RequestType.GET_INSURANCE_OPTIONS, data, callback);
 };
 
-export const makeAddressLookupRequest = (data: IAddressLookupData, callback: (response: IAddressLookupResponse) => void) => {
+export const makeAddressLookupRequest = (data: IAddressLookupSdkData, callback: (response: IAddressLookupResponse) => void) => {
     makeRequest(getAddressLookup, RequestType.GET_ADDRESS_LOOKUP, data, callback);
 };
 
-export const makeCreateOrderRequest = (data: ICreateOrderData, callback: (response: IOrderCreateResponse) => void) => {
+export const makeCreateOrderRequest = (data: ICreateOrderSdkData, callback: (response: IOrderCreateResponse) => void) => {
     makeRequest(createOrder, RequestType.CREATE_ORDER, data, callback);
 };

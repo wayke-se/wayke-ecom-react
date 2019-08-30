@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { IEcomContext, IEcomLifecycle, IEcomStore, IEcomExternalProps, ILoanSpecification } from '../types';
+import { IEcomContext, IEcomLifecycle, IEcomStore, IEcomExternalProps, ILoanSpecification, IEcomData } from '../types';
 
 import StoreAction from '../constants/store-action';
 import Slider from '../components/slider';
@@ -100,7 +100,7 @@ class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsPr
         });
     }
 
-    handleValueUpdated() {
+    handleValueUpdated(callback: (state: IEcomData) => void) {
         const loanSpecification = this.props.loanSpecification;
 
         const depositMin = loanSpecification.depositMin
@@ -112,18 +112,19 @@ class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsPr
         this.props.dispatchStoreAction(StoreAction.PAYMENT_UPDATE_FINANCING_INFORMATION, {
             loanDeposit: deposit,
             loanDuration: duration
-        });
+        }, callback);
     }
 
     handleProceedClick() {
-        const isValidPayment = validatePayment(this.props.data.payment);
+        this.handleValueUpdated((state: IEcomData) => {
+            const isValidPayment = validatePayment(state.payment);
 
-        if (!isValidPayment) {
-            return;
-        }
+            if (!isValidPayment) {
+                return;
+            }
 
-        this.handleValueUpdated();
-        this.props.onProceedToNextStep();
+            this.props.onProceedToNextStep();
+        });
     }
 
     render() {

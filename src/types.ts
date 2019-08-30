@@ -1,7 +1,7 @@
 import CustomerInformationInputType from "./constants/customer-information-input-type";
 import StoreAction from './constants/store-action';
-import { IPaymentOption, IOrderCreateResponse } from "wayke-ecom/dist-types/orders/types";
-import { IInsuranceOptionsResponse, IVehicleLookupResponse, IAddressLookupResponse, IOrderOptionsResponse, IAddress, PaymentType, VehicleCondition, DeliveryType } from "wayke-ecom";
+import { IPaymentOption, PaymentType, DeliveryType } from "wayke-ecom/dist-types/orders/types";
+import { IInsuranceOptionsResponse, IVehicleLookupResponse, IAddressLookupResponse, IOrderOptionsResponse, IOrderCreateResponse, IAddress, VehicleCondition } from "wayke-ecom";
 
 export interface IVehicle {
     id: string;
@@ -143,44 +143,26 @@ export interface ILoanSpecification {
     depositDefault: number;
 };
 
-export interface IOrderOptionsData {
+export interface IOrderOptionsSdkData {
     vehicleId: string;
 };
 
-export interface IInsuranceOptionsData {
-    personalNumber: string;
+export interface IInsuranceOptionsSdkData {
     vehicleId: string;
     paymentType: IPaymentOption;
-    drivingDistance: number;
+    ecomData: IInsuranceData;
 };
 
-export interface IVehicleLookupData {
-    registrationNumber: string;
+export interface IVehicleLookupSdkData {
+    ecomData: ITradeInCarData;
 };
 
-export interface IAddressLookupData {
-    personalNumber: string;
+export interface IAddressLookupSdkData {
+    ecomData: ICustomerData;
 };
 
-export interface ICreateOrderData {
-    customerAddress: IAddress;
-    customerPersonalNumber: string;
-    customerEmail: string;
-    customerPhone: string;
-
-    paymentType: PaymentType;
-    paymentLoanDeposit: number;
-    paymentLoanDuration: number;
-    paymentResidualValue: number;
-
-    insuranceExpectedDrivingDistance: number;
-    insuranceAddOns: string[];
-
-    tradeInRegistrationNumber: string;
-    tradeInMilage: number;
-    tradeInCondition: VehicleCondition;
-    tradeInComment: string;
-
+export interface ICreateOrderSdkData {
     vehicleId: string;
-    deliveryType: DeliveryType;
+    ecomData: IEcomData;
+    addressLookup: IAddressLookupResponse;
 };

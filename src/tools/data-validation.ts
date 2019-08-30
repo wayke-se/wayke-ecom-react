@@ -12,7 +12,7 @@ export const initialize = (specification: ILoanSpecification) => {
     loanSpecification = specification;
 }
 
-export const isValidEcomData = (data: IEcomData, addressLookup: IAddressLookupResponse) => {
+export const validateEcomData = (data: IEcomData, addressLookup: IAddressLookupResponse) => {
     const isValidTradeIn = validateTradeIn(data.tradeInCar);
     const isValidPayment = validatePayment(data.payment);
     const isValidInsurance = validateInsurance(data.insurance);

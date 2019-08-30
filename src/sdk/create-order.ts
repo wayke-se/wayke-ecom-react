@@ -1,0 +1,102 @@
+import { orders, vehicles, customers, IOrderCreateResponse, IAddress, PaymentType, VehicleCondition, DeliveryType, IAddressLookupResponse } from 'wayke-ecom';
+import { IEcomData, ICreateOrderSdkData } from '../types';
+import CustomerInformationInputType from '../constants/customer-information-input-type';
+import { validateEcomData } from '../tools/data-validation';
+
+const validate = (data: IEcomData, addressLookup: IAddressLookupResponse) => {
+    //Data should already be validated, but this is a safety measure
+
+    return validateEcomData(data, addressLookup);
+}
+
+export const createOrder = (data: ICreateOrderSdkData, callback: (response: IOrderCreateResponse) => void) => {
+    const ecomData = data.ecomData;
+    const addressLookup = data.addressLookup;
+    const vehicleId = data.vehicleId;
+
+    const isValidRequestData = validate(ecomData, addressLookup);
+
+    if (!isValidRequestData) {
+        return callback(null);
+    }
+
+    const isAutomaticCustomerInfo = ecomData.customer.inputType === CustomerInformationInputType.AUTOMATIC;
+    const isLoan = ecomData.payment.paymentOption.type === PaymentType.Loan;
+    const hasSelectedInsurance = ecomData.insurance.wantsToSeeInsuranceOptions && ecomData.insurance.hasAddedInsurance;
+    const hasTradeIn = ecomData.tradeInCar.hasTradeInCar;
+
+    const customerBuilder = customers.newCustomer()
+        .withEmail(ecomData.customer.email)
+        .withPhoneNumber(ecomData.customer.phone);
+
+    const paymentBuilder = orders.newPayment()
+        .withType(ecomData.payment.paymentOption.type);
+
+    if (isAutomaticCustomerInfo) {
+        customerBuilder.withPersonalNumber(ecomData.customer.personalNumber);
+    } else {
+        const customerAdress = {
+            city: ecomData.customer.city,
+            name: ecomData.customer.name,
+            postalCode: ecomData.customer.zip,
+            street: ecomData.customer.address,
+            street2: ''
+        } as IAddress;
+
+        customerBuilder.withAddress(customerAdress);
+    }
+
+    if (isLoan) {
+        paymentBuilder.withDownPayment(ecomData.payment.loanDeposit)
+                .withDuration(ecomData.payment.loanDuration)
+                .withResidualValue(0);
+    }
+
+    const customer = customerBuilder.build();
+    const payment = paymentBuilder.build();
+
+    var insurance = null;
+    var tradeIn = null;
+
+    if (hasSelectedInsurance) {
+        insurance = orders.newInsurance()
+            .withDrivingDistance(ecomData.insurance.expectedDrivingDistance.optionIndex)
+            .withAddOns([])
+            .build();
+    }
+
+    if (hasTradeIn) {
+        const milage = parseInt(ecomData.tradeInCar.milage);
+
+        tradeIn = vehicles.newVehicleTrade()
+            .forVehicle(ecomData.tradeInCar.registrationNumber)
+            .withMileage(milage)
+            .withCondition(VehicleCondition.Ok)
+            .withComment('')
+            .build();
+    }
+
+    const createRequestBuilder = orders.newCreateRequest()
+        .forVehicle(vehicleId)
+        .withCustomer(customer)
+        .withPayment(payment)
+        .withDeliveryType(DeliveryType.Pickup);
+
+    if (insurance) {
+        createRequestBuilder.withInsurance(insurance);
+    }
+
+    if (tradeIn) {
+        createRequestBuilder.withTradeIn(tradeIn)
+    }
+
+    const createRequest = createRequestBuilder.build();
+
+    orders.create(createRequest)
+        .then((response: IOrderCreateResponse) => {
+            callback(response);
+        })
+        .catch(() => {
+            callback(null);
+        });
+}

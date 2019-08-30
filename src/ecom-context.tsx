@@ -59,7 +59,7 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
     handleFetchVehicleInformation(callback: (isSuccessful: boolean) => void) {
         const request = () => {
             makeVehicleLookupRequest({
-                registrationNumber: this.props.data.tradeInCar.registrationNumber
+                ecomData: this.props.data.tradeInCar
             }, (response: IVehicleLookupResponse) => {
                 this.saveResponse({
                     vehicleLookup: response
@@ -75,10 +75,9 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
     handleFetchInsuranceOptions(callback: (isSuccessful: boolean) => void) {
         const request = () => {
             makeInsuranceOptionsRequest({
-                personalNumber: this.props.data.insurance.personalNumber,
+                ecomData: this.props.data.insurance,
                 vehicleId: this.props.vehicle.id,
-                paymentType: this.props.data.payment.paymentOption,
-                drivingDistance: this.props.data.insurance.expectedDrivingDistance.optionIndex
+                paymentType: this.props.data.payment.paymentOption
             }, (response: IInsuranceOptionsResponse) => {
                 this.saveResponse({
                     insuranceOptions: response
@@ -94,7 +93,7 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
     handleFetchAddressInformation(callback: (isSuccessful: boolean) => void) {
         const request = () => {
             makeAddressLookupRequest({
-                personalNumber: this.props.data.customer.personalNumber
+                ecomData: this.props.data.customer
             }, (response: IAddressLookupResponse) => {
                 this.saveResponse({
                     addressLookup: response
@@ -110,26 +109,9 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
     handleCreateOrder(callback: (isSuccessful: boolean) => void) {
         const request = () => {
             makeCreateOrderRequest({
-                customerAddress: null,
-                customerPersonalNumber: null,
-                customerEmail: null,
-                customerPhone: null,
-
-                paymentType: null,
-                paymentLoanDeposit: null,
-                paymentLoanDuration: null,
-                paymentResidualValue: null,
-
-                insuranceExpectedDrivingDistance: null,
-                insuranceAddOns: null,
-
-                tradeInRegistrationNumber: null,
-                tradeInMilage: null,
-                tradeInCondition: null,
-                tradeInComment: null,
-
-                vehicleId: null,
-                deliveryType: null
+                ecomData: this.props.data,
+                addressLookup: this.state.addressLookup,
+                vehicleId: this.props.vehicle.id
             }, (response: IOrderCreateResponse) => {
                 this.saveResponse({
                     orderCreate: response
