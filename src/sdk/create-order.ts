@@ -95,10 +95,8 @@ export const createOrder = (data: ICreateOrderSdkData, callback: (wasOrderCreate
     orders.create(createRequest)
         .then(() => {
             callback(true);
-            console.log("foobar");
         })
         .catch((e) => {
             callback(false);
-            console.log(e);
         });
 }

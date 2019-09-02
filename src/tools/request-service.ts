@@ -11,11 +11,11 @@ import { IOrderOptionsSdkData, IVehicleLookupSdkData, IInsuranceOptionsSdkData, 
 
 const requestCache = {};
 
-const getRequestIdentifier = (data: any) => {
-    return JSON.stringify(data);
-}
+const getCachedRequestResponse = <T>(requestType: RequestType, requestIdentifier: string | null): T => {
+    if (requestIdentifier === null) {
+        return null;
+    }
 
-const getCachedRequestResponse = <T>(requestType: RequestType, requestIdentifier: string): T => {
     const cachedRequest = requestCache[requestType];
 
     if (!cachedRequest) {
@@ -26,7 +26,11 @@ const getCachedRequestResponse = <T>(requestType: RequestType, requestIdentifier
     return isSameIdentifier ? cachedRequest.response : null;
 }
 
-const addRequestToCache = <T>(requestType: RequestType, requestIdentifier: string, response: T) => {
+const addRequestToCache = <T>(requestType: RequestType, requestIdentifier: string | null, response: T) => {
+    if (requestIdentifier === null) {
+        return;
+    }
+
     requestCache[requestType] = {
         identifier: requestIdentifier,
         response
@@ -36,10 +40,10 @@ const addRequestToCache = <T>(requestType: RequestType, requestIdentifier: strin
 const makeRequest = <S, T>(
         requestAction: (data: S, actionCallback: (response: T) => void) => void,
         requestType: RequestType,
+        requestIdentifier: string | null,
         data: S,
         callback: (response: T) => void
 ) => {
-    const requestIdentifier = getRequestIdentifier(data);
     const cachedRequestResponse = getCachedRequestResponse<T>(requestType, requestIdentifier);
 
     if (cachedRequestResponse) {
@@ -56,21 +60,31 @@ const makeRequest = <S, T>(
 };
 
 export const makeOrderOptionsRequest = (data: IOrderOptionsSdkData, callback: (response: IOrderOptionsResponse) => void) => {
-    makeRequest(getOrderOptions, RequestType.GET_ORDER_OPTIONS, data, callback);
+    const requestIdentifier = '' + data.vehicleId;
+
+    makeRequest(getOrderOptions, RequestType.GET_ORDER_OPTIONS, requestIdentifier, data, callback);
 };
 
 export const makeVehicleLookupRequest = (data: IVehicleLookupSdkData, callback: (response: IVehicleLookupResponse) => void) => {
-    makeRequest(getVehicleLookup, RequestType.GET_VEHICLE_LOOKUP, data, callback);
+    const requestIdentifier = '' + data.ecomData.registrationNumber + data.ecomData.milage;
+
+    makeRequest(getVehicleLookup, RequestType.GET_VEHICLE_LOOKUP, requestIdentifier, data, callback);
 };
 
 export const makeInsuranceOptionsRequest = (data: IInsuranceOptionsSdkData, callback: (response: IInsuranceOptionsResponse) => void) => {
-    makeRequest(getInsuranceOptions, RequestType.GET_INSURANCE_OPTIONS, data, callback);
+    const requestIdentifier = '' + data.vehicleId + data.paymentType + data.ecomData.expectedDrivingDistance + data.ecomData.personalNumber;
+
+    makeRequest(getInsuranceOptions, RequestType.GET_INSURANCE_OPTIONS, requestIdentifier, data, callback);
 };
 
 export const makeAddressLookupRequest = (data: IAddressLookupSdkData, callback: (response: IAddressLookupResponse) => void) => {
-    makeRequest(getAddressLookup, RequestType.GET_ADDRESS_LOOKUP, data, callback);
+    const requestIdentifier = '' + data.ecomData.personalNumber;
+
+    makeRequest(getAddressLookup, RequestType.GET_ADDRESS_LOOKUP, requestIdentifier, data, callback);
 };
 
 export const makeCreateOrderRequest = (data: ICreateOrderSdkData, callback: (wasOrderSuccessful: boolean) => void) => {
-    makeRequest(createOrder, RequestType.CREATE_ORDER, data, callback);
+    const requestIdentifier = null;
+
+    makeRequest(createOrder, RequestType.CREATE_ORDER, requestIdentifier, data, callback);
 };
