@@ -1,9 +1,12 @@
 import React from 'react';
 
+import marked from 'marked';
+
 import { IEcomLifecycle, IEcomStore, IEcomContext } from '../types';
 import StoreAction from '../constants/store-action';
 import { getDrivingDistanceLabel } from '../utils/insurance';
 import { IInsuranceItem, IInsuranceAddon } from 'wayke-ecom';
+import { htmlEncode } from '../utils/encode';
 
 export interface IInsuranceAlternativeChooserProps extends IEcomContext, IEcomStore, IEcomLifecycle {
 };
@@ -129,13 +132,14 @@ const InsuranceAlternativeChooser = (props: IInsuranceAlternativeChooserProps) =
 
     const hasAddonItems = addonItems.length > 0;
 
+    const encodedDescription = htmlEncode(insuranceOption.brand.description);
+    const markdownDescription = marked(encodedDescription);
+
     return (
         <div className="page-main">
             <section className="page-section">
                 <h1 className="h6">{insuranceOption.brand.name}</h1>
-                <div data-ecom-content="">
-                    <p>{insuranceOption.brand.description}</p>
-                </div>
+                <div data-ecom-content="" dangerouslySetInnerHTML={{__html: markdownDescription}} />
             </section>
 
             <section className="page-section">
