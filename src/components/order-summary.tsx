@@ -10,14 +10,24 @@ import { getVehicleFullTitle } from '../utils/trade-in-car';
 interface IOrderSummaryProps extends IEcomExternalProps, IEcomContext, IEcomStore {
 };
 
+interface IProductItemAddon {
+    title: string;
+    price: number;
+    unit: string;
+};
+
 interface IProductItemProps extends IEcomStore {
     title: string;
     description: string;
     price: number;
     unit: string;
+    addons: IProductItemAddon[];
 };
 
 const ProductItem = (props: IProductItemProps) => {
+    const addonItems = props.addons.map((a, index) => <div key={index}>{a.title} - {a.price}{a.unit}</div>);
+    const hasAddons = addonItems.length > 0;
+
     return (
         <div className="product-card-content">
             <div data-ecom-columnrow="">
@@ -33,6 +43,12 @@ const ProductItem = (props: IProductItemProps) => {
             <div className="font-size-small">
                 {props.description}
             </div>
+
+            { hasAddons &&
+                <div className="font-size-small m-t-mini">
+                    {addonItems}
+                </div>
+            }
         </div>
     );
 }
@@ -51,7 +67,8 @@ const OrderSummary = (props: IOrderSummaryProps) => {
             title: 'Inbytesbil',
             description: getVehicleFullTitle(props.data.tradeInCar.registrationNumber, vehicleInformation),
             price: '',
-            unit: ''
+            unit: '',
+            addons: []
         });
     }
 
@@ -62,18 +79,25 @@ const OrderSummary = (props: IOrderSummaryProps) => {
             title: getPaymentMethodTitle(PaymentType.Loan),
             description: paymentOption.name,
             price: paymentOption.price,
-            unit: paymentOption.unit
+            unit: paymentOption.unit,
+            addons: []
         });
     }
 
     if (hasInsurance) {
         const insuranceOption = props.insuranceOptions.getInsuranceOption();
+        const addons = insuranceOption.addons.filter(a => props.data.insurance.addons.includes(a.name)).map(a => ({
+            title: a.title,
+            price: a.monthlyPrice,
+            unit: 'kr/mån'
+        }));
 
         products.push({
             title: 'Försäkring',
             description: insuranceOption.brand.name + ' - ' + insuranceOption.name,
             price: insuranceOption.price,
-            unit: insuranceOption.unit
+            unit: insuranceOption.unit,
+            addons
         });
     }
 

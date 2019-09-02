@@ -15,7 +15,7 @@ interface ICartItemAddon {
     title: string;
     price: number;
     unit: string;
-}
+};
 
 interface ICartItemProps {
     title: string;
@@ -39,9 +39,11 @@ const CartItem = (props: ICartItemProps) => {
                     {formatPrice(props.price)}{props.unit}
                 </div>
             </div>
+
             <div>
                 {props.description}
             </div>
+
             { hasAddons &&
                 <div className="m-t-mini">
                     {addonItems}
