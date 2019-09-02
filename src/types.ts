@@ -75,6 +75,7 @@ export interface IInsuranceData {
     hasAddedInsurance: boolean;
     personalNumber: string;
     expectedDrivingDistance: DrivingDistance;
+    addons: string[];
 };
 
 export interface ICustomerData {
