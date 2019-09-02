@@ -167,7 +167,7 @@ class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsPr
 
                         { paymentOption.logo &&
                             <div className="column valign-top minimal">
-                                <img src={scaledImage} alt="Audi logotype" className="l-block" />
+                                <img src={scaledImage} alt="Logotype" className="l-block" />
                             </div>
                         }
                     </div>

@@ -9,6 +9,7 @@ import { validateInsurance } from '../tools/data-validation';
 import Alert from '../components/alert';
 import Spinner from '../components/spinner';
 import { DrivingDistance } from 'wayke-ecom';
+import { getDrivingDistanceLabel } from '../utils/insurance';
 
 export interface IInsuranceInformationDefinitionProps extends IEcomContext, IEcomStore, IEcomLifecycle {
 };
@@ -22,28 +23,6 @@ const drivingDistanceOptions = Object.keys(DrivingDistance);
 
 const getIndexFromOption = (option: DrivingDistance): number => {
     return drivingDistanceOptions.indexOf(option);
-};
-
-const getLabel = (drivingDistance: DrivingDistance): string => {
-    switch (drivingDistance) {
-        case DrivingDistance.Between0And1000:
-            return '0-1000 mil';
-
-        case DrivingDistance.Between1000And1500:
-            return '1000-1500 mil';
-
-        case DrivingDistance.Between1500And2000:
-            return '1500-2000 mil';
-
-        case DrivingDistance.Between2000And2500:
-            return '2000-2500 mil';
-
-        case DrivingDistance.Over2500:
-            return '2500+ mil';
-
-        default:
-            return '';
-    }
 };
 
 class InsuranceInformationDefinition extends React.Component<IInsuranceInformationDefinitionProps, IState> {
@@ -117,19 +96,21 @@ class InsuranceInformationDefinition extends React.Component<IInsuranceInformati
     }
 
     render() {
-        const optionValues = drivingDistanceOptions.map((o: DrivingDistance) => getLabel(o));
+        const optionValues = drivingDistanceOptions.map((o: DrivingDistance) => getDrivingDistanceLabel(o));
 
         const optionItems = optionValues.map((v, index) => <option key={index}>{v}</option>);
         const selectedValue = optionValues[this.state.expectedDrivingDistanceIndex];
 
         const hasPersonalNumberError = this.props.data.interact.insurance.personalNumber && !validatePersonalNumber(this.props.data.insurance.personalNumber);
 
+        const insuranceOption = this.props.orderOptions.getInsuranceOption();
+
         return (
             <div className="page-main">
                 <section className="page-section">
-                    <h1 className="h6">Audi Försäkring</h1>
+                    <h1 className="h6">{insuranceOption.title}</h1>
                     <div data-ecom-content="">
-                        <p>Skriv in ditt personnummer och din uppskattade körsträcka för att se din försäkringskostna</p>
+                        <p>Skriv in ditt personnummer och din uppskattade körsträcka för att se din försäkringskostnad.</p>
                     </div>
                 </section>
 
