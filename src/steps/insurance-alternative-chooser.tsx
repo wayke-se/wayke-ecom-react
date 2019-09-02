@@ -219,7 +219,7 @@ const InsuranceAlternativeChooser = (props: IInsuranceAlternativeChooserProps) =
                 </div>
             </section>
 
-            <section className="page-section page-section-bottom">
+            <section className="page-section">
                 <div data-ecom-buttonnav="">
                     <div className="button-nav-item">
                         <div data-ecom-button="light full-width" onClick={() => handleHasAddedInsuranceClick(false)}>

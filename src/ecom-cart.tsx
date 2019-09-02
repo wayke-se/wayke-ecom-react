@@ -11,14 +11,24 @@ export interface IEcomCartProps extends IEcomExternalProps, IEcomContext, IEcomS
     vehicle: IVehicle;
 };
 
+interface ICartItemAddon {
+    title: string;
+    price: number;
+    unit: string;
+}
+
 interface ICartItemProps {
     title: string;
     description: string;
     price: number;
     unit: string;
+    addons: ICartItemAddon[];
 };
 
 const CartItem = (props: ICartItemProps) => {
+    const addonItems = props.addons.map((a, index) => <div key={index}>{a.title} - {a.price}{a.unit}</div>);
+    const hasAddons = addonItems.length > 0;
+
     return (
         <div className="cart-body-section">
             <div data-ecom-columnrow="">
@@ -32,6 +42,11 @@ const CartItem = (props: ICartItemProps) => {
             <div>
                 {props.description}
             </div>
+            { hasAddons &&
+                <div className="m-t-mini">
+                    {addonItems}
+                </div>
+            }
         </div>
     );
 }
@@ -56,7 +71,8 @@ const EcomCart = (props: IEcomCartProps) => {
             title: 'Inbytesbil',
             description: getVehicleFullTitle(props.data.tradeInCar.registrationNumber, vehicleInformation),
             price: '',
-            unit: ''
+            unit: '',
+            addons: []
         });
     }
 
@@ -67,18 +83,25 @@ const EcomCart = (props: IEcomCartProps) => {
             title: getPaymentMethodTitle(PaymentType.Loan),
             description: paymentOption.name,
             price: paymentOption.price,
-            unit: paymentOption.unit
+            unit: paymentOption.unit,
+            addons: []
         });
     }
 
     if (hasInsurance) {
         const insuranceOption = props.insuranceOptions.getInsuranceOption();
+        const addons = insuranceOption.addons.filter(a => props.data.insurance.addons.includes(a.name)).map(a => ({
+            title: a.title,
+            price: a.monthlyPrice,
+            unit: 'kr/mån'
+        }));
 
         cartContent.push({
             title: 'Försäkring',
             description: insuranceOption.brand.name + ' - ' + insuranceOption.name,
             price: insuranceOption.price,
-            unit: insuranceOption.unit
+            unit: insuranceOption.unit,
+            addons
         });
     }
 
