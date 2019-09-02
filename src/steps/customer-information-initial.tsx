@@ -22,7 +22,7 @@ const CustomerInformationInitial = (props: ICustomerInformationInitialProps) => 
         const insurance = props.data.insurance;
         const customer = props.data.customer;
 
-        const shouldUpdateCustomerPersonalNumber = insurance.personalNumber && !customer.personalNumber;
+        const shouldUpdateCustomerPersonalNumber = insurance.personalNumber && customer.personalNumber === null;
 
         if (shouldUpdateCustomerPersonalNumber) {
             props.dispatchStoreAction(StoreAction.UPDATE_NAMED_VALUE, {

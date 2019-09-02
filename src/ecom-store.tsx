@@ -22,7 +22,7 @@ class EcomStore extends React.Component<IEcomStoreProps, IState> {
             customer: {
                 hasAcceptedTerms: false,
                 inputType: null,
-                personalNumber: '',
+                personalNumber: null,
                 name: '',
                 address: '',
                 zip: '',

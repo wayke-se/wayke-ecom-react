@@ -61,7 +61,7 @@ export const createOrder = (data: ICreateOrderSdkData, callback: (wasOrderCreate
     if (hasSelectedInsurance) {
         insurance = orders.newInsurance()
             .withDrivingDistance(ecomData.insurance.expectedDrivingDistance)
-            .withAddOns([])
+            .withAddOns(ecomData.insurance.addons)
             .build();
     }
 

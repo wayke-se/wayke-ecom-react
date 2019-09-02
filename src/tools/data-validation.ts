@@ -63,8 +63,9 @@ export const validateInsurance = (data: IInsuranceData) => {
 
     const isValidPersonalNumber = validatePersonalNumber(data.personalNumber);
     const isValidExpectedDrivingDistance = data.expectedDrivingDistance && containsValue(DrivingDistance, data.expectedDrivingDistance);
+    const isValidAddons = Array.isArray(data.addons);
 
-    return isValidPersonalNumber && isValidExpectedDrivingDistance;
+    return isValidPersonalNumber && isValidExpectedDrivingDistance && isValidAddons;
 };
 
 export const validateCustomerObjectPersonalNumber = (customerObject: ICustomerObject) => {
