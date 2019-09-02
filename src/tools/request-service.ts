@@ -1,6 +1,6 @@
 import RequestType from "../constants/request-type";
 
-import { IOrderOptionsResponse, IInsuranceOptionsResponse, IVehicleLookupResponse, IAddressLookupResponse, IOrderCreateResponse } from "wayke-ecom";
+import { IOrderOptionsResponse, IInsuranceOptionsResponse, IVehicleLookupResponse, IAddressLookupResponse } from "wayke-ecom";
 
 import { getOrderOptions } from "../sdk/get-order-options";
 import { getVehicleLookup } from "../sdk/get-vehicle-lookup";
@@ -71,6 +71,6 @@ export const makeAddressLookupRequest = (data: IAddressLookupSdkData, callback: 
     makeRequest(getAddressLookup, RequestType.GET_ADDRESS_LOOKUP, data, callback);
 };
 
-export const makeCreateOrderRequest = (data: ICreateOrderSdkData, callback: (response: IOrderCreateResponse) => void) => {
+export const makeCreateOrderRequest = (data: ICreateOrderSdkData, callback: (wasOrderSuccessful: boolean) => void) => {
     makeRequest(createOrder, RequestType.CREATE_ORDER, data, callback);
 };

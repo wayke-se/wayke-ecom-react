@@ -1,6 +1,6 @@
 import CustomerInformationInputType from "./constants/customer-information-input-type";
 import StoreAction from './constants/store-action';
-import { IInsuranceOptionsResponse, IVehicleLookupResponse, IAddressLookupResponse, IOrderOptionsResponse, IOrderCreateResponse, IAddress, VehicleCondition, DrivingDistance, PaymentType } from "wayke-ecom";
+import { IInsuranceOptionsResponse, IVehicleLookupResponse, IAddressLookupResponse, IOrderOptionsResponse, DrivingDistance, PaymentType } from "wayke-ecom";
 
 export interface IVehicle {
     id: string;
@@ -29,7 +29,6 @@ export interface IEcomContext {
     insuranceOptions: IInsuranceOptionsResponse;
     vehicleLookup: IVehicleLookupResponse;
     addressLookup: IAddressLookupResponse;
-    orderCreate: IOrderCreateResponse;
 
     onFetchInsuranceOptions: (callback: (isSuccessful: boolean) => void) => void;
     onFetchVehicleInformation: (callback: (isSuccessful: boolean) => void) => void;

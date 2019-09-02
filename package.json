@@ -100,6 +100,6 @@
     "dist-*/"
   ],
   "dependencies": {
-    "wayke-ecom": "^1.0.0-beta-6"
+    "wayke-ecom": "^1.0.0-beta-8"
   }
 }

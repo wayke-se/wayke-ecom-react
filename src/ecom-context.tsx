@@ -16,7 +16,6 @@ interface IState {
     insuranceOptions: IInsuranceOptionsResponse | undefined;
     vehicleLookup: IVehicleLookupResponse | undefined;
     addressLookup: IAddressLookupResponse | undefined;
-    orderCreate: IOrderCreateResponse | undefined;
 };
 
 class EcomContext extends React.Component<IEcomContextProps, IState> {
@@ -37,8 +36,7 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
             orderOptions: null,
             insuranceOptions: null,
             vehicleLookup: null,
-            addressLookup: null,
-            orderCreate: null
+            addressLookup: null
         };
     }
 
@@ -112,11 +110,11 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
                 ecomData: this.props.data,
                 addressLookup: this.state.addressLookup,
                 vehicleId: this.props.vehicle.id
-            }, (response: IOrderCreateResponse) => {
-                this.saveResponse({
-                    orderCreate: response
+            }, (wasOrderCreated: boolean) => {
+                this.setState({
+                    isWaitingForResponse: false
                 }, () => {
-                    callback(!!response);
+                    callback(wasOrderCreated);
                 });
             });
         }

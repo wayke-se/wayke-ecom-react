@@ -9,7 +9,7 @@ const validate = (data: IEcomData, addressLookup: IAddressLookupResponse) => {
     return validateEcomData(data, addressLookup);
 }
 
-export const createOrder = (data: ICreateOrderSdkData, callback: (response: IOrderCreateResponse) => void) => {
+export const createOrder = (data: ICreateOrderSdkData, callback: (wasOrderCreated: boolean) => void) => {
     const ecomData = data.ecomData;
     const addressLookup = data.addressLookup;
     const vehicleId = data.vehicleId;
@@ -93,10 +93,12 @@ export const createOrder = (data: ICreateOrderSdkData, callback: (response: IOrd
     const createRequest = createRequestBuilder.build();
 
     orders.create(createRequest)
-        .then((response: IOrderCreateResponse) => {
-            callback(response);
+        .then(() => {
+            callback(true);
+            console.log("foobar");
         })
-        .catch(() => {
-            callback(null);
+        .catch((e) => {
+            callback(false);
+            console.log(e);
         });
 }

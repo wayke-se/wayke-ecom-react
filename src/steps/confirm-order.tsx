@@ -1,15 +1,35 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { IEcomLifecycle, IEcomStore, IEcomContext, IEcomExternalProps } from '../types';
+import { validateEcomData } from '../tools/data-validation';
+
 import OrderSummary from '../components/order-summary';
 import CustomerInformationSummary from '../components/customer-information-summary';
+import Alert from '../components/alert';
+import Spinner from '../components/spinner';
 
 interface IConfirmOrderProps extends IEcomExternalProps, IEcomContext, IEcomStore, IEcomLifecycle {
 }
 
 const ConfirmOrder = (props: IConfirmOrderProps) => {
+    const [hasRequestError, setHasRequestError] = useState(false);
+
     const handleCreateOrderClick = () => {
-        props.onProceedToNextStep();
+        const isValidData = validateEcomData(props.data, props.addressLookup);
+
+        if (!isValidData) {
+            return setHasRequestError(true);
+        }
+
+        setHasRequestError(false);
+
+        props.onCreateOrder((isSuccessful: boolean) => {
+            if (isSuccessful) {
+                props.onProceedToNextStep();
+            } else {
+                setHasRequestError(true);
+            }
+        });
     }
 
     return (
@@ -35,15 +55,29 @@ const ConfirmOrder = (props: IConfirmOrderProps) => {
                 <CustomerInformationSummary {...props} />
             </section>
 
-            <section className="page-section page-section-bottom">
-                <div data-ecom-buttonnav="">
-                    <div className="button-nav-item">
-                        <div data-ecom-button="full-width" onClick={handleCreateOrderClick}>
-                            Genomför köp
+            { hasRequestError &&
+                <section className="page-section">
+                    <Alert message="Tyvärr gick någonting fel. Prova gärna igen om en liten stund." />
+                </section>
+            }
+
+            { !props.isWaitingForResponse &&
+                <section className="page-section page-section-bottom">
+                    <div data-ecom-buttonnav="">
+                        <div className="button-nav-item">
+                            <div data-ecom-button="full-width" onClick={handleCreateOrderClick}>
+                                Genomför köp
+                            </div>
                         </div>
                     </div>
-                </div>
-            </section>
+                </section>
+            }
+
+            { props.isWaitingForResponse &&
+                <section className="page-section">
+                    <Spinner />
+                </section>
+            }
         </div>
     );
 }
