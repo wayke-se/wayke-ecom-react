@@ -19,6 +19,7 @@ export const getPaymentLookup = (data: IPaymentLookupSdkData, callback: (lookup:
         .forVehicle(data.vehicleId)
         .withDownPayment(data.ecomData.loanDeposit)
         .withDuration(data.ecomData.loanDuration)
+        .withResidualValue(data.ecomData.loanResidual)
         .build();
 
     payments.lookupPayment(request)

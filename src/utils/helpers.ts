@@ -31,3 +31,7 @@ export const formatPrice = (value: number, decimalSymbol = ',') => {
 
     return hasDecimal ? separated + decimalSymbol + parts[1] : separated;
 }
+
+export const formatPercentage = (fractionValue: number) => {
+    return Math.round(fractionValue * 100);
+}

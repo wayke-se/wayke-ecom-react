@@ -101,6 +101,6 @@
   ],
   "dependencies": {
     "marked": "^0.7.0",
-    "wayke-ecom": "^1.0.0-beta-9"
+    "wayke-ecom": "^1.0.0-beta-11"
   }
 }
