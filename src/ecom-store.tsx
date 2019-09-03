@@ -71,7 +71,7 @@ class EcomStore extends React.Component<IEcomStoreProps, IState> {
         };
     }
 
-    dispatchStoreAction(key: StoreAction, value: any, callback?: (state : IEcomData) => void) {
+    dispatchStoreAction(key: StoreAction, value: any, callback?: (state: IEcomData) => void) {
         let stateUpdate = null;
 
         switch (key) {

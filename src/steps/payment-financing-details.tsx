@@ -14,7 +14,7 @@ import { formatPrice } from '../utils/helpers';
 import { getLoanPaymentOptions } from '../utils/payment';
 
 import { validatePayment } from '../tools/data-validation';
-import { PaymentType, IPaymentRangeSpec } from 'wayke-ecom';
+import { PaymentType, IPaymentRangeSpec, IOrderOptionsResponse, IPaymentLookupResponse } from 'wayke-ecom';
 
 export interface IPaymentFinancingDetailsProps extends IEcomExternalProps, IEcomContext, IEcomStore, IEcomLifecycle {
 };
@@ -128,7 +128,7 @@ class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsPr
     handleSliderChange(name, value) {
         // @ts-ignore
         this.setState({
-            [name]: value + ''
+            [name]: value
         });
     }
 
@@ -276,7 +276,7 @@ class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsPr
                                                 step={depositSpecification.step}
                                                 initialValue={parseInt(this.state.deposit)}
                                                 isDisabled={this.props.isWaitingForResponse}
-                                                onChange={(value) => { this.handleSliderChange('deposit', value); }}
+                                                onChange={(value) => { this.handleSliderChange('deposit', value + ''); }}
                                                 onAfterChange={this.handleValueUpdated} />
                                         }
                                     </div>
@@ -339,7 +339,7 @@ class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsPr
                                                     step={residualStep}
                                                     initialValue={parseInt(this.state.residual)}
                                                     isDisabled={shouldDisableResidual}
-                                                    onChange={(value) => { this.handleSliderChange('residual', value); }}
+                                                    onChange={(value) => { this.handleSliderChange('residual', value + ''); }}
                                                     onAfterChange={this.handleValueUpdated} />
                                             }
                                         </div>

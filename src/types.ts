@@ -48,7 +48,7 @@ export interface IEcomLifecycle {
 export interface IEcomStore {
     data: IEcomData;
 
-    dispatchStoreAction: (key: StoreAction, value: any, callback?: (state : IEcomData) => void) => void;
+    dispatchStoreAction: (key: StoreAction, value: any, callback?: (state: IEcomData) => void) => void;
 };
 
 export interface IEcomData {
