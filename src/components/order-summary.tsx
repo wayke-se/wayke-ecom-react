@@ -4,7 +4,7 @@ import { IEcomStore, IEcomContext, IEcomExternalProps } from '../types';
 import { PaymentType } from 'wayke-ecom';
 
 import { formatPrice } from '../utils/helpers';
-import { getPaymentMethodTitle } from '../utils/payment';
+import { getPaymentMethodTitle, getLoanPaymentOptions } from '../utils/payment';
 import { getVehicleFullTitle } from '../utils/trade-in-car';
 
 interface IOrderSummaryProps extends IEcomExternalProps, IEcomContext, IEcomStore {
@@ -73,7 +73,7 @@ const OrderSummary = (props: IOrderSummaryProps) => {
     }
 
     if (hasLoan) {
-        const paymentOption = props.orderOptions.getPaymentOptions().find(p => p.type === PaymentType.Loan);
+        const paymentOption = getLoanPaymentOptions(props.orderOptions);
 
         products.push({
             title: getPaymentMethodTitle(PaymentType.Loan),

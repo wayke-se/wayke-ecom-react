@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { IEcomContext, IEcomLifecycle, IEcomStore, IEcomExternalProps, ILoanSpecification, IEcomData } from '../types';
+import { IEcomContext, IEcomLifecycle, IEcomStore, IEcomExternalProps, IEcomData } from '../types';
 
 import StoreAction from '../constants/store-action';
 
@@ -10,10 +10,11 @@ import SpinnerInline from '../components/spinner-inline';
 
 import { validateStringNumberInRange } from '../utils/validation';
 import { addSizeQuery } from '../utils/image';
-import { getLoanInformation } from '../utils/loan';
 import { formatPrice } from '../utils/helpers';
+import { getLoanPaymentOptions } from '../utils/payment';
+
 import { validatePayment } from '../tools/data-validation';
-import { PaymentType } from 'wayke-ecom';
+import { PaymentType, IPaymentLookupResponse } from 'wayke-ecom';
 
 export interface IPaymentFinancingDetailsProps extends IEcomExternalProps, IEcomContext, IEcomStore, IEcomLifecycle {
 };
@@ -27,26 +28,28 @@ interface IState {
     residual: string;
 };
 
-const getAllDurationSteps = (loanSpecification: ILoanSpecification) => {
-    const difference = loanSpecification.durationMax - loanSpecification.durationMin;
-    const numberOfSteps = difference / loanSpecification.durationStep;
+const getAllDurationSteps = (loanDetails: IPaymentLookupResponse) => {
+    const durationSpecification = loanDetails.getDurationSpec();
+
+    const difference = durationSpecification.max - durationSpecification.min;
+    const numberOfSteps = difference / durationSpecification.step;
 
     const result = [];
 
     for (var i = 0; i <= numberOfSteps; i++) {
-        const value = loanSpecification.durationMin + i * loanSpecification.durationStep;
+        const value = durationSpecification.min + i * durationSpecification.step;
         result.push(value);
     }
 
     return result;
 };
 
-const getIndexFromDuration = (duration: number, loanSpecification: ILoanSpecification): number => {
-    return getAllDurationSteps(loanSpecification).findIndex(s => s === duration);
+const getIndexFromDuration = (duration: number, loanDetails: IPaymentLookupResponse): number => {
+    return getAllDurationSteps(loanDetails).findIndex(s => s === duration);
 };
 
-const getDurationFromIndex = (index: number, loanSpecification: ILoanSpecification): number => {
-    return getAllDurationSteps(loanSpecification).find((s, i) => i === index);
+const getDurationFromIndex = (index: number, loanDetails: IPaymentLookupResponse): number => {
+    return getAllDurationSteps(loanDetails).find((s, i) => i === index);
 };
 
 class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsProps, IState> {
@@ -60,21 +63,21 @@ class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsPr
         this.handleValueUpdated = this.handleValueUpdated.bind(this);
         this.handleProceedClick = this.handleProceedClick.bind(this);
 
-        const loanSpecification = props.loanSpecification;
+        const loanDetails = getLoanPaymentOptions(props.orderOptions).loanDetails;
 
-        const deposit = props.data.payment.loanDeposit ? props.data.payment.loanDeposit : loanSpecification.depositDefault;
-        const duration = props.data.payment.loanDuration ? props.data.payment.loanDuration : loanSpecification.durationDefault;
-        const residual = props.data.payment.loanResidual ? props.data.payment.loanResidual : loanSpecification.residualDefault;
+        const deposit = props.data.payment.loanDeposit ? props.data.payment.loanDeposit : loanDetails.getDownPaymentSpec().default;
+        const duration = props.data.payment.loanDuration ? props.data.payment.loanDuration : loanDetails.getDurationSpec().default;
+        const residual = props.data.payment.loanResidual ? props.data.payment.loanResidual : loanDetails.getResidualValueSpec().default;
 
-        const durationIndex = getIndexFromDuration(duration, loanSpecification);
+        const durationIndex = getIndexFromDuration(duration, loanDetails);
 
         this.state = {
             isShowingDetails: false,
             hasRequestError: false,
 
             deposit: deposit + '',
-            residual: residual + '',
-            durationIndex
+            durationIndex: durationIndex,
+            residual: residual + ''
         };
     }
 
@@ -107,19 +110,14 @@ class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsPr
     }
 
     handleValueUpdated(callback?: (state: IEcomData) => void) {
-        const loanSpecification = this.props.loanSpecification;
+        const loanDetails = getLoanPaymentOptions(this.props.orderOptions).loanDetails;
 
-        const {
-            depositMin,
-            depositMax,
+        const depositSpecification = loanDetails.getDownPaymentSpec();
+        const residualSpecification = loanDetails.getResidualValueSpec();
 
-            residualMin,
-            residualMax
-        } = loanSpecification;
-
-        const deposit = validateStringNumberInRange(this.state.deposit, depositMin, depositMax) ? parseInt(this.state.deposit) : null;
-        const duration = getDurationFromIndex(this.state.durationIndex, loanSpecification);
-        const residual = validateStringNumberInRange(this.state.residual, residualMin, residualMax) ? parseInt(this.state.residual) : null;
+        const deposit = validateStringNumberInRange(this.state.deposit, depositSpecification.min, depositSpecification.max) ? parseInt(this.state.deposit) : null;
+        const duration = getDurationFromIndex(this.state.durationIndex, loanDetails);
+        const residual = validateStringNumberInRange(this.state.residual, residualSpecification.min, residualSpecification.max) ? parseInt(this.state.residual) : null;
 
         const proceedAfterRequestMade = (state: IEcomData, isSuccessful: boolean) => {
             this.setState({
@@ -159,40 +157,32 @@ class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsPr
     }
 
     render() {
-        const loanSpecification = this.props.loanSpecification;
+        const loanDetails = getLoanPaymentOptions(this.props.orderOptions).loanDetails;
 
-        const options = getAllDurationSteps(loanSpecification).map(s => s + 'mån');
+        const options = getAllDurationSteps(loanDetails).map(s => s + 'mån');
 
         const optionItems = options.map((o, index) => <option key={index}>{o}</option>);
         const durationValue = options[this.state.durationIndex];
 
-        const {
-            depositMin,
-            depositMax,
-            depositStep,
+        const depositSpecification = loanDetails.getDownPaymentSpec();
+        const residualSpecification = loanDetails.getResidualValueSpec();
 
-            residualMin,
-            residualMax,
-            residualStep
-        } = loanSpecification;
-
-        const hasDownPaymentError = !validateStringNumberInRange(this.state.deposit, depositMin, depositMax);
-        const hasResidualError = !validateStringNumberInRange(this.state.residual, residualMin, residualMax);
+        const hasDownPaymentError = !validateStringNumberInRange(this.state.deposit, depositSpecification.min, depositSpecification.max);
+        const hasResidualError = !validateStringNumberInRange(this.state.residual, residualSpecification.min, residualSpecification.max);
 
         const paymentOption = this.props.orderOptions.getPaymentOptions().find(p => p.type === PaymentType.Loan);
         const scaledImage = addSizeQuery(paymentOption.logo, 100, 60);
 
-        const loanDetails = paymentOption.loanDetails;
-        const deposit = parseInt(this.state.deposit);
-        const duration = getDurationFromIndex(this.state.durationIndex, loanSpecification);
-        const loanInformation = getLoanInformation(this.props.vehicle.price, duration, deposit, loanDetails.interest, loanDetails.administrationFee, loanDetails.setupFee);
+        const fees = loanDetails.getFees();
+        const costs = loanDetails.getCosts();
+        const interests = loanDetails.getInterests();
 
-        const formattedPrice = formatPrice(loanInformation.monthlyCost);
-        const formattedInterest = formatPrice(loanInformation.interest);
-        const formattedEffectiveInterest = formatPrice(loanInformation.effectiveInterest);
-        const formattedSetupFee = formatPrice(loanInformation.setupFee);
-        const formattedAdministrationFee = formatPrice(loanInformation.administrationFee);
-        const formattedTotalCreditCost = formatPrice(loanInformation.totalCreditCost);
+        const formattedPrice = formatPrice(costs.monthlyCost);
+        const formattedInterest = formatPrice(interests.interest);
+        const formattedEffectiveInterest = formatPrice(interests.effectiveInterest);
+        const formattedSetupFee = formatPrice(fees.setupFee);
+        const formattedAdministrationFee = formatPrice(fees.administrationFee);
+        const formattedTotalCreditCost = formatPrice(costs.totalCreditCost);
 
         return (
             <div className="page-main">
@@ -227,16 +217,16 @@ class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsPr
                                     onBlur={() => { this.handleValueUpdated(); }} />
                             </div>
 
-                            <div className="form-alert">Mellan {formatPrice(depositMin)}kr och {formatPrice(depositMax)}kr.</div>
+                            <div className="form-alert">Mellan {formatPrice(depositSpecification.min)}kr och {formatPrice(depositSpecification.max)}kr.</div>
 
                             <div className="m-t">
                                 <div data-ecom-rangeslider="" className={this.props.isWaitingForResponse ? 'disabled' : ''}>
                                     <div className="range-slider">
                                         { !hasDownPaymentError &&
                                             <Slider
-                                                min={depositMin}
-                                                max={depositMax}
-                                                step={depositStep}
+                                                min={depositSpecification.min}
+                                                max={depositSpecification.max}
+                                                step={depositSpecification.step}
                                                 initialValue={parseInt(this.state.deposit)}
                                                 isDisabled={this.props.isWaitingForResponse}
                                                 onChange={(value) => { this.handleSliderChange('deposit', value); }}
@@ -289,16 +279,16 @@ class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsPr
                                     onBlur={() => { this.handleValueUpdated(); }} />
                             </div>
 
-                            <div className="form-alert">Mellan {formatPrice(residualMin)}kr och {formatPrice(residualMax)}kr.</div>
+                            <div className="form-alert">Mellan {residualSpecification.min}% och {residualSpecification.max}%.</div>
 
                             <div className="m-t">
                                 <div data-ecom-rangeslider="" className={this.props.isWaitingForResponse ? 'disabled' : ''}>
                                     <div className="range-slider">
                                         { !hasResidualError &&
                                             <Slider
-                                                min={residualMin}
-                                                max={residualMax}
-                                                step={residualStep}
+                                                min={residualSpecification.min}
+                                                max={residualSpecification.max}
+                                                step={residualSpecification.step}
                                                 initialValue={parseInt(this.state.residual)}
                                                 isDisabled={this.props.isWaitingForResponse}
                                                 onChange={(value) => { this.handleSliderChange('residual', value); }}
