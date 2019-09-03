@@ -34,14 +34,14 @@ const TradeInConfirmCar = (props: ITradeInConfirmCarProps) => {
             <section className="page-section page-section-bottom">
                 <div data-ecom-buttonnav="">
                     <div className="button-nav-item" onClick={props.onShowTradeInCarDefinition}>
-                        <div data-ecom-button="light full-width">
+                        <button data-ecom-button="light full-width">
                             Ändra regnr
-                        </div>
+                        </button>
                     </div>
                     <div className="button-nav-item" onClick={props.onProceedToNextStep}>
-                        <div data-ecom-button="full-width">
+                        <button data-ecom-button="full-width">
                             Ja
-                        </div>
+                        </button>
                     </div>
                 </div>
             </section>

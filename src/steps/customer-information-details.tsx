@@ -248,9 +248,9 @@ const CustomerInformationDetails = (props: ICustomerInformationDetailsProps) => 
             <section className="page-section page-section-bottom">
                 <div data-ecom-buttonnav="">
                     <div className="button-nav-item">
-                        <div data-ecom-button="full-width" onClick={handleNextStepClick}>
+                        <button data-ecom-button="full-width" onClick={handleNextStepClick}>
                             Gå vidare
-                        </div>
+                        </button>
                     </div>
                 </div>
             </section>

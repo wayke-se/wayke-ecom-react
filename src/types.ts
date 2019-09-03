@@ -70,6 +70,7 @@ export interface IPaymentData {
     paymentType: PaymentType;
     loanDeposit: number;
     loanDuration: number;
+    loanResidual: number;
 };
 
 export interface IInsuranceData {
@@ -136,6 +137,11 @@ export interface ILoanSpecification {
     depositMax: number;
     depositStep: number;
     depositDefault: number;
+
+    residualMin: number;
+    residualMax: number;
+    residualStep: number;
+    residualDefault: number;
 };
 
 export interface IOrderOptionsSdkData {

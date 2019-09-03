@@ -5,8 +5,8 @@ import { IEcomContext, IEcomLifecycle, IEcomStore, IEcomExternalProps, ILoanSpec
 import StoreAction from '../constants/store-action';
 
 import Slider from '../components/slider';
-import Spinner from '../components/spinner';
 import Alert from '../components/alert';
+import SpinnerInline from '../components/spinner-inline';
 
 import { validateStringNumberInRange } from '../utils/validation';
 import { addSizeQuery } from '../utils/image';
@@ -20,9 +20,11 @@ export interface IPaymentFinancingDetailsProps extends IEcomExternalProps, IEcom
 
 interface IState {
     isShowingDetails: boolean;
+    hasRequestError: boolean;
+
     deposit: string;
     durationIndex: number;
-    hasRequestError: boolean;
+    residual: string;
 };
 
 const getAllDurationSteps = (loanSpecification: ILoanSpecification) => {
@@ -53,9 +55,8 @@ class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsPr
 
         this.handleDetailsClick = this.handleDetailsClick.bind(this);
         this.handleDurationChange = this.handleDurationChange.bind(this);
-        this.handleDurationSliderChange = this.handleDurationSliderChange.bind(this);
-        this.handleDepositChange = this.handleDepositChange.bind(this);
-        this.handleDepositSliderChange = this.handleDepositSliderChange.bind(this);
+        this.handleInputValueChange = this.handleInputValueChange.bind(this);
+        this.handleSliderChange = this.handleSliderChange.bind(this);
         this.handleValueUpdated = this.handleValueUpdated.bind(this);
         this.handleProceedClick = this.handleProceedClick.bind(this);
 
@@ -63,13 +64,16 @@ class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsPr
 
         const deposit = props.data.payment.loanDeposit ? props.data.payment.loanDeposit : loanSpecification.depositDefault;
         const duration = props.data.payment.loanDuration ? props.data.payment.loanDuration : loanSpecification.durationDefault;
+        const residual = props.data.payment.loanResidual ? props.data.payment.loanResidual : loanSpecification.residualDefault;
 
         const durationIndex = getIndexFromDuration(duration, loanSpecification);
 
         this.state = {
             isShowingDetails: false,
             hasRequestError: false,
+
             deposit: deposit + '',
+            residual: residual + '',
             durationIndex
         };
     }
@@ -88,32 +92,34 @@ class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsPr
         });
     }
 
-    handleDurationSliderChange(e) {
+    handleInputValueChange(e) {
+        // @ts-ignore
         this.setState({
-            durationIndex: e
+            [e.target.name]: e.target.value
         });
     }
 
-    handleDepositChange(e) {
+    handleSliderChange(name, value) {
+        // @ts-ignore
         this.setState({
-            deposit: e.target.value
-        });
-    }
-
-    handleDepositSliderChange(e) {
-        this.setState({
-            deposit: e
+            [name]: value
         });
     }
 
     handleValueUpdated(callback?: (state: IEcomData) => void) {
         const loanSpecification = this.props.loanSpecification;
 
-        const depositMin = loanSpecification.depositMin
-        const depositMax = loanSpecification.depositMax;
+        const {
+            depositMin,
+            depositMax,
+
+            residualMin,
+            residualMax
+        } = loanSpecification;
 
         const deposit = validateStringNumberInRange(this.state.deposit, depositMin, depositMax) ? parseInt(this.state.deposit) : null;
         const duration = getDurationFromIndex(this.state.durationIndex, loanSpecification);
+        const residual = validateStringNumberInRange(this.state.residual, residualMin, residualMax) ? parseInt(this.state.residual) : null;
 
         const proceedAfterRequestMade = (state: IEcomData, isSuccessful: boolean) => {
             this.setState({
@@ -133,7 +139,8 @@ class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsPr
 
         this.props.dispatchStoreAction(StoreAction.PAYMENT_UPDATE_FINANCING_INFORMATION, {
             loanDeposit: deposit,
-            loanDuration: duration
+            loanDuration: duration,
+            loanResidual: residual
         }, (state: IEcomData) => {
             proceedAfterStoreChanged(state);
         });
@@ -159,12 +166,20 @@ class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsPr
         const optionItems = options.map((o, index) => <option key={index}>{o}</option>);
         const durationValue = options[this.state.durationIndex];
 
-        const depositMin = loanSpecification.depositMin;
-        const depositMax = loanSpecification.depositMax;
+        const {
+            depositMin,
+            depositMax,
+            depositStep,
+
+            residualMin,
+            residualMax,
+            residualStep
+        } = loanSpecification;
 
         const hasDownPaymentError = !validateStringNumberInRange(this.state.deposit, depositMin, depositMax);
-        const paymentOption = this.props.orderOptions.getPaymentOptions().find(p => p.type === PaymentType.Loan);
+        const hasResidualError = !validateStringNumberInRange(this.state.residual, residualMin, residualMax);
 
+        const paymentOption = this.props.orderOptions.getPaymentOptions().find(p => p.type === PaymentType.Loan);
         const scaledImage = addSizeQuery(paymentOption.logo, 100, 60);
 
         const loanDetails = paymentOption.loanDetails;
@@ -204,24 +219,27 @@ class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsPr
                             <div data-ecom-inputtext="">
                                 <input type="text"
                                     id="payment-input-downpayment"
+                                    name="deposit"
                                     placeholder="Kontantinsats"
                                     value={this.state.deposit}
-                                    onChange={this.handleDepositChange}
+                                    disabled={this.props.isWaitingForResponse}
+                                    onChange={this.handleInputValueChange}
                                     onBlur={() => { this.handleValueUpdated(); }} />
                             </div>
 
                             <div className="form-alert">Mellan {formatPrice(depositMin)}kr och {formatPrice(depositMax)}kr.</div>
 
                             <div className="m-t">
-                                <div data-ecom-rangeslider="">
+                                <div data-ecom-rangeslider="" className={this.props.isWaitingForResponse ? 'disabled' : ''}>
                                     <div className="range-slider">
                                         { !hasDownPaymentError &&
                                             <Slider
                                                 min={depositMin}
                                                 max={depositMax}
-                                                step={10}
+                                                step={depositStep}
                                                 initialValue={parseInt(this.state.deposit)}
-                                                onChange={this.handleDepositSliderChange}
+                                                isDisabled={this.props.isWaitingForResponse}
+                                                onChange={(value) => { this.handleSliderChange('deposit', value); }}
                                                 onAfterChange={this.handleValueUpdated} />
                                         }
                                     </div>
@@ -232,22 +250,60 @@ class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsPr
                         <div className="form-group">
                             <label data-ecom-inputlabel="" htmlFor="payment-input-installment">Avbetalning (mil)</label>
 
-                            <div data-ecom-select="">
-                                <select className="select" value={durationValue} onChange={this.handleDurationChange}>
+                            <div data-ecom-select="" className={this.props.isWaitingForResponse ? 'is-disabled' : ''}>
+                                <select className="select"
+                                        value={durationValue}
+                                        disabled={this.props.isWaitingForResponse}
+                                        onChange={this.handleDurationChange}>
                                     {optionItems}
                                 </select>
                             </div>
 
                             <div className="m-t">
-                                <div data-ecom-rangeslider="">
+                                <div data-ecom-rangeslider="" className={this.props.isWaitingForResponse ? 'disabled' : ''}>
                                     <div className="range-slider">
                                         <Slider
                                             min={0}
                                             max={options.length - 1}
                                             step={1}
                                             initialValue={this.state.durationIndex}
-                                            onChange={this.handleDurationSliderChange}
+                                            isDisabled={this.props.isWaitingForResponse}
+                                            onChange={(value) => { this.handleSliderChange('durationIndex', value); }}
                                             onAfterChange={this.handleValueUpdated} />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className={`form-group ${hasResidualError ? ' has-error' : ''}`}>
+                            <label data-ecom-inputlabel="" htmlFor="payment-input-residual">Restvärde (%)</label>
+
+                            <div data-ecom-inputtext="">
+                                <input type="text"
+                                    id="payment-input-residual"
+                                    name="residual"
+                                    placeholder="Restvärde"
+                                    value={this.state.residual}
+                                    disabled={this.props.isWaitingForResponse}
+                                    onChange={this.handleInputValueChange}
+                                    onBlur={() => { this.handleValueUpdated(); }} />
+                            </div>
+
+                            <div className="form-alert">Mellan {formatPrice(residualMin)}kr och {formatPrice(residualMax)}kr.</div>
+
+                            <div className="m-t">
+                                <div data-ecom-rangeslider="" className={this.props.isWaitingForResponse ? 'disabled' : ''}>
+                                    <div className="range-slider">
+                                        { !hasResidualError &&
+                                            <Slider
+                                                min={residualMin}
+                                                max={residualMax}
+                                                step={residualStep}
+                                                initialValue={parseInt(this.state.residual)}
+                                                isDisabled={this.props.isWaitingForResponse}
+                                                onChange={(value) => { this.handleSliderChange('residual', value); }}
+                                                onAfterChange={this.handleValueUpdated} />
+                                        }
                                     </div>
                                 </div>
                             </div>
@@ -261,67 +317,57 @@ class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsPr
                     </section>
                 }
 
-                { this.props.isWaitingForResponse &&
-                    <section className="page-section">
-                        <Spinner />
-                    </section>
-                }
-
-                { !this.props.isWaitingForResponse &&
-                    <React.Fragment>
-                        <section className="page-section">
-                            <div className="h6 m-b-mini">{formattedPrice} kr/mån</div>
-                            <div className="font-size-small">Beräknat på {formattedInterest}% ränta (effektivt {formattedEffectiveInterest}%)</div>
-                            <div className="m-t-half">
-                                <button data-ecom-link="" className="l-block" onClick={this.handleDetailsClick}>{this.state.isShowingDetails ? 'Färre detaljer' : 'Detaljer'}</button>
-                            </div>
-                            { this.state.isShowingDetails &&
-                                <div className="m-t">
-                                    <div data-ecom-columnrow="" className="repeat-m-half">
-                                        <div className="column">
-                                            <div className="font-medium font-size-small">Ränta</div>
-                                        </div>
-                                        <div className="column">{formattedInterest}%</div>
-                                    </div>
-                                    <div data-ecom-columnrow="" className="repeat-m-half">
-                                        <div className="column">
-                                            <div className="font-medium font-size-small">Effektiv ränta	</div>
-                                        </div>
-                                        <div className="column">{formattedEffectiveInterest}%</div>
-                                    </div>
-                                    <div data-ecom-columnrow="" className="repeat-m-half">
-                                        <div className="column">
-                                            <div className="font-medium font-size-small">Uppläggningskostnad</div>
-                                        </div>
-                                        <div className="column">{formattedSetupFee}kr</div>
-                                    </div>
-                                    <div data-ecom-columnrow="" className="repeat-m-half">
-                                        <div className="column">
-                                            <div className="font-medium font-size-small">Administrativa avgifter</div>
-                                        </div>
-                                        <div className="column">{formattedAdministrationFee}kr/mån</div>
-                                    </div>
-                                    <div data-ecom-columnrow="" className="repeat-m-half">
-                                        <div className="column">
-                                            <div className="font-medium font-size-small">Total kreditkostnad</div>
-                                        </div>
-                                        <div className="column">{formattedTotalCreditCost}kr</div>
-                                    </div>
+                <section className="page-section">
+                    <div className="h6 m-b-mini">{this.props.isWaitingForResponse ? <SpinnerInline /> : formattedPrice} kr/mån</div>
+                    <div className="font-size-small">Beräknat på {formattedInterest}% ränta (effektivt {formattedEffectiveInterest}%)</div>
+                    <div className="m-t-half">
+                        <button data-ecom-link="" className="l-block" onClick={this.handleDetailsClick}>{this.state.isShowingDetails ? 'Färre detaljer' : 'Detaljer'}</button>
+                    </div>
+                    { this.state.isShowingDetails &&
+                        <div className="m-t">
+                            <div data-ecom-columnrow="" className="repeat-m-half">
+                                <div className="column">
+                                    <div className="font-medium font-size-small">Ränta</div>
                                 </div>
-                            }
-                        </section>
-
-                        <section className="page-section page-section-bottom">
-                            <div data-ecom-buttonnav="">
-                                <div className="button-nav-item" onClick={this.handleProceedClick}>
-                                    <div data-ecom-button="full-width">
-                                        Välj finansiering
-                                    </div>
-                                </div>
+                                <div className="column">{formattedInterest}%</div>
                             </div>
-                        </section>
-                    </React.Fragment>
-                }
+                            <div data-ecom-columnrow="" className="repeat-m-half">
+                                <div className="column">
+                                    <div className="font-medium font-size-small">Effektiv ränta	</div>
+                                </div>
+                                <div className="column">{formattedEffectiveInterest}%</div>
+                            </div>
+                            <div data-ecom-columnrow="" className="repeat-m-half">
+                                <div className="column">
+                                    <div className="font-medium font-size-small">Uppläggningskostnad</div>
+                                </div>
+                                <div className="column">{formattedSetupFee}kr</div>
+                            </div>
+                            <div data-ecom-columnrow="" className="repeat-m-half">
+                                <div className="column">
+                                    <div className="font-medium font-size-small">Administrativa avgifter</div>
+                                </div>
+                                <div className="column">{formattedAdministrationFee}kr/mån</div>
+                            </div>
+                            <div data-ecom-columnrow="" className="repeat-m-half">
+                                <div className="column">
+                                    <div className="font-medium font-size-small">Total kreditkostnad</div>
+                                </div>
+                                <div className="column">{formattedTotalCreditCost}kr</div>
+                            </div>
+                        </div>
+                    }
+                </section>
+
+                <section className="page-section page-section-bottom">
+                    <div data-ecom-buttonnav="">
+                        <div className="button-nav-item" onClick={this.handleProceedClick}>
+                            <button data-ecom-button="full-width" disabled={this.props.isWaitingForResponse}>
+                                Välj finansiering
+                            </button>
+                        </div>
+                    </div>
+                </section>
             </div>
         );
     }

@@ -85,7 +85,7 @@ export const makeAddressLookupRequest = (data: IAddressLookupSdkData, callback: 
 };
 
 export const makePaymentLookupRequest = (data: IPaymentLookupSdkData, callback: (response: IPaymentLookupResponse) => void) => {
-    const requestIdentifier = '' + data.ecomData.loanDeposit + data.ecomData.loanDuration;
+    const requestIdentifier = '' + data.ecomData.loanDeposit + data.ecomData.loanDuration + data.ecomData.loanResidual;
 
     makeRequest(getPaymentLookup, RequestType.GET_PAYMENT_LOOKUP, requestIdentifier, data, callback);
 }

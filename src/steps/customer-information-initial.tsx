@@ -117,9 +117,9 @@ const CustomerInformationInitial = (props: ICustomerInformationInitialProps) => 
 
                     { !props.isWaitingForResponse &&
                         <div className="form-group">
-                            <div data-ecom-button="light full-width" onClick={() => handleInputTypeClick(CustomerInformationInputType.AUTOMATIC)}>
+                            <button data-ecom-button="light full-width" onClick={() => handleInputTypeClick(CustomerInformationInputType.AUTOMATIC)}>
                                 Hämta uppgifter
-                            </div>
+                            </button>
                         </div>
                     }
 

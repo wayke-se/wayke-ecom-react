@@ -5,6 +5,7 @@ interface ISliderProps {
     max: number;
     step: number;
     initialValue: number;
+    isDisabled: boolean;
 
     onChange: (value: number) => void;
     onAfterChange: () => void;
@@ -118,6 +119,10 @@ class Slider extends React.Component<ISliderProps, IState> {
     }
 
     handleMouseDown() {
+        if (this.props.isDisabled) {
+            return;
+        }
+
         this.setState({
             isDragging: true
          });

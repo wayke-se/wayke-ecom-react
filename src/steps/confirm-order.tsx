@@ -65,9 +65,9 @@ const ConfirmOrder = (props: IConfirmOrderProps) => {
                 <section className="page-section page-section-bottom">
                     <div data-ecom-buttonnav="">
                         <div className="button-nav-item">
-                            <div data-ecom-button="full-width" onClick={handleCreateOrderClick}>
+                            <button data-ecom-button="full-width" onClick={handleCreateOrderClick}>
                                 Genomför köp
-                            </div>
+                            </button>
                         </div>
                     </div>
                 </section>

@@ -153,9 +153,9 @@ class InsuranceInformationDefinition extends React.Component<IInsuranceInformati
 
                         { !this.props.isWaitingForResponse &&
                             <div className="form-group">
-                                <div data-ecom-button="light full-width" onClick={this.handleProceedClick}>
+                                <button data-ecom-button="light full-width" onClick={this.handleProceedClick}>
                                     Visa försäkringar
-                                </div>
+                                </button>
                             </div>
                         }
 

@@ -98,9 +98,9 @@ const TradeInCarDefinition = (props: ITradeInCarDefinitionProps) => {
                 <section className="page-section page-section-bottom">
                     <div data-ecom-buttonnav="">
                         <div className="button-nav-item" onClick={handleNextStepClick}>
-                            <div data-ecom-button="full-width">
+                            <button data-ecom-button="full-width">
                                 Gå vidare
-                            </div>
+                            </button>
                         </div>
                     </div>
                 </section>
