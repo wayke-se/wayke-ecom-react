@@ -1,12 +1,11 @@
 import React from 'react';
 
 import EcomContext from './ecom-context';
-import { IEcomExternalProps, IEcomData, ILoanSpecification } from './types';
+import { IEcomExternalProps, IEcomData } from './types';
 
 import StoreAction from './constants/store-action';
 
 interface IEcomStoreProps extends IEcomExternalProps {
-    loanSpecification: ILoanSpecification;
 };
 
 interface IState extends IEcomData {

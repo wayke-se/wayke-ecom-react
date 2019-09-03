@@ -1,20 +1,15 @@
-import { PaymentType, IAddressLookupResponse, DrivingDistance } from "wayke-ecom";
-import { ITradeInCarData, IPaymentData, IInsuranceData, ICustomerObject, IEcomData, ILoanSpecification } from "../types";
+import { PaymentType, IAddressLookupResponse, DrivingDistance, IOrderOptionsResponse, IPaymentLookupResponse } from "wayke-ecom";
+import { ITradeInCarData, IPaymentData, IInsuranceData, ICustomerObject, IEcomData } from "../types";
 
 import { validateMilage, validateRegistrationNumber, validateNumberInRange, validatePersonalNumber, validateEmail, validatePhoneNumber, validateZip } from "../utils/validation";
 
 import { createCustomerObject } from "./data-creator";
 import { containsValue } from "../utils/enum";
+import { getLoanPaymentOptions } from "../utils/payment";
 
-var loanSpecification: ILoanSpecification = null;
-
-export const initialize = (specification: ILoanSpecification) => {
-    loanSpecification = specification;
-}
-
-export const validateEcomData = (data: IEcomData, addressLookup: IAddressLookupResponse) => {
+export const validateEcomData = (data: IEcomData, addressLookup: IAddressLookupResponse, orderOptions: IOrderOptionsResponse, paymentLookup: IPaymentLookupResponse | undefined) => {
     const isValidTradeIn = validateTradeIn(data.tradeInCar);
-    const isValidPayment = validatePayment(data.payment);
+    const isValidPayment = validatePayment(data.payment, orderOptions, paymentLookup);
     const isValidInsurance = validateInsurance(data.insurance);
 
     const customerObject = createCustomerObject(data.customer, addressLookup);
@@ -34,12 +29,7 @@ export const validateTradeIn = (data: ITradeInCarData) => {
     return isValidMilage && isValidRegistrationNumber;
 };
 
-export const validatePayment = (data: IPaymentData) => {
-    const depositMin = loanSpecification.depositMin;
-    const depositMax = loanSpecification.depositMax;
-    const durationMin = loanSpecification.durationMin;
-    const durationMax = loanSpecification.durationMax;
-
+export const validatePayment = (data: IPaymentData, orderOptions: IOrderOptionsResponse, paymentLookup: IPaymentLookupResponse | undefined) => {
     if (!data.paymentType) {
         return false;
     }
@@ -50,10 +40,29 @@ export const validatePayment = (data: IPaymentData) => {
         return true;
     }
 
+    const selectedPaymentLookup = paymentLookup ? paymentLookup : getLoanPaymentOptions(orderOptions).loanDetails;
+
+    const depositMin = selectedPaymentLookup.getDownPaymentSpec().min;
+    const depositMax = selectedPaymentLookup.getDownPaymentSpec().max;
+
+    const durationMin = selectedPaymentLookup.getDurationSpec().min;
+    const durationMax = selectedPaymentLookup.getDurationSpec().max;
+
     const isValidDeposit = validateNumberInRange(data.loanDeposit, depositMin, depositMax);
     const isValidLoanDuration = validateNumberInRange(data.loanDuration, durationMin, durationMax);
 
-    return isValidDeposit && isValidLoanDuration;
+    var isValidResidual = true;
+
+    const hasResidual = selectedPaymentLookup.getResidualValueSpec() !== null;
+
+    if (hasResidual) {
+        const residualMin = selectedPaymentLookup.getResidualValueSpec().min;
+        const residualMax = selectedPaymentLookup.getResidualValueSpec().max;
+
+        isValidResidual = validateNumberInRange(data.loanResidual, residualMin, residualMax);
+    }
+
+    return isValidDeposit && isValidLoanDuration && isValidResidual;
 };
 
 export const validateInsurance = (data: IInsuranceData) => {

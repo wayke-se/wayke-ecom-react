@@ -16,8 +16,17 @@ interface IState {
     value: number;
 };
 
-const applyStepToExternalValue = (externalValue: number, step: number) => {
-    return Math.round(externalValue / step) * step;
+const roundIfDivisionError = (value: number) => {
+    const decimal = value % 1;
+    const divisionErrorDecimalThreshold = 0.00001;
+
+    const isInThreshold = decimal < divisionErrorDecimalThreshold;
+
+    if (isInThreshold) {
+        return Math.round(value);
+    } else {
+        return value;
+    }
 }
 
 const applyStepToFraction = (fraction: number, min: number, max: number, step: number) => {
@@ -142,14 +151,15 @@ class Slider extends React.Component<ISliderProps, IState> {
         }
 
         const fraction = this.calculateNewFractionPosition(e.clientX);
-        const externalValue = convertFractionToExternalValue(fraction, this.props.min, this.props.max);
+        const fractionInStep = applyStepToFraction(fraction, this.props.min, this.props.max, this.props.step);
 
-        const externalValueInStep = applyStepToExternalValue(externalValue, this.props.step);
+        const externalValueInStep = convertFractionToExternalValue(fractionInStep, this.props.min, this.props.max);
+        const externalValueRounded = roundIfDivisionError(externalValueInStep);
 
         this.setState({
             value: fraction
         }, () => {
-            this.props.onChange(externalValueInStep);
+            this.props.onChange(externalValueRounded);
         })
     }
 

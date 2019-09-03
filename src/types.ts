@@ -126,23 +126,6 @@ export interface IInteractData {
     };
 };
 
-export interface ILoanSpecification {
-    durationMin: number;
-    durationMax: number;
-    durationStep: number;
-    durationDefault: number;
-
-    depositMin: number;
-    depositMax: number;
-    depositStep: number;
-    depositDefault: number;
-
-    residualMin: number;
-    residualMax: number;
-    residualStep: number;
-    residualDefault: number;
-};
-
 export interface IOrderOptionsSdkData {
     vehicleId: string;
 };
@@ -165,9 +148,13 @@ export interface ICreateOrderSdkData {
     vehicleId: string;
     ecomData: IEcomData;
     addressLookup: IAddressLookupResponse;
+    orderOptions: IOrderOptionsResponse;
+    paymentLookup: IPaymentLookupResponse | undefined;
 };
 
 export interface IPaymentLookupSdkData {
     vehicleId: string;
     ecomData: IPaymentData;
+    orderOptions: IOrderOptionsResponse;
+    paymentLookup: IPaymentLookupResponse | undefined;
 };

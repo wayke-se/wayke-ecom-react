@@ -15,7 +15,7 @@ const ConfirmOrder = (props: IConfirmOrderProps) => {
     const [hasRequestError, setHasRequestError] = useState(false);
 
     const handleCreateOrderClick = () => {
-        const isValidData = validateEcomData(props.data, props.addressLookup);
+        const isValidData = validateEcomData(props.data, props.addressLookup, props.orderOptions, props.paymentLookup);
 
         if (!isValidData) {
             return setHasRequestError(true);

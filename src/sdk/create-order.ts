@@ -1,20 +1,22 @@
-import { orders, vehicles, customers, IOrderCreateResponse, IAddress, PaymentType, VehicleCondition, DeliveryType, IAddressLookupResponse } from 'wayke-ecom';
+import { orders, vehicles, customers, IOrderCreateResponse, IAddress, PaymentType, VehicleCondition, DeliveryType, IAddressLookupResponse, IOrderOptionsResponse, IPaymentLookupResponse } from 'wayke-ecom';
 import { IEcomData, ICreateOrderSdkData } from '../types';
 import CustomerInformationInputType from '../constants/customer-information-input-type';
 import { validateEcomData } from '../tools/data-validation';
 
-const validate = (data: IEcomData, addressLookup: IAddressLookupResponse) => {
+const validate = (data: IEcomData, addressLookup: IAddressLookupResponse, orderOptions: IOrderOptionsResponse, paymentLookup: IPaymentLookupResponse | undefined) => {
     //Data should already be validated, but this is a safety measure
 
-    return validateEcomData(data, addressLookup);
+    return validateEcomData(data, addressLookup, orderOptions, paymentLookup);
 }
 
 export const createOrder = (data: ICreateOrderSdkData, callback: (wasOrderCreated: boolean) => void) => {
     const ecomData = data.ecomData;
     const addressLookup = data.addressLookup;
+    const orderOptions = data.orderOptions;
+    const paymentLookup = data.paymentLookup;
     const vehicleId = data.vehicleId;
 
-    const isValidRequestData = validate(ecomData, addressLookup);
+    const isValidRequestData = validate(ecomData, addressLookup, orderOptions, paymentLookup);
 
     if (!isValidRequestData) {
         return callback(null);

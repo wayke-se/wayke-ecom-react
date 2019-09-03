@@ -111,7 +111,9 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
         const request = () => {
             makePaymentLookupRequest({
                 vehicleId: this.props.vehicle.id,
-                ecomData: this.props.data.payment
+                ecomData: this.props.data.payment,
+                orderOptions: this.state.orderOptions,
+                paymentLookup: this.state.paymentLookup
             }, (response: IPaymentLookupResponse) => {
                 this.saveResponse({
                     paymentLookup: response
@@ -129,7 +131,9 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
             makeCreateOrderRequest({
                 ecomData: this.props.data,
                 addressLookup: this.state.addressLookup,
-                vehicleId: this.props.vehicle.id
+                vehicleId: this.props.vehicle.id,
+                orderOptions: this.state.orderOptions,
+                paymentLookup: this.state.paymentLookup
             }, (wasOrderCreated: boolean) => {
                 this.setState({
                     isWaitingForResponse: false
