@@ -51,7 +51,7 @@ export const createOrder = (data: ICreateOrderSdkData, callback: (wasOrderCreate
     if (isLoan) {
         paymentBuilder.withDownPayment(ecomData.payment.loanDeposit)
                 .withDuration(ecomData.payment.loanDuration)
-                .withResidualValue(0);
+                .withResidualValue(ecomData.payment.loanResidual);
     }
 
     const customer = customerBuilder.build();
