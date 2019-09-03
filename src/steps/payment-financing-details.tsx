@@ -66,6 +66,10 @@ const getConvertedResidualSpecification = (residualSpecification: IPaymentRangeS
     }
 }
 
+const getLoanDetails = (orderOptions: IOrderOptionsResponse, paymentLookup: IPaymentLookupResponse | undefined): IPaymentLookupResponse => {
+    return paymentLookup ? paymentLookup : getLoanPaymentOptions(orderOptions).loanDetails;
+}
+
 class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsProps, IState> {
     constructor(props: IPaymentFinancingDetailsProps) {
         super(props);
@@ -78,7 +82,7 @@ class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsPr
         this.handleProceedClick = this.handleProceedClick.bind(this);
         this.updateStoreValues = this.updateStoreValues.bind(this);
 
-        const loanDetails = getLoanPaymentOptions(props.orderOptions).loanDetails;
+        const loanDetails = getLoanDetails(props.orderOptions, props.paymentLookup);
 
         const convertedResidualSpecification = getConvertedResidualSpecification(loanDetails.getResidualValueSpec());
         const hasResidual = convertedResidualSpecification !== null;
@@ -155,7 +159,7 @@ class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsPr
     }
 
     updateStoreValues(callback?: (state: IEcomData) => void) {
-        const loanDetails = getLoanPaymentOptions(this.props.orderOptions).loanDetails;
+        const loanDetails = getLoanDetails(this.props.orderOptions, this.props.paymentLookup);
 
         const depositSpecification = loanDetails.getDownPaymentSpec();
         const durationSpecification = loanDetails.getDurationSpec();
@@ -174,23 +178,19 @@ class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsPr
             residual = validateStringNumberInRange(this.state.residual, residualMin, residualMax) ? parseInt(this.state.residual) / 100 : null
         }
 
-        const proceedAfterStoreChanged = (state: IEcomData) => {
-            if (callback) {
-                callback(state);
-            }
-        }
-
         this.props.dispatchStoreAction(StoreAction.PAYMENT_UPDATE_FINANCING_INFORMATION, {
             loanDeposit: deposit,
             loanDuration: duration,
             loanResidual: residual
         }, (state: IEcomData) => {
-            proceedAfterStoreChanged(state);
+            if (callback) {
+                callback(state);
+            }
         });
     }
 
     render() {
-        const loanDetails = getLoanPaymentOptions(this.props.orderOptions).loanDetails;
+        const loanDetails = getLoanDetails(this.props.orderOptions, this.props.paymentLookup);
 
         const depositSpecification = loanDetails.getDownPaymentSpec();
         const durationSpecification = loanDetails.getDurationSpec();
@@ -267,20 +267,16 @@ class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsPr
                             <div className="form-alert">Mellan {formatPrice(depositSpecification.min)}kr och {formatPrice(depositSpecification.max)}kr.</div>
 
                             <div className="m-t">
-                                <div data-ecom-rangeslider="" className={this.props.isWaitingForResponse ? 'disabled' : ''}>
-                                    <div className="range-slider">
-                                        { !hasDownPaymentError &&
-                                            <Slider
-                                                min={depositSpecification.min}
-                                                max={depositSpecification.max}
-                                                step={depositSpecification.step}
-                                                initialValue={parseInt(this.state.deposit)}
-                                                isDisabled={this.props.isWaitingForResponse}
-                                                onChange={(value) => { this.handleSliderChange('deposit', value + ''); }}
-                                                onAfterChange={this.handleValueUpdated} />
-                                        }
-                                    </div>
-                                </div>
+                                { !hasDownPaymentError &&
+                                    <Slider
+                                        min={depositSpecification.min}
+                                        max={depositSpecification.max}
+                                        step={depositSpecification.step}
+                                        initialValue={parseInt(this.state.deposit)}
+                                        isDisabled={this.props.isWaitingForResponse}
+                                        onChange={(value) => { this.handleSliderChange('deposit', value + ''); }}
+                                        onAfterChange={this.handleValueUpdated} />
+                                }
                             </div>
                         </div>
 
@@ -297,18 +293,14 @@ class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsPr
                             </div>
 
                             <div className="m-t">
-                                <div data-ecom-rangeslider="" className={this.props.isWaitingForResponse ? 'disabled' : ''}>
-                                    <div className="range-slider">
-                                        <Slider
-                                            min={0}
-                                            max={options.length - 1}
-                                            step={1}
-                                            initialValue={this.state.durationIndex}
-                                            isDisabled={this.props.isWaitingForResponse}
-                                            onChange={(value) => { this.handleSliderChange('durationIndex', value); }}
-                                            onAfterChange={this.handleValueUpdated} />
-                                    </div>
-                                </div>
+                                <Slider
+                                    min={0}
+                                    max={options.length - 1}
+                                    step={1}
+                                    initialValue={this.state.durationIndex}
+                                    isDisabled={this.props.isWaitingForResponse}
+                                    onChange={(value) => { this.handleSliderChange('durationIndex', value); }}
+                                    onAfterChange={this.handleValueUpdated} />
                             </div>
                         </div>
 
@@ -330,20 +322,16 @@ class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsPr
                                 <div className="form-alert">Mellan {residualMin}% och {residualMax}%.</div>
 
                                 <div className="m-t">
-                                    <div data-ecom-rangeslider="" className={this.props.isWaitingForResponse ? 'disabled' : ''}>
-                                        <div className="range-slider">
-                                            { !hasResidualError &&
-                                                <Slider
-                                                    min={residualMin}
-                                                    max={residualMax}
-                                                    step={residualStep}
-                                                    initialValue={parseInt(this.state.residual)}
-                                                    isDisabled={shouldDisableResidual}
-                                                    onChange={(value) => { this.handleSliderChange('residual', value + ''); }}
-                                                    onAfterChange={this.handleValueUpdated} />
-                                            }
-                                        </div>
-                                    </div>
+                                    { !hasResidualError &&
+                                        <Slider
+                                            min={residualMin}
+                                            max={residualMax}
+                                            step={residualStep}
+                                            initialValue={parseInt(this.state.residual)}
+                                            isDisabled={shouldDisableResidual}
+                                            onChange={(value) => { this.handleSliderChange('residual', value + ''); }}
+                                            onAfterChange={this.handleValueUpdated} />
+                                    }
                                 </div>
                             </div>
                         }

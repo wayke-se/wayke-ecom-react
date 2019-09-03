@@ -210,16 +210,18 @@ class Slider extends React.Component<ISliderProps, IState> {
         } as React.CSSProperties;
 
         return (
-            <div ref={this.sliderRef} className="rc-slider">
-                <div className="rc-slider-rail"></div>
-                <div className="rc-slider-track rc-slider-track-1" style={trackStyle}></div>
-                <div className="rc-slider-step"></div>
-                <div className="rc-slider-handle rc-slider-handle-1"
-                        style={handleStyle}
-                        onMouseDown={this.handleMouseDown}
-                        onMouseUp={this.handleMouseUp}>
+            <div data-ecom-rangeslider="" className={this.props.isDisabled ? 'is-disabled' : ''} ref={this.sliderRef} >
+                <div className="range-slider">
+                    <div className="range-slider-bar">
+                        <div className="range-slider-rail"></div>
+                        <div className="range-slider-track" style={trackStyle}></div>
+                        <div className="range-slider-handle"
+                                style={handleStyle}
+                                onMouseDown={this.handleMouseDown}
+                                onMouseUp={this.handleMouseUp}>
+                        </div>
+                    </div>
                 </div>
-                <div className="rc-slider-mark"></div>
             </div>
         );
     }
