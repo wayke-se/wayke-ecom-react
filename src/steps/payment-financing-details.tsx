@@ -26,6 +26,10 @@ interface IState {
     deposit: string;
     durationIndex: number;
     residual: string;
+
+    residualMin: number;
+    residualMax: number;
+    residualStep: number;
 };
 
 const getAllDurationSteps = (loanDetails: IPaymentLookupResponse) => {
@@ -65,9 +69,25 @@ class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsPr
 
         const loanDetails = getLoanPaymentOptions(props.orderOptions).loanDetails;
 
+        const hasResidual = !!loanDetails.getResidualValueSpec();
+
+        var residual = null;
+        var residualMin = null;
+        var residualMax = null;
+        var residualStep = null;
+        var residualDefault = null;
+
+        if (hasResidual) {
+            residualMin = loanDetails.getResidualValueSpec().min * 100;
+            residualMax = loanDetails.getResidualValueSpec().max * 100;
+            residualStep = loanDetails.getResidualValueSpec().step * 100;
+            residualDefault = loanDetails.getResidualValueSpec().default * 100;
+
+            residual = props.data.payment.loanResidual ? props.data.payment.loanResidual * 100 : residualDefault;
+        }
+
         const deposit = props.data.payment.loanDeposit ? props.data.payment.loanDeposit : loanDetails.getDownPaymentSpec().default;
         const duration = props.data.payment.loanDuration ? props.data.payment.loanDuration : loanDetails.getDurationSpec().default;
-        const residual = props.data.payment.loanResidual ? props.data.payment.loanResidual : loanDetails.getResidualValueSpec().default;
 
         const durationIndex = getIndexFromDuration(duration, loanDetails);
 
@@ -76,8 +96,12 @@ class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsPr
             hasRequestError: false,
 
             deposit: deposit + '',
-            durationIndex: durationIndex,
-            residual: residual + ''
+            durationIndex,
+            residual: residual === null ? null : residual + '',
+
+            residualMin,
+            residualMax,
+            residualStep
         };
     }
 
@@ -113,11 +137,15 @@ class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsPr
         const loanDetails = getLoanPaymentOptions(this.props.orderOptions).loanDetails;
 
         const depositSpecification = loanDetails.getDownPaymentSpec();
-        const residualSpecification = loanDetails.getResidualValueSpec();
+
+        const {
+            residualMin,
+            residualMax
+        } = this.state;
 
         const deposit = validateStringNumberInRange(this.state.deposit, depositSpecification.min, depositSpecification.max) ? parseInt(this.state.deposit) : null;
         const duration = getDurationFromIndex(this.state.durationIndex, loanDetails);
-        const residual = validateStringNumberInRange(this.state.residual, residualSpecification.min, residualSpecification.max) ? parseInt(this.state.residual) : null;
+        const residual = validateStringNumberInRange(this.state.residual, residualMin, residualMax) ? parseInt(this.state.residual) / 100 : null;
 
         const proceedAfterRequestMade = (state: IEcomData, isSuccessful: boolean) => {
             this.setState({
@@ -165,10 +193,20 @@ class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsPr
         const durationValue = options[this.state.durationIndex];
 
         const depositSpecification = loanDetails.getDownPaymentSpec();
-        const residualSpecification = loanDetails.getResidualValueSpec();
+
+        const {
+            residual,
+            residualMin,
+            residualMax,
+            residualStep
+        } = this.state;
+
+        const hasResidual = !!loanDetails.getResidualValueSpec();
+        const isResidualDisabledByBackend = hasResidual && residualMin === residualMax;
+        const shouldDisableResidual = isResidualDisabledByBackend || this.props.isWaitingForResponse;
 
         const hasDownPaymentError = !validateStringNumberInRange(this.state.deposit, depositSpecification.min, depositSpecification.max);
-        const hasResidualError = !validateStringNumberInRange(this.state.residual, residualSpecification.min, residualSpecification.max);
+        const hasResidualError = hasResidual && !validateStringNumberInRange(residual, residualMin, residualMax);
 
         const paymentOption = this.props.orderOptions.getPaymentOptions().find(p => p.type === PaymentType.Loan);
         const scaledImage = addSizeQuery(paymentOption.logo, 100, 60);
@@ -265,39 +303,41 @@ class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsPr
                             </div>
                         </div>
 
-                        <div className={`form-group ${hasResidualError ? ' has-error' : ''}`}>
-                            <label data-ecom-inputlabel="" htmlFor="payment-input-residual">Restvärde (%)</label>
+                        { hasResidual &&
+                            <div className={`form-group ${hasResidualError ? ' has-error' : ''}`}>
+                                <label data-ecom-inputlabel="" htmlFor="payment-input-residual">Restvärde (%)</label>
 
-                            <div data-ecom-inputtext="">
-                                <input type="text"
-                                    id="payment-input-residual"
-                                    name="residual"
-                                    placeholder="Restvärde"
-                                    value={this.state.residual}
-                                    disabled={this.props.isWaitingForResponse}
-                                    onChange={this.handleInputValueChange}
-                                    onBlur={() => { this.handleValueUpdated(); }} />
-                            </div>
+                                <div data-ecom-inputtext="">
+                                    <input type="text"
+                                        id="payment-input-residual"
+                                        name="residual"
+                                        placeholder="Restvärde"
+                                        value={this.state.residual}
+                                        disabled={shouldDisableResidual}
+                                        onChange={this.handleInputValueChange}
+                                        onBlur={() => { this.handleValueUpdated(); }} />
+                                </div>
 
-                            <div className="form-alert">Mellan {residualSpecification.min}% och {residualSpecification.max}%.</div>
+                                <div className="form-alert">Mellan {residualMin}% och {residualMax}%.</div>
 
-                            <div className="m-t">
-                                <div data-ecom-rangeslider="" className={this.props.isWaitingForResponse ? 'disabled' : ''}>
-                                    <div className="range-slider">
-                                        { !hasResidualError &&
-                                            <Slider
-                                                min={residualSpecification.min}
-                                                max={residualSpecification.max}
-                                                step={residualSpecification.step}
-                                                initialValue={parseInt(this.state.residual)}
-                                                isDisabled={this.props.isWaitingForResponse}
-                                                onChange={(value) => { this.handleSliderChange('residual', value); }}
-                                                onAfterChange={this.handleValueUpdated} />
-                                        }
+                                <div className="m-t">
+                                    <div data-ecom-rangeslider="" className={this.props.isWaitingForResponse ? 'disabled' : ''}>
+                                        <div className="range-slider">
+                                            { !hasResidualError &&
+                                                <Slider
+                                                    min={residualMin}
+                                                    max={residualMax}
+                                                    step={residualStep}
+                                                    initialValue={parseInt(this.state.residual)}
+                                                    isDisabled={shouldDisableResidual}
+                                                    onChange={(value) => { this.handleSliderChange('residual', value); }}
+                                                    onAfterChange={this.handleValueUpdated} />
+                                            }
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        }
                     </div>
                 </section>
 
