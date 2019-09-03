@@ -1,10 +1,10 @@
 import React from "react";
 
 import { IEcomExternalProps, IEcomStore } from "./types";
-import { IOrderOptionsResponse, IInsuranceOptionsResponse, IVehicleLookupResponse, IAddressLookupResponse, IOrderCreateResponse } from "wayke-ecom";
+import { IOrderOptionsResponse, IInsuranceOptionsResponse, IVehicleLookupResponse, IAddressLookupResponse, IPaymentLookupResponse } from "wayke-ecom";
 
 import EcomLifecycle from './ecom-lifecycle';
-import { makeOrderOptionsRequest, makeVehicleLookupRequest, makeInsuranceOptionsRequest, makeAddressLookupRequest, makeCreateOrderRequest } from './tools/request-service';
+import { makeOrderOptionsRequest, makeVehicleLookupRequest, makeInsuranceOptionsRequest, makeAddressLookupRequest, makeCreateOrderRequest, makePaymentLookupRequest } from './tools/request-service';
 
 export interface IEcomContextProps extends IEcomExternalProps, IEcomStore {
 }
@@ -16,6 +16,7 @@ interface IState {
     insuranceOptions: IInsuranceOptionsResponse | undefined;
     vehicleLookup: IVehicleLookupResponse | undefined;
     addressLookup: IAddressLookupResponse | undefined;
+    paymentLookup: IPaymentLookupResponse | undefined;
 };
 
 class EcomContext extends React.Component<IEcomContextProps, IState> {
@@ -25,6 +26,7 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
         this.handleFetchVehicleInformation = this.handleFetchVehicleInformation.bind(this);
         this.handleFetchInsuranceOptions = this.handleFetchInsuranceOptions.bind(this);
         this.handleFetchAddressInformation = this.handleFetchAddressInformation.bind(this);
+        this.handleFetchPaymentInformation = this.handleFetchPaymentInformation.bind(this);
         this.handleCreateOrder = this.handleCreateOrder.bind(this);
 
         this.makeRequest = this.makeRequest.bind(this);
@@ -36,7 +38,8 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
             orderOptions: null,
             insuranceOptions: null,
             vehicleLookup: null,
-            addressLookup: null
+            addressLookup: null,
+            paymentLookup: null
         };
     }
 
@@ -104,6 +107,23 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
         this.makeRequest(request);
     }
 
+    handleFetchPaymentInformation(callback: (isSuccessful: boolean) => void) {
+        const request = () => {
+            makePaymentLookupRequest({
+                vehicleId: this.props.vehicle.id,
+                ecomData: this.props.data.payment
+            }, (response: IPaymentLookupResponse) => {
+                this.saveResponse({
+                    paymentLookup: response
+                }, () => {
+                    callback(!!response);
+                });
+            });
+        }
+
+        this.makeRequest(request);
+    }
+
     handleCreateOrder(callback: (isSuccessful: boolean) => void) {
         const request = () => {
             makeCreateOrderRequest({
@@ -141,6 +161,7 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
                 onFetchInsuranceOptions={this.handleFetchInsuranceOptions}
                 onFetchVehicleInformation={this.handleFetchVehicleInformation}
                 onFetchAddressInformation={this.handleFetchAddressInformation}
+                onFetchPaymentInformation={this.handleFetchPaymentInformation}
                 onCreateOrder={this.handleCreateOrder}
                 {...this.state}
                 {...this.props} />

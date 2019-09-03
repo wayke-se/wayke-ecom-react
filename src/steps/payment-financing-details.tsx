@@ -3,7 +3,10 @@ import React from 'react';
 import { IEcomContext, IEcomLifecycle, IEcomStore, IEcomExternalProps, ILoanSpecification, IEcomData } from '../types';
 
 import StoreAction from '../constants/store-action';
+
 import Slider from '../components/slider';
+import Spinner from '../components/spinner';
+import Alert from '../components/alert';
 
 import { validateStringNumberInRange } from '../utils/validation';
 import { addSizeQuery } from '../utils/image';
@@ -19,6 +22,7 @@ interface IState {
     isShowingDetails: boolean;
     deposit: string;
     durationIndex: number;
+    hasRequestError: boolean;
 };
 
 const getAllDurationSteps = (loanSpecification: ILoanSpecification) => {
@@ -64,6 +68,7 @@ class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsPr
 
         this.state = {
             isShowingDetails: false,
+            hasRequestError: false,
             deposit: deposit + '',
             durationIndex
         };
@@ -110,10 +115,28 @@ class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsPr
         const deposit = validateStringNumberInRange(this.state.deposit, depositMin, depositMax) ? parseInt(this.state.deposit) : null;
         const duration = getDurationFromIndex(this.state.durationIndex, loanSpecification);
 
+        const proceedAfterRequestMade = (state: IEcomData, isSuccessful: boolean) => {
+            this.setState({
+                hasRequestError: !isSuccessful
+            }, () => {
+                if (callback) {
+                    callback(state);
+                }
+            });
+        }
+
+        const proceedAfterStoreChanged = (state: IEcomData) => {
+            this.props.onFetchPaymentInformation((isSuccessful: boolean) => {
+                proceedAfterRequestMade(state, isSuccessful);
+            });
+        }
+
         this.props.dispatchStoreAction(StoreAction.PAYMENT_UPDATE_FINANCING_INFORMATION, {
             loanDeposit: deposit,
             loanDuration: duration
-        }, callback);
+        }, (state: IEcomData) => {
+            proceedAfterStoreChanged(state);
+        });
     }
 
     handleProceedClick() {
@@ -184,7 +207,7 @@ class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsPr
                                     placeholder="Kontantinsats"
                                     value={this.state.deposit}
                                     onChange={this.handleDepositChange}
-                                    onBlur={this.handleValueUpdated} />
+                                    onBlur={() => { this.handleValueUpdated(); }} />
                             </div>
 
                             <div className="form-alert">Mellan {formatPrice(depositMin)}kr och {formatPrice(depositMax)}kr.</div>
@@ -232,57 +255,73 @@ class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsPr
                     </div>
                 </section>
 
-                <section className="page-section">
-                    <div className="h6 m-b-mini">{formattedPrice} kr/mån</div>
-                    <div className="font-size-small">Beräknat på {formattedInterest}% ränta (effektivt {formattedEffectiveInterest}%)</div>
-                    <div className="m-t-half">
-                        <button data-ecom-link="" className="l-block" onClick={this.handleDetailsClick}>{this.state.isShowingDetails ? 'Färre detaljer' : 'Detaljer'}</button>
-                    </div>
-                    { this.state.isShowingDetails &&
-                        <div className="m-t">
-                            <div data-ecom-columnrow="" className="repeat-m-half">
-                                <div className="column">
-                                    <div className="font-medium font-size-small">Ränta</div>
-                                </div>
-                                <div className="column">{formattedInterest}%</div>
-                            </div>
-                            <div data-ecom-columnrow="" className="repeat-m-half">
-                                <div className="column">
-                                    <div className="font-medium font-size-small">Effektiv ränta	</div>
-                                </div>
-                                <div className="column">{formattedEffectiveInterest}%</div>
-                            </div>
-                            <div data-ecom-columnrow="" className="repeat-m-half">
-                                <div className="column">
-                                    <div className="font-medium font-size-small">Uppläggningskostnad</div>
-                                </div>
-                                <div className="column">{formattedSetupFee}kr</div>
-                            </div>
-                            <div data-ecom-columnrow="" className="repeat-m-half">
-                                <div className="column">
-                                    <div className="font-medium font-size-small">Administrativa avgifter</div>
-                                </div>
-                                <div className="column">{formattedAdministrationFee}kr/mån</div>
-                            </div>
-                            <div data-ecom-columnrow="" className="repeat-m-half">
-                                <div className="column">
-                                    <div className="font-medium font-size-small">Total kreditkostnad</div>
-                                </div>
-                                <div className="column">{formattedTotalCreditCost}kr</div>
-                            </div>
-                        </div>
-                    }
-                </section>
+                { this.state.hasRequestError &&
+                    <section className="page-section">
+                        <Alert message="Tyvärr gick någonting fel. Prova gärna igen om en liten stund." />
+                    </section>
+                }
 
-                <section className="page-section page-section-bottom">
-                    <div data-ecom-buttonnav="">
-                        <div className="button-nav-item" onClick={this.handleProceedClick}>
-                            <div data-ecom-button="full-width">
-                                Välj finansiering
+                { this.props.isWaitingForResponse &&
+                    <section className="page-section">
+                        <Spinner />
+                    </section>
+                }
+
+                { !this.props.isWaitingForResponse &&
+                    <React.Fragment>
+                        <section className="page-section">
+                            <div className="h6 m-b-mini">{formattedPrice} kr/mån</div>
+                            <div className="font-size-small">Beräknat på {formattedInterest}% ränta (effektivt {formattedEffectiveInterest}%)</div>
+                            <div className="m-t-half">
+                                <button data-ecom-link="" className="l-block" onClick={this.handleDetailsClick}>{this.state.isShowingDetails ? 'Färre detaljer' : 'Detaljer'}</button>
                             </div>
-                        </div>
-                    </div>
-                </section>
+                            { this.state.isShowingDetails &&
+                                <div className="m-t">
+                                    <div data-ecom-columnrow="" className="repeat-m-half">
+                                        <div className="column">
+                                            <div className="font-medium font-size-small">Ränta</div>
+                                        </div>
+                                        <div className="column">{formattedInterest}%</div>
+                                    </div>
+                                    <div data-ecom-columnrow="" className="repeat-m-half">
+                                        <div className="column">
+                                            <div className="font-medium font-size-small">Effektiv ränta	</div>
+                                        </div>
+                                        <div className="column">{formattedEffectiveInterest}%</div>
+                                    </div>
+                                    <div data-ecom-columnrow="" className="repeat-m-half">
+                                        <div className="column">
+                                            <div className="font-medium font-size-small">Uppläggningskostnad</div>
+                                        </div>
+                                        <div className="column">{formattedSetupFee}kr</div>
+                                    </div>
+                                    <div data-ecom-columnrow="" className="repeat-m-half">
+                                        <div className="column">
+                                            <div className="font-medium font-size-small">Administrativa avgifter</div>
+                                        </div>
+                                        <div className="column">{formattedAdministrationFee}kr/mån</div>
+                                    </div>
+                                    <div data-ecom-columnrow="" className="repeat-m-half">
+                                        <div className="column">
+                                            <div className="font-medium font-size-small">Total kreditkostnad</div>
+                                        </div>
+                                        <div className="column">{formattedTotalCreditCost}kr</div>
+                                    </div>
+                                </div>
+                            }
+                        </section>
+
+                        <section className="page-section page-section-bottom">
+                            <div data-ecom-buttonnav="">
+                                <div className="button-nav-item" onClick={this.handleProceedClick}>
+                                    <div data-ecom-button="full-width">
+                                        Välj finansiering
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </React.Fragment>
+                }
             </div>
         );
     }

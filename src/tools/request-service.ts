@@ -1,13 +1,14 @@
 import RequestType from "../constants/request-type";
 
-import { IOrderOptionsResponse, IInsuranceOptionsResponse, IVehicleLookupResponse, IAddressLookupResponse } from "wayke-ecom";
+import { IOrderOptionsResponse, IInsuranceOptionsResponse, IVehicleLookupResponse, IAddressLookupResponse, IPaymentLookupResponse } from "wayke-ecom";
 
 import { getOrderOptions } from "../sdk/get-order-options";
 import { getVehicleLookup } from "../sdk/get-vehicle-lookup";
 import { getInsuranceOptions } from "../sdk/get-insurance-options";
 import { getAddressLookup } from "../sdk/get-address-lookup";
+import { getPaymentLookup } from '../sdk/get-payment-lookup';
 import { createOrder } from "../sdk/create-order";
-import { IOrderOptionsSdkData, IVehicleLookupSdkData, IInsuranceOptionsSdkData, IAddressLookupSdkData, ICreateOrderSdkData } from "../types";
+import { IOrderOptionsSdkData, IVehicleLookupSdkData, IInsuranceOptionsSdkData, IAddressLookupSdkData, ICreateOrderSdkData, IPaymentLookupSdkData } from "../types";
 
 const requestCache = {};
 
@@ -82,6 +83,12 @@ export const makeAddressLookupRequest = (data: IAddressLookupSdkData, callback: 
 
     makeRequest(getAddressLookup, RequestType.GET_ADDRESS_LOOKUP, requestIdentifier, data, callback);
 };
+
+export const makePaymentLookupRequest = (data: IPaymentLookupSdkData, callback: (response: IPaymentLookupResponse) => void) => {
+    const requestIdentifier = '' + data.ecomData.loanDeposit + data.ecomData.loanDuration;
+
+    makeRequest(getPaymentLookup, RequestType.GET_PAYMENT_LOOKUP, requestIdentifier, data, callback);
+}
 
 export const makeCreateOrderRequest = (data: ICreateOrderSdkData, callback: (wasOrderSuccessful: boolean) => void) => {
     const requestIdentifier = null;

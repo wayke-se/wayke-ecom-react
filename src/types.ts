@@ -1,6 +1,6 @@
 import CustomerInformationInputType from "./constants/customer-information-input-type";
 import StoreAction from './constants/store-action';
-import { IInsuranceOptionsResponse, IVehicleLookupResponse, IAddressLookupResponse, IOrderOptionsResponse, DrivingDistance, PaymentType } from "wayke-ecom";
+import { IInsuranceOptionsResponse, IVehicleLookupResponse, IAddressLookupResponse, IOrderOptionsResponse, DrivingDistance, PaymentType, IPaymentLookupResponse } from "wayke-ecom";
 
 export interface IVehicle {
     id: string;
@@ -29,10 +29,12 @@ export interface IEcomContext {
     insuranceOptions: IInsuranceOptionsResponse;
     vehicleLookup: IVehicleLookupResponse;
     addressLookup: IAddressLookupResponse;
+    paymentLookup: IPaymentLookupResponse;
 
     onFetchInsuranceOptions: (callback: (isSuccessful: boolean) => void) => void;
     onFetchVehicleInformation: (callback: (isSuccessful: boolean) => void) => void;
     onFetchAddressInformation: (callback: (isSuccessful: boolean) => void) => void;
+    onFetchPaymentInformation: (callback: (isSuccessful: boolean) => void) => void;
     onCreateOrder: (callback: (isSuccessful: boolean) => void) => void;
 }
 
@@ -158,4 +160,9 @@ export interface ICreateOrderSdkData {
     vehicleId: string;
     ecomData: IEcomData;
     addressLookup: IAddressLookupResponse;
+};
+
+export interface IPaymentLookupSdkData {
+    vehicleId: string;
+    ecomData: IPaymentData;
 };
