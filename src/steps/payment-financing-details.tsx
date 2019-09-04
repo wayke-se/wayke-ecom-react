@@ -10,7 +10,7 @@ import SpinnerInline from '../components/spinner-inline';
 
 import { validateStringNumberInRange } from '../utils/validation';
 import { addSizeQuery } from '../utils/image';
-import { formatPrice } from '../utils/helpers';
+import { formatPrice, formatPercentage } from '../utils/helpers';
 import { getLoanPaymentOptions } from '../utils/payment';
 
 import { validatePayment } from '../tools/data-validation';
@@ -225,8 +225,8 @@ class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsPr
         const scaledImage = addSizeQuery(paymentOption.logo, 100, 60);
 
         const formattedPrice = formatPrice(loanDetails.getCosts().monthlyCost);
-        const formattedInterest = formatPrice(loanDetails.getInterests().interest);
-        const formattedEffectiveInterest = formatPrice(loanDetails.getInterests().effectiveInterest);
+        const formattedInterest = formatPercentage(loanDetails.getInterests().interest);
+        const formattedEffectiveInterest = formatPercentage(loanDetails.getInterests().effectiveInterest);
         const formattedSetupFee = formatPrice(loanDetails.getFees().setupFee);
         const formattedAdministrationFee = formatPrice(loanDetails.getFees().administrationFee);
         const formattedTotalCreditCost = formatPrice(loanDetails.getCosts().totalCreditCost);

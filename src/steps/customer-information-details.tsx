@@ -178,6 +178,8 @@ const CustomerInformationDetails = (props: ICustomerInformationDetailsProps) => 
     const hasPhoneError = props.data.interact.customer.phone && !validatePhoneNumber( props.data.customer.phone);
     const hasTermsError = props.data.interact.customer.hasAcceptedTerms && !props.data.customer.hasAcceptedTerms;
 
+    const conditions = props.orderOptions.getOrderConditions();
+
     return (
         <div data-ecom-page="">
             <section className="page-section">
@@ -240,6 +242,9 @@ const CustomerInformationDetails = (props: ICustomerInformationDetailsProps) => 
                             </label>
 
                             <div className="form-alert">Användarvillkoren behöver godkännas för att gå vidare</div>
+
+                            <div>Användarvillkor:</div>
+                            <div>{conditions}</div>
                         </div>
                     </div>
                 </div>

@@ -112,7 +112,7 @@ class Slider extends React.Component<ISliderProps, IState> {
 
     mouseMoveEventListener(e: MouseEvent) {
         this.handleMouseMove(e);
-    };
+    }
 
     mouseUpEventListener(e: MouseEvent) {
         if (this.state.isDragging) {
