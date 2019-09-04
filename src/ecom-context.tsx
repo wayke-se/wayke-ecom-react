@@ -1,7 +1,7 @@
 import React from "react";
 
 import { IEcomExternalProps, IEcomStore } from "./types";
-import { IOrderOptionsResponse, IInsuranceOptionsResponse, IVehicleLookupResponse, IAddressLookupResponse, IPaymentLookupResponse } from "wayke-ecom";
+import { IOrderOptionsResponse, IInsuranceOptionsResponse, IVehicleLookupResponse, IAddressLookupResponse, IPaymentLookupResponse } from '@wayke-se/ecom';
 
 import EcomLifecycle from './ecom-lifecycle';
 import { makeOrderOptionsRequest, makeVehicleLookupRequest, makeInsuranceOptionsRequest, makeAddressLookupRequest, makeCreateOrderRequest, makePaymentLookupRequest } from './tools/request-service';
@@ -12,11 +12,11 @@ export interface IEcomContextProps extends IEcomExternalProps, IEcomStore {
 interface IState {
     isWaitingForResponse: boolean;
 
-    orderOptions: IOrderOptionsResponse | undefined;
-    insuranceOptions: IInsuranceOptionsResponse | undefined;
-    vehicleLookup: IVehicleLookupResponse | undefined;
-    addressLookup: IAddressLookupResponse | undefined;
-    paymentLookup: IPaymentLookupResponse | undefined;
+    orderOptions: IOrderOptionsResponse | null;
+    insuranceOptions: IInsuranceOptionsResponse | null;
+    vehicleLookup: IVehicleLookupResponse | null;
+    addressLookup: IAddressLookupResponse | null;
+    paymentLookup: IPaymentLookupResponse | null;
 };
 
 class EcomContext extends React.Component<IEcomContextProps, IState> {
@@ -47,7 +47,7 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
         const request = () => {
             makeOrderOptionsRequest({
                 vehicleId: this.props.vehicle.id
-            }, (response: IOrderOptionsResponse) => {
+            }, (response: IOrderOptionsResponse | null) => {
                 this.saveResponse({
                     orderOptions: response
                 }, () => {});
@@ -61,7 +61,7 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
         const request = () => {
             makeVehicleLookupRequest({
                 ecomData: this.props.data.tradeInCar
-            }, (response: IVehicleLookupResponse) => {
+            }, (response: IVehicleLookupResponse | null) => {
                 this.saveResponse({
                     vehicleLookup: response
                 }, () => {
@@ -79,7 +79,7 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
                 ecomData: this.props.data.insurance,
                 vehicleId: this.props.vehicle.id,
                 paymentType: this.props.data.payment.paymentType
-            }, (response: IInsuranceOptionsResponse) => {
+            }, (response: IInsuranceOptionsResponse | null) => {
                 this.saveResponse({
                     insuranceOptions: response
                 }, () => {
@@ -95,7 +95,7 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
         const request = () => {
             makeAddressLookupRequest({
                 ecomData: this.props.data.customer
-            }, (response: IAddressLookupResponse) => {
+            }, (response: IAddressLookupResponse | null) => {
                 this.saveResponse({
                     addressLookup: response
                 }, () => {
@@ -114,7 +114,7 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
                 ecomData: this.props.data.payment,
                 orderOptions: this.state.orderOptions,
                 paymentLookup: this.state.paymentLookup
-            }, (response: IPaymentLookupResponse) => {
+            }, (response: IPaymentLookupResponse | null) => {
                 this.saveResponse({
                     paymentLookup: response
                 }, () => {

@@ -1,4 +1,4 @@
-import { orders, vehicles, customers, IOrderCreateResponse, IAddress, PaymentType, VehicleCondition, DeliveryType, IAddressLookupResponse, IOrderOptionsResponse, IPaymentLookupResponse } from 'wayke-ecom';
+import { orders, vehicles, customers, IOrderCreateResponse, IAddress, PaymentType, VehicleCondition, DeliveryType, IAddressLookupResponse, IOrderOptionsResponse, IPaymentLookupResponse } from '@wayke-se/ecom';
 import { IEcomData, ICreateOrderSdkData } from '../types';
 import CustomerInformationInputType from '../constants/customer-information-input-type';
 import { validateEcomData } from '../tools/data-validation';

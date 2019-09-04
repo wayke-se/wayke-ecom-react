@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { PaymentType } from 'wayke-ecom';
+import { PaymentType } from '@wayke-se/ecom';
 import { IVehicle, IEcomStore, IEcomExternalProps, IEcomContext } from './types';
 
 import { formatPrice } from './utils/helpers';

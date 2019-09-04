@@ -2,6 +2,10 @@
   "name": "@wayke-se/ecom-react",
   "version": "1.0.0",
   "description": "React components for wayke ecom.",
+  "main": "src/index.tsx",
+  "scripts": {
+    "build": "pika build"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/wayke-se/wayke-ecom-react.git"
@@ -23,8 +27,34 @@
   "engines": {
     "node": ">= 10.0.0"
   },
+  "devDependencies": {
+    "@pika/pack": "^0.5.0",
+    "@pika/plugin-build-node": "^0.6.0",
+    "@pika/plugin-build-types": "^0.6.0",
+    "@pika/plugin-build-web": "^0.6.0",
+    "@pika/plugin-ts-standard-pkg": "^0.6.0",
+    "@types/node": "^12.7.2",
+    "@types/react": "^16.8.0",
+    "typescript": "^3.5.3"
+  },
   "dependencies": {
     "@wayke-se/ecom": "^1.0.0",
     "marked": "^0.7.0"
+  },
+  "@pika/pack": {
+    "pipeline": [
+      [
+        "@pika/plugin-ts-standard-pkg"
+      ],
+      [
+        "@pika/plugin-build-node"
+      ],
+      [
+        "@pika/plugin-build-web"
+      ],
+      [
+        "@pika/plugin-build-types"
+      ]
+    ]
   }
 }

@@ -2,7 +2,7 @@ import EcomStep from './constants/ecom-step';
 import CustomerInformationInputType from './constants/customer-information-input-type';
 
 import { IEcomData } from './types';
-import { PaymentType, IOrderOptionsResponse } from 'wayke-ecom';
+import { PaymentType, IOrderOptionsResponse } from '@wayke-se/ecom';
 
 export const getInitialStep = (options: IOrderOptionsResponse): EcomStep => {
     return options.allowsTradeIn() ? EcomStep.TRADE_IN_EXISTS_CHOOSER : EcomStep.PAYMENT_METHOD_CHOOSER;

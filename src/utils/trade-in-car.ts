@@ -1,6 +1,6 @@
-import { IVehicle } from "wayke-ecom";
+import { IVehicle } from '@wayke-se/ecom';
 
-export const getVehicleTitle = (vehicle: IVehicle): string => {
+export const getVehicleTitle = (vehicle: IVehicle): string | null => {
     if (!vehicle) {
         return null;
     }
@@ -8,7 +8,7 @@ export const getVehicleTitle = (vehicle: IVehicle): string => {
     return vehicle.manufacturer + ' ' + vehicle.modelName;
 }
 
-export const getVehicleDescription = (vehicle: IVehicle): string => {
+export const getVehicleDescription = (vehicle: IVehicle): string | null => {
     if (!vehicle) {
         return null;
     }
@@ -16,7 +16,7 @@ export const getVehicleDescription = (vehicle: IVehicle): string => {
     return vehicle.modelSeries;
 }
 
-export const getVehicleFullTitle = (registrationNumber: string, vehicle: IVehicle): string => {
+export const getVehicleFullTitle = (registrationNumber: string, vehicle: IVehicle): string | null => {
     if (!vehicle) {
         return null;
     }

@@ -1,4 +1,4 @@
-import { customers, IAddressLookupResponse, } from 'wayke-ecom';
+import { customers, IAddressLookupResponse, } from '@wayke-se/ecom';
 import { ICustomerData, IAddressLookupSdkData } from '../types';
 import { validateCustomerObjectPersonalNumber } from '../tools/data-validation';
 import { createCustomerObject } from '../tools/data-creator';
@@ -10,7 +10,7 @@ const validate = (data: ICustomerData) => {
     return validateCustomerObjectPersonalNumber(customerObject);
 }
 
-export const getAddressLookup = (data: IAddressLookupSdkData, callback: (lookup: IAddressLookupResponse) => void) => {
+export const getAddressLookup = (data: IAddressLookupSdkData, callback: (lookup: IAddressLookupResponse | null) => void) => {
     const isValidRequestData = validate(data.ecomData);
 
     if (!isValidRequestData) {

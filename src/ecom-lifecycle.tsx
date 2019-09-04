@@ -9,7 +9,7 @@ import EcomCart from './ecom-cart';
 import EcomTimeline from './ecom-timeline';
 
 import { IEcomExternalProps, IEcomContext, IEcomStore, IEcomData } from './types';
-import { IOrderOptionsResponse } from 'wayke-ecom';
+import { IOrderOptionsResponse } from '@wayke-se/ecom';
 
 interface IEcomLifecycleProps extends IEcomExternalProps, IEcomContext, IEcomStore {
 }

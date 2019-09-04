@@ -8,7 +8,7 @@ import { validateInsurance } from '../tools/data-validation';
 
 import Alert from '../components/alert';
 import Spinner from '../components/spinner';
-import { DrivingDistance } from 'wayke-ecom';
+import { DrivingDistance } from '@wayke-se/ecom';
 import { getDrivingDistanceLabel } from '../utils/insurance';
 
 export interface IInsuranceInformationDefinitionProps extends IEcomContext, IEcomStore, IEcomLifecycle {

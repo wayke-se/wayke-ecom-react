@@ -17,7 +17,7 @@ const separateEveryThirdCharacter = (value: string) => {
 
 export const formatPrice = (value: number, decimalSymbol = ',') => {
     if (!value) {
-        return;
+        return null;
     }
 
     const roundedValue = Math.round(value);

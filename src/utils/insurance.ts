@@ -1,4 +1,4 @@
-import { DrivingDistance } from 'wayke-ecom';
+import { DrivingDistance } from '@wayke-se/ecom';
 
 export const getDrivingDistanceLabel = (drivingDistance: DrivingDistance): string => {
     switch (drivingDistance) {

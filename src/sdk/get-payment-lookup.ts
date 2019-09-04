@@ -1,4 +1,4 @@
-import { payments, IPaymentLookupResponse, IOrderOptionsResponse } from 'wayke-ecom';
+import { payments, IPaymentLookupResponse, IOrderOptionsResponse } from '@wayke-se/ecom';
 import { IPaymentLookupSdkData, IPaymentData } from '../types';
 import { validatePayment } from '../tools/data-validation';
 
@@ -8,7 +8,7 @@ const validate = (data: IPaymentData, orderOptions: IOrderOptionsResponse, payme
     return validatePayment(data, orderOptions, paymentLookup);
 }
 
-export const getPaymentLookup = (data: IPaymentLookupSdkData, callback: (lookup: IPaymentLookupResponse) => void) => {
+export const getPaymentLookup = (data: IPaymentLookupSdkData, callback: (lookup: IPaymentLookupResponse | null) => void) => {
     const isValidRequestData = validate(data.ecomData, data.orderOptions, data.paymentLookup);
 
     if (!isValidRequestData) {

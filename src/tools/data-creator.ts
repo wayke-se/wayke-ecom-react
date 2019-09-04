@@ -1,5 +1,5 @@
 import { ICustomerData, ICustomerObject } from "../types";
-import { IAddressLookupResponse } from 'wayke-ecom';
+import { IAddressLookupResponse } from '@wayke-se/ecom';
 import CustomerInformationInputType from "../constants/customer-information-input-type";
 
 export const createCustomerObject = (customer: ICustomerData, addressLookupResponse: IAddressLookupResponse | undefined): ICustomerObject => {
@@ -32,9 +32,13 @@ export const createCustomerObject = (customer: ICustomerData, addressLookupRespo
         personalNumber,
         email,
         phone,
+        // @ts-ignore
         name,
+        // @ts-ignore
         address,
+        // @ts-ignore
         zip,
+        // @ts-ignore
         city
     };
 }

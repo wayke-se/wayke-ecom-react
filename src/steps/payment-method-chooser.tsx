@@ -3,7 +3,7 @@ import React from 'react';
 import { IEcomContext, IEcomLifecycle, IEcomStore, IEcomExternalProps } from '../types';
 import StoreAction from '../constants/store-action';
 
-import { PaymentType, IPaymentOption } from 'wayke-ecom';
+import { PaymentType, IPaymentOption } from '@wayke-se/ecom';
 
 import { formatPrice, formatPercentage } from '../utils/helpers';
 import { addSizeQuery } from '../utils/image';
@@ -28,18 +28,18 @@ const PaymentMethodItem = (props: IPaymentMethodItemProps) => {
     };
 
     const title = getPaymentMethodTitle(props.paymentOption.type);
-    const scaledImage = addSizeQuery(props.paymentOption.logo, 100, 60);
+    const scaledImage = addSizeQuery(props.paymentOption.logo!, 100, 60);
 
     const isLoan = props.paymentOption.type === PaymentType.Loan;
 
-    var formattedPrice = null;
-    var formattedInterest = null;
+    var formattedPrice: string | number | null | undefined = null;
+    var formattedInterest: number | null = null;
 
     if (isLoan) {
         const loanDetails = props.paymentOption.loanDetails;
 
-        formattedPrice = formatPrice(loanDetails.getCosts().monthlyCost);
-        formattedInterest = formatPercentage(loanDetails.getInterests().interest);
+        formattedPrice = formatPrice(loanDetails!.getCosts().monthlyCost);
+        formattedInterest = formatPercentage(loanDetails!.getInterests().interest);
     } else {
         formattedPrice = props.paymentOption.price;
     }
@@ -56,7 +56,7 @@ const PaymentMethodItem = (props: IPaymentMethodItemProps) => {
 
                     { props.paymentOption.logo &&
                         <div className="column valign-top minimal">
-                            <img src={scaledImage} alt="logotype" className="l-block" />
+                            <img src={scaledImage!} alt="logotype" className="l-block" />
                         </div>
                     }
                 </div>

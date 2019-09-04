@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "target": "es2019",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "strict": false,
+    "lib": ["dom", "es2015", "es2016", "es2017", "es2018"],
+    "outDir": "dist",
+    "declaration": true,
+    "removeComments": true,
+    "esModuleInterop": true,
+    "jsx": "react",
+    "noImplicitAny": false
+  },
+  "include": [
+    "src/**/*"
+  ]
+}

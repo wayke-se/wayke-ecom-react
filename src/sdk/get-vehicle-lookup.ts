@@ -1,4 +1,4 @@
-import { vehicles, IVehicleLookupResponse, } from 'wayke-ecom';
+import { vehicles, IVehicleLookupResponse, } from '@wayke-se/ecom';
 import { ITradeInCarData, IVehicleLookupSdkData } from '../types';
 import { validateTradeIn } from '../tools/data-validation';
 
@@ -8,7 +8,7 @@ const validate = (data: ITradeInCarData) => {
     return validateTradeIn(data);
 }
 
-export const getVehicleLookup = (data: IVehicleLookupSdkData, callback: (lookup: IVehicleLookupResponse) => void) => {
+export const getVehicleLookup = (data: IVehicleLookupSdkData, callback: (lookup: IVehicleLookupResponse | null) => void) => {
     const isValidRequestData = validate(data.ecomData);
 
     if (!isValidRequestData) {

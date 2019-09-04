@@ -1,4 +1,4 @@
-import { insurances, IInsuranceOptionsResponse } from 'wayke-ecom';
+import { insurances, IInsuranceOptionsResponse } from '@wayke-se/ecom';
 import { IInsuranceData, IInsuranceOptionsSdkData } from '../types';
 import { validateInsurance } from '../tools/data-validation';
 
@@ -8,7 +8,7 @@ const validate = (data: IInsuranceData) => {
     return validateInsurance(data);
 }
 
-export const getInsuranceOptions = (data: IInsuranceOptionsSdkData, callback: (options: IInsuranceOptionsResponse) => void) => {
+export const getInsuranceOptions = (data: IInsuranceOptionsSdkData, callback: (options: IInsuranceOptionsResponse | null) => void) => {
     const isValidRequestData = validate(data.ecomData);
 
     if (!isValidRequestData) {

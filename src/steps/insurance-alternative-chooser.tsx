@@ -5,7 +5,7 @@ import marked from 'marked';
 import { IEcomLifecycle, IEcomStore, IEcomContext } from '../types';
 import StoreAction from '../constants/store-action';
 import { getDrivingDistanceLabel } from '../utils/insurance';
-import { IInsuranceItem, IInsuranceAddon } from 'wayke-ecom';
+import { IInsuranceItem, IInsuranceAddon } from '@wayke-se/ecom';
 import { htmlEncode } from '../utils/encode';
 
 export interface IInsuranceAlternativeChooserProps extends IEcomContext, IEcomStore, IEcomLifecycle {

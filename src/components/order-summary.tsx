@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { IEcomStore, IEcomContext, IEcomExternalProps } from '../types';
-import { PaymentType } from 'wayke-ecom';
+import { PaymentType } from '@wayke-se/ecom';
 
 import { formatPrice } from '../utils/helpers';
 import { getPaymentMethodTitle, getLoanPaymentOptions } from '../utils/payment';

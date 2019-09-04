@@ -1,7 +1,7 @@
-import { orders, IOrderOptionsResponse } from 'wayke-ecom';
+import { orders, IOrderOptionsResponse } from '@wayke-se/ecom';
 import { IOrderOptionsSdkData } from '../types';
 
-export const getOrderOptions = (data: IOrderOptionsSdkData, callback: (options: IOrderOptionsResponse) => void) => {
+export const getOrderOptions = (data: IOrderOptionsSdkData, callback: (options: IOrderOptionsResponse | null) => void) => {
     const request = orders.newOptionsRequest()
         .forVehicle(data.vehicleId)
         .build();

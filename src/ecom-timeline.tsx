@@ -1,7 +1,7 @@
 import React from 'react';
 
 import EcomStep from './constants/ecom-step';
-import { IOrderOptionsResponse } from 'wayke-ecom';
+import { IOrderOptionsResponse } from '@wayke-se/ecom';
 import { getPrimarySteps } from './ecom-step-transitions';
 
 export interface IEcomTimelineProps {

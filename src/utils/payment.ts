@@ -1,4 +1,4 @@
-import { PaymentType, IOrderOptionsResponse } from 'wayke-ecom';
+import { PaymentType, IOrderOptionsResponse } from '@wayke-se/ecom';
 
 export const getPaymentMethodTitle = (type: PaymentType) => {
     switch(type) {
