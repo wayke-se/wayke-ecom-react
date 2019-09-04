@@ -14,7 +14,7 @@ import { formatPrice, formatPercentage } from '../utils/helpers';
 import { getLoanPaymentOptions } from '../utils/payment';
 
 import { validatePayment } from '../tools/data-validation';
-import { PaymentType, IPaymentRangeSpec, IOrderOptionsResponse, IPaymentLookupResponse } from 'wayke-ecom';
+import { PaymentType, IPaymentRangeSpec, IOrderOptionsResponse, IPaymentLookupResponse } from '@wayke-se/ecom';
 
 export interface IPaymentFinancingDetailsProps extends IEcomExternalProps, IEcomContext, IEcomStore, IEcomLifecycle {
 };
