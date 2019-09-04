@@ -43,3 +43,20 @@ const ecomData = {
 * `vehicle` - This is information about the vehicle that the user wants to sell. The `id` is referring to a *Wayke id*, i.e. an id that is defined by Wayke for the car to sell via Wayke's e-commerce solution. The rest of the information is information about the vehicle to sell and/or the retailer who sells it.
 * `serviceLogotypeUrl` - This should be an url to an image that is shown in the "header" of the e-commerce modal.
 * `onExit` - This should be a function that determines what should happen when the user either clicks the exit button on the modal, or if the user goes through the whole flow, makes the order and now is finished. (this code should probably hide the modal)
+
+When you want to show the Ecom component you simply import it and instantiate it with the above mentioned data.
+
+```
+import Ecom from 'wayke-ecom-react';
+
+...
+<Ecom {...ecomData} />
+...
+```
+
+The ecom component will always be visible, so you have to set it's visibility by removing and adding it, e.g.:
+
+```
+...
+{ shouldShowEcomModal && <Ecom {...ecomData} /> }
+...
