@@ -161,6 +161,8 @@ const ManualContent = (props: ICustomerInformationDetailsProps) => {
 };
 
 const CustomerInformationDetails = (props: ICustomerInformationDetailsProps) => {
+    const [ isExtended, setIsExtended ] = React.useState(false);
+
     const handleNextStepClick = () => {
         const customerObject = createCustomerObject(props.data.customer, props.addressLookup);
         const isValidCustomer = validateCustomerObject(customerObject);
@@ -170,6 +172,10 @@ const CustomerInformationDetails = (props: ICustomerInformationDetailsProps) => 
         }
 
         props.onProceedToNextStep();
+    };
+
+    const handleShowTermsClick = () => {
+        setIsExtended(!isExtended);
     };
 
     const isAutomatic = props.data.customer.inputType === CustomerInformationInputType.AUTOMATIC;
@@ -227,27 +233,37 @@ const CustomerInformationDetails = (props: ICustomerInformationDetailsProps) => 
 
                         <div className="form-alert">Fel format</div>
                     </div>
+                </div>
+            </section>
 
+            <section className="page-section">
+                <div data-ecom-form="">
                     <div className={`form-group ${hasTermsError ? ' has-error' : ''}`}>
                         <div data-ecom-inputselection="checkbox">
                             <input type="checkbox"
-                                id="information-2-checkbox"
+                                id="checkbox-summary-terms"
                                 name="hasAcceptedTerms"
                                 checked={props.data.customer.hasAcceptedTerms}
                                 onChange={(e) => { handleCheckboxChange(props, e) }}
                                 onBlur={(e) => handleBlur(props, e)} />
 
-                            <label htmlFor="information-2-checkbox">
-                                <span className="text">Jag godkänner användarvillkoren</span>
+                            <label htmlFor="checkbox-summary-terms">
+                                <span className="text">Jag godkänner <button data-ecom-link="" className="valign-baseline" onClick={handleShowTermsClick}>användarvillkoren</button></span>
                             </label>
 
                             <div className="form-alert">Användarvillkoren behöver godkännas för att gå vidare</div>
-
-                            <div>Användarvillkor:</div>
-                            <div>{conditions}</div>
                         </div>
                     </div>
                 </div>
+
+                { isExtended &&
+                    <div data-ecom-scrollbox="" className="m-t">
+                        <article data-ecom-content="small-headings">
+                            <h1>Användarvillkor</h1>
+                            <p>{conditions}</p>
+                        </article>
+                    </div>
+                }
             </section>
 
             <section className="page-section page-section-bottom">
