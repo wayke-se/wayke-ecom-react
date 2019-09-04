@@ -8,7 +8,7 @@ TODO
 Configure the e-commerce API endpoint:
 
 ```
-import { config } from "wayke-ecom";
+import { config } from "@wayke-se/ecom";
 
 config.bind({
     api: {
@@ -47,7 +47,7 @@ const ecomData = {
 When you want to show the Ecom component you simply import it and instantiate it with the above mentioned data.
 
 ```
-import Ecom from 'wayke-ecom-react';
+import Ecom from '@wayke-se/ecom-react';
 
 ...
 <Ecom {...ecomData} />
