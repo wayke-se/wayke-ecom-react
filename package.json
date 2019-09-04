@@ -1,0 +1,30 @@
+{
+  "name": "wayke-ecom-react",
+  "version": "1.0.0",
+  "description": "React components for wayke ecom.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wayke-se/wayke-ecom-react.git"
+  },
+  "keywords": [
+    "wayke",
+    "ecom",
+    "react"
+  ],
+  "author": "Robin Sveningson",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/wayke-se/wayke-ecom-react/issues"
+  },
+  "homepage": "https://github.com/wayke-se/wayke-ecom-react#readme",
+  "peerDependencies": {
+    "react": "^16.8.0"
+  },
+  "engines": {
+    "node": ">= 10.0.0"
+  },
+  "dependencies": {
+    "@wayke-se/ecom": "^1.0.0",
+    "marked": "^0.7.0"
+  }
+}
