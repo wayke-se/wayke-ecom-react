@@ -2,24 +2,9 @@
   "name": "wayke-ecom-react",
   "version": "1.0.0",
   "description": "React components for wayke ecom.",
-  "main": "dist/index.js",
-  "typings": "dist/index.d.ts",
-  "scripts": {
-    "build": "pika build",
-    "prebuild": "npm run prepare && npm run clean",
-    "build:tsc": "tsc",
-    "prebuild:tsc": "npm run prepare && npm run clean",
-    "clean": "rimraf ./dist ./pkg",
-    "lint": "tslint -c ./tslint.json -p ./tsconfig.json -e 'src/__test__/**/*' -e 'src/**/*.spec.{ts}' 'src/**/*.{ts}'",
-    "prepare": "npm run prettify && npm run type-check && npm run lint && npm run test",
-    "test": "jest --coverage --verbose",
-    "pretest": "rimraf ./coverage",
-    "type-check": "tsc --noEmit --skipLibCheck",
-    "version": "npm run build"
-  },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/wayke/wayke-ecom-react.git"
+    "url": "git+https://github.com/wayke-se/wayke-ecom-react.git"
   },
   "keywords": [
     "wayke",
@@ -29,79 +14,17 @@
   "author": "Robin Sveningson",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/wayke/wayke-ecom-react/issues"
+    "url": "https://github.com/wayke-se/wayke-ecom-react/issues"
   },
-  "homepage": "https://github.com/wayke/wayke-ecom-react#readme",
-  "devDependencies": {
-    "@pika/pack": "^0.5.0",
-    "@pika/plugin-build-node": "^0.6.0",
-    "@pika/plugin-build-types": "^0.6.0",
-    "@pika/plugin-build-web": "^0.6.0",
-    "@pika/plugin-ts-standard-pkg": "^0.6.0",
-    "@types/jest": "^24.0.17",
-    "@types/node": "^12.7.2",
-    "@types/react": "^16.9.2",
-    "coveralls": "^3.0.6",
-    "jest": "^24.9.0",
-    "parcel-bundler": "^1.12.3",
-    "react": "^16.8.0",
-    "react-dom": "^16.8.0",
-    "rimraf": "^3.0.0",
-    "ts-jest": "^24.0.2",
-    "tslint": "^5.18.0",
-    "tslint-config-airbnb": "^5.11.1",
-    "tslint-config-prettier": "^1.18.0",
-    "tslint-react": "^4.0.0",
-    "typescript": "^3.5.3"
-  },
+  "homepage": "https://github.com/wayke-se/wayke-ecom-react#readme",
   "peerDependencies": {
     "react": "^16.8.0"
   },
   "engines": {
     "node": ">= 10.0.0"
   },
-  "jest": {
-    "moduleFileExtensions": [
-      "ts",
-      "js",
-      "tsx"
-    ],
-    "transform": {
-      "^.+\\.(ts|tsx)$": "ts-jest"
-    },
-    "testMatch": [
-      "<rootDir>/src/**/*.spec.(ts|js|tsx)"
-    ]
-  },
-  "@pika/pack": {
-    "pipeline": [
-      [
-        "@pika/plugin-ts-standard-pkg",
-        {
-          "exclude": [
-            "__test__/*",
-            "@types/*",
-            "**/*.spec.ts[x]"
-          ]
-        }
-      ],
-      [
-        "@pika/plugin-build-node"
-      ],
-      [
-        "@pika/plugin-build-web"
-      ],
-      [
-        "@pika/plugin-build-types"
-      ]
-    ]
-  },
-  "files": [
-    "dist-*/"
-  ],
   "dependencies": {
     "@wayke-se/ecom": "^1.0.0",
-    "marked": "^0.7.0",
-    "wayke-ecom": "^1.0.0-beta-12"
+    "marked": "^0.7.0"
   }
 }
