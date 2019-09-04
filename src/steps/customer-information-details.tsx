@@ -166,8 +166,11 @@ const CustomerInformationDetails = (props: ICustomerInformationDetailsProps) => 
     const handleNextStepClick = () => {
         const customerObject = createCustomerObject(props.data.customer, props.addressLookup);
         const isValidCustomer = validateCustomerObject(customerObject);
+        const hasAcceptedTerms = props.data.customer.hasAcceptedTerms;
 
-        if (!isValidCustomer) {
+        const isValid = isValidCustomer && hasAcceptedTerms;
+
+        if (!isValid) {
             return props.dispatchStoreAction(StoreAction.INTERACT_SET_ALL_FOR_TYPE, 'customer');
         }
 
