@@ -106,7 +106,7 @@ const CustomerInformationInitial = (props: ICustomerInformationInitialProps) => 
                                 onBlur={handleBlur} />
                         </div>
 
-                        <div className="form-alert">Fel format</div>
+                        <div className="form-alert">Ange personnummer i formatet ÅÅÅÅMMDD-XXXX</div>
                     </div>
 
                     { hasRequestError &&

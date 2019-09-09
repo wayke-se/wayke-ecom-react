@@ -129,7 +129,7 @@ class InsuranceInformationDefinition extends React.Component<IInsuranceInformati
                                     onBlur={this.handleBlur} />
                             </div>
 
-                            <div className="form-alert">Fel format</div>
+                            <div className="form-alert">Ange personnummer i formatet ÅÅÅÅMMDD-XXXX</div>
                         </div>
 
                         <div className="form-group">

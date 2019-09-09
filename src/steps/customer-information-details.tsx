@@ -105,7 +105,7 @@ const ManualContent = (props: ICustomerInformationDetailsProps) => {
                             onBlur={(e) => handleBlur(props, e)} />
                     </div>
 
-                    <div className="form-alert">Fel format</div>
+                    <div className="form-alert">För- och efternamn måste anges</div>
                 </div>
 
                 <div className={`form-group ${hasAddressError ? ' has-error' : ''}`}>
@@ -121,7 +121,7 @@ const ManualContent = (props: ICustomerInformationDetailsProps) => {
                             onBlur={(e) => handleBlur(props, e)} />
                     </div>
 
-                    <div className="form-alert">Fel format</div>
+                    <div className="form-alert">Gatuadress måste anges</div>
                 </div>
 
                 <div className={`form-group ${hasZipError ? ' has-error' : ''}`}>
@@ -137,7 +137,7 @@ const ManualContent = (props: ICustomerInformationDetailsProps) => {
                             onBlur={(e) => handleBlur(props, e)} />
                     </div>
 
-                    <div className="form-alert">Fel format</div>
+                    <div className="form-alert">Ange postnummer i formatet "XXX XX"</div>
                 </div>
 
                 <div className={`form-group ${hasCityError ? ' has-error' : ''}`}>
@@ -153,7 +153,7 @@ const ManualContent = (props: ICustomerInformationDetailsProps) => {
                             onBlur={(e) => handleBlur(props, e)} />
                     </div>
 
-                    <div className="form-alert">Fel format</div>
+                    <div className="form-alert">Postort måste anges</div>
                 </div>
             </div>
         </section>
@@ -218,7 +218,7 @@ const CustomerInformationDetails = (props: ICustomerInformationDetailsProps) => 
                                 onBlur={(e) => handleBlur(props, e)} />
                         </div>
 
-                        <div className="form-alert">Fel format</div>
+                        <div className="form-alert">En giltig e-postadress måste anges</div>
                     </div>
 
                     <div className={`form-group ${hasPhoneError ? ' has-error' : ''}`}>
@@ -234,7 +234,7 @@ const CustomerInformationDetails = (props: ICustomerInformationDetailsProps) => 
                                 onBlur={(e) => handleBlur(props, e)} />
                         </div>
 
-                        <div className="form-alert">Fel format</div>
+                        <div className="form-alert">Ange telefonnummer i formatet 07X-XXXXXXX</div>
                     </div>
                 </div>
             </section>

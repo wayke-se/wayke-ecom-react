@@ -69,7 +69,7 @@ const TradeInCarDefinition = (props: ITradeInCarDefinitionProps) => {
                                     onChange={handleInputChange}
                                     onBlur={handleBlur} />
                         </div>
-                        <div className="form-alert">Fel format.</div>
+                        <div className="form-alert">Ett giltigt registreringsnummer behöver anges</div>
                     </div>
 
                     <div className={`form-group ${hasErrorMilage ? ' has-error' : ''}`}>
@@ -83,7 +83,7 @@ const TradeInCarDefinition = (props: ITradeInCarDefinitionProps) => {
                                     onChange={handleInputChange}
                                     onBlur={handleBlur} />
                         </div>
-                        <div className="form-alert">Mellan 0 och 80 000 mil.</div>
+                        <div className="form-alert">Mellan 0 och 80 000 mil</div>
                     </div>
                 </div>
             </section>

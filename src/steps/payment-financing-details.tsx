@@ -264,7 +264,7 @@ class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsPr
                                     onBlur={this.handleValueUpdated} />
                             </div>
 
-                            <div className="form-alert">Mellan {formatPrice(depositSpecification.min)}kr och {formatPrice(depositSpecification.max)}kr.</div>
+                            <div className="form-alert">Mellan {formatPrice(depositSpecification.min)}kr och {formatPrice(depositSpecification.max)}kr</div>
 
                             <div className="m-t">
                                 { !hasDownPaymentError &&
@@ -319,7 +319,7 @@ class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsPr
                                         onBlur={this.handleValueUpdated} />
                                 </div>
 
-                                <div className="form-alert">Mellan {residualMin}% och {residualMax}%.</div>
+                                <div className="form-alert">Mellan {residualMin}% och {residualMax}%</div>
 
                                 <div className="m-t">
                                     { !hasResidualError &&
