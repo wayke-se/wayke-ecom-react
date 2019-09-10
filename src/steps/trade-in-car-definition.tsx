@@ -7,6 +7,7 @@ import { validateTradeIn } from '../tools/data-validation';
 
 import Alert from '../components/alert';
 import Spinner from '../components/spinner';
+import { handleEnterPress } from '../utils/events';
 
 export interface ITradeInCarDefinitionProps extends IEcomContext, IEcomStore, IEcomLifecycle {
 };
@@ -81,7 +82,8 @@ const TradeInCarDefinition = (props: ITradeInCarDefinitionProps) => {
                                     placeholder="Miltal"
                                     value={props.data.tradeInCar.milage}
                                     onChange={handleInputChange}
-                                    onBlur={handleBlur} />
+                                    onBlur={handleBlur}
+                                    onKeyPress={(e: React.KeyboardEvent) => handleEnterPress(e, handleNextStepClick)} />
                         </div>
                         <div className="form-alert">Mellan 0 och 80 000 mil</div>
                     </div>

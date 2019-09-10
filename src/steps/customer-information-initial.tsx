@@ -11,6 +11,7 @@ import { validateCustomerObjectPersonalNumber } from '../tools/data-validation';
 
 import Alert from '../components/alert';
 import Spinner from '../components/spinner';
+import { handleEnterPress } from '../utils/events';
 
 export interface ICustomerInformationInitialProps extends IEcomContext, IEcomStore, IEcomLifecycle {
 };
@@ -103,7 +104,8 @@ const CustomerInformationInitial = (props: ICustomerInformationInitialProps) => 
                                 placeholder="ÅÅÅÅMMDD-XXXX"
                                 value={props.data.customer.personalNumber || ''}
                                 onChange={handleInputChange}
-                                onBlur={handleBlur} />
+                                onBlur={handleBlur}
+                                onKeyPress={(e: React.KeyboardEvent) => handleEnterPress(e, () => handleInputTypeClick(CustomerInformationInputType.AUTOMATIC)) } />
                         </div>
 
                         <div className="form-alert">Ange personnummer i formatet ÅÅÅÅMMDD-XXXX</div>
