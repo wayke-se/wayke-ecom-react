@@ -13,7 +13,6 @@ const FinalConfirmation = (props: IFinalConfirmationProps) => {
                 <h1 className="h6">Tack för din order!</h1>
                 <div data-ecom-content="">
                     <p>En orderbekräftelse kommer att skickas till din e-postadress <span className="font-medium">{props.data.customer.email}</span>.</p>
-                    <p>Orderbekräftelsen skickas normalt inom <span className="font-medium">10 minuter</span>, men kan i undantagsfall dröja upp till <span className="font-medium">48 timmar</span>.</p>
                 </div>
             </section>
 
