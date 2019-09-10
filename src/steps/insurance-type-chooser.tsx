@@ -38,7 +38,7 @@ const InsuranceTypeChooser = (props: IInsuranceTypeChooserProps) => {
                             <button className="option-list-action" onClick={() => handleInsuranceOptionClick(true)}>
                                 <div data-ecom-columnrow="">
                                     <div className="column">
-                                        <div className="option-list-action-title">{insuranceOption.title}</div>
+                                        <div className="option-list-action-title">{insuranceOption.title}<i className="icon-arrow-right m-l-half"></i></div>
                                         { insuranceOption.description && <div className="option-list-action-subtitle">{insuranceOption.description}</div> }
                                     </div>
 
@@ -52,7 +52,7 @@ const InsuranceTypeChooser = (props: IInsuranceTypeChooserProps) => {
                         </li>
                         <li className="option-list-item">
                             <button className="option-list-action" onClick={() => handleInsuranceOptionClick(false)}>
-                                <div className="option-list-action-title">Hoppa över detta steg</div>
+                                <div className="option-list-action-title">Hoppa över detta steg<i className="icon-arrow-right m-l-half"></i></div>
                                 <div className="option-list-action-meta">Jag har egen försäkring</div>
                             </button>
                         </li>

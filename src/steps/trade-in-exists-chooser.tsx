@@ -31,13 +31,13 @@ const TradeInExistsChooser = (props: ITradeInExistsChooserProps) => {
                     <ul className="option-list">
                         <li className="option-list-item">
                             <button className="option-list-action" onClick={() => handleHasTradeInCarClick(true)}>
-                                <div className="option-list-action-title">Jag har inbytesbil</div>
+                                <div className="option-list-action-title">Jag har inbytesbil<i className="icon-arrow-right m-l-half"></i></div>
                             </button>
                         </li>
 
                         <li className="option-list-item">
                             <button className="option-list-action" onClick={() => handleHasTradeInCarClick(false)}>
-                                <div className="option-list-action-title">Jag har ingen inbytesbil</div>
+                                <div className="option-list-action-title">Jag har ingen inbytesbil<i className="icon-arrow-right m-l-half"/></div>
                             </button>
                         </li>
                     </ul>

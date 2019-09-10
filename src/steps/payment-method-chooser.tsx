@@ -49,7 +49,7 @@ const PaymentMethodItem = (props: IPaymentMethodItemProps) => {
             <button className="option-list-action" onClick={() => handlePaymentMethodClick()}>
                 <div data-ecom-columnrow="">
                     <div className="column">
-                        <div className="option-list-action-title">{title}</div>
+                        <div className="option-list-action-title">{title}<i className="icon-arrow-right m-l-half"></i></div>
                         <div className="option-list-action-subtitle">{props.paymentOption.name}</div>
                         <div className="option-list-action-meta">{formattedPrice} {props.paymentOption.unit} {formattedInterest !== null && <span className="text-dark-lighten">Ränta {formattedInterest}%</span>}</div>
                     </div>
