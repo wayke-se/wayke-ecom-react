@@ -8,6 +8,14 @@ import { getDrivingDistanceLabel } from '../utils/insurance';
 import { IInsuranceItem, IInsuranceAddon } from '@wayke-se/ecom';
 import { htmlEncode } from '../utils/encode';
 
+const markedRenderer = new marked.Renderer();
+const linkRenderer = markedRenderer.link;
+
+markedRenderer.link = (href, title, text) => {
+    const html = linkRenderer.call(markedRenderer, href, title, text);
+    return html.replace(/<a/, '<a target="_blank"');
+};
+
 export interface IInsuranceAlternativeChooserProps extends IEcomContext, IEcomStore, IEcomLifecycle {
 };
 
@@ -133,7 +141,7 @@ const InsuranceAlternativeChooser = (props: IInsuranceAlternativeChooserProps) =
     const hasAddonItems = addonItems.length > 0;
 
     const encodedDescription = htmlEncode(insuranceOption.brand.description);
-    const markdownDescription = marked(encodedDescription);
+    const markdownDescription = marked(encodedDescription, { renderer: markedRenderer });
 
     return (
         <div className="page-main">
@@ -177,7 +185,7 @@ const InsuranceAlternativeChooser = (props: IInsuranceAlternativeChooserProps) =
                             </div>
 
                             <div data-ecom-content="" className="m-b">
-                                <a data-ecom-link="" href={insuranceOption.conditions.url}>
+                                <a data-ecom-link="" href={insuranceOption.conditions.url} target="_blank">
                                     {insuranceOption.conditions.description}
                                     <i className="icon-link-external m-l-half"></i>
                                 </a>
