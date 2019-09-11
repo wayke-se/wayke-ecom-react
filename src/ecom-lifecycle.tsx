@@ -32,7 +32,7 @@ const getNextStep = (currentStep: EcomStep, data: IEcomData, options: IOrderOpti
 
 const shouldShowCart = (step: EcomStep) => {
     switch(step) {
-        case EcomStep.CONFIRM_ORDER:
+        case EcomStep.CUSTOMER_INFORMATION_DETAILS:
         case EcomStep.FINAL_CONFIRMATION:
             return false;
         default:

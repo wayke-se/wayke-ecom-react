@@ -27,7 +27,6 @@ export const getPrimarySteps = (options: IOrderOptionsResponse): EcomStep[] => {
 
     result.push(
         EcomStep.CUSTOMER_INFORMATION_INITIAL,
-        EcomStep.CONFIRM_ORDER,
         EcomStep.FINAL_CONFIRMATION
     );
 
@@ -84,6 +83,5 @@ export const getAllTransitions = () => ({
             return EcomStep.CUSTOMER_INFORMATION_DETAILS;
         }
     },
-    [EcomStep.CUSTOMER_INFORMATION_DETAILS]: () => EcomStep.CONFIRM_ORDER,
-    [EcomStep.CONFIRM_ORDER]: () => EcomStep.FINAL_CONFIRMATION,
+    [EcomStep.CUSTOMER_INFORMATION_DETAILS]: () => EcomStep.FINAL_CONFIRMATION
 });

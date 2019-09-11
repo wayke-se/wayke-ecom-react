@@ -56,25 +56,13 @@ const ProductItem = (props: IProductItemProps) => {
 const OrderSummary = (props: IOrderSummaryProps) => {
     const products = [];
 
+    const hasLoan = props.data.payment.paymentType && props.data.payment.paymentType === PaymentType.Loan;
+    const hasInsurance = props.data.insurance.hasAddedInsurance;
     const hasTradeIn = props.data.tradeInCar.wantsToDefineTradeIn &&
             props.data.tradeInCar.hasProvidedTradeInInfo &&
             props.data.tradeInCar.hasTradeInCar &&
             props.data.tradeInCar.registrationNumber &&
             props.vehicleLookup !== null;
-    const hasLoan = props.data.payment.paymentType && props.data.payment.paymentType === PaymentType.Loan;
-    const hasInsurance = props.data.insurance.hasAddedInsurance;
-
-    if (hasTradeIn) {
-        const vehicleInformation = props.vehicleLookup.getVehicle();
-
-        products.push({
-            title: 'Inbytesbil',
-            description: getVehicleFullTitle(props.data.tradeInCar.registrationNumber, vehicleInformation),
-            price: '',
-            unit: '',
-            addons: []
-        });
-    }
 
     if (hasLoan) {
         const paymentOption = getLoanPaymentOptions(props.orderOptions);
@@ -102,6 +90,18 @@ const OrderSummary = (props: IOrderSummaryProps) => {
             price: insuranceOption.price,
             unit: insuranceOption.unit,
             addons
+        });
+    }
+
+    if (hasTradeIn) {
+        const vehicleInformation = props.vehicleLookup.getVehicle();
+
+        products.push({
+            title: 'Inbytesbil',
+            description: getVehicleFullTitle(props.data.tradeInCar.registrationNumber, vehicleInformation),
+            price: '',
+            unit: '',
+            addons: []
         });
     }
 

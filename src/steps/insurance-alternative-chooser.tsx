@@ -1,20 +1,9 @@
 import React from 'react';
 
-import marked from 'marked';
-
 import { IEcomLifecycle, IEcomStore, IEcomContext } from '../types';
 import StoreAction from '../constants/store-action';
 import { getDrivingDistanceLabel } from '../utils/insurance';
 import { IInsuranceItem, IInsuranceAddon } from '@wayke-se/ecom';
-import { htmlEncode } from '../utils/encode';
-
-const markedRenderer = new marked.Renderer();
-const linkRenderer = markedRenderer.link;
-
-markedRenderer.link = (href, title, text) => {
-    const html = linkRenderer.call(markedRenderer, href, title, text);
-    return html.replace(/<a/, '<a target="_blank"');
-};
 
 export interface IInsuranceAlternativeChooserProps extends IEcomContext, IEcomStore, IEcomLifecycle {
 };
@@ -140,14 +129,10 @@ const InsuranceAlternativeChooser = (props: IInsuranceAlternativeChooserProps) =
 
     const hasAddonItems = addonItems.length > 0;
 
-    const encodedDescription = htmlEncode(insuranceOption.brand.description);
-    const markdownDescription = marked(encodedDescription, { renderer: markedRenderer });
-
     return (
         <div className="page-main">
             <section className="page-section">
                 <h1 className="h6">{insuranceOption.brand.name}</h1>
-                <div data-ecom-content="" dangerouslySetInnerHTML={{__html: markdownDescription}} />
             </section>
 
             <section className="page-section">

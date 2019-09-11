@@ -4,11 +4,14 @@ import CustomerInformationInputType from '../constants/customer-information-inpu
 import StoreAction from '../constants/store-action';
 
 import { validateEmail, validateZip, validatePhoneNumber } from '../utils/validation';
-import { IEcomLifecycle, IEcomStore, IEcomContext } from '../types';
-import { validateCustomerObject } from '../tools/data-validation';
-import { createCustomerObject } from '../tools/data-creator';
+import { IEcomLifecycle, IEcomStore, IEcomContext, IEcomExternalProps } from '../types';
+import { validateEcomData } from '../tools/data-validation';
 
-export interface ICustomerInformationDetailsProps extends IEcomContext, IEcomStore, IEcomLifecycle {
+import Alert from '../components/alert';
+import Spinner from '../components/spinner';
+import OrderSummary from '../components/order-summary';
+
+export interface ICustomerInformationDetailsProps extends IEcomExternalProps, IEcomContext, IEcomStore, IEcomLifecycle {
 };
 
 const handleInputChange = (props: ICustomerInformationDetailsProps, e: React.ChangeEvent<HTMLInputElement>) => {
@@ -161,21 +164,26 @@ const ManualContent = (props: ICustomerInformationDetailsProps) => {
 };
 
 const CustomerInformationDetails = (props: ICustomerInformationDetailsProps) => {
-    const [ isExtended, setIsExtended ] = React.useState(false);
+    const [isExtended, setIsExtended] = React.useState(false);
+    const [hasRequestError, setHasRequestError] = React.useState(false);
 
-    const handleNextStepClick = () => {
-        const customerObject = createCustomerObject(props.data.customer, props.addressLookup);
-        const isValidCustomer = validateCustomerObject(customerObject);
-        const hasAcceptedTerms = props.data.customer.hasAcceptedTerms;
+    const handleCreateOrderClick = () => {
+        const isValidData = validateEcomData(props.data, props.addressLookup, props.orderOptions, props.paymentLookup);
 
-        const isValid = isValidCustomer && hasAcceptedTerms;
-
-        if (!isValid) {
+        if (!isValidData) {
             return props.dispatchStoreAction(StoreAction.INTERACT_SET_ALL_FOR_TYPE, 'customer');
         }
 
-        props.onProceedToNextStep();
-    };
+        setHasRequestError(false);
+
+        props.onCreateOrder((isSuccessful: boolean) => {
+            if (isSuccessful) {
+                props.onProceedToNextStep();
+            } else {
+                setHasRequestError(true);
+            }
+        });
+    }
 
     const handleShowTermsClick = () => {
         setIsExtended(!isExtended);
@@ -269,14 +277,36 @@ const CustomerInformationDetails = (props: ICustomerInformationDetailsProps) => 
                 }
             </section>
 
-            <section className="page-section page-section-bottom">
-                <div data-ecom-buttonnav="">
-                    <div className="button-nav-item">
-                        <button data-ecom-button="full-width" onClick={handleNextStepClick}>
-                            Gå vidare
-                        </button>
+            { hasRequestError &&
+                <section className="page-section">
+                    <Alert message="Tyvärr gick någonting fel. Prova gärna igen om en liten stund." />
+                </section>
+            }
+
+            { !props.isWaitingForResponse &&
+                <section className="page-section page-section-bottom">
+                    <div data-ecom-buttonnav="">
+                        <div className="button-nav-item">
+                            <button data-ecom-button="full-width" onClick={handleCreateOrderClick}>
+                                Genomför köp
+                            </button>
+                        </div>
                     </div>
+                </section>
+            }
+
+            { props.isWaitingForResponse &&
+                <section className="page-section">
+                    <Spinner />
+                </section>
+            }
+
+            <section className="page-section page-section-accent">
+                <div className="page-section-accent-content">
+                    <h2 className="h6">Din order</h2>
                 </div>
+
+                <OrderSummary {...props} />
             </section>
         </div>
     );

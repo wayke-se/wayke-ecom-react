@@ -285,7 +285,7 @@ class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsPr
                         </div>
 
                         <div className="form-group">
-                            <label data-ecom-inputlabel="" htmlFor="payment-input-installment">Avbetalning (mil)</label>
+                            <label data-ecom-inputlabel="" htmlFor="payment-input-installment">Avbetalning (mån)</label>
 
                             <div className="form-group-split">
                                 <div className="form-group-split-item">
