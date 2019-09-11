@@ -39,7 +39,6 @@ const InsuranceTypeChooser = (props: IInsuranceTypeChooserProps) => {
                                 <div data-ecom-columnrow="">
                                     <div className="column">
                                         <div className="option-list-action-title">{insuranceOption.title}<i className="icon-arrow-right m-l-half"></i></div>
-                                        { insuranceOption.description && <div className="option-list-action-subtitle">{insuranceOption.description}</div> }
                                     </div>
 
                                     { scaledImage &&
