@@ -234,7 +234,7 @@ const CustomerInformationDetails = (props: ICustomerInformationDetailsProps) => 
                                 onBlur={(e) => handleBlur(props, e)} />
                         </div>
 
-                        <div className="form-alert">Ange telefonnummer i formatet 07X-XXXXXXX</div>
+                        <div className="form-alert">Ange ditt telefonnummer</div>
                     </div>
                 </div>
             </section>

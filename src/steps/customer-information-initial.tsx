@@ -133,8 +133,8 @@ const CustomerInformationInitial = (props: ICustomerInformationInitialProps) => 
                 </div>
             </section>
 
-            <section className="page-section">
-                <button data-ecom-link="" onClick={() => handleInputTypeClick(CustomerInformationInputType.MANUAL)}>Jag vill fylla i mina uppgifter manuellt</button>
+            <section className="page-section text-center" onClick={() => handleInputTypeClick(CustomerInformationInputType.MANUAL)}>
+                <button data-ecom-link="action">Jag vill fylla i mina uppgifter manuellt</button>
             </section>
         </div>
     );

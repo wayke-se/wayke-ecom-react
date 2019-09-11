@@ -43,6 +43,7 @@ export interface IEcomLifecycle {
     onShowCustomerInformationInitial: () => void;
     onShowInsuranceInformationDefinition: () => void;
     onShowTradeInCarDefinition: () => void;
+    onShowPaymentMethodChooser: () => void;
 };
 
 export interface IEcomStore {

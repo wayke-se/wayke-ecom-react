@@ -88,7 +88,7 @@ const AddonItem = (props: IAddonItemProps) => {
                         <label htmlFor={props.id}>
                             <span className="text">
                                 <span className="l-block">{props.title}</span>
-                                <span className="l-block font-size-small">
+                                <span className="l-block font-size-small m-t-mini">
                                     <button data-ecom-link="font-size-inherit" onClick={handleMoreInformationClick}>Visa {isExtended ? 'mindre' : 'mer'}</button>
                                 </span>
                             </span>

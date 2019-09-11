@@ -16,6 +16,7 @@ import EcomStep from './constants/ecom-step';
 import { IEcomExternalProps, IEcomContext, IEcomLifecycle, IEcomStore } from './types';
 import Alert from './components/alert';
 import ConfirmOrder from './steps/confirm-order';
+import Spinner from './components/spinner';
 
 interface AllProps extends IEcomExternalProps, IEcomContext, IEcomStore, IEcomLifecycle {
     step: EcomStep;
@@ -64,6 +65,10 @@ const EcomStepContent = (props: AllProps) => {
             return <FinalConfirmation {...props} />;
 
         default:
+            if (props.isWaitingForResponse) {
+                return <Spinner />;
+            }
+
             return <div></div>;
     }
 };

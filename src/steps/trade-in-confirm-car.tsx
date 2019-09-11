@@ -59,14 +59,8 @@ const TradeInConfirmCar = (props: ITradeInConfirmCarProps) => {
                 </div>
             </section>
 
-            <section className="page-section page-section-bottom">
-                <div data-ecom-buttonnav="">
-                    <div className="button-nav-item" onClick={() => handleHasTradeInCar(false)}>
-                        <button data-ecom-button="full-width">
-                            Hoppa över
-                        </button>
-                    </div>
-                </div>
+            <section className="page-section text-center" onClick={() => handleHasTradeInCar(false)}>
+                <button data-ecom-link="action"><i className="icon-skip m-r-half"></i>Hoppa över detta steg</button>
             </section>
         </div>
     );

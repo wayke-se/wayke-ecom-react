@@ -1,10 +1,8 @@
 const regexRegistrationNumber = /[a-zA-Z]{3}\d{2}(d||[a-zA-Z]){1}/;
 const regexPersonalNumber = /^(19|20)?(\d{6}(-|\s)\d{4}|(?!19|20)\d{10})$/;
 const regexEmail = /\S+@\S+\.\S+/;
-const regexZip = /^[0-9]{3} [0-9]{2}$/;
-
-const regexPhoneNumberVariant1 = /^[0-9]{3}[\-]?[0-9]{7}$/;
-const regexPhoneNumberVariant2 = /^[0-9]{4}[\-]?[0-9]{6}$/;
+const regexZip = /^[0-9\ \-]+$/;
+const regexPhoneNumberVariant = /^[0-9\-\+\(\)\ ]+$/;
 
 export const validateRegistrationNumber = (registrationNumber: string) => {
     if (!registrationNumber) {
@@ -77,8 +75,5 @@ export const validatePhoneNumber = (phoneNumber: string) => {
         return false;
     }
 
-    const hasCorrectLength = phoneNumber.length === 10 || phoneNumber.length === 11;
-    const isRegexMatch = regexPhoneNumberVariant1.test(phoneNumber) || regexPhoneNumberVariant2.test(phoneNumber);
-
-    return isRegexMatch && hasCorrectLength;
+    return regexPhoneNumberVariant.test(phoneNumber);
 }

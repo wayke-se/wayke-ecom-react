@@ -55,7 +55,7 @@ const PaymentMethodItem = (props: IPaymentMethodItemProps) => {
                     </div>
 
                     { props.paymentOption.logo &&
-                        <div className="column valign-top minimal">
+                        <div className="column minimal">
                             <img src={scaledImage!} alt="logotype" className="l-block" />
                         </div>
                     }
@@ -73,7 +73,7 @@ const PaymentMethodChooser = (props: IPaymentMethodChooserProps) => {
             <section className="page-section">
                 <h1 className="h6">Betalsätt</h1>
                 <div data-ecom-content="">
-                    <p>Hur vill du betala för din {props.vehicle.title}?</p>
+                    <p>Hur vill du betala för din nya bil?</p>
                 </div>
             </section>
 

@@ -42,21 +42,19 @@ const InsuranceTypeChooser = (props: IInsuranceTypeChooserProps) => {
                                     </div>
 
                                     { scaledImage &&
-                                        <div className="column valign-top minimal">
+                                        <div className="column minimal">
                                             <img src={scaledImage} alt="Logotype" className="l-block" />
                                         </div>
                                     }
                                 </div>
                             </button>
                         </li>
-                        <li className="option-list-item">
-                            <button className="option-list-action" onClick={() => handleInsuranceOptionClick(false)}>
-                                <div className="option-list-action-title">Hoppa över detta steg<i className="icon-arrow-right m-l-half"></i></div>
-                                <div className="option-list-action-meta">Jag har egen försäkring</div>
-                            </button>
-                        </li>
                     </ul>
                 </div>
+            </section>
+
+            <section className="page-section text-center" onClick={() => handleInsuranceOptionClick(false)}>
+                <button data-ecom-link="action"><i className="icon-skip m-r-half"></i>Hoppa över detta steg</button>
             </section>
         </div>
     );

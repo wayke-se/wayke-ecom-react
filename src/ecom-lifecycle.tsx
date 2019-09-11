@@ -152,7 +152,8 @@ class EcomLifecycle extends React.Component<IEcomLifecycleProps, IState> {
                                                 onProceedToNextStep={this.handleProceedToNextStep}
                                                 onShowCustomerInformationInitial={() => this.handleSpecificStepClick(EcomStep.CUSTOMER_INFORMATION_INITIAL)}
                                                 onShowInsuranceInformationDefinition={() => this.handleSpecificStepClick(EcomStep.INSURANCE_INFORMATION_DEFINITION)}
-                                                onShowTradeInCarDefinition={() => this.handleSpecificStepClick(EcomStep.TRADE_IN_CAR_DEFINITION)} />
+                                                onShowTradeInCarDefinition={() => this.handleSpecificStepClick(EcomStep.TRADE_IN_CAR_DEFINITION)}
+                                                onShowPaymentMethodChooser={() => this.handleSpecificStepClick(EcomStep.PAYMENT_METHOD_CHOOSER)} />
                                         </div>
                                     </div>
 
