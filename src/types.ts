@@ -60,6 +60,8 @@ export interface IEcomData {
 };
 
 export interface ITradeInCarData {
+    wantsToDefineTradeIn: boolean;
+    hasProvidedTradeInInfo: boolean;
     hasTradeInCar: boolean;
     registrationNumber: string;
     milage: string;

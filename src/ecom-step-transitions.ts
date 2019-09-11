@@ -36,13 +36,19 @@ export const getPrimarySteps = (options: IOrderOptionsResponse): EcomStep[] => {
 
 export const getAllTransitions = () => ({
     [EcomStep.TRADE_IN_EXISTS_CHOOSER]: (data: IEcomData) => {
-        if (data.tradeInCar.hasTradeInCar) {
+        if (data.tradeInCar.wantsToDefineTradeIn) {
             return EcomStep.TRADE_IN_CAR_DEFINITION;
         } else {
             return EcomStep.PAYMENT_METHOD_CHOOSER;
         }
     },
-    [EcomStep.TRADE_IN_CAR_DEFINITION]: () => EcomStep.TRADE_IN_CONFIRM_CAR,
+    [EcomStep.TRADE_IN_CAR_DEFINITION]: (data: IEcomData) => {
+        if (data.tradeInCar.hasProvidedTradeInInfo) {
+            return EcomStep.TRADE_IN_CONFIRM_CAR;
+        } else {
+            return EcomStep.PAYMENT_METHOD_CHOOSER;
+        }
+    },
     [EcomStep.TRADE_IN_CONFIRM_CAR]: () => EcomStep.PAYMENT_METHOD_CHOOSER,
     [EcomStep.PAYMENT_METHOD_CHOOSER]: (data: IEcomData, options: IOrderOptionsResponse) => {
         const isLoan = data.payment.paymentType === PaymentType.Loan;

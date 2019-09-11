@@ -64,7 +64,9 @@ class EcomStore extends React.Component<IEcomStoreProps, IState> {
                 loanResidual: null
             },
             tradeInCar: {
-                hasTradeInCar: null,
+                wantsToDefineTradeIn: false,
+                hasProvidedTradeInInfo: false,
+                hasTradeInCar: false,
                 registrationNumber: '',
                 milage: ''
             }

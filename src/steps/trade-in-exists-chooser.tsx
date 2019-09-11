@@ -7,10 +7,10 @@ export interface ITradeInExistsChooserProps extends IEcomStore, IEcomLifecycle {
 }
 
 const TradeInExistsChooser = (props: ITradeInExistsChooserProps) => {
-    const handleHasTradeInCarClick = (value: boolean) => {
+    const handleWantsToDefineTradeInClick = (value: boolean) => {
         props.dispatchStoreAction(StoreAction.UPDATE_NAMED_VALUE, {
             type: 'tradeInCar',
-            name: 'hasTradeInCar',
+            name: 'wantsToDefineTradeIn',
             value
         }, () => {
             props.onProceedToNextStep();
@@ -30,13 +30,13 @@ const TradeInExistsChooser = (props: ITradeInExistsChooserProps) => {
                 <div data-ecom-optionlist="">
                     <ul className="option-list">
                         <li className="option-list-item">
-                            <button className="option-list-action" onClick={() => handleHasTradeInCarClick(true)}>
+                            <button className="option-list-action" onClick={() => handleWantsToDefineTradeInClick(true)}>
                                 <div className="option-list-action-title">Jag har inbytesbil<i className="icon-arrow-right m-l-half"></i></div>
                             </button>
                         </li>
 
                         <li className="option-list-item">
-                            <button className="option-list-action" onClick={() => handleHasTradeInCarClick(false)}>
+                            <button className="option-list-action" onClick={() => handleWantsToDefineTradeInClick(false)}>
                                 <div className="option-list-action-title">Jag har ingen inbytesbil<i className="icon-arrow-right m-l-half"/></div>
                             </button>
                         </li>

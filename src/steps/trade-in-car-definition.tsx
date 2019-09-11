@@ -38,12 +38,28 @@ const TradeInCarDefinition = (props: ITradeInCarDefinitionProps) => {
 
         props.onFetchVehicleInformation((isSuccessful: boolean) => {
             if (isSuccessful) {
-                props.onProceedToNextStep();
+                props.dispatchStoreAction(StoreAction.UPDATE_NAMED_VALUE, {
+                    type: 'tradeInCar',
+                    name: 'hasProvidedTradeInInfo',
+                    value: true
+                }, () => {
+                    props.onProceedToNextStep();
+                });
             } else {
                 setHasRequestError(true);
             }
         });
     };
+
+    const handleSkipClick = () => {
+        props.dispatchStoreAction(StoreAction.UPDATE_NAMED_VALUE, {
+            type: 'tradeInCar',
+            name: 'hasProvidedTradeInInfo',
+            value: false
+        }, () => {
+            props.onProceedToNextStep();
+        });
+    }
 
     const hasErrorRegistrationNumber = props.data.interact.tradeInCar.registrationNumber && !validateRegistrationNumber(props.data.tradeInCar.registrationNumber);
     const hasErrorMilage = props.data.interact.tradeInCar.milage && !validateMilage(props.data.tradeInCar.milage);
@@ -92,20 +108,32 @@ const TradeInCarDefinition = (props: ITradeInCarDefinitionProps) => {
 
             { hasRequestError &&
                 <section className="page-section">
-                    <Alert message={`Tyvärr fick vi ingen träff på registreringsnumret ${props.data.tradeInCar.registrationNumber}. Prova gärna med ett annat registreringsnummer.`} />
+                    <Alert message={`Tyvärr fick vi ingen träff på registreringsnumret ${props.data.tradeInCar.registrationNumber}. Kontrollera registreringsnumret igen eller gå vidare utan inbytesbil (kan kompletteras vid senare kontakt med handlaren).`} />
                 </section>
             }
 
             { !props.isWaitingForResponse &&
-                <section className="page-section page-section-bottom">
-                    <div data-ecom-buttonnav="">
-                        <div className="button-nav-item" onClick={handleNextStepClick}>
-                            <button data-ecom-button="full-width">
-                                Gå vidare
-                            </button>
+                <React.Fragment>
+                    <section className="page-section page-section-bottom">
+                        <div data-ecom-buttonnav="">
+                            <div className="button-nav-item" onClick={handleNextStepClick}>
+                                <button data-ecom-button="full-width">
+                                    Gå vidare
+                                </button>
+                            </div>
                         </div>
-                    </div>
-                </section>
+                    </section>
+
+                    <section className="page-section page-section-bottom">
+                        <div data-ecom-buttonnav="">
+                            <div className="button-nav-item" onClick={handleSkipClick}>
+                                <button data-ecom-button="full-width">
+                                    Hoppa över
+                                </button>
+                            </div>
+                        </div>
+                    </section>
+                </React.Fragment>
             }
 
             { props.isWaitingForResponse &&

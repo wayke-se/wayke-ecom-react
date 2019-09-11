@@ -56,7 +56,11 @@ const ProductItem = (props: IProductItemProps) => {
 const OrderSummary = (props: IOrderSummaryProps) => {
     const products = [];
 
-    const hasTradeIn = props.data.tradeInCar.hasTradeInCar && props.data.tradeInCar.registrationNumber && props.vehicleLookup !== null;
+    const hasTradeIn = props.data.tradeInCar.wantsToDefineTradeIn &&
+            props.data.tradeInCar.hasProvidedTradeInInfo &&
+            props.data.tradeInCar.hasTradeInCar &&
+            props.data.tradeInCar.registrationNumber &&
+            props.vehicleLookup !== null;
     const hasLoan = props.data.payment.paymentType && props.data.payment.paymentType === PaymentType.Loan;
     const hasInsurance = props.data.insurance.hasAddedInsurance;
 

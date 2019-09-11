@@ -21,7 +21,7 @@ export const validateEcomData = (data: IEcomData, addressLookup: IAddressLookupR
 }
 
 export const validateTradeIn = (data: ITradeInCarData) => {
-    if (!data.hasTradeInCar) {
+    if (!data.wantsToDefineTradeIn) {
         return true;
     }
 

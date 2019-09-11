@@ -25,7 +25,7 @@ export const createOrder = (data: ICreateOrderSdkData, callback: (wasOrderCreate
     const isAutomaticCustomerInfo = ecomData.customer.inputType === CustomerInformationInputType.AUTOMATIC;
     const isLoan = ecomData.payment.paymentType === PaymentType.Loan;
     const hasSelectedInsurance = ecomData.insurance.wantsToSeeInsuranceOptions && ecomData.insurance.hasAddedInsurance;
-    const hasTradeIn = ecomData.tradeInCar.hasTradeInCar;
+    const hasTradeIn = ecomData.tradeInCar.wantsToDefineTradeIn && ecomData.tradeInCar.hasProvidedTradeInInfo && ecomData.tradeInCar.hasTradeInCar;
 
     const customerBuilder = customers.newCustomer()
         .withEmail(ecomData.customer.email)
