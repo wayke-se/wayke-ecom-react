@@ -38,14 +38,10 @@ const TradeInExistsChooser = (props: ITradeInExistsChooserProps) => {
                 </div>
             </section>
 
-            <section className="page-section page-section-bottom">
-                <div data-ecom-buttonnav="">
-                    <div className="button-nav-item">
-                        <button data-ecom-button="full-width light" onClick={() => handleWantsToDefineTradeInClick(false)}>
-                            Hoppa över detta steg
-                        </button>
-                    </div>
-                </div>
+            <section className="page-section text-center">
+                <button data-ecom-link="action" onClick={() => handleWantsToDefineTradeInClick(false)}>
+                    Hoppa över detta steg
+                </button>
             </section>
         </div>
     );

@@ -182,29 +182,34 @@ class InsuranceInformationDefinition extends React.Component<IInsuranceInformati
                     </div>
                 </section>
 
-                <section className="page-section page-section-bottom">
-                    { !this.props.isWaitingForResponse &&
-                        <div data-ecom-buttonnav="">
-                            <div className="button-nav-item">
-                                <button data-ecom-button="full-width light" onClick={() => this.handleWantsToSeeInsuranceOptionsChange(false)}>
-                                    Hoppa över
-                                </button>
-                            </div>
 
-                            <div className="button-nav-item">
-                                <button data-ecom-button="full-width" onClick={() => this.handleWantsToSeeInsuranceOptionsChange(true)}>
-                                    Visa försäkringar
-                                </button>
+                { !this.props.isWaitingForResponse &&
+                    <React.Fragment>
+                        <section className="page-section">
+                            <div data-ecom-buttonnav="">
+                                <div className="button-nav-item">
+                                    <button data-ecom-button="full-width" onClick={() => this.handleWantsToSeeInsuranceOptionsChange(true)}>
+                                        Visa försäkringar
+                                    </button>
+                                </div>
                             </div>
-                        </div>
-                    }
+                        </section>
 
-                    { this.props.isWaitingForResponse &&
+                        <section className="page-section text-center">
+                            <button data-ecom-link="action" onClick={() => this.handleWantsToSeeInsuranceOptionsChange(false)}>
+                                Hoppa över detta steg
+                            </button>
+                        </section>
+                    </React.Fragment>
+                }
+
+                { this.props.isWaitingForResponse &&
+                    <section className="page-section">
                         <div className="form-group">
                             <Spinner />
                         </div>
-                    }
-                </section>
+                    </section>
+                }
             </div>
         );
     }
