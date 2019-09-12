@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { validatePersonalNumber } from '../utils/validation';
+import { DrivingDistance } from '@wayke-se/ecom';
 import { IEcomLifecycle, IEcomStore, IEcomContext, IEcomData } from '../types';
 
 import StoreAction from '../constants/store-action';
@@ -8,8 +8,10 @@ import { validateInsurance } from '../tools/data-validation';
 
 import Alert from '../components/alert';
 import Spinner from '../components/spinner';
-import { DrivingDistance } from '@wayke-se/ecom';
+
 import { getDrivingDistanceLabel } from '../utils/insurance';
+import { addSizeQuery } from '../utils/image';
+import { validatePersonalNumber } from '../utils/validation';
 
 export interface IInsuranceInformationDefinitionProps extends IEcomContext, IEcomStore, IEcomLifecycle {
 };
@@ -52,6 +54,20 @@ class InsuranceInformationDefinition extends React.Component<IInsuranceInformati
             });
         });
     }
+
+    handleWantsToSeeInsuranceOptionsChange(wantsToSeeInsuranceOptions: boolean) {
+        this.props.dispatchStoreAction(StoreAction.UPDATE_NAMED_VALUE, {
+            type: 'insurance',
+            name: 'wantsToSeeInsuranceOptions',
+            value: wantsToSeeInsuranceOptions
+        }, () => {
+            if (wantsToSeeInsuranceOptions) {
+                this.handleProceedClick();
+            } else {
+                this.props.onProceedToNextStep();
+            }
+        });
+    };
 
     handleProceedClick() {
         this.props.dispatchStoreAction(StoreAction.UPDATE_NAMED_VALUE, {
@@ -104,12 +120,27 @@ class InsuranceInformationDefinition extends React.Component<IInsuranceInformati
         const hasPersonalNumberError = this.props.data.interact.insurance.personalNumber && !validatePersonalNumber(this.props.data.insurance.personalNumber);
 
         const insuranceOption = this.props.orderOptions.getInsuranceOption();
+        const scaledImage = addSizeQuery(insuranceOption.logo, 100, 60);
 
         return (
             <div className="page-main">
                 <section className="page-section">
-                    <h1 className="h6">{insuranceOption.title}</h1>
+                    <div data-ecom-columnrow="">
+                        <div className="column">
+                            <h1 className="h6 no-margin">{insuranceOption.title}</h1>
+                        </div>
+
+                        { scaledImage &&
+                            <div className="column minimal">
+                                <img src={scaledImage} alt="Logotype" className="l-block" />
+                            </div>
+                        }
+                    </div>
+                </section>
+
+                <section className="page-section">
                     <div data-ecom-content="">
+                        <p>Vill du teckna försäkring på din nya bil?</p>
                         <p>Skriv in ditt personnummer och din uppskattade körsträcka för att se din försäkringskostnad.</p>
                     </div>
                 </section>
@@ -143,28 +174,36 @@ class InsuranceInformationDefinition extends React.Component<IInsuranceInformati
                             </div>
                         </div>
 
-
-
                         { this.state.hasRequestError &&
                             <div className="form-group">
                                 <Alert message="Tyvärr hittades inga försäkringsalternativ för det angivna personnumret." />
                             </div>
                         }
+                    </div>
+                </section>
 
-                        { !this.props.isWaitingForResponse &&
-                            <div className="form-group">
-                                <button data-ecom-button="light full-width" onClick={this.handleProceedClick}>
+                <section className="page-section page-section-bottom">
+                    { !this.props.isWaitingForResponse &&
+                        <div data-ecom-buttonnav="">
+                            <div className="button-nav-item">
+                                <button data-ecom-button="full-width light" onClick={() => this.handleWantsToSeeInsuranceOptionsChange(false)}>
+                                    Hoppa över
+                                </button>
+                            </div>
+
+                            <div className="button-nav-item">
+                                <button data-ecom-button="full-width" onClick={() => this.handleWantsToSeeInsuranceOptionsChange(true)}>
                                     Visa försäkringar
                                 </button>
                             </div>
-                        }
+                        </div>
+                    }
 
-                        { this.props.isWaitingForResponse &&
-                            <div className="form-group">
-                                <Spinner />
-                            </div>
-                        }
-                    </div>
+                    { this.props.isWaitingForResponse &&
+                        <div className="form-group">
+                            <Spinner />
+                        </div>
+                    }
                 </section>
             </div>
         );

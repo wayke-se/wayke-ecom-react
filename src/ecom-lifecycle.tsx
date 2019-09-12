@@ -18,6 +18,7 @@ interface IState {
     step: EcomStep | undefined;
     stepHistory: EcomStep[];
     isBackwardsStepForbidden: boolean;
+    hasNewStep: boolean;
 }
 
 const getNextStep = (currentStep: EcomStep, data: IEcomData, options: IOrderOptionsResponse): EcomStep => {
@@ -41,6 +42,8 @@ const shouldShowCart = (step: EcomStep) => {
 }
 
 class EcomLifecycle extends React.Component<IEcomLifecycleProps, IState> {
+    private frameBodyRef: React.RefObject<HTMLDivElement>;
+
     constructor(props: IEcomLifecycleProps) {
         super(props);
 
@@ -48,10 +51,13 @@ class EcomLifecycle extends React.Component<IEcomLifecycleProps, IState> {
         this.handlePreviousStepClick = this.handlePreviousStepClick.bind(this);
         this.handleSpecificStepClick = this.handleSpecificStepClick.bind(this);
 
+        this.frameBodyRef = React.createRef();
+
         this.state = {
             step: undefined,
             stepHistory: [],
-            isBackwardsStepForbidden: false
+            isBackwardsStepForbidden: false,
+            hasNewStep: false
         };
     }
 
@@ -69,6 +75,16 @@ class EcomLifecycle extends React.Component<IEcomLifecycleProps, IState> {
                 step: initialStep
             });
         }
+
+        if (this.state.hasNewStep) {
+            this.setState({
+                hasNewStep: false
+            }, () => {
+                if (this.frameBodyRef.current) {
+                    this.frameBodyRef.current.scrollTop = 0;
+                }
+            })
+        }
     }
 
     handleProceedToNextStep() {
@@ -84,7 +100,8 @@ class EcomLifecycle extends React.Component<IEcomLifecycleProps, IState> {
         this.setState({
             step: nextStep,
             stepHistory: newHistory,
-            isBackwardsStepForbidden: nextStep === EcomStep.FINAL_CONFIRMATION
+            isBackwardsStepForbidden: nextStep === EcomStep.FINAL_CONFIRMATION,
+            hasNewStep: true
         });
     }
 
@@ -136,7 +153,7 @@ class EcomLifecycle extends React.Component<IEcomLifecycleProps, IState> {
                         <div className="modal-dialog">
                             <div className="modal-dialog-main">
                                 <div data-ecom-frame="">
-                                    <div className="frame-body">
+                                    <div className="frame-body" ref={this.frameBodyRef}>
                                         <EcomHeader
                                             {...this.props}
                                             canPressBackButton={canPressBackButton}

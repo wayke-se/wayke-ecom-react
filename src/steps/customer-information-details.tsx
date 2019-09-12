@@ -259,10 +259,10 @@ const CustomerInformationDetails = (props: ICustomerInformationDetailsProps) => 
                                 onBlur={(e) => handleBlur(props, e)} />
 
                             <label htmlFor="checkbox-summary-terms">
-                                <span className="text">Jag godkänner <button data-ecom-link="" className="valign-baseline" onClick={handleShowTermsClick}>användarvillkoren</button></span>
+                                <span className="text">Jag godkänner <button data-ecom-link="" className="valign-baseline" onClick={handleShowTermsClick}>köpvillkoren</button></span>
                             </label>
 
-                            <div className="form-alert">Användarvillkoren behöver godkännas för att gå vidare</div>
+                            <div className="form-alert">Köpvillkoren behöver godkännas för att gå vidare</div>
                         </div>
                     </div>
                 </div>
@@ -270,7 +270,7 @@ const CustomerInformationDetails = (props: ICustomerInformationDetailsProps) => 
                 { isExtended &&
                     <div data-ecom-scrollbox="" className="m-t">
                         <article data-ecom-content="small-headings">
-                            <h1>Användarvillkor</h1>
+                            <h1>Köpvillkor</h1>
                             <p>{conditions}</p>
                         </article>
                     </div>

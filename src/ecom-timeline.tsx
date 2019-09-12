@@ -38,7 +38,7 @@ const getLabel = (step: EcomStep): string => {
             return 'Inbyte';
         case EcomStep.PAYMENT_METHOD_CHOOSER:
             return 'Betalsätt';
-        case EcomStep.INSURANCE_TYPE_CHOOSER:
+        case EcomStep.INSURANCE_INFORMATION_DEFINITION:
             return 'Försäkring';
         case EcomStep.CUSTOMER_INFORMATION_INITIAL:
             return 'Uppgifter';

@@ -5,7 +5,6 @@ import CustomerInformationInitial from './steps/customer-information-initial';
 import FinalConfirmation from './steps/final-confirmation';
 import InsuranceAlternativeChooser from './steps/insurance-alternative-chooser';
 import InsuranceInformationDefinition from './steps/insurance-information-definition';
-import InsuranceTypeChooser from './steps/insurance-type-chooser';
 import PaymentFinancingDetails from './steps/payment-financing-details';
 import PaymentMethodChooser from './steps/payment-method-chooser';
 import TradeInCarDefinition from './steps/trade-in-car-definition';
@@ -41,9 +40,6 @@ const EcomStepContent = (props: AllProps) => {
 
         case EcomStep.PAYMENT_FINANCING_DETAILS:
             return <PaymentFinancingDetails {...props} />;
-
-        case EcomStep.INSURANCE_TYPE_CHOOSER:
-            return <InsuranceTypeChooser {...props} />;
 
         case EcomStep.INSURANCE_INFORMATION_DEFINITION:
             return <InsuranceInformationDefinition {...props} />;

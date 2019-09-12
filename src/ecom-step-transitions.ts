@@ -21,7 +21,7 @@ export const getPrimarySteps = (options: IOrderOptionsResponse): EcomStep[] => {
 
     if (options.getInsuranceOption()) {
         result.push(
-            EcomStep.INSURANCE_TYPE_CHOOSER
+            EcomStep.INSURANCE_INFORMATION_DEFINITION
         );
     }
 
@@ -57,24 +57,23 @@ export const getAllTransitions = () => ({
         } else if (!options.getInsuranceOption()) {
             return EcomStep.CUSTOMER_INFORMATION_INITIAL;
         } else {
-            return EcomStep.INSURANCE_TYPE_CHOOSER;
+            return EcomStep.INSURANCE_INFORMATION_DEFINITION;
         }
     },
     [EcomStep.PAYMENT_FINANCING_DETAILS]: (data: IEcomData, options: IOrderOptionsResponse) => {
         if (!options.getInsuranceOption()) {
             return EcomStep.CUSTOMER_INFORMATION_INITIAL;
         } else {
-            return EcomStep.INSURANCE_TYPE_CHOOSER;
+            return EcomStep.INSURANCE_INFORMATION_DEFINITION;
         }
     },
-    [EcomStep.INSURANCE_TYPE_CHOOSER]: (data: IEcomData) => {
+    [EcomStep.INSURANCE_INFORMATION_DEFINITION]: (data: IEcomData) => {
         if (data.insurance.wantsToSeeInsuranceOptions) {
-            return EcomStep.INSURANCE_INFORMATION_DEFINITION;
+            return EcomStep.INSURANCE_ALTERNATIVE_CHOOSER;
         } else {
             return EcomStep.CUSTOMER_INFORMATION_INITIAL;
         }
     },
-    [EcomStep.INSURANCE_INFORMATION_DEFINITION]: () => EcomStep.INSURANCE_ALTERNATIVE_CHOOSER,
     [EcomStep.INSURANCE_ALTERNATIVE_CHOOSER]: () => EcomStep.CUSTOMER_INFORMATION_INITIAL,
     [EcomStep.CUSTOMER_INFORMATION_INITIAL]: (data: IEcomData) => {
         if (data.customer.inputType === CustomerInformationInputType.MANUAL) {

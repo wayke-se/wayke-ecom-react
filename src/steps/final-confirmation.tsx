@@ -12,7 +12,7 @@ const FinalConfirmation = (props: IFinalConfirmationProps) => {
             <section className="page-section">
                 <h1 className="h6">Tack för din order!</h1>
                 <div data-ecom-content="">
-                    <p>En orderbekräftelse kommer att skickas till din e-postadress <span className="font-medium">{props.data.customer.email}</span>.</p>
+                    <p>En orderbekräftelse kommer att skickas till din e-postadress <span className="font-medium">{props.data.customer.email}</span>. Vi kontaktar dig sedan inom kort.</p>
                 </div>
             </section>
 
@@ -28,6 +28,13 @@ const FinalConfirmation = (props: IFinalConfirmationProps) => {
                 <h2 className="h6">Kunduppgifter</h2>
 
                 <CustomerInformationSummary {...props} />
+            </section>
+
+            <section className="page-section">
+                <h1 className="h6">Har du frågor?</h1>
+                <div data-ecom-content="">
+                    <p>Kontakta {props.vehicle.retailerName} - <a href={`mailto:${props.vehicle.retailerEmail}`}>{props.vehicle.retailerEmail}</a> - <a href={`tel:${props.vehicle.retailerPhoneNumber}`}>{props.vehicle.retailerPhoneNumber}</a></p>
+                </div>
             </section>
 
             <section className="page-section page-section-bottom">

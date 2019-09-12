@@ -58,10 +58,6 @@ const TradeInConfirmCar = (props: ITradeInConfirmCarProps) => {
                     </div>
                 </div>
             </section>
-
-            <section className="page-section text-center" onClick={() => handleHasTradeInCar(false)}>
-                <button data-ecom-link="action"><i className="icon-skip m-r-half"></i>Hoppa över detta steg</button>
-            </section>
         </div>
     );
 };

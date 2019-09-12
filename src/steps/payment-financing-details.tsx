@@ -314,7 +314,7 @@ class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsPr
 
                         { hasResidual &&
                             <div className={`form-group ${hasResidualError ? ' has-error' : ''}`}>
-                                <label data-ecom-inputlabel="" htmlFor="payment-input-residual">Restvärde (%)</label>
+                                <label data-ecom-inputlabel="" htmlFor="payment-input-residual">Restskuld (%)</label>
 
                                 <div className="form-group-split">
                                     <div className="form-group-split-item">
@@ -322,7 +322,7 @@ class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsPr
                                             <input type="text"
                                                 id="payment-input-residual"
                                                 name="residual"
-                                                placeholder="Restvärde"
+                                                placeholder="Restskuld"
                                                 value={this.state.residual}
                                                 disabled={shouldDisableResidual}
                                                 onChange={this.handleInputValueChange}

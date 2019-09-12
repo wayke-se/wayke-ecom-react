@@ -9,6 +9,8 @@ export interface IVehicle {
     price: number;
     imageUrl: string;
     retailerName: string;
+    retailerEmail: string;
+    retailerPhoneNumber: string;
     modelYear: number;
     milage: string;
     gearBox: string;
