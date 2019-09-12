@@ -69,9 +69,10 @@ class Slider extends React.Component<ISliderProps, IState> {
         this.mouseMoveEventListener = this.mouseMoveEventListener.bind(this);
         this.mouseUpEventListener = this.mouseUpEventListener.bind(this);
 
-        this.handleMouseDown = this.handleMouseDown.bind(this);
-        this.handleMouseUp = this.handleMouseUp.bind(this);
-        this.handleMouseMove = this.handleMouseMove.bind(this);
+        this.handleTouchMove = this.handleTouchMove.bind(this);
+        this.handleSliderPress = this.handleSliderPress.bind(this);
+        this.handleSliderRelease = this.handleSliderRelease.bind(this);
+        this.handleSliderMove = this.handleSliderMove.bind(this);
 
         this.calculateNewFractionPosition = this.calculateNewFractionPosition.bind(this);
 
@@ -111,7 +112,7 @@ class Slider extends React.Component<ISliderProps, IState> {
     }
 
     mouseMoveEventListener(e: MouseEvent) {
-        this.handleMouseMove(e);
+        this.handleSliderMove(e.clientX);
     }
 
     mouseUpEventListener(e: MouseEvent) {
@@ -119,7 +120,7 @@ class Slider extends React.Component<ISliderProps, IState> {
             e.preventDefault();
             e.stopPropagation();
 
-            this.handleMouseUp();
+            this.handleSliderPress();
 
             return false;
         }
@@ -127,7 +128,11 @@ class Slider extends React.Component<ISliderProps, IState> {
         return true;
     }
 
-    handleMouseDown() {
+    handleTouchMove(e: TouchEvent) {
+        this.handleSliderMove(e.touches[0].pageX);
+    }
+
+    handleSliderPress() {
         if (this.props.isDisabled) {
             return;
         }
@@ -137,7 +142,7 @@ class Slider extends React.Component<ISliderProps, IState> {
          });
     }
 
-    handleMouseUp() {
+    handleSliderRelease() {
         this.setState({
             isDragging: false
         }, function() {
@@ -145,12 +150,12 @@ class Slider extends React.Component<ISliderProps, IState> {
         });
     }
 
-    handleMouseMove(e: MouseEvent) {
+    handleSliderMove(x: number) {
         if (!this.state.isDragging) {
             return;
         }
 
-        const fraction = this.calculateNewFractionPosition(e.clientX);
+        const fraction = this.calculateNewFractionPosition(x);
         const fractionInStep = applyStepToFraction(fraction, this.props.min, this.props.max, this.props.step);
 
         const externalValueInStep = convertFractionToExternalValue(fractionInStep, this.props.min, this.props.max);
@@ -217,9 +222,11 @@ class Slider extends React.Component<ISliderProps, IState> {
                         <div className="range-slider-track" style={trackStyle}></div>
                         <div className="range-slider-handle"
                                 style={handleStyle}
-                                onMouseDown={this.handleMouseDown}
-                                onMouseUp={this.handleMouseUp}>
-                        </div>
+                                onMouseDown={this.handleSliderPress}
+                                onMouseUp={this.handleSliderRelease}
+                                onTouchStart={this.handleSliderPress}
+                                onTouchEnd={this.handleSliderRelease}
+                                onTouchMove={this.handleTouchMove} />
                     </div>
                 </div>
             </div>
