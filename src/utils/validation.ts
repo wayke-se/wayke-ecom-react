@@ -59,6 +59,10 @@ export const validateStringNumberInRange = (value: string, from: number, to: num
 };
 
 export const validateNumberInRange = (value: number, from: number, to: number) => {
+    if (value === null || value === undefined) {
+        return false;
+    }
+
     if (isNaN(value)) {
         return false;
     }

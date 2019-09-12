@@ -23,7 +23,7 @@ export const getPaymentLookup = (data: IPaymentLookupSdkData, callback: (lookup:
     const hasResidual = data.ecomData.loanResidual !== null;
 
     if (hasResidual) {
-        builder.withResidualValue(data.ecomData.loanResidual)
+        builder.withResidualValue(data.ecomData.loanResidual);
     }
 
     const request = builder.build();

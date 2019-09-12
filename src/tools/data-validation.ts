@@ -6,6 +6,7 @@ import { validateMilage, validateRegistrationNumber, validateNumberInRange, vali
 import { createCustomerObject } from "./data-creator";
 import { containsValue } from "../utils/enum";
 import { getLoanPaymentOptions } from "../utils/payment";
+import { isResidualEnabled } from '../utils/residual';
 
 export const validateEcomData = (data: IEcomData, addressLookup: IAddressLookupResponse, orderOptions: IOrderOptionsResponse, paymentLookup: IPaymentLookupResponse | undefined) => {
     const isValidTradeIn = validateTradeIn(data.tradeInCar);
@@ -42,24 +43,24 @@ export const validatePayment = (data: IPaymentData, orderOptions: IOrderOptionsR
         return true;
     }
 
-    const selectedPaymentLookup = paymentLookup ? paymentLookup : getLoanPaymentOptions(orderOptions)!.loanDetails;
+    const selectedPaymentLookup = paymentLookup ? paymentLookup : getLoanPaymentOptions(orderOptions).loanDetails;
 
-    const depositMin = selectedPaymentLookup!.getDownPaymentSpec().min;
-    const depositMax = selectedPaymentLookup!.getDownPaymentSpec().max;
+    const depositMin = selectedPaymentLookup.getDownPaymentSpec().min;
+    const depositMax = selectedPaymentLookup.getDownPaymentSpec().max;
 
-    const durationMin = selectedPaymentLookup!.getDurationSpec().min;
-    const durationMax = selectedPaymentLookup!.getDurationSpec().max;
+    const durationMin = selectedPaymentLookup.getDurationSpec().min;
+    const durationMax = selectedPaymentLookup.getDurationSpec().max;
 
     const isValidDeposit = validateNumberInRange(data.loanDeposit, depositMin, depositMax);
     const isValidLoanDuration = validateNumberInRange(data.loanDuration, durationMin, durationMax);
 
     var isValidResidual = true;
 
-    const hasResidual = selectedPaymentLookup!.getResidualValueSpec() !== null;
+    const hasResidual = isResidualEnabled(selectedPaymentLookup.getResidualValueSpec());
 
     if (hasResidual) {
-        const residualMin = selectedPaymentLookup!.getResidualValueSpec().min;
-        const residualMax = selectedPaymentLookup!.getResidualValueSpec().max;
+        const residualMin = selectedPaymentLookup.getResidualValueSpec().min;
+        const residualMax = selectedPaymentLookup.getResidualValueSpec().max;
 
         isValidResidual = validateNumberInRange(data.loanResidual, residualMin, residualMax);
     }

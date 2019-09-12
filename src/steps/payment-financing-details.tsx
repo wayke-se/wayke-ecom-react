@@ -12,6 +12,7 @@ import { validateStringNumberInRange } from '../utils/validation';
 import { addSizeQuery } from '../utils/image';
 import { formatPrice, formatPercentage } from '../utils/helpers';
 import { getLoanPaymentOptions } from '../utils/payment';
+import { getConvertedResidualSpecification, isResidualEnabled } from '../utils/residual';
 
 import { validatePayment } from '../tools/data-validation';
 import { PaymentType, IPaymentRangeSpec, IOrderOptionsResponse, IPaymentLookupResponse } from '@wayke-se/ecom';
@@ -50,22 +51,6 @@ const getDurationFromIndex = (index: number, durationSpecification: IPaymentRang
     return getAllDurationSteps(durationSpecification).find((s, i) => i === index);
 };
 
-const getConvertedResidualSpecification = (residualSpecification: IPaymentRangeSpec): IPaymentRangeSpec => {
-    const hasResidual = residualSpecification !== null;
-
-    if (hasResidual) {
-        return {
-            min: residualSpecification.min * 100,
-            max: residualSpecification.max * 100,
-            step: residualSpecification.step * 100,
-            default: residualSpecification.default * 100,
-            current: 0
-        } as IPaymentRangeSpec;
-    } else {
-        return null;
-    }
-}
-
 const getLoanDetails = (orderOptions: IOrderOptionsResponse, paymentLookup: IPaymentLookupResponse | undefined): IPaymentLookupResponse => {
     return paymentLookup ? paymentLookup : getLoanPaymentOptions(orderOptions).loanDetails;
 }
@@ -85,7 +70,7 @@ class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsPr
         const loanDetails = getLoanDetails(props.orderOptions, props.paymentLookup);
 
         const convertedResidualSpecification = getConvertedResidualSpecification(loanDetails.getResidualValueSpec());
-        const hasResidual = convertedResidualSpecification !== null;
+        const hasResidual = isResidualEnabled(convertedResidualSpecification);
 
         var residual = null;
 
@@ -137,7 +122,13 @@ class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsPr
     }
 
     handleValueUpdated() {
-        this.updateStoreValues(() => {
+        this.updateStoreValues((state: IEcomData) => {
+            const isValidPayment = validatePayment(state.payment, this.props.orderOptions, this.props.paymentLookup);
+
+            if (!isValidPayment) {
+                return;
+            }
+
             this.props.onFetchPaymentInformation((isSuccessful: boolean) => {
                 this.setState({
                     hasRequestError: !isSuccessful
@@ -169,7 +160,7 @@ class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsPr
         const duration = getDurationFromIndex(this.state.durationIndex, durationSpecification);
 
         var residual = null;
-        const hasResidual = convertedResidualSpecification !== null;
+        const hasResidual = isResidualEnabled(convertedResidualSpecification);
 
         if (hasResidual) {
             const residualMin = convertedResidualSpecification.min;
@@ -201,12 +192,12 @@ class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsPr
         const optionItems = options.map((o, index) => <option key={index}>{o}</option>);
         const durationValue = options[this.state.durationIndex];
 
-        const hasResidual = convertedResidualSpecification !== null;
-
         var residual = null;
         var residualMin = null;
         var residualMax = null;
         var residualStep = null;
+
+        const hasResidual = isResidualEnabled(convertedResidualSpecification);
 
         if (hasResidual) {
             residual = this.state.residual;
@@ -214,9 +205,6 @@ class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsPr
             residualMax = convertedResidualSpecification.max;
             residualStep = convertedResidualSpecification.step;
         }
-
-        const isResidualDisabledByBackend = hasResidual && residualMin === residualMax;
-        const shouldDisableResidual = isResidualDisabledByBackend || this.props.isWaitingForResponse;
 
         const hasDownPaymentError = !validateStringNumberInRange(this.state.deposit, depositSpecification.min, depositSpecification.max);
         const hasResidualError = hasResidual && !validateStringNumberInRange(residual, residualMin, residualMax);
@@ -324,7 +312,7 @@ class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsPr
                                                 name="residual"
                                                 placeholder="Restskuld"
                                                 value={this.state.residual}
-                                                disabled={shouldDisableResidual}
+                                                disabled={this.props.isWaitingForResponse}
                                                 onChange={this.handleInputValueChange}
                                                 onBlur={this.handleValueUpdated} />
                                         </div>
@@ -337,7 +325,7 @@ class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsPr
                                                 max={residualMax}
                                                 step={residualStep}
                                                 initialValue={parseInt(this.state.residual)}
-                                                isDisabled={shouldDisableResidual}
+                                                isDisabled={this.props.isWaitingForResponse}
                                                 onChange={(value) => { this.handleSliderChange('residual', value + ''); }}
                                                 onAfterChange={this.handleValueUpdated} />
                                         }
