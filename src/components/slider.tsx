@@ -120,7 +120,7 @@ class Slider extends React.Component<ISliderProps, IState> {
             e.preventDefault();
             e.stopPropagation();
 
-            this.handleSliderPress();
+            this.handleSliderRelease();
 
             return false;
         }
