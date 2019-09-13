@@ -40,7 +40,7 @@ const FinalConfirmation = (props: IFinalConfirmationProps) => {
             <section className="page-section page-section-bottom">
                 <div data-ecom-buttonnav="">
                     <div className="button-nav-item">
-                        <button data-ecom-button="full-width light" onClick={props.onExit}>
+                        <button data-ecom-button="full-width" onClick={props.onExit}>
                             Stäng
                         </button>
                     </div>

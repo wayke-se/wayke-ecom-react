@@ -212,10 +212,14 @@ const InsuranceAlternativeChooser = (props: IInsuranceAlternativeChooserProps) =
                 </div>
             </section>
 
-            <section className="page-section text-center">
-                <button data-ecom-link="action" onClick={() => handleHasAddedInsuranceClick(false)}>
-                    Hoppa över detta steg
-                </button>
+            <section className="page-section">
+                <div data-ecom-buttonnav="">
+                    <div className="button-nav-item" onClick={() => handleHasAddedInsuranceClick(false)}>
+                        <button data-ecom-button="full-width light">
+                            Hoppa över detta steg
+                        </button>
+                    </div>
+                </div>
             </section>
         </div>
     );

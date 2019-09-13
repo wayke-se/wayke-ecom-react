@@ -37,7 +37,16 @@ const TradeInConfirmCar = (props: ITradeInConfirmCarProps) => {
 
             <section className="page-section">
                 <div data-ecom-box="">
-                    <div data-ecom-label="">{registrationNumber}, {milage} mil</div>
+                    <div data-ecom-columnrow="" className="font-size-small m-b-half">
+                        <div className="column">
+                            <div data-ecom-label="">{registrationNumber}, {milage} mil</div>
+                        </div>
+
+                        <div className="column">
+                            <button data-ecom-link="font-inerit" onClick={props.onShowTradeInCarDefinition}>Ändra</button>
+                        </div>
+                    </div>
+
                     <div className="m-t-half">
                         <span className="font-medium">{vehicleTitle}</span> {vehicleDecsription}
                     </div>
@@ -46,11 +55,6 @@ const TradeInConfirmCar = (props: ITradeInConfirmCarProps) => {
 
             <section className="page-section page-section-bottom">
                 <div data-ecom-buttonnav="">
-                    <div className="button-nav-item" onClick={props.onShowTradeInCarDefinition}>
-                        <button data-ecom-button="light full-width">
-                            Ändra
-                        </button>
-                    </div>
                     <div className="button-nav-item" onClick={() => handleHasTradeInCar(true)}>
                         <button data-ecom-button="full-width">
                             Gå vidare

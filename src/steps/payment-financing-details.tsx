@@ -235,6 +235,7 @@ class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsPr
                         <div className="column">
                             <h1 className="h6 no-margin">Betalsätt</h1>
                             <div className="font-size-small">{paymentOption.name}</div>
+                            <button data-ecom-link="font-inerit" onClick={this.props.onShowPaymentMethodChooser} className="m-t">Ändra betalsätt</button>
                         </div>
 
                         { paymentOption.logo &&
@@ -414,11 +415,6 @@ class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsPr
 
                 <section className="page-section page-section-bottom">
                     <div data-ecom-buttonnav="">
-                        <div className="button-nav-item" onClick={this.props.onShowPaymentMethodChooser}>
-                            <button data-ecom-button="light full-width">
-                                Ändra betalsätt
-                            </button>
-                        </div>
                         <div className="button-nav-item" onClick={this.handleProceedClick}>
                             <button data-ecom-button="full-width" disabled={this.props.isWaitingForResponse}>
                                 Välj finansiering

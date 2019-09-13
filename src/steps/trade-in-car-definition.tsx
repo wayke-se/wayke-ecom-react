@@ -122,12 +122,14 @@ const TradeInCarDefinition = (props: ITradeInCarDefinitionProps) => {
                                 </button>
                             </div>
                         </div>
-                    </section>
 
-                    <section className="page-section text-center">
-                        <button data-ecom-link="action" onClick={handleSkipClick}>
-                            Hoppa över detta steg
-                        </button>
+                        <div data-ecom-buttonnav="" className="m-t">
+                            <div className="button-nav-item" onClick={handleSkipClick}>
+                                <button data-ecom-button="full-width light">
+                                    Hoppa över detta steg
+                                </button>
+                            </div>
+                        </div>
                     </section>
                 </React.Fragment>
             }

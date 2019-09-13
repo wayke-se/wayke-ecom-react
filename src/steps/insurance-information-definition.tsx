@@ -184,23 +184,23 @@ class InsuranceInformationDefinition extends React.Component<IInsuranceInformati
 
 
                 { !this.props.isWaitingForResponse &&
-                    <React.Fragment>
-                        <section className="page-section">
-                            <div data-ecom-buttonnav="">
-                                <div className="button-nav-item">
-                                    <button data-ecom-button="full-width" onClick={() => this.handleWantsToSeeInsuranceOptionsChange(true)}>
-                                        Visa försäkringar
-                                    </button>
-                                </div>
+                    <section className="page-section">
+                        <div data-ecom-buttonnav="">
+                            <div className="button-nav-item">
+                                <button data-ecom-button="full-width" onClick={() => this.handleWantsToSeeInsuranceOptionsChange(true)}>
+                                    Visa försäkringar
+                                </button>
                             </div>
-                        </section>
+                        </div>
 
-                        <section className="page-section text-center">
-                            <button data-ecom-link="action" onClick={() => this.handleWantsToSeeInsuranceOptionsChange(false)}>
-                                Hoppa över detta steg
-                            </button>
-                        </section>
-                    </React.Fragment>
+                        <div data-ecom-buttonnav="" className="m-t">
+                            <div className="button-nav-item" onClick={() => this.handleWantsToSeeInsuranceOptionsChange(false)}>
+                                <button data-ecom-button="full-width light">
+                                    Hoppa över detta steg
+                                </button>
+                            </div>
+                        </div>
+                    </section>
                 }
 
                 { this.props.isWaitingForResponse &&
