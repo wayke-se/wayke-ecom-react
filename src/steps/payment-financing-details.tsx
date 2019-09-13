@@ -218,6 +218,9 @@ class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsPr
         const formattedSetupFee = formatPrice(loanDetails.getFees().setupFee);
         const formattedAdministrationFee = formatPrice(loanDetails.getFees().administrationFee);
         const formattedTotalCreditCost = formatPrice(loanDetails.getCosts().totalCreditCost);
+        const formattedTotalResidualValue = formatPrice(loanDetails.getTotalResidualValue());
+
+        const publicUrl = loanDetails.getPublicURL();
 
         return (
             <div className="page-main">
@@ -320,14 +323,18 @@ class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsPr
 
                                     <div className="form-group-split-item">
                                         { !hasResidualError &&
-                                            <Slider
-                                                min={residualMin}
-                                                max={residualMax}
-                                                step={residualStep}
-                                                initialValue={parseInt(this.state.residual)}
-                                                isDisabled={this.props.isWaitingForResponse}
-                                                onChange={(value) => { this.handleSliderChange('residual', value + ''); }}
-                                                onAfterChange={this.handleValueUpdated} />
+                                            <React.Fragment>
+                                                <Slider
+                                                    min={residualMin}
+                                                    max={residualMax}
+                                                    step={residualStep}
+                                                    initialValue={parseInt(this.state.residual)}
+                                                    isDisabled={this.props.isWaitingForResponse}
+                                                    onChange={(value) => { this.handleSliderChange('residual', value + ''); }}
+                                                    onAfterChange={this.handleValueUpdated} />
+
+                                                <div className="font-medium m-t-half">{formattedTotalResidualValue}kr</div>
+                                            </React.Fragment>
                                         }
                                     </div>
                                 </div>
@@ -347,42 +354,55 @@ class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsPr
                 <section className="page-section">
                     <div className="h6 m-b-mini">{this.props.isWaitingForResponse ? <SpinnerInline /> : formattedPrice} kr/mån</div>
                     <div className="font-size-small">Beräknat på {formattedInterest}% ränta (effektivt {formattedEffectiveInterest}%)</div>
+
                     <div className="m-t-half">
                         <button data-ecom-link="" className="l-block" onClick={this.handleDetailsClick}>{this.state.isShowingDetails ? 'Färre detaljer' : 'Detaljer'}</button>
                     </div>
+
                     { this.state.isShowingDetails &&
-                        <div className="m-t">
-                            <div data-ecom-columnrow="" className="repeat-m-half">
-                                <div className="column">
-                                    <div className="font-medium font-size-small">Ränta</div>
+                        <React.Fragment>
+                            <div className="m-t">
+                                <div data-ecom-columnrow="" className="repeat-m-half">
+                                    <div className="column">
+                                        <div className="font-medium font-size-small">Ränta</div>
+                                    </div>
+                                    <div className="column">{this.props.isWaitingForResponse ? <SpinnerInline /> : formattedInterest}%</div>
                                 </div>
-                                <div className="column">{this.props.isWaitingForResponse ? <SpinnerInline /> : formattedInterest}%</div>
-                            </div>
-                            <div data-ecom-columnrow="" className="repeat-m-half">
-                                <div className="column">
-                                    <div className="font-medium font-size-small">Effektiv ränta	</div>
+                                <div data-ecom-columnrow="" className="repeat-m-half">
+                                    <div className="column">
+                                        <div className="font-medium font-size-small">Effektiv ränta	</div>
+                                    </div>
+                                    <div className="column">{this.props.isWaitingForResponse ? <SpinnerInline /> : formattedEffectiveInterest}%</div>
                                 </div>
-                                <div className="column">{this.props.isWaitingForResponse ? <SpinnerInline /> : formattedEffectiveInterest}%</div>
-                            </div>
-                            <div data-ecom-columnrow="" className="repeat-m-half">
-                                <div className="column">
-                                    <div className="font-medium font-size-small">Uppläggningskostnad</div>
+                                <div data-ecom-columnrow="" className="repeat-m-half">
+                                    <div className="column">
+                                        <div className="font-medium font-size-small">Uppläggningskostnad</div>
+                                    </div>
+                                    <div className="column">{this.props.isWaitingForResponse ? <SpinnerInline /> : formattedSetupFee}kr</div>
                                 </div>
-                                <div className="column">{this.props.isWaitingForResponse ? <SpinnerInline /> : formattedSetupFee}kr</div>
-                            </div>
-                            <div data-ecom-columnrow="" className="repeat-m-half">
-                                <div className="column">
-                                    <div className="font-medium font-size-small">Administrativa avgifter</div>
+                                <div data-ecom-columnrow="" className="repeat-m-half">
+                                    <div className="column">
+                                        <div className="font-medium font-size-small">Administrativa avgifter</div>
+                                    </div>
+                                    <div className="column">{this.props.isWaitingForResponse ? <SpinnerInline /> : formattedAdministrationFee}kr/mån</div>
                                 </div>
-                                <div className="column">{this.props.isWaitingForResponse ? <SpinnerInline /> : formattedAdministrationFee}kr/mån</div>
-                            </div>
-                            <div data-ecom-columnrow="" className="repeat-m-half">
-                                <div className="column">
-                                    <div className="font-medium font-size-small">Total kreditkostnad</div>
+                                <div data-ecom-columnrow="" className="repeat-m-half">
+                                    <div className="column">
+                                        <div className="font-medium font-size-small">Total kreditkostnad</div>
+                                    </div>
+                                    <div className="column">{this.props.isWaitingForResponse ? <SpinnerInline /> : formattedTotalCreditCost}kr</div>
                                 </div>
-                                <div className="column">{this.props.isWaitingForResponse ? <SpinnerInline /> : formattedTotalCreditCost}kr</div>
                             </div>
-                        </div>
+
+                            { publicUrl &&
+                                <div data-ecom-content="" className="m-t">
+                                    <a data-ecom-link="" href={publicUrl} target="_blank">
+                                        Mer information
+                                        <i className="icon-link-external m-l-half"></i>
+                                    </a>
+                                </div>
+                            }
+                        </React.Fragment>
                     }
                 </section>
 

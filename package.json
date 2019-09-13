@@ -45,7 +45,7 @@
     "typescript": "^3.5.3"
   },
   "dependencies": {
-    "@wayke-se/ecom": "^1.0.0",
+    "@wayke-se/ecom": "^1.0.2",
     "marked": "^0.7.0"
   },
   "@pika/pack": {

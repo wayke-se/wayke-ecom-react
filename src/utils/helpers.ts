@@ -16,7 +16,7 @@ const separateEveryThirdCharacter = (value: string) => {
 }
 
 export const formatPrice = (value: number, decimalSymbol = ',') => {
-    if (!value) {
+    if (value === null || value === undefined) {
         return null;
     }
 
