@@ -206,8 +206,14 @@ class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsPr
             residualStep = convertedResidualSpecification.step;
         }
 
-        const hasDownPaymentError = !validateStringNumberInRange(this.state.deposit, depositSpecification.min, depositSpecification.max);
+        const hasDepositError = !validateStringNumberInRange(this.state.deposit, depositSpecification.min, depositSpecification.max);
         const hasResidualError = hasResidual && !validateStringNumberInRange(residual, residualMin, residualMax);
+
+        const hasAnyError = hasDepositError || hasResidualError;
+
+        const isDepositDisabled = (hasAnyError && !hasDepositError) || this.props.isWaitingForResponse;
+        const isDurationDisabled = hasAnyError || this.props.isWaitingForResponse;
+        const isResidualDisabled = (hasAnyError && !hasResidualError) || this.props.isWaitingForResponse;
 
         const paymentOption = this.props.orderOptions.getPaymentOptions().find(p => p.type === PaymentType.Loan);
         const scaledImage = addSizeQuery(paymentOption.logo, 100, 60);
@@ -241,7 +247,7 @@ class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsPr
 
                 <section className="page-section">
                     <div data-ecom-form="">
-                        <div className={`form-group ${hasDownPaymentError ? ' has-error' : ''}`}>
+                        <div className={`form-group ${hasDepositError ? ' has-error' : ''}`}>
                             <label data-ecom-inputlabel="" htmlFor="payment-input-downpayment">Kontantinsats (kr)</label>
 
                             <div className="form-group-split">
@@ -252,20 +258,20 @@ class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsPr
                                             name="deposit"
                                             placeholder="Kontantinsats"
                                             value={this.state.deposit}
-                                            disabled={this.props.isWaitingForResponse}
+                                            disabled={isDepositDisabled}
                                             onChange={this.handleInputValueChange}
                                             onBlur={this.handleValueUpdated} />
                                     </div>
                                 </div>
 
                                 <div className="form-group-split-item">
-                                    { !hasDownPaymentError &&
+                                    { !hasDepositError &&
                                         <Slider
                                             min={depositSpecification.min}
                                             max={depositSpecification.max}
                                             step={depositSpecification.step}
                                             initialValue={parseInt(this.state.deposit)}
-                                            isDisabled={this.props.isWaitingForResponse}
+                                            isDisabled={isDepositDisabled}
                                             onChange={(value) => { this.handleSliderChange('deposit', value + ''); }}
                                             onAfterChange={this.handleValueUpdated} />
                                     }
@@ -283,7 +289,7 @@ class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsPr
                                     <div data-ecom-select="" className={this.props.isWaitingForResponse ? 'is-disabled' : ''}>
                                         <select className="select"
                                                 value={durationValue}
-                                                disabled={this.props.isWaitingForResponse}
+                                                disabled={isDurationDisabled}
                                                 onChange={this.handleDurationChange}>
                                             {optionItems}
                                         </select>
@@ -296,7 +302,7 @@ class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsPr
                                         max={options.length - 1}
                                         step={1}
                                         initialValue={this.state.durationIndex}
-                                        isDisabled={this.props.isWaitingForResponse}
+                                        isDisabled={isDurationDisabled}
                                         onChange={(value) => { this.handleSliderChange('durationIndex', value); }}
                                         onAfterChange={this.handleValueUpdated} />
                                 </div>
@@ -315,7 +321,7 @@ class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsPr
                                                 name="residual"
                                                 placeholder="Restskuld"
                                                 value={this.state.residual}
-                                                disabled={this.props.isWaitingForResponse}
+                                                disabled={isResidualDisabled}
                                                 onChange={this.handleInputValueChange}
                                                 onBlur={this.handleValueUpdated} />
                                         </div>
@@ -329,7 +335,7 @@ class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsPr
                                                     max={residualMax}
                                                     step={residualStep}
                                                     initialValue={parseInt(this.state.residual)}
-                                                    isDisabled={this.props.isWaitingForResponse}
+                                                    isDisabled={isResidualDisabled}
                                                     onChange={(value) => { this.handleSliderChange('residual', value + ''); }}
                                                     onAfterChange={this.handleValueUpdated} />
 
