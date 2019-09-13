@@ -132,12 +132,10 @@ const CustomerInformationInitial = (props: ICustomerInformationInitialProps) => 
                     }
                 </div>
 
-                <div data-ecom-buttonnav="" className="m-t">
-                    <div className="button-nav-item" onClick={() => handleInputTypeClick(CustomerInformationInputType.MANUAL)}>
-                        <button data-ecom-button="full-width light">
-                        Jag vill fylla i mina uppgifter manuellt
-                        </button>
-                    </div>
+                <div className="m-t">
+                    <button data-ecom-button="full-width light" onClick={() => handleInputTypeClick(CustomerInformationInputType.MANUAL)}>
+                    Fyll i manuellt
+                    </button>
                 </div>
             </section>
         </div>

@@ -250,54 +250,42 @@ class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsPr
                     <div data-ecom-form="">
                         <div className={`form-group ${hasDepositError ? ' has-error' : ''}`}>
                             <label data-ecom-inputlabel="" htmlFor="payment-input-downpayment">Kontantinsats (kr)</label>
-
-                            <div className="form-group-split">
-                                <div className="form-group-split-item">
-                                    <div data-ecom-inputtext="">
-                                        <input type="text"
-                                            id="payment-input-downpayment"
-                                            name="deposit"
-                                            placeholder="Kontantinsats"
-                                            value={this.state.deposit}
-                                            disabled={isDepositDisabled}
-                                            onChange={this.handleInputValueChange}
-                                            onBlur={this.handleValueUpdated} />
-                                    </div>
-                                </div>
-
-                                <div className="form-group-split-item">
-                                    { !hasDepositError &&
-                                        <Slider
-                                            min={depositSpecification.min}
-                                            max={depositSpecification.max}
-                                            step={depositSpecification.step}
-                                            initialValue={parseInt(this.state.deposit)}
-                                            isDisabled={isDepositDisabled}
-                                            onChange={(value) => { this.handleSliderChange('deposit', value + ''); }}
-                                            onAfterChange={this.handleValueUpdated} />
-                                    }
-                                </div>
+                            <div data-ecom-inputtext="">
+                                <input type="text"
+                                    id="payment-input-downpayment"
+                                    name="deposit"
+                                    placeholder="Kontantinsats"
+                                    value={this.state.deposit}
+                                    disabled={isDepositDisabled}
+                                    onChange={this.handleInputValueChange}
+                                    onBlur={this.handleValueUpdated} />
                             </div>
-
+                            <div className="m-t">
+                                { !hasDepositError &&
+                                    <Slider
+                                        min={depositSpecification.min}
+                                        max={depositSpecification.max}
+                                        step={depositSpecification.step}
+                                        initialValue={parseInt(this.state.deposit)}
+                                        isDisabled={isDepositDisabled}
+                                        onChange={(value) => { this.handleSliderChange('deposit', value + ''); }}
+                                        onAfterChange={this.handleValueUpdated} />
+                                }
+                            </div>
                             <div className="form-alert">Mellan {formatPrice(depositSpecification.min)}kr och {formatPrice(depositSpecification.max)}kr</div>
                         </div>
 
                         <div className="form-group">
                             <label data-ecom-inputlabel="" htmlFor="payment-input-installment">Avbetalning (mån)</label>
-
-                            <div className="form-group-split">
-                                <div className="form-group-split-item">
-                                    <div data-ecom-select="" className={this.props.isWaitingForResponse ? 'is-disabled' : ''}>
-                                        <select className="select"
-                                                value={durationValue}
-                                                disabled={isDurationDisabled}
-                                                onChange={this.handleDurationChange}>
-                                            {optionItems}
-                                        </select>
-                                    </div>
+                                <div data-ecom-select="" className={this.props.isWaitingForResponse ? 'is-disabled' : ''}>
+                                    <select className="select"
+                                            value={durationValue}
+                                            disabled={isDurationDisabled}
+                                            onChange={this.handleDurationChange}>
+                                        {optionItems}
+                                    </select>
                                 </div>
-
-                                <div className="form-group-split-item">
+                                <div className="m-t">
                                     <Slider
                                         min={0}
                                         max={options.length - 1}
@@ -307,28 +295,29 @@ class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsPr
                                         onChange={(value) => { this.handleSliderChange('durationIndex', value); }}
                                         onAfterChange={this.handleValueUpdated} />
                                 </div>
-                            </div>
                         </div>
 
                         { hasResidual &&
                             <div className={`form-group ${hasResidualError ? ' has-error' : ''}`}>
-                                <label data-ecom-inputlabel="" htmlFor="payment-input-residual">Restskuld (%)</label>
-
-                                <div className="form-group-split">
-                                    <div className="form-group-split-item">
-                                        <div data-ecom-inputtext="">
-                                            <input type="text"
-                                                id="payment-input-residual"
-                                                name="residual"
-                                                placeholder="Restskuld"
-                                                value={this.state.residual}
-                                                disabled={isResidualDisabled}
-                                                onChange={this.handleInputValueChange}
-                                                onBlur={this.handleValueUpdated} />
-                                        </div>
+                                <div data-ecom-columnrow="" className="m-b-half">
+                                    <div className="column">
+                                        <label data-ecom-inputlabel="" htmlFor="payment-input-residual" className="no-margin">Restskuld (%)</label>
                                     </div>
-
-                                    <div className="form-group-split-item">
+                                    <div className="column">
+                                        <div className="font-medium font-size-small">{formattedTotalResidualValue} kr</div>
+                                    </div>
+                                </div>
+                                    <div data-ecom-inputtext="">
+                                        <input type="text"
+                                            id="payment-input-residual"
+                                            name="residual"
+                                            placeholder="Restskuld"
+                                            value={this.state.residual}
+                                            disabled={isResidualDisabled}
+                                            onChange={this.handleInputValueChange}
+                                            onBlur={this.handleValueUpdated} />
+                                    </div>
+                                    <div className="m-t">
                                         { !hasResidualError &&
                                             <React.Fragment>
                                                 <Slider
@@ -339,13 +328,9 @@ class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsPr
                                                     isDisabled={isResidualDisabled}
                                                     onChange={(value) => { this.handleSliderChange('residual', value + ''); }}
                                                     onAfterChange={this.handleValueUpdated} />
-
-                                                <div className="font-medium m-t-half">{formattedTotalResidualValue}kr</div>
                                             </React.Fragment>
                                         }
                                     </div>
-                                </div>
-
                                 <div className="form-alert">Mellan {residualMin}% och {residualMax}%</div>
                             </div>
                         }

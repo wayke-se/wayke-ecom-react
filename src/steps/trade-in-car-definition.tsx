@@ -115,20 +115,15 @@ const TradeInCarDefinition = (props: ITradeInCarDefinitionProps) => {
             { !props.isWaitingForResponse &&
                 <React.Fragment>
                     <section className="page-section">
-                        <div data-ecom-buttonnav="">
-                            <div className="button-nav-item" onClick={handleNextStepClick}>
-                                <button data-ecom-button="full-width">
-                                    Gå vidare
-                                </button>
-                            </div>
+                        <div className="repeat-m">
+                            <button data-ecom-button="full-width" onClick={handleNextStepClick}>
+                                Gå vidare
+                            </button>
                         </div>
-
-                        <div data-ecom-buttonnav="" className="m-t">
-                            <div className="button-nav-item" onClick={handleSkipClick}>
-                                <button data-ecom-button="full-width light">
-                                    Hoppa över detta steg
-                                </button>
-                            </div>
+                        <div className="repeat-m">
+                            <button data-ecom-button="full-width light" onClick={handleSkipClick}>
+                                Hoppa över detta steg
+                            </button>
                         </div>
                     </section>
                 </React.Fragment>

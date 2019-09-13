@@ -185,20 +185,15 @@ class InsuranceInformationDefinition extends React.Component<IInsuranceInformati
 
                 { !this.props.isWaitingForResponse &&
                     <section className="page-section">
-                        <div data-ecom-buttonnav="">
-                            <div className="button-nav-item">
-                                <button data-ecom-button="full-width" onClick={() => this.handleWantsToSeeInsuranceOptionsChange(true)}>
-                                    Visa försäkringar
-                                </button>
-                            </div>
+                        <div className="repeat-m">
+                            <button data-ecom-button="full-width" onClick={() => this.handleWantsToSeeInsuranceOptionsChange(true)}>
+                            Visa försäkringar
+                            </button>
                         </div>
-
-                        <div data-ecom-buttonnav="" className="m-t">
-                            <div className="button-nav-item" onClick={() => this.handleWantsToSeeInsuranceOptionsChange(false)}>
-                                <button data-ecom-button="full-width light">
-                                    Hoppa över detta steg
-                                </button>
-                            </div>
+                        <div className="repeat-m">
+                            <button data-ecom-button="full-width light"  onClick={() => this.handleWantsToSeeInsuranceOptionsChange(false)}>
+                                Hoppa över detta steg
+                            </button>
                         </div>
                     </section>
                 }

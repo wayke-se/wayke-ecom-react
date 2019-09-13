@@ -9,7 +9,7 @@ import { getLoanPaymentOptions } from "../utils/payment";
 import { isResidualEnabled } from '../utils/residual';
 
 export const validateEcomData = (data: IEcomData, addressLookup: IAddressLookupResponse, orderOptions: IOrderOptionsResponse, paymentLookup: IPaymentLookupResponse | undefined) => {
-    const isValidTradeIn = validateTradeIn(data.tradeInCar);
+    const isValidTradeIn = data.tradeInCar.hasProvidedTradeInInfo && data.tradeInCar.hasTradeInCar ? validateTradeIn(data.tradeInCar) : true;
     const isValidPayment = validatePayment(data.payment, orderOptions, paymentLookup);
     const isValidInsurance = validateInsurance(data.insurance);
 
