@@ -128,7 +128,7 @@ class Slider extends React.Component<ISliderProps, IState> {
         return true;
     }
 
-    handleTouchMove(e: TouchEvent) {
+    handleTouchMove(e: React.TouchEvent<HTMLDivElement>) {
         this.handleSliderMove(e.touches[0].pageX);
     }
 
