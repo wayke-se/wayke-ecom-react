@@ -31,17 +31,16 @@ const TradeInExistsChooser = (props: ITradeInExistsChooserProps) => {
                     <ul className="option-list">
                         <li className="option-list-item">
                             <button className="option-list-action" onClick={() => handleWantsToDefineTradeInClick(true)}>
-                                <div className="option-list-action-title">Jag har inbytesbil<i className="icon-arrow-right m-l-half"></i></div>
+                                <div className="option-list-action-title">Ja, jag har inbytesbil<i className="icon-arrow-right m-l-half"></i></div>
+                            </button>
+                        </li>
+                        <li className="option-list-item">
+                            <button className="option-list-action" onClick={() => handleWantsToDefineTradeInClick(false)}>
+                                <div className="option-list-action-title">Nej, jag har ingen inbytesbil<i className="icon-arrow-right m-l-half"></i></div>
                             </button>
                         </li>
                     </ul>
                 </div>
-            </section>
-
-            <section className="page-section text-center">
-                <button data-ecom-link="action" onClick={() => handleWantsToDefineTradeInClick(false)}>
-                    Hoppa över detta steg
-                </button>
             </section>
         </div>
     );
