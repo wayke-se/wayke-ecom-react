@@ -36,13 +36,15 @@ const ecomData = {
         fuelType: [string]
     },
     serviceLogotypeUrl: [string],
-    onExit: [function]
+    onExit: [function],
+    onUserEvent: [function]
 };
 ```
 
 * `vehicle` - This is information about the vehicle that the user wants to sell. The `id` is referring to a *Wayke id*, i.e. an id that is defined by Wayke for the car to sell via Wayke's e-commerce solution. The rest of the information is information about the vehicle to sell and/or the retailer who sells it.
 * `serviceLogotypeUrl` - This should be an url to an image that is shown in the "header" of the e-commerce modal.
 * `onExit` - This should be a function that determines what should happen when the user either clicks the exit button on the modal, or if the user goes through the whole flow, makes the order and now is finished. (this code should probably hide the modal)
+* `onUserEvent` - This is an *optional* method to provide if you want to be informed about how the user navigates through the ecom modal. This could for instance be used for analytics purposes. The method will receive two parameters: 1) `userEvent: string` and 2) `currentStep: string`. The first one indicating what the user did, and the second one which step the user was on when they performed the event.
 
 When you want to show the Ecom component you simply import it and instantiate it with the above mentioned data.
 
