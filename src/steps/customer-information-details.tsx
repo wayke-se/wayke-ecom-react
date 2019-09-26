@@ -10,6 +10,7 @@ import { validateEcomData } from '../tools/data-validation';
 import Alert from '../components/alert';
 import Spinner from '../components/spinner';
 import OrderSummary from '../components/order-summary';
+import UserEvent from '../constants/user-event';
 
 export interface ICustomerInformationDetailsProps extends IEcomExternalProps, IEcomContext, IEcomStore, IEcomLifecycle {
 };
@@ -167,6 +168,8 @@ const CustomerInformationDetails = (props: ICustomerInformationDetailsProps) => 
     const [isExtended, setIsExtended] = React.useState(false);
     const [hasRequestError, setHasRequestError] = React.useState(false);
 
+    const isAutomatic = props.data.customer.inputType === CustomerInformationInputType.AUTOMATIC;
+
     const handleCreateOrderClick = () => {
         const isValidData = validateEcomData(props.data, props.addressLookup, props.orderOptions, props.paymentLookup);
 
@@ -177,19 +180,25 @@ const CustomerInformationDetails = (props: ICustomerInformationDetailsProps) => 
         setHasRequestError(false);
 
         props.onCreateOrder((isSuccessful: boolean) => {
-            if (isSuccessful) {
-                props.onProceedToNextStep();
-            } else {
+            if (!isSuccessful) {
                 setHasRequestError(true);
+                return;
             }
+
+            if (isAutomatic) {
+                props.onIncompleteUserEvent(UserEvent.CUSTOMER_DETAILS_AUTOMATIC_CHOSEN);
+            } else {
+                props.onIncompleteUserEvent(UserEvent.CUSTOMER_DETAILS_MANUAL_CHOSEN);
+            }
+
+            props.onIncompleteUserEvent(UserEvent.ORDER_CREATED);
+            props.onProceedToNextStep();
         });
     }
 
     const handleShowTermsClick = () => {
         setIsExtended(!isExtended);
     };
-
-    const isAutomatic = props.data.customer.inputType === CustomerInformationInputType.AUTOMATIC;
 
     const hasEmailError = props.data.interact.customer.email && !validateEmail(props.data.customer.email);
     const hasPhoneError = props.data.interact.customer.phone && !validatePhoneNumber( props.data.customer.phone);

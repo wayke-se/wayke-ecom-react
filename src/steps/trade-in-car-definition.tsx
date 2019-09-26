@@ -8,6 +8,7 @@ import { validateTradeIn } from '../tools/data-validation';
 import Alert from '../components/alert';
 import Spinner from '../components/spinner';
 import { handleEnterPress } from '../utils/events';
+import UserEvent from '../constants/user-event';
 
 export interface ITradeInCarDefinitionProps extends IEcomContext, IEcomStore, IEcomLifecycle {
 };
@@ -43,6 +44,7 @@ const TradeInCarDefinition = (props: ITradeInCarDefinitionProps) => {
                     name: 'hasProvidedTradeInInfo',
                     value: true
                 }, () => {
+                    props.onIncompleteUserEvent(UserEvent.TRADE_IN_DEFINED);
                     props.onProceedToNextStep();
                 });
             } else {
@@ -57,6 +59,7 @@ const TradeInCarDefinition = (props: ITradeInCarDefinitionProps) => {
             name: 'hasProvidedTradeInInfo',
             value: false
         }, () => {
+            props.onIncompleteUserEvent(UserEvent.TRADE_IN_SKIPPED);
             props.onProceedToNextStep();
         });
     }

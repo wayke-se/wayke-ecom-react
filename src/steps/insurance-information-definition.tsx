@@ -12,6 +12,7 @@ import Spinner from '../components/spinner';
 import { getDrivingDistanceLabel } from '../utils/insurance';
 import { addSizeQuery } from '../utils/image';
 import { validatePersonalNumber } from '../utils/validation';
+import UserEvent from '../constants/user-event';
 
 export interface IInsuranceInformationDefinitionProps extends IEcomContext, IEcomStore, IEcomLifecycle {
 };
@@ -64,6 +65,7 @@ class InsuranceInformationDefinition extends React.Component<IInsuranceInformati
             if (wantsToSeeInsuranceOptions) {
                 this.handleProceedClick();
             } else {
+                this.props.onIncompleteUserEvent(UserEvent.INSURANCE_SKIPPED);
                 this.props.onProceedToNextStep();
             }
         });

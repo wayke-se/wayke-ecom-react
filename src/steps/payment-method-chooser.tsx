@@ -8,6 +8,7 @@ import { PaymentType, IPaymentOption } from '@wayke-se/ecom';
 import { formatPrice, formatPercentage } from '../utils/helpers';
 import { addSizeQuery } from '../utils/image';
 import { getPaymentMethodTitle } from '../utils/payment';
+import UserEvent from '../constants/user-event';
 
 export interface IPaymentMethodChooserProps extends IEcomExternalProps, IEcomContext, IEcomStore, IEcomLifecycle {
 };
@@ -16,6 +17,20 @@ interface IPaymentMethodItemProps extends IEcomExternalProps, IEcomContext, IEco
     paymentOption: IPaymentOption;
 };
 
+const getUserEventFromPaymentType = (type: PaymentType): UserEvent | null => {
+    switch (type) {
+        case PaymentType.Cash:
+            return UserEvent.PAYMENT_TYPE_CASH_CHOSEN;
+        case PaymentType.Lease:
+            return UserEvent.PAYMENT_TYPE_LEASING_CHOSEN;
+        case PaymentType.Loan:
+            //This is sent when the user has gone through the extra loan step.
+            return null;
+    }
+
+    return null;
+}
+
 const PaymentMethodItem = (props: IPaymentMethodItemProps) => {
     const handlePaymentMethodClick = () => {
         props.dispatchStoreAction(StoreAction.UPDATE_NAMED_VALUE, {
@@ -23,6 +38,12 @@ const PaymentMethodItem = (props: IPaymentMethodItemProps) => {
             name: 'paymentType',
             value: props.paymentOption.type
         }, () => {
+            const userEvent = getUserEventFromPaymentType(props.paymentOption.type);
+            const hasUserEvent = userEvent !== null;
+
+            if (hasUserEvent) {
+                props.onIncompleteUserEvent(userEvent);
+            }
             props.onProceedToNextStep();
         });
     };
@@ -32,8 +53,8 @@ const PaymentMethodItem = (props: IPaymentMethodItemProps) => {
 
     const isLoan = props.paymentOption.type === PaymentType.Loan;
 
-    var formattedPrice: string | number | null | undefined = null;
-    var formattedInterest: number | null = null;
+    var formattedPrice = null;
+    var formattedInterest = null;
 
     if (isLoan) {
         const loanDetails = props.paymentOption.loanDetails;

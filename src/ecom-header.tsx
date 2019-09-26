@@ -1,12 +1,19 @@
 import React from 'react';
 import { IEcomExternalProps } from './types';
+import UserEvent from './constants/user-event';
 
 export interface IEcomHeaderProps extends IEcomExternalProps {
     canPressBackButton: boolean;
     onPreviousStepClick: () => void;
+    onIncompleteUserEvent: (userEvent: UserEvent) => void;
 };
 
 const EcomHeader = (props: IEcomHeaderProps) => {
+    const handleExitClick = () => {
+        props.onIncompleteUserEvent(UserEvent.ORDER_CANCELLED);
+        props.onExit();
+    };
+
     return (
         <header data-ecom-header="">
             <div className="header">
@@ -18,7 +25,7 @@ const EcomHeader = (props: IEcomHeaderProps) => {
                   }
                 </div>
                 <div className="header-action">
-                    <button className="header-action-btn" title="Stäng" onClick={props.onExit}>
+                    <button className="header-action-btn" title="Stäng" onClick={handleExitClick}>
                         <i className="icon-close no-margin"></i>
                     </button>
                 </div>

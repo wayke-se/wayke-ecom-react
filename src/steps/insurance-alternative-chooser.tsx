@@ -4,6 +4,7 @@ import { IEcomLifecycle, IEcomStore, IEcomContext } from '../types';
 import StoreAction from '../constants/store-action';
 import { getDrivingDistanceLabel } from '../utils/insurance';
 import { IInsuranceItem, IInsuranceAddon } from '@wayke-se/ecom';
+import UserEvent from '../constants/user-event';
 
 export interface IInsuranceAlternativeChooserProps extends IEcomContext, IEcomStore, IEcomLifecycle {
 };
@@ -99,12 +100,18 @@ const AddonItem = (props: IAddonItemProps) => {
 const InsuranceAlternativeChooser = (props: IInsuranceAlternativeChooserProps) => {
     const [ isExtended, setIsExtended ] = React.useState(false);
 
-    const handleHasAddedInsuranceClick = (value: boolean) => {
+    const handleHasAddedInsuranceClick = (hasAddedInsurance: boolean) => {
         props.dispatchStoreAction(StoreAction.UPDATE_NAMED_VALUE, {
             type: 'insurance',
             name: 'hasAddedInsurance',
-            value
+            hasAddedInsurance
         }, () => {
+            if (hasAddedInsurance) {
+                props.onIncompleteUserEvent(UserEvent.INSURANCE_ADDED);
+            } else {
+                props.onIncompleteUserEvent(UserEvent.INSURANCE_SKIPPED);
+            }
+
             props.onProceedToNextStep();
         });
     }

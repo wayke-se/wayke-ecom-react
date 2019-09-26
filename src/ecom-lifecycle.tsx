@@ -1,6 +1,7 @@
 import React from 'react';
 
 import EcomStep from './constants/ecom-step';
+import UserEvent from './constants/user-event';
 import { getAllTransitions, getInitialStep } from './ecom-step-transitions';
 
 import EcomHeader from './ecom-header';
@@ -50,6 +51,7 @@ class EcomLifecycle extends React.Component<IEcomLifecycleProps, IState> {
         this.handleProceedToNextStep = this.handleProceedToNextStep.bind(this);
         this.handlePreviousStepClick = this.handlePreviousStepClick.bind(this);
         this.handleSpecificStepClick = this.handleSpecificStepClick.bind(this);
+        this.handleIncompleteUserEvent = this.handleIncompleteUserEvent.bind(this);
 
         this.frameBodyRef = React.createRef();
 
@@ -142,6 +144,15 @@ class EcomLifecycle extends React.Component<IEcomLifecycleProps, IState> {
         });
     }
 
+    handleIncompleteUserEvent(userEvent: UserEvent) {
+        if (this.props.onUserEvent) {
+            const userEventKey = UserEvent[userEvent];
+            const ecomStepKey = EcomStep[this.state.step];
+
+            this.props.onUserEvent(userEventKey, ecomStepKey);
+        }
+    }
+
     render() {
         const canPressBackButton = this.state.stepHistory.length > 1 && !this.state.isBackwardsStepForbidden;
         const showCart = shouldShowCart(this.state.step);
@@ -157,7 +168,8 @@ class EcomLifecycle extends React.Component<IEcomLifecycleProps, IState> {
                                         <EcomHeader
                                             {...this.props}
                                             canPressBackButton={canPressBackButton}
-                                            onPreviousStepClick={this.handlePreviousStepClick} />
+                                            onPreviousStepClick={this.handlePreviousStepClick}
+                                            onIncompleteUserEvent={this.handleIncompleteUserEvent} />
 
                                         <EcomTimeline currentStep={this.state.step} options={this.props.orderOptions} />
 
@@ -170,7 +182,8 @@ class EcomLifecycle extends React.Component<IEcomLifecycleProps, IState> {
                                                 onShowCustomerInformationInitial={() => this.handleSpecificStepClick(EcomStep.CUSTOMER_INFORMATION_INITIAL)}
                                                 onShowInsuranceInformationDefinition={() => this.handleSpecificStepClick(EcomStep.INSURANCE_INFORMATION_DEFINITION)}
                                                 onShowTradeInCarDefinition={() => this.handleSpecificStepClick(EcomStep.TRADE_IN_CAR_DEFINITION)}
-                                                onShowPaymentMethodChooser={() => this.handleSpecificStepClick(EcomStep.PAYMENT_METHOD_CHOOSER)} />
+                                                onShowPaymentMethodChooser={() => this.handleSpecificStepClick(EcomStep.PAYMENT_METHOD_CHOOSER)}
+                                                onIncompleteUserEvent={this.handleIncompleteUserEvent} />
                                         </div>
                                     </div>
 

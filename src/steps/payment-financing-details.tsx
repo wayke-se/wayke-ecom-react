@@ -16,6 +16,7 @@ import { getConvertedResidualSpecification, isResidualEnabled } from '../utils/r
 
 import { validatePayment } from '../tools/data-validation';
 import { PaymentType, IPaymentRangeSpec, IOrderOptionsResponse, IPaymentLookupResponse } from '@wayke-se/ecom';
+import UserEvent from '../constants/user-event';
 
 export interface IPaymentFinancingDetailsProps extends IEcomExternalProps, IEcomContext, IEcomStore, IEcomLifecycle {
 };
@@ -145,6 +146,7 @@ class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsPr
                 return;
             }
 
+            this.props.onIncompleteUserEvent(UserEvent.PAYMENT_TYPE_LOAN_CHOSEN);
             this.props.onProceedToNextStep();
         });
     }
@@ -400,8 +402,8 @@ class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsPr
 
                 <section className="page-section page-section-bottom">
                     <div data-ecom-buttonnav="">
-                        <div className="button-nav-item" onClick={this.handleProceedClick}>
-                            <button data-ecom-button="full-width" disabled={this.props.isWaitingForResponse}>
+                        <div className="button-nav-item">
+                            <button data-ecom-button="full-width" disabled={this.props.isWaitingForResponse} onClick={this.handleProceedClick}>
                                 Välj finansiering
                             </button>
                         </div>

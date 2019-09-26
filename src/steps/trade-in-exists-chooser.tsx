@@ -2,6 +2,7 @@ import React from 'react';
 
 import { IEcomStore, IEcomLifecycle } from '../types';
 import StoreAction from '../constants/store-action';
+import UserEvent from '../constants/user-event';
 
 export interface ITradeInExistsChooserProps extends IEcomStore, IEcomLifecycle {
 }
@@ -16,6 +17,11 @@ const TradeInExistsChooser = (props: ITradeInExistsChooserProps) => {
             props.onProceedToNextStep();
         });
     };
+
+    const handleNoTradeInClick = () => {
+        props.onIncompleteUserEvent(UserEvent.TRADE_IN_SKIPPED);
+        handleWantsToDefineTradeInClick(false);
+    }
 
     return (
         <div className="page-main">
@@ -35,7 +41,7 @@ const TradeInExistsChooser = (props: ITradeInExistsChooserProps) => {
                             </button>
                         </li>
                         <li className="option-list-item">
-                            <button className="option-list-action" onClick={() => handleWantsToDefineTradeInClick(false)}>
+                            <button className="option-list-action" onClick={handleNoTradeInClick}>
                                 <div className="option-list-action-title">Nej, jag har ingen inbytesbil<i className="icon-arrow-right m-l-half"></i></div>
                             </button>
                         </li>

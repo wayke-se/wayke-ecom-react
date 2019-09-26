@@ -1,5 +1,4 @@
 import EcomStep from './constants/ecom-step';
-import CustomerInformationInputType from './constants/customer-information-input-type';
 
 import { IEcomData } from './types';
 import { PaymentType, IOrderOptionsResponse } from '@wayke-se/ecom';
@@ -75,12 +74,6 @@ export const getAllTransitions = () => ({
         }
     },
     [EcomStep.INSURANCE_ALTERNATIVE_CHOOSER]: () => EcomStep.CUSTOMER_INFORMATION_INITIAL,
-    [EcomStep.CUSTOMER_INFORMATION_INITIAL]: (data: IEcomData) => {
-        if (data.customer.inputType === CustomerInformationInputType.MANUAL) {
-            return EcomStep.CUSTOMER_INFORMATION_DETAILS;
-        } else {
-            return EcomStep.CUSTOMER_INFORMATION_DETAILS;
-        }
-    },
+    [EcomStep.CUSTOMER_INFORMATION_INITIAL]: () => EcomStep.CUSTOMER_INFORMATION_DETAILS,
     [EcomStep.CUSTOMER_INFORMATION_DETAILS]: () => EcomStep.FINAL_CONFIRMATION
 });

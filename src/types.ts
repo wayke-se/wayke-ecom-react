@@ -1,5 +1,7 @@
 import CustomerInformationInputType from "./constants/customer-information-input-type";
 import StoreAction from './constants/store-action';
+import UserEvent from "./constants/user-event";
+
 import { IInsuranceOptionsResponse, IVehicleLookupResponse, IAddressLookupResponse, IOrderOptionsResponse, DrivingDistance, PaymentType, IPaymentLookupResponse } from '@wayke-se/ecom';
 
 export interface IVehicle {
@@ -22,6 +24,7 @@ export interface IEcomExternalProps {
     serviceLogotypeUrl: string;
 
     onExit: () => void;
+    onUserEvent?: (userEvent: string, currentStep: string) => void;
 }
 
 export interface IEcomContext {
@@ -46,6 +49,7 @@ export interface IEcomLifecycle {
     onShowInsuranceInformationDefinition: () => void;
     onShowTradeInCarDefinition: () => void;
     onShowPaymentMethodChooser: () => void;
+    onIncompleteUserEvent: (userEvent: UserEvent) => void;
 };
 
 export interface IEcomStore {
