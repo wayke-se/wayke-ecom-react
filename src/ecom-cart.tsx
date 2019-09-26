@@ -27,7 +27,9 @@ interface ICartItemProps {
 
 const CartItem = (props: ICartItemProps) => {
     const addonItems = props.addons.map((a, index) => <div key={index}>{a.title} - {a.price}{a.unit}</div>);
+
     const hasAddons = addonItems.length > 0;
+    const hasPrice = props.price !== null;
 
     return (
         <div className="cart-body-section">
@@ -35,9 +37,11 @@ const CartItem = (props: ICartItemProps) => {
                 <div className="column">
                     <div className="font-medium">{props.title}</div>
                 </div>
-                <div className="column">
-                    {formatPrice(props.price)}{props.unit}
-                </div>
+                { hasPrice &&
+                    <div className="column">
+                        {formatPrice(props.price)}{props.unit}
+                    </div>
+                }
             </div>
 
             <div>
@@ -105,8 +109,8 @@ const EcomCart = (props: IEcomCartProps) => {
         cartContent.push({
             title: 'Inbytesbil',
             description: getVehicleFullTitle(props.data.tradeInCar.registrationNumber, vehicleInformation),
-            price: '',
-            unit: '',
+            price: null,
+            unit: null,
             addons: []
         });
     }

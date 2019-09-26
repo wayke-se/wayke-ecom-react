@@ -26,7 +26,9 @@ interface IProductItemProps extends IEcomStore {
 
 const ProductItem = (props: IProductItemProps) => {
     const addonItems = props.addons.map((a, index) => <div key={index}>{a.title} - {a.price}{a.unit}</div>);
+
     const hasAddons = addonItems.length > 0;
+    const hasPrice = props.price !== null;
 
     return (
         <div className="product-card-content">
@@ -35,9 +37,11 @@ const ProductItem = (props: IProductItemProps) => {
                     <div className="font-medium">{props.title}</div>
                 </div>
 
-                <div className="column">
-                    {formatPrice(props.price)}{props.unit}
-                </div>
+                { hasPrice &&
+                    <div className="column">
+                        {formatPrice(props.price)}{props.unit}
+                    </div>
+                }
             </div>
 
             <div className="font-size-small">
@@ -99,8 +103,8 @@ const OrderSummary = (props: IOrderSummaryProps) => {
         products.push({
             title: 'Inbytesbil',
             description: getVehicleFullTitle(props.data.tradeInCar.registrationNumber, vehicleInformation),
-            price: '',
-            unit: '',
+            price: null,
+            unit: null,
             addons: []
         });
     }
@@ -119,10 +123,10 @@ const OrderSummary = (props: IOrderSummaryProps) => {
                     <div className="product-card-title">{props.vehicle.title} {props.vehicle.shortDescription}</div>
 
                     <ul className="product-card-usp-list">
-                        <li className="product-card-usp-item">{props.vehicle.modelYear}</li>
-                        <li className="product-card-usp-item">{props.vehicle.milage}</li>
-                        <li className="product-card-usp-item">{props.vehicle.gearBox}</li>
-                        <li className="product-card-usp-item">{props.vehicle.fuelType}</li>
+                        { props.vehicle.modelYear && <li className="product-card-usp-item">{props.vehicle.modelYear}</li> }
+                        { props.vehicle.milage && <li className="product-card-usp-item">{props.vehicle.milage}</li> }
+                        { props.vehicle.gearBox && <li className="product-card-usp-item">{props.vehicle.gearBox}</li> }
+                        { props.vehicle.fuelType && <li className="product-card-usp-item">{props.vehicle.fuelType}</li> }
                     </ul>
                 </div>
 
