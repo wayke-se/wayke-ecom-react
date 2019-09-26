@@ -14,12 +14,17 @@ const EcomHeader = (props: IEcomHeaderProps) => {
         props.onExit();
     };
 
+    const handleBackClick = () => {
+        props.onIncompleteUserEvent(UserEvent.BACK_BUTTON_CLICKED);
+        props.onPreviousStepClick();
+    };
+
     return (
         <header data-ecom-header="">
             <div className="header">
                 <div className="header-action">
                   { props.canPressBackButton &&
-                      <button data-ecom-link="" title="Tillbaka" onClick={props.onPreviousStepClick}>
+                      <button data-ecom-link="" title="Tillbaka" onClick={handleBackClick}>
                           <i className="icon-chevron-left m-r-half"></i>Tillbaka
                       </button>
                   }
