@@ -68,6 +68,7 @@ export interface ITradeInCarData {
     hasTradeInCar: boolean;
     registrationNumber: string;
     milage: string;
+    description: string;
 };
 
 export interface IPaymentData {

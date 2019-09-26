@@ -75,33 +75,47 @@ const TradeInCarDefinition = (props: ITradeInCarDefinitionProps) => {
 
             <section className="page-section">
                 <div data-ecom-form="">
-                    <div className={`form-group ${hasErrorRegistrationNumber ? ' has-error' : ''}`}>
-                        <label data-ecom-inputlabel="" htmlFor="exchange-input-regnr">Registreringsnummer</label>
-                        <div data-ecom-inputtext="">
-                            <input type="text"
-                                    id="exchange-input-regnr"
-                                    name="registrationNumber"
-                                    placeholder="Registreringsnummer"
-                                    value={props.data.tradeInCar.registrationNumber}
-                                    onChange={handleInputChange}
-                                    onBlur={handleBlur} />
+                    <div className="form-group-row">
+                        <div className={`form-group is-half ${hasErrorRegistrationNumber ? ' has-error' : ''}`}>
+                            <label data-ecom-inputlabel="" htmlFor="exchange-input-regnr">Registreringsnummer</label>
+                            <div data-ecom-inputtext="">
+                                <input type="text"
+                                        id="exchange-input-regnr"
+                                        name="registrationNumber"
+                                        placeholder="Registreringsnummer"
+                                        value={props.data.tradeInCar.registrationNumber}
+                                        onChange={handleInputChange}
+                                        onBlur={handleBlur} />
+                            </div>
+                            <div className="form-alert">Ett giltigt registreringsnummer behöver anges</div>
                         </div>
-                        <div className="form-alert">Ett giltigt registreringsnummer behöver anges</div>
+
+                        <div className={`form-group is-half ${hasErrorMilage ? ' has-error' : ''}`}>
+                            <label data-ecom-inputlabel="" htmlFor="exchange-input-mileage">Miltal (mil)</label>
+                            <div data-ecom-inputtext="">
+                                <input type="text"
+                                        id="exchange-input-mileage"
+                                        name="milage"
+                                        placeholder="Miltal"
+                                        value={props.data.tradeInCar.milage}
+                                        onChange={handleInputChange}
+                                        onBlur={handleBlur}
+                                        onKeyPress={(e: React.KeyboardEvent) => handleEnterPress(e, handleNextStepClick)} />
+                            </div>
+                            <div className="form-alert">Mellan 0 och 80 000 mil</div>
+                        </div>
                     </div>
 
-                    <div className={`form-group ${hasErrorMilage ? ' has-error' : ''}`}>
-                        <label data-ecom-inputlabel="" htmlFor="exchange-input-mileage">Miltal (mil)</label>
+                    <div className="form-group">
+                        <label data-ecom-inputlabel="" htmlFor="exchange-input-description">Beskrivning (valfritt)</label>
                         <div data-ecom-inputtext="">
-                            <input type="text"
-                                    id="exchange-input-mileage"
-                                    name="milage"
-                                    placeholder="Miltal"
-                                    value={props.data.tradeInCar.milage}
+                            <textarea id="exchange-input-description"
+                                    name="description"
+                                    placeholder="Beskriv gärna bilens servicehistorik, extrautrustning och skick i allmänhet..."
+                                    value={props.data.tradeInCar.description}
                                     onChange={handleInputChange}
-                                    onBlur={handleBlur}
-                                    onKeyPress={(e: React.KeyboardEvent) => handleEnterPress(e, handleNextStepClick)} />
+                                    style={{ height: "100px" }} />
                         </div>
-                        <div className="form-alert">Mellan 0 och 80 000 mil</div>
                     </div>
                 </div>
             </section>

@@ -74,7 +74,7 @@ export const createOrder = (data: ICreateOrderSdkData, callback: (wasOrderCreate
             .forVehicle(ecomData.tradeInCar.registrationNumber)
             .withMileage(milage)
             .withCondition(VehicleCondition.Ok)
-            .withComment('')
+            .withComment(ecomData.tradeInCar.description)
             .build();
     }
 

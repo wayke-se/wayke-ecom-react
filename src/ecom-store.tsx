@@ -68,7 +68,8 @@ class EcomStore extends React.Component<IEcomStoreProps, IState> {
                 hasProvidedTradeInInfo: false,
                 hasTradeInCar: false,
                 registrationNumber: '',
-                milage: ''
+                milage: '',
+                description: ''
             }
         };
     }
