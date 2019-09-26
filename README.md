@@ -17,6 +17,8 @@ config.bind({
 });
 ```
 
+See https://github.com/wayke-se/wayke-ecom-js for more info about for instance the API address.
+
 ## Usage
 
 The React components are built with Typescript and React, but Typescript is optional to use. The ecom flow can be added to your website by including the React component `Ecom`. This component needs some data in the following format:
