@@ -64,3 +64,8 @@ The ecom component will always be visible, so you have to set it's visibility by
 ...
 { shouldShowEcomModal && <Ecom {...ecomData} /> }
 ...
+```
+
+### Styling
+
+In the folder `assets/styles` there is a CSS-file `default.css`. If you want to use these provided styles, you can simply add this CSS to your html-head as normally with a `link` element.
