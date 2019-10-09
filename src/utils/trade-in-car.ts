@@ -5,7 +5,7 @@ export const getVehicleTitle = (vehicle: IVehicle): string | null => {
         return null;
     }
 
-    return vehicle.manufacturer + ' ' + vehicle.modelName;
+    return vehicle.manufacturer + ' ' + vehicle.modelSeries;
 }
 
 export const getVehicleDescription = (vehicle: IVehicle): string | null => {
@@ -13,7 +13,7 @@ export const getVehicleDescription = (vehicle: IVehicle): string | null => {
         return null;
     }
 
-    return vehicle.modelSeries;
+    return vehicle.modelName;
 }
 
 export const getVehicleFullTitle = (registrationNumber: string, vehicle: IVehicle): string | null => {
@@ -21,5 +21,5 @@ export const getVehicleFullTitle = (registrationNumber: string, vehicle: IVehicl
         return null;
     }
 
-    return registrationNumber + ' - ' + vehicle.manufacturer + ' ' + vehicle.modelName + ', ' + vehicle.modelSeries;
+    return registrationNumber + ' - ' + vehicle.manufacturer + ' ' + vehicle.modelSeries + ', ' + vehicle.modelName;
 }

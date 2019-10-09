@@ -5,7 +5,7 @@ import { PaymentType } from '@wayke-se/ecom';
 
 import { formatPrice } from '../utils/helpers';
 import { getPaymentMethodTitle, getLoanPaymentOptions } from '../utils/payment';
-import { getVehicleFullTitle } from '../utils/trade-in-car';
+import { getVehicleTitle, getVehicleDescription } from '../utils/trade-in-car';
 
 interface IOrderSummaryProps extends IEcomExternalProps, IEcomContext, IEcomStore {
 };
@@ -97,42 +97,57 @@ const OrderSummary = (props: IOrderSummaryProps) => {
         });
     }
 
+    const items = products.map((p, index) => <ProductItem key={index} {...p} />);
+    var tradeInItem;
+
     if (hasTradeIn) {
         const vehicleInformation = props.vehicleLookup.getVehicle();
+        const tradeInTitle = getVehicleTitle(vehicleInformation) + ' ' + getVehicleDescription(vehicleInformation);
 
-        products.push({
-            title: 'Inbytesbil',
-            description: getVehicleFullTitle(props.data.tradeInCar.registrationNumber, vehicleInformation),
-            price: null,
-            unit: null,
-            addons: []
-        });
+        tradeInItem = (
+            <div className="repeat-m">
+                <div data-ecom-productcard="">
+                    <div className="product-card-content-section">
+                        <div className="product-card-content">
+                            <div className="product-card-title">Inbytesbil</div>
+                                <ul className="product-card-usp-list">
+                                <li className="product-card-usp-item">{props.data.tradeInCar.registrationNumber}</li>
+                                <li className="product-card-usp-item">{tradeInTitle}</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
     }
 
-    const items = products.map((p, index) => <ProductItem key={index} {...p} />);
-
     return (
-        <div data-ecom-productcard="">
-            <div className="prodcut-card-image-section">
-                <div className="product-card-image" style={{ backgroundImage: `url(${props.vehicle.imageUrl})` }}></div>
-            </div>
+        <React.Fragment>
+            <div className="repeat-m">
+                <div data-ecom-productcard="">
+                    <div className="product-card-image-content">
+                        <div className="prodcut-card-image-section">
+                            <div className="product-card-image" style={{ backgroundImage: `url(${props.vehicle.imageUrl})` }}></div>
+                        </div>
+                        <div className="product-card-content">
+                            <div className="product-card-retailer">{props.vehicle.retailerName}</div>
+                            <div className="product-card-title">{props.vehicle.title} {props.vehicle.shortDescription}</div>
 
-            <div className="product-card-content-section">
-                <div className="product-card-content">
-                    <div className="product-card-retailer">{props.vehicle.retailerName}</div>
-                    <div className="product-card-title">{props.vehicle.title} {props.vehicle.shortDescription}</div>
+                            <ul className="product-card-usp-list">
+                                { props.vehicle.modelYear && <li className="product-card-usp-item">{props.vehicle.modelYear}</li> }
+                                { props.vehicle.milage && <li className="product-card-usp-item">{props.vehicle.milage}</li> }
+                                { props.vehicle.gearBox && <li className="product-card-usp-item">{props.vehicle.gearBox}</li> }
+                                { props.vehicle.fuelType && <li className="product-card-usp-item">{props.vehicle.fuelType}</li> }
+                            </ul>
+                        </div>
+                    </div>
 
-                    <ul className="product-card-usp-list">
-                        { props.vehicle.modelYear && <li className="product-card-usp-item">{props.vehicle.modelYear}</li> }
-                        { props.vehicle.milage && <li className="product-card-usp-item">{props.vehicle.milage}</li> }
-                        { props.vehicle.gearBox && <li className="product-card-usp-item">{props.vehicle.gearBox}</li> }
-                        { props.vehicle.fuelType && <li className="product-card-usp-item">{props.vehicle.fuelType}</li> }
-                    </ul>
+                    {items}
                 </div>
-
-                {items}
             </div>
-        </div>
+
+            {tradeInItem}
+        </React.Fragment>
     );
 }
 

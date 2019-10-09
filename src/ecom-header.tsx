@@ -29,13 +29,13 @@ const EcomHeader = (props: IEcomHeaderProps) => {
                       </button>
                   }
                 </div>
+                <div className="header-logo-container">
+                    <img src={props.serviceLogotypeUrl} alt="Logotype" className="header-logo" />
+                </div>
                 <div className="header-action">
                     <button className="header-action-btn" title="Stäng" onClick={handleExitClick}>
                         <i className="icon-close no-margin"></i>
                     </button>
-                </div>
-                <div className="header-logo-container">
-                    <img src={props.serviceLogotypeUrl} alt="Logotype" className="header-logo" />
                 </div>
             </div>
         </header>

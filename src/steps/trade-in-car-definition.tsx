@@ -139,7 +139,7 @@ const TradeInCarDefinition = (props: ITradeInCarDefinitionProps) => {
                         </div>
                         <div className="repeat-m">
                             <button data-ecom-button="full-width light" onClick={handleSkipClick}>
-                                Hoppa över detta steg
+                                Gå vidare utan inbytesbil
                             </button>
                         </div>
                     </section>

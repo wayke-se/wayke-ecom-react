@@ -53,6 +53,19 @@ const TradeInConfirmCar = (props: ITradeInConfirmCarProps) => {
                 </div>
             </section>
 
+            <section className="page-section">
+                <div data-ecom-alert="">
+                    <div className="alert-icon-section">
+                        <div className="alert-icon">
+                            <i className="icon-info no-margin"></i>
+                        </div>
+                    </div>
+                    <div className="alert-content">
+                        <div className="font-medium">Vi skickar med uppgifter om din inbytesbil till bilhandlaren.</div> Bilhandlaren kommer att göra en utvärdering innan det exakta värdet för bilen fastställs.
+                    </div>
+                </div>
+            </section>
+
             <section className="page-section page-section-bottom">
                 <div data-ecom-buttonnav="">
                     <div className="button-nav-item" onClick={() => handleHasTradeInCar(true)}>

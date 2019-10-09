@@ -104,7 +104,7 @@ const InsuranceAlternativeChooser = (props: IInsuranceAlternativeChooserProps) =
         props.dispatchStoreAction(StoreAction.UPDATE_NAMED_VALUE, {
             type: 'insurance',
             name: 'hasAddedInsurance',
-            hasAddedInsurance
+            value: hasAddedInsurance
         }, () => {
             if (hasAddedInsurance) {
                 props.onIncompleteUserEvent(UserEvent.INSURANCE_ADDED);
