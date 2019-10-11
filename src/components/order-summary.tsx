@@ -121,6 +121,8 @@ const OrderSummary = (props: IOrderSummaryProps) => {
         );
     }
 
+    const formattedPrice = formatPrice(props.vehicle.price);
+
     return (
         <React.Fragment>
             <div className="repeat-m">
@@ -131,7 +133,11 @@ const OrderSummary = (props: IOrderSummaryProps) => {
                         </div>
                         <div className="product-card-content">
                             <div className="product-card-retailer">{props.vehicle.retailerName}</div>
-                            <div className="product-card-title">{props.vehicle.title} {props.vehicle.shortDescription}</div>
+                            <div className="product-card-title">
+                                <div className="product-card-heading">{props.vehicle.title}</div>
+                                <div className="product-card-sub-heading">{props.vehicle.shortDescription}</div>
+                            </div>
+                            <div className="product-card-price">{formattedPrice} kr</div>
 
                             <ul className="product-card-usp-list">
                                 { props.vehicle.modelYear && <li className="product-card-usp-item">{props.vehicle.modelYear}</li> }

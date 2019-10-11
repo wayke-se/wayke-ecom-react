@@ -62,7 +62,7 @@ const PaymentMethodItem = (props: IPaymentMethodItemProps) => {
         formattedPrice = formatPrice(loanDetails!.getCosts().monthlyCost);
         formattedInterest = formatPercentage(loanDetails!.getInterests().interest);
     } else {
-        formattedPrice = props.paymentOption.price;
+        formattedPrice = formatPrice(props.paymentOption.price);
     }
 
     return (

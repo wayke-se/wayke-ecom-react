@@ -7,6 +7,16 @@ interface IFinalConfirmationProps extends IEcomExternalProps, IEcomContext, IEco
 };
 
 const FinalConfirmation = (props: IFinalConfirmationProps) => {
+    const contactInformation = props.orderOptions.getContactInformation();
+
+    var retailerName, retailerEmail, retailerPhone;
+
+    if (contactInformation) {
+        retailerName = contactInformation.name;
+        retailerEmail = contactInformation.email;
+        retailerPhone = contactInformation.phone;
+    }
+
     return (
         <div data-ecom-page="">
             <section className="page-section">
@@ -33,7 +43,11 @@ const FinalConfirmation = (props: IFinalConfirmationProps) => {
             <section className="page-section">
                 <h1 className="h6">Har du frågor?</h1>
                 <div data-ecom-content="">
-                    <p>Kontakta {props.vehicle.retailerName} - <a href={`mailto:${props.vehicle.retailerEmail}`}>{props.vehicle.retailerEmail}</a> - <a href={`tel:${props.vehicle.retailerPhoneNumber}`}>{props.vehicle.retailerPhoneNumber}</a></p>
+                    <p>
+                        { retailerName && <React.Fragment>Kontakta {retailerName}</React.Fragment> }
+                        { retailerEmail && <React.Fragment> - <a href={`mailto:${retailerEmail}`}>{retailerEmail}</a></React.Fragment> }
+                        { retailerPhone && <React.Fragment> - <a href={`tel:${retailerPhone}`}>{retailerPhone}</a></React.Fragment> }
+                    </p>
                 </div>
             </section>
 
