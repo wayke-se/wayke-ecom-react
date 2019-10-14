@@ -1,8 +1,10 @@
 import React from 'react';
 import { IEcomExternalProps } from './types';
 import UserEvent from './constants/user-event';
+import EcomStep from './constants/ecom-step';
 
 export interface IEcomHeaderProps extends IEcomExternalProps {
+    step: EcomStep;
     canPressBackButton: boolean;
     onPreviousStepClick: () => void;
     onIncompleteUserEvent: (userEvent: UserEvent) => void;
@@ -10,7 +12,12 @@ export interface IEcomHeaderProps extends IEcomExternalProps {
 
 const EcomHeader = (props: IEcomHeaderProps) => {
     const handleExitClick = () => {
-        props.onIncompleteUserEvent(UserEvent.ORDER_CANCELLED);
+        const isExitCancellation = props.step !== EcomStep.FINAL_CONFIRMATION;
+
+        if (isExitCancellation) {
+            props.onIncompleteUserEvent(UserEvent.ORDER_CANCELLED);
+        }
+
         props.onExit();
     };
 

@@ -167,6 +167,7 @@ class EcomLifecycle extends React.Component<IEcomLifecycleProps, IState> {
                                     <div className="frame-body" ref={this.frameBodyRef}>
                                         <EcomHeader
                                             {...this.props}
+                                            step={this.state.step}
                                             canPressBackButton={canPressBackButton}
                                             onPreviousStepClick={this.handlePreviousStepClick}
                                             onIncompleteUserEvent={this.handleIncompleteUserEvent} />

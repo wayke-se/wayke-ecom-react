@@ -109,8 +109,8 @@ const OrderSummary = (props: IOrderSummaryProps) => {
                 <div data-ecom-productcard="">
                     <div className="product-card-content-section">
                         <div className="product-card-content">
-                            <div className="product-card-title">Inbytesbil</div>
-                                <ul className="product-card-usp-list">
+                            <div className="product-card-title"><div className="product-card-heading">Inbytesbil</div></div>
+                            <ul className="product-card-usp-list">
                                 <li className="product-card-usp-item">{props.data.tradeInCar.registrationNumber}</li>
                                 <li className="product-card-usp-item">{tradeInTitle}</li>
                             </ul>
