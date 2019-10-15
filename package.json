@@ -1,6 +1,6 @@
 {
   "name": "@wayke-se/ecom-react",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "React components for wayke ecom.",
   "main": "src/index.tsx",
   "scripts": {

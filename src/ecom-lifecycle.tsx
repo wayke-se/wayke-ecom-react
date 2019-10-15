@@ -44,6 +44,7 @@ const shouldShowCart = (step: EcomStep) => {
 
 class EcomLifecycle extends React.Component<IEcomLifecycleProps, IState> {
     private frameBodyRef: React.RefObject<HTMLDivElement>;
+    private rootRef: React.RefObject<HTMLDivElement>;
 
     constructor(props: IEcomLifecycleProps) {
         super(props);
@@ -54,6 +55,7 @@ class EcomLifecycle extends React.Component<IEcomLifecycleProps, IState> {
         this.handleIncompleteUserEvent = this.handleIncompleteUserEvent.bind(this);
 
         this.frameBodyRef = React.createRef();
+        this.rootRef = React.createRef();
 
         this.state = {
             step: undefined,
@@ -84,6 +86,10 @@ class EcomLifecycle extends React.Component<IEcomLifecycleProps, IState> {
             }, () => {
                 if (this.frameBodyRef.current) {
                     this.frameBodyRef.current.scrollTop = 0;
+                }
+
+                if (this.rootRef.current) {
+                    this.rootRef.current.scrollTop = 0;
                 }
             })
         }
@@ -158,7 +164,7 @@ class EcomLifecycle extends React.Component<IEcomLifecycleProps, IState> {
         const showCart = shouldShowCart(this.state.step);
 
         return (
-            <div data-ecom-modal="" className="wayke-ecom">
+            <div data-ecom-modal="" className="wayke-ecom" ref={this.rootRef}>
                 <div className="modal-container">
                     <div className="modal-center">
                         <div className="modal-dialog">
