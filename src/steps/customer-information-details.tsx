@@ -164,6 +164,24 @@ const ManualContent = (props: ICustomerInformationDetailsProps) => {
     );
 };
 
+const formatNewLines = (text: string): any => {
+    if (!text) {
+        return null;
+    }
+
+    const lines = text.split('\n');
+
+    return lines.map((l, index) => {
+        const isFirst = index === 0;
+
+        if (isFirst) {
+            return <span key={index}>{l}</span>;
+        } else {
+            return <span key={index}><br/>{l}</span>;
+        }
+    });
+};
+
 const CustomerInformationDetails = (props: ICustomerInformationDetailsProps) => {
     const [isExtended, setIsExtended] = React.useState(false);
     const [hasRequestError, setHasRequestError] = React.useState(false);
@@ -205,6 +223,7 @@ const CustomerInformationDetails = (props: ICustomerInformationDetailsProps) => 
     const hasTermsError = props.data.interact.customer.hasAcceptedTerms && !props.data.customer.hasAcceptedTerms;
 
     const conditions = props.orderOptions.getOrderConditions();
+    const formattedConditions = formatNewLines(conditions);
 
     return (
         <div data-ecom-page="">
@@ -280,7 +299,7 @@ const CustomerInformationDetails = (props: ICustomerInformationDetailsProps) => 
                     <div data-ecom-scrollbox="" className="m-t">
                         <article data-ecom-content="small-headings">
                             <h1>Köpvillkor</h1>
-                            <p>{conditions}</p>
+                            <p>{formattedConditions}</p>
                         </article>
                     </div>
                 }
