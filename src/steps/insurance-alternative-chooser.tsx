@@ -85,7 +85,7 @@ const AddonItem = (props: IAddonItemProps) => {
                         </label>
                     </div>
                 </div>
-                <div className="column font-medium">{props.monthlyPrice}kr/mån</div>
+                <div className="column font-medium">{props.monthlyPrice} kr/mån</div>
             </div>
 
             { isExtended &&
@@ -165,7 +165,7 @@ const InsuranceAlternativeChooser = (props: IInsuranceAlternativeChooserProps) =
             <section className="page-section page-section-accent">
                 <div className="repeat-m-half">
                     <div data-ecom-box="light" className={isExtended ? 'is-extended' : ''}>
-                        <h2 className="h6">{insuranceOption.price}{insuranceOption.unit}</h2>
+                        <h2 className="h6">{insuranceOption.price} {insuranceOption.unit}</h2>
 
                         <div data-ecom-content="">
                             <p>{insuranceOption.name}</p>

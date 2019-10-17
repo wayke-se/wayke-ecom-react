@@ -9,6 +9,7 @@ import { formatPrice, formatPercentage } from '../utils/helpers';
 import { addSizeQuery } from '../utils/image';
 import { getPaymentMethodTitle } from '../utils/payment';
 import UserEvent from '../constants/user-event';
+import { getRetailerInformation } from '../utils/retailer';
 
 export interface IPaymentMethodChooserProps extends IEcomExternalProps, IEcomContext, IEcomStore, IEcomLifecycle {
 };
@@ -88,6 +89,7 @@ const PaymentMethodItem = (props: IPaymentMethodItemProps) => {
 
 const PaymentMethodChooser = (props: IPaymentMethodChooserProps) => {
     const items = props.orderOptions.getPaymentOptions().map((o, index) => <PaymentMethodItem key={index} paymentOption={o} {...props} />);
+    const retailerInformation = getRetailerInformation(props.orderOptions);
 
     return (
         <div className="page-main">
@@ -114,7 +116,7 @@ const PaymentMethodChooser = (props: IPaymentMethodChooserProps) => {
                         </div>
                     </div>
                     <div className="alert-content">
-                        Avtalsskrivning/betalning sker vid möte med handlaren
+                        Köpet är villkorat att eventuell finansiering beviljas och att säljare {retailerInformation.name} och köpare är överens om pris för eventuell inbytesbil.
                     </div>
                 </div>
             </section>

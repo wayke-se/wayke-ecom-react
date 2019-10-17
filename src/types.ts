@@ -10,9 +10,6 @@ export interface IVehicle {
     shortDescription: string;
     price: number;
     imageUrl: string;
-    retailerName: string;
-    retailerEmail: string;
-    retailerPhoneNumber: string;
     modelYear: number;
     milage: string;
     gearBox: string;
@@ -80,6 +77,7 @@ export interface IPaymentData {
     loanDeposit: number;
     loanDuration: number;
     loanResidual: number;
+    hasAcceptedLoanDetails: boolean;
 };
 
 export interface IInsuranceData {
@@ -167,4 +165,15 @@ export interface IPaymentLookupSdkData {
     ecomData: IPaymentData;
     orderOptions: IOrderOptionsResponse;
     paymentLookup: IPaymentLookupResponse | undefined;
+};
+
+export interface IRetailerInformation {
+    name: string;
+    email: string;
+    phoneNumber: string;
+};
+
+export interface ILoanInformation {
+    name: string;
+    unit: string;
 };

@@ -4,8 +4,9 @@ import { PaymentType } from '@wayke-se/ecom';
 import { IVehicle, IEcomStore, IEcomExternalProps, IEcomContext } from './types';
 
 import { formatPrice } from './utils/helpers';
-import { getPaymentMethodTitle, getLoanPaymentOptions } from './utils/payment';
+import { getPaymentMethodTitle, getLoanDetails, getLoanInformation } from './utils/payment';
 import { getVehicleFullTitle } from './utils/trade-in-car';
+import { getRetailerInformation } from './utils/retailer';
 
 export interface IEcomCartProps extends IEcomExternalProps, IEcomContext, IEcomStore {
     vehicle: IVehicle;
@@ -26,7 +27,7 @@ interface ICartItemProps {
 };
 
 const CartItem = (props: ICartItemProps) => {
-    const addonItems = props.addons.map((a, index) => <div key={index}>{a.title} - {a.price}{a.unit}</div>);
+    const addonItems = props.addons.map((a, index) => <div key={index}>{a.title} - {a.price} {a.unit}</div>);
 
     const hasAddons = addonItems.length > 0;
     const hasPrice = props.price !== null;
@@ -39,7 +40,7 @@ const CartItem = (props: ICartItemProps) => {
                 </div>
                 { hasPrice &&
                     <div className="column">
-                        {formatPrice(props.price)}{props.unit}
+                        {formatPrice(props.price)} {props.unit}
                     </div>
                 }
             </div>
@@ -62,7 +63,9 @@ const EcomCart = (props: IEcomCartProps) => {
 
     const cartContent = [];
 
-    const hasLoan = props.data.payment.paymentType && props.data.payment.paymentType === PaymentType.Loan;
+    const hasLoan = props.data.payment.paymentType &&
+            props.data.payment.paymentType === PaymentType.Loan &&
+            props.data.payment.hasAcceptedLoanDetails;
     const hasInsurance = props.data.insurance.wantsToSeeInsuranceOptions &&
             props.data.insurance.hasAddedInsurance &&
             props.data.insurance.personalNumber &&
@@ -75,13 +78,15 @@ const EcomCart = (props: IEcomCartProps) => {
             props.vehicleLookup !== null;
 
     if (hasLoan) {
-        const paymentOption = getLoanPaymentOptions(props.orderOptions);
+        const loanDetails = getLoanDetails(props.orderOptions, props.paymentLookup);
+        const loanInformation = getLoanInformation(props.orderOptions);
+        const loanPrice = loanDetails ? loanDetails.getCosts().monthlyCost : '';
 
         cartContent.push({
             title: getPaymentMethodTitle(PaymentType.Loan),
-            description: paymentOption.name,
-            price: paymentOption.price,
-            unit: paymentOption.unit,
+            description: loanInformation.name,
+            price: loanPrice,
+            unit: loanInformation.unit,
             addons: []
         });
     }
@@ -124,7 +129,9 @@ const EcomCart = (props: IEcomCartProps) => {
         }
 
         setIsExtended(!isExtended);
-    }
+    };
+
+    const retailerInformation = getRetailerInformation(props.orderOptions);
 
     return (
         <div data-ecom-footer="">
@@ -135,8 +142,9 @@ const EcomCart = (props: IEcomCartProps) => {
                     </div>
                     <div className="cart-header-content-section">
                         <div className="cart-header-content-info">
+                            <div className="cart-seller">{retailerInformation.name}</div>
                             <div className="cart-header-title">
-                            <span className="font-medium">{props.vehicle.title}</span> {props.vehicle.shortDescription}
+                                <span className="font-medium">{props.vehicle.title}</span> {props.vehicle.shortDescription}
                             </div>
                             <div className="cart-header-price">{formatPrice(props.vehicle.price)} kr</div>
                         </div>

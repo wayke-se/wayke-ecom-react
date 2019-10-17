@@ -4,8 +4,9 @@ import { IEcomStore, IEcomContext, IEcomExternalProps } from '../types';
 import { PaymentType } from '@wayke-se/ecom';
 
 import { formatPrice } from '../utils/helpers';
-import { getPaymentMethodTitle, getLoanPaymentOptions } from '../utils/payment';
+import { getPaymentMethodTitle, getLoanDetails, getLoanInformation } from '../utils/payment';
 import { getVehicleTitle, getVehicleDescription } from '../utils/trade-in-car';
+import { getRetailerInformation } from '../utils/retailer';
 
 interface IOrderSummaryProps extends IEcomExternalProps, IEcomContext, IEcomStore {
 };
@@ -69,13 +70,15 @@ const OrderSummary = (props: IOrderSummaryProps) => {
             props.vehicleLookup !== null;
 
     if (hasLoan) {
-        const paymentOption = getLoanPaymentOptions(props.orderOptions);
+        const loanDetails = getLoanDetails(props.orderOptions, props.paymentLookup);
+        const loanInformation = getLoanInformation(props.orderOptions);
+        const loanPrice = loanDetails ? loanDetails.getCosts().monthlyCost : '';
 
         products.push({
             title: getPaymentMethodTitle(PaymentType.Loan),
-            description: paymentOption.name,
-            price: paymentOption.price,
-            unit: paymentOption.unit,
+            description: loanInformation.name,
+            price: loanPrice,
+            unit: loanInformation.unit,
             addons: []
         });
     }
@@ -122,6 +125,7 @@ const OrderSummary = (props: IOrderSummaryProps) => {
     }
 
     const formattedPrice = formatPrice(props.vehicle.price);
+    const retailerInformation = getRetailerInformation(props.orderOptions);
 
     return (
         <React.Fragment>
@@ -132,7 +136,7 @@ const OrderSummary = (props: IOrderSummaryProps) => {
                             <div className="product-card-image" style={{ backgroundImage: `url(${props.vehicle.imageUrl})` }}></div>
                         </div>
                         <div className="product-card-content">
-                            <div className="product-card-retailer">{props.vehicle.retailerName}</div>
+                            <div className="product-card-retailer">{retailerInformation.name}</div>
                             <div className="product-card-title">
                                 <div className="product-card-heading">{props.vehicle.title}</div>
                                 <div className="product-card-sub-heading">{props.vehicle.shortDescription}</div>

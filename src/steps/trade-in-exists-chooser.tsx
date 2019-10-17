@@ -1,10 +1,11 @@
 import React from 'react';
 
-import { IEcomStore, IEcomLifecycle } from '../types';
+import { IEcomStore, IEcomLifecycle, IEcomContext } from '../types';
 import StoreAction from '../constants/store-action';
 import UserEvent from '../constants/user-event';
+import { getRetailerInformation } from '../utils/retailer';
 
-export interface ITradeInExistsChooserProps extends IEcomStore, IEcomLifecycle {
+export interface ITradeInExistsChooserProps extends IEcomContext, IEcomStore, IEcomLifecycle {
 }
 
 const TradeInExistsChooser = (props: ITradeInExistsChooserProps) => {
@@ -21,7 +22,9 @@ const TradeInExistsChooser = (props: ITradeInExistsChooserProps) => {
     const handleNoTradeInClick = () => {
         props.onIncompleteUserEvent(UserEvent.TRADE_IN_SKIPPED);
         handleWantsToDefineTradeInClick(false);
-    }
+    };
+
+    const retailerInformation = getRetailerInformation(props.orderOptions);
 
     return (
         <div className="page-main">
@@ -46,6 +49,19 @@ const TradeInExistsChooser = (props: ITradeInExistsChooserProps) => {
                             </button>
                         </li>
                     </ul>
+                </div>
+            </section>
+
+            <section className="page-section">
+                <div data-ecom-alert="">
+                    <div className="alert-icon-section">
+                        <div className="alert-icon">
+                            <i className="icon-info no-margin"></i>
+                        </div>
+                    </div>
+                    <div className="alert-content">
+                        Notera att beställningen görs med {retailerInformation.name} som avtalspart.
+                    </div>
                 </div>
             </section>
         </div>

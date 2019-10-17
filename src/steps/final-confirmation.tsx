@@ -1,21 +1,21 @@
 import React from 'react';
+
 import CustomerInformationSummary from '../components/customer-information-summary';
 import OrderSummary from '../components/order-summary';
+
+import { getRetailerInformation } from '../utils/retailer';
 import { IEcomStore, IEcomContext, IEcomExternalProps } from '../types';
 
 interface IFinalConfirmationProps extends IEcomExternalProps, IEcomContext, IEcomStore {
 };
 
 const FinalConfirmation = (props: IFinalConfirmationProps) => {
-    const contactInformation = props.orderOptions.getContactInformation();
-
-    var retailerName, retailerEmail, retailerPhone;
-
-    if (contactInformation) {
-        retailerName = contactInformation.name;
-        retailerEmail = contactInformation.email;
-        retailerPhone = contactInformation.phone;
-    }
+    const retailerInformation = getRetailerInformation(props.orderOptions);
+    const {
+        name,
+        email,
+        phoneNumber
+    } = retailerInformation;
 
     return (
         <div data-ecom-page="">
@@ -44,9 +44,9 @@ const FinalConfirmation = (props: IFinalConfirmationProps) => {
                 <h1 className="h6">Har du frågor?</h1>
                 <div data-ecom-content="">
                     <p>
-                        { retailerName && <React.Fragment>Kontakta {retailerName}</React.Fragment> }
-                        { retailerEmail && <React.Fragment> - <a href={`mailto:${retailerEmail}`}>{retailerEmail}</a></React.Fragment> }
-                        { retailerPhone && <React.Fragment> - <a href={`tel:${retailerPhone}`}>{retailerPhone}</a></React.Fragment> }
+                        { name && <React.Fragment>Kontakta {name}</React.Fragment> }
+                        { email && <React.Fragment> - <a href={`mailto:${email}`}>{email}</a></React.Fragment> }
+                        { phoneNumber && <React.Fragment> - <a href={`tel:${phoneNumber}`}>{phoneNumber}</a></React.Fragment> }
                     </p>
                 </div>
             </section>

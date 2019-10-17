@@ -11,11 +11,11 @@ import SpinnerInline from '../components/spinner-inline';
 import { validateStringNumberInRange } from '../utils/validation';
 import { addSizeQuery } from '../utils/image';
 import { formatPrice, formatPercentage } from '../utils/helpers';
-import { getLoanPaymentOptions } from '../utils/payment';
+import { getLoanDetails } from '../utils/payment';
 import { getConvertedResidualSpecification, isResidualEnabled } from '../utils/residual';
 
 import { validatePayment } from '../tools/data-validation';
-import { PaymentType, IPaymentRangeSpec, IOrderOptionsResponse, IPaymentLookupResponse } from '@wayke-se/ecom';
+import { PaymentType, IPaymentRangeSpec } from '@wayke-se/ecom';
 import UserEvent from '../constants/user-event';
 
 export interface IPaymentFinancingDetailsProps extends IEcomExternalProps, IEcomContext, IEcomStore, IEcomLifecycle {
@@ -51,10 +51,6 @@ const getIndexFromDuration = (duration: number, durationSpecification: IPaymentR
 const getDurationFromIndex = (index: number, durationSpecification: IPaymentRangeSpec): number => {
     return getAllDurationSteps(durationSpecification).find((s, i) => i === index);
 };
-
-const getLoanDetails = (orderOptions: IOrderOptionsResponse, paymentLookup: IPaymentLookupResponse | undefined): IPaymentLookupResponse => {
-    return paymentLookup ? paymentLookup : getLoanPaymentOptions(orderOptions).loanDetails;
-}
 
 class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsProps, IState> {
     constructor(props: IPaymentFinancingDetailsProps) {
@@ -139,15 +135,21 @@ class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsPr
     }
 
     handleProceedClick() {
-        this.updateStoreValues((state: IEcomData) => {
-            const isValidPayment = validatePayment(state.payment, this.props.orderOptions, this.props.paymentLookup);
-
-            if (!isValidPayment) {
-                return;
-            }
-
-            this.props.onIncompleteUserEvent(UserEvent.PAYMENT_TYPE_LOAN_CHOSEN);
-            this.props.onProceedToNextStep();
+        this.props.dispatchStoreAction(StoreAction.UPDATE_NAMED_VALUE, {
+            type: 'payment',
+            name: 'hasAcceptedLoanDetails',
+            value: true
+        }, () => {
+            this.updateStoreValues((state: IEcomData) => {
+                const isValidPayment = validatePayment(state.payment, this.props.orderOptions, this.props.paymentLookup);
+    
+                if (!isValidPayment) {
+                    return;
+                }
+    
+                this.props.onIncompleteUserEvent(UserEvent.PAYMENT_TYPE_LOAN_CHOSEN);
+                this.props.onProceedToNextStep();
+            });
         });
     }
 
@@ -189,7 +191,7 @@ class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsPr
         const durationSpecification = loanDetails.getDurationSpec();
         const convertedResidualSpecification = getConvertedResidualSpecification(loanDetails.getResidualValueSpec());
 
-        const options = getAllDurationSteps(durationSpecification).map(s => s + 'mån');
+        const options = getAllDurationSteps(durationSpecification).map(s => s + ' mån');
 
         const optionItems = options.map((o, index) => <option key={index}>{o}</option>);
         const durationValue = options[this.state.durationIndex];
@@ -333,7 +335,7 @@ class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsPr
                                             </React.Fragment>
                                         }
                                     </div>
-                                <div className="form-alert">Mellan {residualMin}% och {residualMax}%</div>
+                                <div className="form-alert">Mellan {residualMin} % och {residualMax} %</div>
                             </div>
                         }
                     </div>
@@ -347,7 +349,7 @@ class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsPr
 
                 <section className="page-section">
                     <div className="h6 m-b-mini">{this.props.isWaitingForResponse ? <SpinnerInline /> : formattedPrice} kr/mån</div>
-                    <div className="font-size-small">Beräknat på {formattedInterest}% ränta (effektivt {formattedEffectiveInterest}%)</div>
+                    <div className="font-size-small">Beräknat på {formattedInterest} % ränta (effektivt {formattedEffectiveInterest} %)</div>
 
                     <div className="m-t-half">
                         <button data-ecom-link="" className="l-block" onClick={this.handleDetailsClick}>{this.state.isShowingDetails ? 'Färre detaljer' : 'Detaljer'}</button>
@@ -360,31 +362,31 @@ class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsPr
                                     <div className="column">
                                         <div className="font-medium font-size-small">Ränta</div>
                                     </div>
-                                    <div className="column">{this.props.isWaitingForResponse ? <SpinnerInline /> : formattedInterest}%</div>
+                                    <div className="column">{this.props.isWaitingForResponse ? <SpinnerInline /> : formattedInterest} %</div>
                                 </div>
                                 <div data-ecom-columnrow="" className="repeat-m-half">
                                     <div className="column">
                                         <div className="font-medium font-size-small">Effektiv ränta	</div>
                                     </div>
-                                    <div className="column">{this.props.isWaitingForResponse ? <SpinnerInline /> : formattedEffectiveInterest}%</div>
+                                    <div className="column">{this.props.isWaitingForResponse ? <SpinnerInline /> : formattedEffectiveInterest} %</div>
                                 </div>
                                 <div data-ecom-columnrow="" className="repeat-m-half">
                                     <div className="column">
                                         <div className="font-medium font-size-small">Uppläggningskostnad</div>
                                     </div>
-                                    <div className="column">{this.props.isWaitingForResponse ? <SpinnerInline /> : formattedSetupFee}kr</div>
+                                    <div className="column">{this.props.isWaitingForResponse ? <SpinnerInline /> : formattedSetupFee} kr</div>
                                 </div>
                                 <div data-ecom-columnrow="" className="repeat-m-half">
                                     <div className="column">
                                         <div className="font-medium font-size-small">Administrativa avgifter</div>
                                     </div>
-                                    <div className="column">{this.props.isWaitingForResponse ? <SpinnerInline /> : formattedAdministrationFee}kr/mån</div>
+                                    <div className="column">{this.props.isWaitingForResponse ? <SpinnerInline /> : formattedAdministrationFee} kr/mån</div>
                                 </div>
                                 <div data-ecom-columnrow="" className="repeat-m-half">
                                     <div className="column">
                                         <div className="font-medium font-size-small">Total kreditkostnad</div>
                                     </div>
-                                    <div className="column">{this.props.isWaitingForResponse ? <SpinnerInline /> : formattedTotalCreditCost}kr</div>
+                                    <div className="column">{this.props.isWaitingForResponse ? <SpinnerInline /> : formattedTotalCreditCost} kr</div>
                                 </div>
                             </div>
 
