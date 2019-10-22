@@ -33,5 +33,6 @@ export const formatPrice = (value: number, decimalSymbol = ',') => {
 }
 
 export const formatPercentage = (fractionValue: number) => {
-    return Math.round(fractionValue * 100);
+    const percentageValue = fractionValue * 100;
+    return (Math.round(percentageValue * 100) / 100).toFixed(2);
 }

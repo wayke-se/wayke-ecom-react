@@ -18,9 +18,14 @@ interface IState {
 
 const roundIfDivisionError = (value: number) => {
     const decimal = value % 1;
-    const divisionErrorDecimalThreshold = 0.00001;
 
-    const isInThreshold = decimal < divisionErrorDecimalThreshold;
+    const divisionErrorLowerThreshold = 0.00001;
+    const divisionErrorUpperThreshold = 0.99999;
+
+    const isInLowerThreshold = decimal < divisionErrorLowerThreshold;
+    const isInUpperThreshold = decimal > divisionErrorUpperThreshold;
+
+    const isInThreshold = isInLowerThreshold || isInUpperThreshold;
 
     if (isInThreshold) {
         return Math.round(value);
