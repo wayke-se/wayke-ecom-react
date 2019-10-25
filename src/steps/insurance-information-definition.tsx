@@ -1,9 +1,11 @@
 import React from 'react';
+import marked from 'marked';
 
 import { DrivingDistance } from '@wayke-se/ecom';
 import { IEcomLifecycle, IEcomStore, IEcomContext, IEcomData } from '../types';
 
 import StoreAction from '../constants/store-action';
+import UserEvent from '../constants/user-event';
 import { validateInsurance } from '../tools/data-validation';
 
 import Alert from '../components/alert';
@@ -12,7 +14,7 @@ import Spinner from '../components/spinner';
 import { getDrivingDistanceLabel } from '../utils/insurance';
 import { addSizeQuery } from '../utils/image';
 import { validatePersonalNumber } from '../utils/validation';
-import UserEvent from '../constants/user-event';
+import { htmlEncode } from '../utils/encode';
 
 export interface IInsuranceInformationDefinitionProps extends IEcomContext, IEcomStore, IEcomLifecycle {
 };
@@ -20,6 +22,14 @@ export interface IInsuranceInformationDefinitionProps extends IEcomContext, IEco
 interface IState {
     expectedDrivingDistanceIndex: number;
     hasRequestError: boolean;
+};
+
+const markedRenderer = new marked.Renderer();
+const linkRenderer = markedRenderer.link;
+
+markedRenderer.link = (href: any, title: any, text: any) => {
+    const html = linkRenderer.call(markedRenderer, href, title, text);
+    return html.replace(/<a/, '<a target="_blank"');
 };
 
 const drivingDistanceOptions = Object.keys(DrivingDistance);
@@ -124,6 +134,13 @@ class InsuranceInformationDefinition extends React.Component<IInsuranceInformati
         const insuranceOption = this.props.orderOptions.getInsuranceOption();
         const scaledImage = addSizeQuery(insuranceOption.logo, 100, 60);
 
+        var markdownEcomInsuranceText;
+
+        if (insuranceOption.ecomInsuranceText) {
+            const encodedEcomInsuranceText = htmlEncode(insuranceOption.ecomInsuranceText);
+            markdownEcomInsuranceText = marked(encodedEcomInsuranceText, { renderer: markedRenderer });
+        }
+
         return (
             <div className="page-main">
                 <section className="page-section">
@@ -143,6 +160,7 @@ class InsuranceInformationDefinition extends React.Component<IInsuranceInformati
                 <section className="page-section">
                     <div data-ecom-content="">
                         <p>Vill du teckna försäkring på din nya bil?</p>
+                        { markdownEcomInsuranceText && <div dangerouslySetInnerHTML={{ __html: markdownEcomInsuranceText }} /> }
                         <p>Skriv in ditt personnummer och din uppskattade körsträcka för att se din försäkringskostnad.</p>
                     </div>
                 </section>

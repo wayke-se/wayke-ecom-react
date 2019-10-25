@@ -1,9 +1,11 @@
 import React from 'react';
 
-import { IEcomLifecycle, IEcomStore, IEcomContext } from '../types';
-import StoreAction from '../constants/store-action';
-import { getDrivingDistanceLabel } from '../utils/insurance';
 import { IInsuranceItem, IInsuranceAddon } from '@wayke-se/ecom';
+import { IEcomLifecycle, IEcomStore, IEcomContext } from '../types';
+
+import { getDrivingDistanceLabel } from '../utils/insurance';
+
+import StoreAction from '../constants/store-action';
 import UserEvent from '../constants/user-event';
 
 export interface IInsuranceAlternativeChooserProps extends IEcomContext, IEcomStore, IEcomLifecycle {
