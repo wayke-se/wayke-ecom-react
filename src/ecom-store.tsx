@@ -19,7 +19,8 @@ class EcomStore extends React.Component<IEcomStoreProps, IState> {
 
         this.state = {
             customer: {
-                hasAcceptedTerms: false,
+                hasAcceptedConditions: false,
+                hasAcceptedReturnConditions: false,
                 inputType: null,
                 personalNumber: null,
                 name: '',
@@ -47,7 +48,8 @@ class EcomStore extends React.Component<IEcomStoreProps, IState> {
                 },
 
                 customer: {
-                    hasAcceptedTerms: false,
+                    hasAcceptedConditions: false,
+                    hasAcceptedReturnConditions: false,
                     personalNumber: false,
                     name: false,
                     address: false,

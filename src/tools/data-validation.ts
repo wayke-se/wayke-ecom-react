@@ -16,9 +16,16 @@ export const validateEcomData = (data: IEcomData, addressLookup: IAddressLookupR
     const customerObject = createCustomerObject(data.customer, addressLookup);
     const isValidCustomer = validateCustomerObject(customerObject);
 
-    const hasAcceptedTerms = data.customer.hasAcceptedTerms;
+    const hasAcceptedConditions = data.customer.hasAcceptedConditions;
 
-    return isValidTradeIn && isValidPayment && isValidInsurance && isValidCustomer && hasAcceptedTerms;
+    const returnConditions = orderOptions.getOrderReturnConditions();
+    let hasAcceptedReturnConditions = true;
+
+    if (returnConditions) {
+        hasAcceptedReturnConditions = data.customer.hasAcceptedReturnConditions;
+    }
+
+    return isValidTradeIn && isValidPayment && isValidInsurance && isValidCustomer && hasAcceptedConditions && hasAcceptedReturnConditions;
 }
 
 export const validateTradeIn = (data: ITradeInCarData) => {

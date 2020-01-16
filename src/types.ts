@@ -89,7 +89,8 @@ export interface IInsuranceData {
 };
 
 export interface ICustomerData {
-    hasAcceptedTerms: boolean;
+    hasAcceptedConditions: boolean;
+    hasAcceptedReturnConditions: boolean;
     inputType: CustomerInformationInputType;
     personalNumber: string;
     name: string;
@@ -123,7 +124,8 @@ export interface IInteractData {
     };
 
     customer: {
-        hasAcceptedTerms: boolean;
+        hasAcceptedConditions: boolean;
+        hasAcceptedReturnConditions: boolean;
         personalNumber: boolean;
         name: boolean;
         address: boolean;
