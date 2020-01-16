@@ -257,6 +257,25 @@ const CustomerInformationDetails = (props: ICustomerInformationDetailsProps) => 
                 </head>
 
                 <body>
+                    <h1>Information</h1>
+                    <table>
+                        <tr>
+                            <td style="padding-right: 10px">Fordon</td>
+                            <td>${props.vehicle.title} - ${props.vehicle.shortDescription}</td>
+                        </tr>
+                        <tr>
+                            <td>Pris</td>
+                            <td>${props.vehicle.price}kr</td>
+                        </tr>
+                        <tr>
+                            <td>Datum</td>
+                            <td>${new Date().toUTCString()}</td>
+                        </tr>
+                        <tr>
+                            <td style="font-size: 10px">Vehicle id</td>
+                            <td style="font-size: 10px">${props.vehicle.id}kr</td>
+                        </tr>
+                    </table>
                     <h1>Köpvillkor</h1>
                     <p>${rawFormattedConditions}</p>
 
