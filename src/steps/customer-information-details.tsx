@@ -183,7 +183,8 @@ const formatNewLines = (text: string): any => {
 };
 
 const CustomerInformationDetails = (props: ICustomerInformationDetailsProps) => {
-    const [isExtended, setIsExtended] = React.useState(false);
+    const [isConditionsExtended, setIsConditionsExtended] = React.useState(false);
+    const [isReturnConditionsExtended, setIsReturnConditionsExtended] = React.useState(false);
     const [hasRequestError, setHasRequestError] = React.useState(false);
 
     const isAutomatic = props.data.customer.inputType === CustomerInformationInputType.AUTOMATIC;
@@ -214,16 +215,24 @@ const CustomerInformationDetails = (props: ICustomerInformationDetailsProps) => 
         });
     }
 
-    const handleShowTermsClick = () => {
-        setIsExtended(!isExtended);
+    const handleShowConditionsClick = () => {
+        setIsConditionsExtended(!isConditionsExtended);
+    };
+
+    const handleShowReturnConditionsClick = () => {
+        setIsReturnConditionsExtended(!isReturnConditionsExtended);
     };
 
     const hasEmailError = props.data.interact.customer.email && !validateEmail(props.data.customer.email);
     const hasPhoneError = props.data.interact.customer.phone && !validatePhoneNumber( props.data.customer.phone);
-    const hasTermsError = props.data.interact.customer.hasAcceptedTerms && !props.data.customer.hasAcceptedTerms;
+    const hasConditionsError = props.data.interact.customer.hasAcceptedConditions && !props.data.customer.hasAcceptedConditions;
+    const hasReturnConditionsError = props.data.interact.customer.hasAcceptedReturnConditions && !props.data.customer.hasAcceptedReturnConditions;
 
     const conditions = props.orderOptions.getOrderConditions();
+    const returnConditions = props.orderOptions.getOrderReturnConditions();
+
     const formattedConditions = formatNewLines(conditions);
+    const formattedReturnConditions = formatNewLines(returnConditions);
 
     return (
         <div data-ecom-page="">
@@ -277,31 +286,63 @@ const CustomerInformationDetails = (props: ICustomerInformationDetailsProps) => 
 
             <section className="page-section">
                 <div data-ecom-form="">
-                    <div className={`form-group ${hasTermsError ? ' has-error' : ''}`}>
+                    <div className={`form-group ${hasConditionsError ? ' has-error' : ''}`}>
                         <div data-ecom-inputselection="checkbox">
                             <input type="checkbox"
-                                id="checkbox-summary-terms"
-                                name="hasAcceptedTerms"
-                                checked={props.data.customer.hasAcceptedTerms}
+                                id="checkbox-summary-conditions"
+                                name="hasAcceptedConditions"
+                                checked={props.data.customer.hasAcceptedConditions}
                                 onChange={(e) => { handleCheckboxChange(props, e) }}
                                 onBlur={(e) => handleBlur(props, e)} />
 
-                            <label htmlFor="checkbox-summary-terms">
-                                <span className="text">Jag intygar att de angivna uppgifterna stämmer, och jag godkänner <button data-ecom-link="" className="valign-baseline" onClick={handleShowTermsClick}>köpvillkor och villkor för ångerrätt</button></span>
+                            <label htmlFor="checkbox-summary-conditions">
+                                <span className="text">Jag intygar att de angivna uppgifterna stämmer, och jag godkänner <button data-ecom-link="" className="valign-baseline" onClick={handleShowConditionsClick}>köpvillkor</button></span>
                             </label>
 
-                            <div className="form-alert">Köpvillkor och villkor för ångerrätt behöver godkännas för att gå vidare</div>
+                            <div className="form-alert">Köpvillkor behöver godkännas för att gå vidare</div>
                         </div>
                     </div>
                 </div>
 
-                { isExtended &&
+                { isConditionsExtended &&
                     <div data-ecom-scrollbox="" className="m-t">
                         <article data-ecom-content="small-headings">
-                            <h1>Köpvillkor och villkor för ångerrätt</h1>
+                            <h1>Köpvillkor</h1>
                             <p>{formattedConditions}</p>
                         </article>
                     </div>
+                }
+
+                { returnConditions &&
+                    <>
+                        <div data-ecom-form="" className="m-t">
+                            <div className={`form-group ${hasReturnConditionsError ? ' has-error' : ''}`}>
+                                <div data-ecom-inputselection="checkbox">
+                                    <input type="checkbox"
+                                        id="checkbox-summary-return-conditions"
+                                        name="hasAcceptedReturnConditions"
+                                        checked={props.data.customer.hasAcceptedReturnConditions}
+                                        onChange={(e) => { handleCheckboxChange(props, e) }}
+                                        onBlur={(e) => handleBlur(props, e)} />
+
+                                    <label htmlFor="checkbox-summary-return-conditions">
+                                        <span className="text">Jag godkänner <button data-ecom-link="" className="valign-baseline" onClick={handleShowReturnConditionsClick}>villkor för ångerrätt</button></span>
+                                    </label>
+
+                                    <div className="form-alert">Villkor för ångerrätt behöver godkännas för att gå vidare</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        { isReturnConditionsExtended &&
+                            <div data-ecom-scrollbox="" className="m-t">
+                                <article data-ecom-content="small-headings">
+                                    <h1>Villkor för ångerrätt</h1>
+                                    <p>{formattedReturnConditions}</p>
+                                </article>
+                            </div>
+                        }
+                    </>
                 }
             </section>
 
