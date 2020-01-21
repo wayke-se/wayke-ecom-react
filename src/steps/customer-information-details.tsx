@@ -164,7 +164,7 @@ const ManualContent = (props: ICustomerInformationDetailsProps) => {
     );
 };
 
-const formatNewLinesToJsx = (text: string): any => {
+const formatNewLines = (text: string): any => {
     if (!text) {
         return null;
     }
@@ -182,29 +182,12 @@ const formatNewLinesToJsx = (text: string): any => {
     });
 };
 
-const formatNewLinesToHtmlRaw = (text: string): string => {
-    if (!text) {
-        return null;
-    }
-
-    return text.replace(/\n/g, '<br/>');
-};
-
 const CustomerInformationDetails = (props: ICustomerInformationDetailsProps) => {
     const [isConditionsExtended, setIsConditionsExtended] = React.useState(false);
     const [isReturnConditionsExtended, setIsReturnConditionsExtended] = React.useState(false);
     const [hasRequestError, setHasRequestError] = React.useState(false);
 
     const isAutomatic = props.data.customer.inputType === CustomerInformationInputType.AUTOMATIC;
-
-    const conditions = props.orderOptions.getOrderConditions();
-    const returnConditions = props.orderOptions.getOrderReturnConditions();
-
-    const formattedConditions = formatNewLinesToJsx(conditions);
-    const formattedReturnConditions = formatNewLinesToJsx(returnConditions);
-
-    const rawFormattedConditions = formatNewLinesToHtmlRaw(conditions);
-    const rawFormattedReturnConditions = formatNewLinesToHtmlRaw(returnConditions);
 
     const handleCreateOrderClick = () => {
         const isValidData = validateEcomData(props.data, props.addressLookup, props.orderOptions, props.paymentLookup);
@@ -240,45 +223,16 @@ const CustomerInformationDetails = (props: ICustomerInformationDetailsProps) => 
         setIsReturnConditionsExtended(!isReturnConditionsExtended);
     };
 
-    const handleDownloadConditionsClick = () => {
-        let returnConditionsContent = '';
-
-        if (rawFormattedReturnConditions) {
-            returnConditionsContent = `
-                <h1>Villkor för ångerrätt</h1>
-                <p>${rawFormattedReturnConditions}</p>
-            `;
-        }
-
-        const content = `
-            <html>
-                <head>
-                    <title>Villkor</title>
-                </head>
-
-                <body>
-                    <h1>Köpvillkor</h1>
-                    <p>${rawFormattedConditions}</p>
-
-                    ${returnConditionsContent}
-                </body>
-            </html>
-        `;
-        const newWindow = window.open('', 'mywindow', 'status=1,width=1000,height=800');
-
-        newWindow.document.open();
-        newWindow.document.write(content)
-        newWindow.document.close();
-
-        setTimeout(() => {
-            newWindow.print();
-        }, 500);
-    };
-
     const hasEmailError = props.data.interact.customer.email && !validateEmail(props.data.customer.email);
     const hasPhoneError = props.data.interact.customer.phone && !validatePhoneNumber( props.data.customer.phone);
     const hasConditionsError = props.data.interact.customer.hasAcceptedConditions && !props.data.customer.hasAcceptedConditions;
     const hasReturnConditionsError = props.data.interact.customer.hasAcceptedReturnConditions && !props.data.customer.hasAcceptedReturnConditions;
+
+    const conditions = props.orderOptions.getOrderConditions();
+    const returnConditions = props.orderOptions.getOrderReturnConditions();
+
+    const formattedConditions = formatNewLines(conditions);
+    const formattedReturnConditions = formatNewLines(returnConditions);
 
     return (
         <div data-ecom-page="">
@@ -390,11 +344,6 @@ const CustomerInformationDetails = (props: ICustomerInformationDetailsProps) => 
                         }
                     </>
                 }
-
-                <div data-ecom-link="" className="m-t" onClick={handleDownloadConditionsClick}>
-                    Ladda ner villkor (PDF)
-                    <i className="icon-link-external m-l-half"/>
-                </div>
             </section>
 
             { hasRequestError &&
