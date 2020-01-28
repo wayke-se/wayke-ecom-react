@@ -230,6 +230,7 @@ const CustomerInformationDetails = (props: ICustomerInformationDetailsProps) => 
 
     const conditions = props.orderOptions.getOrderConditions();
     const returnConditions = props.orderOptions.getOrderReturnConditions();
+    const conditionsPdfUri = props.orderOptions.getConditionsPdfUri();
 
     const formattedConditions = formatNewLines(conditions);
     const formattedReturnConditions = formatNewLines(returnConditions);
@@ -343,6 +344,15 @@ const CustomerInformationDetails = (props: ICustomerInformationDetailsProps) => 
                             </div>
                         }
                     </>
+                }
+
+                { conditionsPdfUri &&
+                    <div data-ecom-content="" className="m-t">
+                        <a href={conditionsPdfUri} data-ecom-link="" title="Ladda ner villkor (PDF)" target="_blank" rel="noopener noreferrer">
+                            Ladda ner villkor (PDF)
+                            <i className="icon-link-external m-l-half"/>
+                        </a>
+                    </div>
                 }
             </section>
 
