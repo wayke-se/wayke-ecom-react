@@ -12,7 +12,7 @@ import { validateStringNumberInRange } from '../utils/validation';
 import { addSizeQuery } from '../utils/image';
 import { formatPrice, formatPercentage } from '../utils/helpers';
 import { getLoanDetails } from '../utils/payment';
-import { getConvertedResidualSpecification, isResidualEnabled } from '../utils/residual';
+import { getConvertedResidualSpecification, isResidualEnabled, isResidualFixed, } from '../utils/residual';
 
 import { validatePayment } from '../tools/data-validation';
 import { PaymentType, IPaymentRangeSpec } from '@wayke-se/ecom';
@@ -142,11 +142,11 @@ class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsPr
         }, () => {
             this.updateStoreValues((state: IEcomData) => {
                 const isValidPayment = validatePayment(state.payment, this.props.orderOptions, this.props.paymentLookup);
-    
+
                 if (!isValidPayment) {
                     return;
                 }
-    
+
                 this.props.onIncompleteUserEvent(UserEvent.PAYMENT_TYPE_LOAN_CHOSEN);
                 this.props.onProceedToNextStep();
             });
@@ -200,14 +200,20 @@ class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsPr
         var residualMin = null;
         var residualMax = null;
         var residualStep = null;
+        var residualFixed = null;
 
         const hasResidual = isResidualEnabled(convertedResidualSpecification);
+        const hasFixedResidual = isResidualFixed(convertedResidualSpecification);
 
         if (hasResidual) {
             residual = this.state.residual;
             residualMin = convertedResidualSpecification.min;
             residualMax = convertedResidualSpecification.max;
             residualStep = convertedResidualSpecification.step;
+        }
+
+        if (hasFixedResidual) {
+            residualFixed = convertedResidualSpecification.min;
         }
 
         const hasDepositError = !validateStringNumberInRange(this.state.deposit, depositSpecification.min, depositSpecification.max);
@@ -336,6 +342,22 @@ class PaymentFinancingDetails extends React.Component<IPaymentFinancingDetailsPr
                                         }
                                     </div>
                                 <div className="form-alert">Mellan {residualMin} % och {residualMax} %</div>
+                            </div>
+                        }
+
+                        { hasFixedResidual &&
+                            <div className="form-group">
+                                <div data-ecom-columnrow="" className="m-b-half">
+                                    <div className="column">
+                                        <label data-ecom-inputlabel="" htmlFor="payment-input-residual" className="no-margin">Restskuld (%)</label>
+                                    </div>
+                                </div>
+
+                                <div data-ecom-columnrow="" className="m-b-half">
+                                    <div className="column">
+                                        {residualFixed}%
+                                    </div>
+                                </div>
                             </div>
                         }
                     </div>
