@@ -1,28 +1,27 @@
-import { insurances, IInsuranceOptionsResponse } from '@wayke-se/ecom';
-import { IInsuranceData, IInsuranceOptionsSdkData } from '../types';
-import { validateInsurance } from '../tools/data-validation';
+import { insurances, IInsuranceOptionsResponse } from "@wayke-se/ecom";
+import { IInsuranceOptionsSdkData } from "../types";
+import { validateInsurance } from "../tools/data-validation";
 
-const validate = (data: IInsuranceData) => {
-    //Data should already be validated, but this is a safety measure
-
-    return validateInsurance(data);
-}
-
-export const getInsuranceOptions = (data: IInsuranceOptionsSdkData, callback: (options: IInsuranceOptionsResponse | null) => void) => {
-    const isValidRequestData = validate(data.ecomData);
+export const getInsuranceOptions = (
+    data: IInsuranceOptionsSdkData,
+    callback: (options: IInsuranceOptionsResponse | null) => void
+) => {
+    const isValidRequestData = validateInsurance(data.ecomData);
 
     if (!isValidRequestData) {
         return callback(null);
     }
 
-    const request = insurances.newInsuranceOptionsRequest()
-                        .forCustomer(data.ecomData.personalNumber)
-                        .forVehicle(data.vehicleId)
-                        .withPaymentType(data.paymentType)
-                        .withDrivingDistance(data.ecomData.expectedDrivingDistance)
-                        .build();
+    const request = insurances
+        .newInsuranceOptionsRequest()
+        .forCustomer(data.ecomData.personalNumber)
+        .forVehicle(data.vehicleId)
+        .withPaymentType(data.paymentType)
+        .withDrivingDistance(data.ecomData.expectedDrivingDistance)
+        .build();
 
-    insurances.getOptions(request)
+    insurances
+        .getOptions(request)
         .then((response: IInsuranceOptionsResponse) => {
             callback(response);
         })

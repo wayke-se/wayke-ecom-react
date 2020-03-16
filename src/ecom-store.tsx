@@ -1,18 +1,12 @@
-import React from 'react';
+import React from "react";
 
-import EcomContext from './ecom-context';
-import { IEcomExternalProps, IEcomData } from './types';
+import EcomContext from "./ecom-context";
+import { IEcomExternalProps, IEcomData } from "./types";
 
-import StoreAction from './constants/store-action';
+import StoreAction from "./constants/store-action";
 
-interface IEcomStoreProps extends IEcomExternalProps {
-};
-
-interface IState extends IEcomData {
-};
-
-class EcomStore extends React.Component<IEcomStoreProps, IState> {
-    constructor(props: IEcomStoreProps) {
+class EcomStore extends React.Component<IEcomExternalProps, IEcomData> {
+    constructor(props: IEcomExternalProps) {
         super(props);
 
         this.dispatchStoreAction = this.dispatchStoreAction.bind(this);
@@ -23,19 +17,19 @@ class EcomStore extends React.Component<IEcomStoreProps, IState> {
                 hasAcceptedReturnConditions: false,
                 inputType: null,
                 personalNumber: null,
-                name: '',
-                address: '',
-                zip: '',
-                city: '',
-                email: '',
-                phone: ''
+                name: "",
+                address: "",
+                zip: "",
+                city: "",
+                email: "",
+                phone: "",
             },
             insurance: {
-                personalNumber: '',
+                personalNumber: "",
                 expectedDrivingDistance: null,
                 hasAddedInsurance: false,
                 wantsToSeeInsuranceOptions: null,
-                addons: []
+                addons: [],
             },
             interact: {
                 tradeInCar: {
@@ -57,27 +51,31 @@ class EcomStore extends React.Component<IEcomStoreProps, IState> {
                     city: false,
                     email: false,
                     phone: false,
-                }
+                },
             },
             payment: {
                 paymentType: null,
                 loanDeposit: null,
                 loanDuration: null,
                 loanResidual: null,
-                hasAcceptedLoanDetails: false
+                hasAcceptedLoanDetails: false,
             },
             tradeInCar: {
                 wantsToDefineTradeIn: false,
                 hasProvidedTradeInInfo: false,
                 hasTradeInCar: false,
-                registrationNumber: '',
-                milage: '',
-                description: ''
-            }
+                registrationNumber: "",
+                milage: "",
+                description: "",
+            },
         };
     }
 
-    dispatchStoreAction(key: StoreAction, value: any, callback?: (state: IEcomData) => void) {
+    dispatchStoreAction(
+        key: StoreAction,
+        value: any,
+        callback?: (state: IEcomData) => void
+    ) {
         let stateUpdate = null;
 
         switch (key) {
@@ -91,26 +89,26 @@ class EcomStore extends React.Component<IEcomStoreProps, IState> {
                 stateUpdate = {
                     [namedValueType]: {
                         ...oldContent,
-                        [namedValueName]: namedValueValue
-                    }
+                        [namedValueName]: namedValueValue,
+                    },
                 };
                 break;
 
             case StoreAction.INTERACT_SET_ALL_FOR_TYPE:
                 const newInteract = {};
-                const keys = Object.keys(this.state.interact[value]);
+                const stateKeys = Object.keys(this.state.interact[value]);
 
-                keys.forEach(key => {
-                    newInteract[key] = true;
+                stateKeys.forEach(stateKey => {
+                    newInteract[stateKey] = true;
                 });
 
                 stateUpdate = {
                     interact: {
                         ...this.state.interact,
                         [value]: {
-                            ...newInteract
-                        }
-                    }
+                            ...newInteract,
+                        },
+                    },
                 };
                 break;
 
@@ -123,9 +121,9 @@ class EcomStore extends React.Component<IEcomStoreProps, IState> {
                         ...this.state.interact,
                         [interactType]: {
                             ...this.state.interact[interactType],
-                            [interactName]: true
-                        }
-                    }
+                            [interactName]: true,
+                        },
+                    },
                 };
                 break;
 
@@ -133,11 +131,11 @@ class EcomStore extends React.Component<IEcomStoreProps, IState> {
                 stateUpdate = {
                     payment: {
                         ...this.state.payment,
-                        ...value
-                    }
+                        ...value,
+                    },
                 };
                 break;
-        };
+        }
 
         if (stateUpdate && callback) {
             this.setState(stateUpdate, () => {
@@ -151,11 +149,12 @@ class EcomStore extends React.Component<IEcomStoreProps, IState> {
     render() {
         return (
             <EcomContext
-                    {...this.props}
-                    data={this.state}
-                    dispatchStoreAction={this.dispatchStoreAction} />
+                {...this.props}
+                data={this.state}
+                dispatchStoreAction={this.dispatchStoreAction}
+            />
         );
     }
-};
+}
 
 export default EcomStore;

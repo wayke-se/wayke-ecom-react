@@ -16,6 +16,6 @@ enum UserEvent {
     ORDER_CANCELLED,
 
     BACK_BUTTON_CLICKED,
-};
+}
 
 export default UserEvent;

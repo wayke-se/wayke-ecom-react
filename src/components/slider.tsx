@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 interface ISliderProps {
     min: number;
@@ -14,7 +14,7 @@ interface ISliderProps {
 interface IState {
     isDragging: boolean;
     value: number;
-};
+}
 
 const roundIfDivisionError = (value: number) => {
     const decimal = value % 1;
@@ -27,14 +27,15 @@ const roundIfDivisionError = (value: number) => {
 
     const isInThreshold = isInLowerThreshold || isInUpperThreshold;
 
-    if (isInThreshold) {
-        return Math.round(value);
-    } else {
-        return value;
-    }
-}
+    return isInThreshold ? Math.round(value) : value;
+};
 
-const applyStepToFraction = (fraction: number, min: number, max: number, step: number) => {
+const applyStepToFraction = (
+    fraction: number,
+    min: number,
+    max: number,
+    step: number
+) => {
     const difference = max - min;
     const n = difference / step;
 
@@ -44,26 +45,30 @@ const applyStepToFraction = (fraction: number, min: number, max: number, step: n
     const differenceToLower = fraction - lower;
     const differentToUpper = upper - fraction;
 
-    if (differenceToLower < differentToUpper) {
-        return lower;
-    } else {
-        return upper;
-    }
-}
+    return differenceToLower < differentToUpper ? lower : upper;
+};
 
-const convertFractionToExternalValue = (fraction: number, min: number, max: number) => {
+const convertFractionToExternalValue = (
+    fraction: number,
+    min: number,
+    max: number
+) => {
     const difference = max - min;
     return fraction * difference + min;
-}
+};
 
-const convertExternalValueToFraction = (externalValue: number, min: number, max: number) => {
+const convertExternalValueToFraction = (
+    externalValue: number,
+    min: number,
+    max: number
+) => {
     if (!externalValue || isNaN(externalValue)) {
         return 0;
     }
 
     const difference = max - min;
     return (externalValue - min) / difference;
-}
+};
 
 class Slider extends React.Component<ISliderProps, IState> {
     private sliderRef: React.RefObject<HTMLDivElement>;
@@ -79,41 +84,50 @@ class Slider extends React.Component<ISliderProps, IState> {
         this.handleSliderRelease = this.handleSliderRelease.bind(this);
         this.handleSliderMove = this.handleSliderMove.bind(this);
 
-        this.calculateNewFractionPosition = this.calculateNewFractionPosition.bind(this);
+        this.calculateNewFractionPosition = this.calculateNewFractionPosition.bind(
+            this
+        );
 
         this.getValueInsideOfBounds = this.getValueInsideOfBounds.bind(this);
         this.getFractionPosition = this.getFractionPosition.bind(this);
-        this.getPercentagePositionFromFraction = this.getPercentagePositionFromFraction.bind(this);
+        this.getPercentagePositionFromFraction = this.getPercentagePositionFromFraction.bind(
+            this
+        );
 
         this.sliderRef = React.createRef();
 
         this.state = {
             isDragging: false,
-            value: 0
+            value: 0,
         };
     }
 
     static getDerivedStateFromProps(props: ISliderProps, state: IState) {
-        const value = convertExternalValueToFraction(props.initialValue, props.min, props.max) || 0;
+        const value =
+            convertExternalValueToFraction(
+                props.initialValue,
+                props.min,
+                props.max
+            ) || 0;
 
         if (value !== state.value) {
             return {
                 ...state,
-                value
+                value,
             };
-        } else {
-            return null;
         }
+
+        return null;
     }
 
     componentDidMount() {
-        window.addEventListener('mouseup', this.mouseUpEventListener);
-        window.addEventListener('mousemove', this.mouseMoveEventListener);
+        window.addEventListener("mouseup", this.mouseUpEventListener);
+        window.addEventListener("mousemove", this.mouseMoveEventListener);
     }
 
     componentWillUnmount() {
-        window.removeEventListener('mouseup', this.mouseUpEventListener)
-        window.removeEventListener('mousemove', this.mouseMoveEventListener);
+        window.removeEventListener("mouseup", this.mouseUpEventListener);
+        window.removeEventListener("mousemove", this.mouseMoveEventListener);
     }
 
     mouseMoveEventListener(e: MouseEvent) {
@@ -143,16 +157,19 @@ class Slider extends React.Component<ISliderProps, IState> {
         }
 
         this.setState({
-            isDragging: true
-         });
+            isDragging: true,
+        });
     }
 
     handleSliderRelease() {
-        this.setState({
-            isDragging: false
-        }, function() {
-            this.props.onAfterChange();
-        });
+        this.setState(
+            {
+                isDragging: false,
+            },
+            function() {
+                this.props.onAfterChange();
+            }
+        );
     }
 
     handleSliderMove(x: number) {
@@ -161,24 +178,45 @@ class Slider extends React.Component<ISliderProps, IState> {
         }
 
         const fraction = this.calculateNewFractionPosition(x);
-        const fractionInStep = applyStepToFraction(fraction, this.props.min, this.props.max, this.props.step);
+        const fractionInStep = applyStepToFraction(
+            fraction,
+            this.props.min,
+            this.props.max,
+            this.props.step
+        );
 
-        const externalValueInStep = convertFractionToExternalValue(fractionInStep, this.props.min, this.props.max);
+        const externalValueInStep = convertFractionToExternalValue(
+            fractionInStep,
+            this.props.min,
+            this.props.max
+        );
         const externalValueRounded = roundIfDivisionError(externalValueInStep);
 
-        this.setState({
-            value: fraction
-        }, () => {
-            this.props.onChange(externalValueRounded);
-        })
+        this.setState(
+            {
+                value: fraction,
+            },
+            () => {
+                this.props.onChange(externalValueRounded);
+            }
+        );
     }
 
     calculateNewFractionPosition(x: number) {
         const boundaryMin = this.sliderRef.current.getBoundingClientRect().left;
-        const boundaryMax = this.sliderRef.current.getBoundingClientRect().right;
+        const boundaryMax = this.sliderRef.current.getBoundingClientRect()
+            .right;
 
-        const valueInsideOfBounds = this.getValueInsideOfBounds(x, boundaryMin, boundaryMax);
-        return this.getFractionPosition(valueInsideOfBounds, boundaryMin, boundaryMax);
+        const valueInsideOfBounds = this.getValueInsideOfBounds(
+            x,
+            boundaryMin,
+            boundaryMax
+        );
+        return this.getFractionPosition(
+            valueInsideOfBounds,
+            boundaryMin,
+            boundaryMax
+        );
     }
 
     getValueInsideOfBounds(value: number, min: number, max: number) {
@@ -187,11 +225,13 @@ class Slider extends React.Component<ISliderProps, IState> {
 
         if (isLessThanMin) {
             return min;
-        } else if (isMoreThanMax) {
-            return max;
-        } else {
-            return value;
         }
+
+        if (isMoreThanMax) {
+            return max;
+        }
+
+        return value;
     }
 
     getFractionPosition(value: number, min: number, max: number) {
@@ -202,36 +242,52 @@ class Slider extends React.Component<ISliderProps, IState> {
     }
 
     getPercentagePositionFromFraction(fraction: number) {
-        const fractionWithStep = applyStepToFraction(fraction, this.props.min, this.props.max, this.props.step);
+        const fractionWithStep = applyStepToFraction(
+            fraction,
+            this.props.min,
+            this.props.max,
+            this.props.step
+        );
         return fractionWithStep * 100;
     }
 
     render() {
-        const handlePercentagePosition = this.getPercentagePositionFromFraction(this.state.value);
+        const handlePercentagePosition = this.getPercentagePositionFromFraction(
+            this.state.value
+        );
 
-        const trackStyle = {
-            visibility: 'visible',
-            left: '0%',
-            width: `${handlePercentagePosition}%`
-        } as React.CSSProperties;
+        const trackStyle: React.CSSProperties = {
+            visibility: "visible",
+            left: "0%",
+            width: `${handlePercentagePosition}%`,
+        };
 
-        const handleStyle = {
-            left: `${handlePercentagePosition}%`
-        } as React.CSSProperties;
+        const handleStyle: React.CSSProperties = {
+            left: `${handlePercentagePosition}%`,
+        };
 
         return (
-            <div data-ecom-rangeslider="" className={this.props.isDisabled ? 'is-disabled' : ''} ref={this.sliderRef} >
+            <div
+                data-ecom-rangeslider=""
+                className={this.props.isDisabled ? "is-disabled" : ""}
+                ref={this.sliderRef}
+            >
                 <div className="range-slider">
                     <div className="range-slider-bar">
-                        <div className="range-slider-rail"></div>
-                        <div className="range-slider-track" style={trackStyle}></div>
-                        <div className="range-slider-handle"
-                                style={handleStyle}
-                                onMouseDown={this.handleSliderPress}
-                                onMouseUp={this.handleSliderRelease}
-                                onTouchStart={this.handleSliderPress}
-                                onTouchEnd={this.handleSliderRelease}
-                                onTouchMove={this.handleTouchMove} />
+                        <div className="range-slider-rail" />
+                        <div
+                            className="range-slider-track"
+                            style={trackStyle}
+                        />
+                        <div
+                            className="range-slider-handle"
+                            style={handleStyle}
+                            onMouseDown={this.handleSliderPress}
+                            onMouseUp={this.handleSliderRelease}
+                            onTouchStart={this.handleSliderPress}
+                            onTouchEnd={this.handleSliderRelease}
+                            onTouchMove={this.handleTouchMove}
+                        />
                     </div>
                 </div>
             </div>

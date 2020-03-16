@@ -1,22 +1,28 @@
-import React from 'react';
+import React from "react";
 
-import { IEcomStore, IEcomLifecycle, IEcomContext } from '../types';
-import StoreAction from '../constants/store-action';
-import UserEvent from '../constants/user-event';
-import { getRetailerInformation } from '../utils/retailer';
+import { IEcomStore, IEcomLifecycle, IEcomContext } from "../types";
+import StoreAction from "../constants/store-action";
+import UserEvent from "../constants/user-event";
+import { getRetailerInformation } from "../utils/retailer";
 
-export interface ITradeInExistsChooserProps extends IEcomContext, IEcomStore, IEcomLifecycle {
-}
+export interface ITradeInExistsChooserProps
+    extends IEcomContext,
+        IEcomStore,
+        IEcomLifecycle {}
 
-const TradeInExistsChooser = (props: ITradeInExistsChooserProps) => {
+export default (props: ITradeInExistsChooserProps) => {
     const handleWantsToDefineTradeInClick = (value: boolean) => {
-        props.dispatchStoreAction(StoreAction.UPDATE_NAMED_VALUE, {
-            type: 'tradeInCar',
-            name: 'wantsToDefineTradeIn',
-            value
-        }, () => {
-            props.onProceedToNextStep();
-        });
+        props.dispatchStoreAction(
+            StoreAction.UPDATE_NAMED_VALUE,
+            {
+                value,
+                type: "tradeInCar",
+                name: "wantsToDefineTradeIn",
+            },
+            () => {
+                props.onProceedToNextStep();
+            }
+        );
     };
 
     const handleNoTradeInClick = () => {
@@ -26,12 +32,16 @@ const TradeInExistsChooser = (props: ITradeInExistsChooserProps) => {
 
     const retailerInformation = getRetailerInformation(props.orderOptions);
 
+    const onTradeInClick = () => handleWantsToDefineTradeInClick(true);
+
     return (
         <div className="page-main">
             <section className="page-section">
                 <h1 className="h6">Har du inbytesbil?</h1>
                 <div data-ecom-content="">
-                    <p>Har du en bil du vill byta in när du köper din nya bil?</p>
+                    <p>
+                        Har du en bil du vill byta in när du köper din nya bil?
+                    </p>
                 </div>
             </section>
 
@@ -39,13 +49,25 @@ const TradeInExistsChooser = (props: ITradeInExistsChooserProps) => {
                 <div data-ecom-optionlist="">
                     <ul className="option-list">
                         <li className="option-list-item">
-                            <button className="option-list-action" onClick={() => handleWantsToDefineTradeInClick(true)}>
-                                <div className="option-list-action-title">Ja, jag har inbytesbil<i className="icon-arrow-right m-l-half"></i></div>
+                            <button
+                                className="option-list-action"
+                                onClick={onTradeInClick}
+                            >
+                                <div className="option-list-action-title">
+                                    Ja, jag har inbytesbil
+                                    <i className="icon-arrow-right m-l-half" />
+                                </div>
                             </button>
                         </li>
                         <li className="option-list-item">
-                            <button className="option-list-action" onClick={handleNoTradeInClick}>
-                                <div className="option-list-action-title">Nej, jag har ingen inbytesbil<i className="icon-arrow-right m-l-half"></i></div>
+                            <button
+                                className="option-list-action"
+                                onClick={handleNoTradeInClick}
+                            >
+                                <div className="option-list-action-title">
+                                    Nej, jag har ingen inbytesbil
+                                    <i className="icon-arrow-right m-l-half" />
+                                </div>
                             </button>
                         </li>
                     </ul>
@@ -56,16 +78,15 @@ const TradeInExistsChooser = (props: ITradeInExistsChooserProps) => {
                 <div data-ecom-alert="">
                     <div className="alert-icon-section">
                         <div className="alert-icon">
-                            <i className="icon-info no-margin"></i>
+                            <i className="icon-info no-margin" />
                         </div>
                     </div>
                     <div className="alert-content">
-                        Notera att beställningen görs med {retailerInformation.name} som avtalspart.
+                        Notera att beställningen görs med{" "}
+                        {retailerInformation.name} som avtalspart.
                     </div>
                 </div>
             </section>
         </div>
     );
 };
-
-export default TradeInExistsChooser;

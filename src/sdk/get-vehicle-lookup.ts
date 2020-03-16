@@ -1,25 +1,24 @@
-import { vehicles, IVehicleLookupResponse, } from '@wayke-se/ecom';
-import { ITradeInCarData, IVehicleLookupSdkData } from '../types';
-import { validateTradeIn } from '../tools/data-validation';
+import { vehicles, IVehicleLookupResponse } from "@wayke-se/ecom";
+import { IVehicleLookupSdkData } from "../types";
+import { validateTradeIn } from "../tools/data-validation";
 
-const validate = (data: ITradeInCarData) => {
-    //Data should already be validated, but this is a safety measure
-
-    return validateTradeIn(data);
-}
-
-export const getVehicleLookup = (data: IVehicleLookupSdkData, callback: (lookup: IVehicleLookupResponse | null) => void) => {
-    const isValidRequestData = validate(data.ecomData);
+export const getVehicleLookup = (
+    data: IVehicleLookupSdkData,
+    callback: (lookup: IVehicleLookupResponse | null) => void
+) => {
+    const isValidRequestData = validateTradeIn(data.ecomData);
 
     if (!isValidRequestData) {
         return callback(null);
     }
 
-    const request = vehicles.newLookupRequest()
+    const request = vehicles
+        .newLookupRequest()
         .withRegistrationNumber(data.ecomData.registrationNumber)
         .build();
 
-    vehicles.lookupVehicle(request)
+    vehicles
+        .lookupVehicle(request)
         .then((response: IVehicleLookupResponse) => {
             callback(response);
         })

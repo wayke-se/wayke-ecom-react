@@ -9,10 +9,10 @@ export const validateRegistrationNumber = (registrationNumber: string) => {
         return false;
     }
 
-    const trimmed = registrationNumber.replace(' ', '');
+    const trimmed = registrationNumber.replace(" ", "");
 
     const hasCorrectLength = trimmed.length === 6;
-    const isRegexMatch = regexRegistrationNumber.test(trimmed)
+    const isRegexMatch = regexRegistrationNumber.test(trimmed);
 
     return hasCorrectLength && isRegexMatch;
 };
@@ -22,7 +22,8 @@ export const validatePersonalNumber = (personalNumber: string) => {
         return false;
     }
 
-    const hasCorrectLength = personalNumber.length === 13 || personalNumber.length === 12;
+    const hasCorrectLength =
+        personalNumber.length === 13 || personalNumber.length === 12;
     const isRegexMatch = regexPersonalNumber.test(personalNumber);
 
     return isRegexMatch && hasCorrectLength;
@@ -44,12 +45,16 @@ export const validateZip = (zip: string) => {
     return regexZip.test(zip);
 };
 
-export const validateStringNumberInRange = (value: string, from: number, to: number) => {
+export const validateStringNumberInRange = (
+    value: string,
+    from: number,
+    to: number
+) => {
     if (!value) {
         return false;
     }
 
-    const number = parseInt(value);
+    const number = parseInt(value, 10);
 
     if (isNaN(number)) {
         return false;
@@ -58,7 +63,11 @@ export const validateStringNumberInRange = (value: string, from: number, to: num
     return number >= from && number <= to;
 };
 
-export const validateNumberInRange = (value: number, from: number, to: number) => {
+export const validateNumberInRange = (
+    value: number,
+    from: number,
+    to: number
+) => {
     if (value === null || value === undefined) {
         return false;
     }
@@ -80,4 +89,4 @@ export const validatePhoneNumber = (phoneNumber: string) => {
     }
 
     return regexPhoneNumberVariant.test(phoneNumber);
-}
+};

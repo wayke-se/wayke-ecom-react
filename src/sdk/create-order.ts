@@ -1,76 +1,97 @@
-import { orders, vehicles, customers, IOrderCreateResponse, IAddress, PaymentType, VehicleCondition, DeliveryType, IAddressLookupResponse, IOrderOptionsResponse, IPaymentLookupResponse } from '@wayke-se/ecom';
-import { IEcomData, ICreateOrderSdkData } from '../types';
-import CustomerInformationInputType from '../constants/customer-information-input-type';
-import { validateEcomData } from '../tools/data-validation';
+import {
+    orders,
+    vehicles,
+    customers,
+    IAddress,
+    PaymentType,
+    VehicleCondition,
+    DeliveryType,
+} from "@wayke-se/ecom";
+import { ICreateOrderSdkData } from "../types";
+import CustomerInformationInputType from "../constants/customer-information-input-type";
+import { validateEcomData } from "../tools/data-validation";
 
-const validate = (data: IEcomData, addressLookup: IAddressLookupResponse, orderOptions: IOrderOptionsResponse, paymentLookup: IPaymentLookupResponse | undefined) => {
-    //Data should already be validated, but this is a safety measure
-
-    return validateEcomData(data, addressLookup, orderOptions, paymentLookup);
-}
-
-export const createOrder = (data: ICreateOrderSdkData, callback: (wasOrderCreated: boolean) => void) => {
+export const createOrder = (
+    data: ICreateOrderSdkData,
+    callback: (wasOrderCreated: boolean) => void
+) => {
     const ecomData = data.ecomData;
     const addressLookup = data.addressLookup;
     const orderOptions = data.orderOptions;
     const paymentLookup = data.paymentLookup;
     const vehicleId = data.vehicleId;
 
-    const isValidRequestData = validate(ecomData, addressLookup, orderOptions, paymentLookup);
+    const isValidRequestData = validateEcomData(
+        ecomData,
+        addressLookup,
+        orderOptions,
+        paymentLookup
+    );
 
     if (!isValidRequestData) {
         return callback(null);
     }
 
-    const isAutomaticCustomerInfo = ecomData.customer.inputType === CustomerInformationInputType.AUTOMATIC;
+    const isAutomaticCustomerInfo =
+        ecomData.customer.inputType === CustomerInformationInputType.AUTOMATIC;
     const isLoan = ecomData.payment.paymentType === PaymentType.Loan;
-    const hasSelectedInsurance = ecomData.insurance.wantsToSeeInsuranceOptions && ecomData.insurance.hasAddedInsurance;
-    const hasTradeIn = ecomData.tradeInCar.wantsToDefineTradeIn && ecomData.tradeInCar.hasProvidedTradeInInfo && ecomData.tradeInCar.hasTradeInCar;
+    const hasSelectedInsurance =
+        ecomData.insurance.wantsToSeeInsuranceOptions &&
+        ecomData.insurance.hasAddedInsurance;
+    const hasTradeIn =
+        ecomData.tradeInCar.wantsToDefineTradeIn &&
+        ecomData.tradeInCar.hasProvidedTradeInInfo &&
+        ecomData.tradeInCar.hasTradeInCar;
 
-    const customerBuilder = customers.newCustomer()
+    const customerBuilder = customers
+        .newCustomer()
         .withEmail(ecomData.customer.email)
         .withPhoneNumber(ecomData.customer.phone);
 
-    const paymentBuilder = orders.newPayment()
+    const paymentBuilder = orders
+        .newPayment()
         .withType(ecomData.payment.paymentType);
 
     if (isAutomaticCustomerInfo) {
         customerBuilder.withPersonalNumber(ecomData.customer.personalNumber);
     } else {
-        const customerAdress = {
+        const customerAdress: IAddress = {
             city: ecomData.customer.city,
             name: ecomData.customer.name,
             postalCode: ecomData.customer.zip,
             street: ecomData.customer.address,
-            street2: ''
-        } as IAddress;
+            street2: "",
+        };
 
         customerBuilder.withAddress(customerAdress);
     }
 
     if (isLoan) {
-        paymentBuilder.withDownPayment(ecomData.payment.loanDeposit)
-                .withDuration(ecomData.payment.loanDuration)
-                .withResidualValue(ecomData.payment.loanResidual);
+        paymentBuilder
+            .withDownPayment(ecomData.payment.loanDeposit)
+            .withDuration(ecomData.payment.loanDuration)
+            .withResidualValue(ecomData.payment.loanResidual);
     }
 
     const customer = customerBuilder.build();
     const payment = paymentBuilder.build();
 
-    var insurance = null;
-    var tradeIn = null;
+    let insurance = null;
+    let tradeIn = null;
 
     if (hasSelectedInsurance) {
-        insurance = orders.newInsurance()
+        insurance = orders
+            .newInsurance()
             .withDrivingDistance(ecomData.insurance.expectedDrivingDistance)
             .withAddOns(ecomData.insurance.addons)
             .build();
     }
 
     if (hasTradeIn) {
-        const milage = parseInt(ecomData.tradeInCar.milage);
+        const milage = parseInt(ecomData.tradeInCar.milage, 10);
 
-        tradeIn = vehicles.newVehicleTrade()
+        tradeIn = vehicles
+            .newVehicleTrade()
             .forVehicle(ecomData.tradeInCar.registrationNumber)
             .withMileage(milage)
             .withCondition(VehicleCondition.Ok)
@@ -78,7 +99,8 @@ export const createOrder = (data: ICreateOrderSdkData, callback: (wasOrderCreate
             .build();
     }
 
-    const createRequestBuilder = orders.newCreateRequest()
+    const createRequestBuilder = orders
+        .newCreateRequest()
         .forVehicle(vehicleId)
         .withCustomer(customer)
         .withPayment(payment)
@@ -89,16 +111,17 @@ export const createOrder = (data: ICreateOrderSdkData, callback: (wasOrderCreate
     }
 
     if (tradeIn) {
-        createRequestBuilder.withTradeIn(tradeIn)
+        createRequestBuilder.withTradeIn(tradeIn);
     }
 
     const createRequest = createRequestBuilder.build();
 
-    orders.create(createRequest)
+    orders
+        .create(createRequest)
         .then(() => {
             callback(true);
         })
-        .catch((e) => {
+        .catch(e => {
             callback(false);
         });
-}
+};
