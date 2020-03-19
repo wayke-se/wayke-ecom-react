@@ -1,6 +1,6 @@
 enum CustomerInformationInputType {
     AUTOMATIC,
-    MANUAL
-};
+    MANUAL,
+}
 
 export default CustomerInformationInputType;

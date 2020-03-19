@@ -1,10 +1,8 @@
 import React from "react";
 
 import { IEcomExternalProps } from "./types";
-import EcomStore from './ecom-store';
+import EcomStore from "./ecom-store";
 
-const Ecom = (props: IEcomExternalProps) => {
+export default (props: IEcomExternalProps) => {
     return <EcomStore {...props} />;
-}
-
-export default Ecom;
+};

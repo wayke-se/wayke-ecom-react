@@ -1,16 +1,48 @@
-import { PaymentType, IAddressLookupResponse, DrivingDistance, IOrderOptionsResponse, IPaymentLookupResponse } from '@wayke-se/ecom';
-import { ITradeInCarData, IPaymentData, IInsuranceData, ICustomerObject, IEcomData } from "../types";
+import {
+    PaymentType,
+    IAddressLookupResponse,
+    DrivingDistance,
+    IOrderOptionsResponse,
+    IPaymentLookupResponse,
+} from "@wayke-se/ecom";
+import {
+    ITradeInCarData,
+    IPaymentData,
+    IInsuranceData,
+    ICustomerObject,
+    IEcomData,
+} from "../types";
 
-import { validateMilage, validateRegistrationNumber, validateNumberInRange, validatePersonalNumber, validateEmail, validatePhoneNumber, validateZip } from "../utils/validation";
+import {
+    validateMilage,
+    validateRegistrationNumber,
+    validateNumberInRange,
+    validatePersonalNumber,
+    validateEmail,
+    validatePhoneNumber,
+    validateZip,
+} from "../utils/validation";
 
 import { createCustomerObject } from "./data-creator";
 import { containsValue } from "../utils/enum";
 import { getLoanDetails } from "../utils/payment";
-import { isResidualEnabled } from '../utils/residual';
+import { isResidualEnabled } from "../utils/residual";
 
-export const validateEcomData = (data: IEcomData, addressLookup: IAddressLookupResponse, orderOptions: IOrderOptionsResponse, paymentLookup: IPaymentLookupResponse | undefined) => {
-    const isValidTradeIn = data.tradeInCar.hasProvidedTradeInInfo && data.tradeInCar.hasTradeInCar ? validateTradeIn(data.tradeInCar) : true;
-    const isValidPayment = validatePayment(data.payment, orderOptions, paymentLookup);
+export const validateEcomData = (
+    data: IEcomData,
+    addressLookup: IAddressLookupResponse,
+    orderOptions: IOrderOptionsResponse,
+    paymentLookup: IPaymentLookupResponse | undefined
+) => {
+    const isValidTradeIn =
+        data.tradeInCar.hasProvidedTradeInInfo && data.tradeInCar.hasTradeInCar
+            ? validateTradeIn(data.tradeInCar)
+            : true;
+    const isValidPayment = validatePayment(
+        data.payment,
+        orderOptions,
+        paymentLookup
+    );
     const isValidInsurance = validateInsurance(data.insurance);
 
     const customerObject = createCustomerObject(data.customer, addressLookup);
@@ -25,8 +57,15 @@ export const validateEcomData = (data: IEcomData, addressLookup: IAddressLookupR
         hasAcceptedReturnConditions = data.customer.hasAcceptedReturnConditions;
     }
 
-    return isValidTradeIn && isValidPayment && isValidInsurance && isValidCustomer && hasAcceptedConditions && hasAcceptedReturnConditions;
-}
+    return (
+        isValidTradeIn &&
+        isValidPayment &&
+        isValidInsurance &&
+        isValidCustomer &&
+        hasAcceptedConditions &&
+        hasAcceptedReturnConditions
+    );
+};
 
 export const validateTradeIn = (data: ITradeInCarData) => {
     if (!data.wantsToDefineTradeIn) {
@@ -34,12 +73,18 @@ export const validateTradeIn = (data: ITradeInCarData) => {
     }
 
     const isValidMilage = validateMilage(data.milage);
-    const isValidRegistrationNumber = validateRegistrationNumber(data.registrationNumber);
+    const isValidRegistrationNumber = validateRegistrationNumber(
+        data.registrationNumber
+    );
 
     return isValidMilage && isValidRegistrationNumber;
 };
 
-export const validatePayment = (data: IPaymentData, orderOptions: IOrderOptionsResponse, paymentLookup: IPaymentLookupResponse | undefined) => {
+export const validatePayment = (
+    data: IPaymentData,
+    orderOptions: IOrderOptionsResponse,
+    paymentLookup: IPaymentLookupResponse | undefined
+) => {
     if (!data.paymentType) {
         return false;
     }
@@ -58,10 +103,18 @@ export const validatePayment = (data: IPaymentData, orderOptions: IOrderOptionsR
     const durationMin = loanDetails.getDurationSpec().min;
     const durationMax = loanDetails.getDurationSpec().max;
 
-    const isValidDeposit = validateNumberInRange(data.loanDeposit, depositMin, depositMax);
-    const isValidLoanDuration = validateNumberInRange(data.loanDuration, durationMin, durationMax);
+    const isValidDeposit = validateNumberInRange(
+        data.loanDeposit,
+        depositMin,
+        depositMax
+    );
+    const isValidLoanDuration = validateNumberInRange(
+        data.loanDuration,
+        durationMin,
+        durationMax
+    );
 
-    var isValidResidual = true;
+    let isValidResidual = true;
 
     const hasResidual = isResidualEnabled(loanDetails.getResidualValueSpec());
 
@@ -69,7 +122,11 @@ export const validatePayment = (data: IPaymentData, orderOptions: IOrderOptionsR
         const residualMin = loanDetails.getResidualValueSpec().min;
         const residualMax = loanDetails.getResidualValueSpec().max;
 
-        isValidResidual = validateNumberInRange(data.loanResidual, residualMin, residualMax);
+        isValidResidual = validateNumberInRange(
+            data.loanResidual,
+            residualMin,
+            residualMax
+        );
     }
 
     return isValidDeposit && isValidLoanDuration && isValidResidual;
@@ -81,18 +138,28 @@ export const validateInsurance = (data: IInsuranceData) => {
     }
 
     const isValidPersonalNumber = validatePersonalNumber(data.personalNumber);
-    const isValidExpectedDrivingDistance = data.expectedDrivingDistance && containsValue(DrivingDistance, data.expectedDrivingDistance);
+    const isValidExpectedDrivingDistance =
+        data.expectedDrivingDistance &&
+        containsValue(DrivingDistance, data.expectedDrivingDistance);
     const isValidAddons = Array.isArray(data.addons);
 
-    return isValidPersonalNumber && isValidExpectedDrivingDistance && isValidAddons;
+    return (
+        isValidPersonalNumber && isValidExpectedDrivingDistance && isValidAddons
+    );
 };
 
-export const validateCustomerObjectPersonalNumber = (customerObject: ICustomerObject) => {
-    return customerObject.isAutomaticLookup ? validatePersonalNumber(customerObject.personalNumber) : true;
-}
+export const validateCustomerObjectPersonalNumber = (
+    customerObject: ICustomerObject
+) => {
+    return customerObject.isAutomaticLookup
+        ? validatePersonalNumber(customerObject.personalNumber)
+        : true;
+};
 
 export const validateCustomerObject = (customerObject: ICustomerObject) => {
-    const isValidPersonalNumber = validateCustomerObjectPersonalNumber(customerObject);
+    const isValidPersonalNumber = validateCustomerObjectPersonalNumber(
+        customerObject
+    );
     const isValidEmail = validateEmail(customerObject.email);
     const isValidPhone = validatePhoneNumber(customerObject.phone);
 
@@ -100,13 +167,17 @@ export const validateCustomerObject = (customerObject: ICustomerObject) => {
     const isValidAddress = !!customerObject.address;
     const isValidCity = !!customerObject.city;
 
-    var isValidZip: boolean;
+    const isValidZip = customerObject.isMasked
+        ? !!customerObject.zip
+        : validateZip(customerObject.zip);
 
-    if (customerObject.isMasked) {
-        isValidZip = !!customerObject.zip;
-    } else {
-        isValidZip = validateZip(customerObject.zip);
-    }
-
-    return isValidPersonalNumber && isValidEmail && isValidPhone && isValidName && isValidAddress && isValidZip && isValidCity;
+    return (
+        isValidPersonalNumber &&
+        isValidEmail &&
+        isValidPhone &&
+        isValidName &&
+        isValidAddress &&
+        isValidZip &&
+        isValidCity
+    );
 };

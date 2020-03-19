@@ -4,7 +4,7 @@ enum RequestType {
     GET_INSURANCE_OPTIONS,
     GET_ADDRESS_LOOKUP,
     GET_PAYMENT_LOOKUP,
-    CREATE_ORDER
-};
+    CREATE_ORDER,
+}
 
 export default RequestType;

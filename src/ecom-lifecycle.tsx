@@ -1,19 +1,26 @@
-import React from 'react';
+import React from "react";
 
-import EcomStep from './constants/ecom-step';
-import UserEvent from './constants/user-event';
-import { getAllTransitions, getInitialStep } from './ecom-step-transitions';
+import EcomStep from "./constants/ecom-step";
+import UserEvent from "./constants/user-event";
+import { getAllTransitions, getInitialStep } from "./ecom-step-transitions";
 
-import EcomHeader from './ecom-header';
-import EcomStepContent from './ecom-step-content';
-import EcomCart from './ecom-cart';
-import EcomTimeline from './ecom-timeline';
+import EcomHeader from "./ecom-header";
+import EcomStepContent from "./ecom-step-content";
+import EcomCart from "./ecom-cart";
+import EcomTimeline from "./ecom-timeline";
 
-import { IEcomExternalProps, IEcomContext, IEcomStore, IEcomData } from './types';
-import { IOrderOptionsResponse } from '@wayke-se/ecom';
+import {
+    IEcomExternalProps,
+    IEcomContext,
+    IEcomStore,
+    IEcomData,
+} from "./types";
+import { IOrderOptionsResponse } from "@wayke-se/ecom";
 
-interface IEcomLifecycleProps extends IEcomExternalProps, IEcomContext, IEcomStore {
-}
+interface IEcomLifecycleProps
+    extends IEcomExternalProps,
+        IEcomContext,
+        IEcomStore {}
 
 interface IState {
     step: EcomStep | undefined;
@@ -22,25 +29,29 @@ interface IState {
     hasNewStep: boolean;
 }
 
-const getNextStep = (currentStep: EcomStep, data: IEcomData, options: IOrderOptionsResponse): EcomStep => {
+const getNextStep = (
+    currentStep: EcomStep,
+    data: IEcomData,
+    options: IOrderOptionsResponse
+): EcomStep => {
     const transition = getAllTransitions()[currentStep];
 
-    if (transition) {
-        return transition(data, options);
-    } else {
-        throw 'Did not find a possible transition.';
+    if (!transition) {
+        throw new Error("Did not find a possible transition.");
     }
+
+    return transition(data, options);
 };
 
 const shouldShowCart = (step: EcomStep) => {
-    switch(step) {
+    switch (step) {
         case EcomStep.CUSTOMER_INFORMATION_DETAILS:
         case EcomStep.FINAL_CONFIRMATION:
             return false;
         default:
             return true;
     }
-}
+};
 
 class EcomLifecycle extends React.Component<IEcomLifecycleProps, IState> {
     private frameBodyRef: React.RefObject<HTMLDivElement>;
@@ -52,7 +63,9 @@ class EcomLifecycle extends React.Component<IEcomLifecycleProps, IState> {
         this.handleProceedToNextStep = this.handleProceedToNextStep.bind(this);
         this.handlePreviousStepClick = this.handlePreviousStepClick.bind(this);
         this.handleSpecificStepClick = this.handleSpecificStepClick.bind(this);
-        this.handleIncompleteUserEvent = this.handleIncompleteUserEvent.bind(this);
+        this.handleIncompleteUserEvent = this.handleIncompleteUserEvent.bind(
+            this
+        );
 
         this.frameBodyRef = React.createRef();
         this.rootRef = React.createRef();
@@ -61,7 +74,7 @@ class EcomLifecycle extends React.Component<IEcomLifecycleProps, IState> {
             step: undefined,
             stepHistory: [],
             isBackwardsStepForbidden: false,
-            hasNewStep: false
+            hasNewStep: false,
         };
     }
 
@@ -75,41 +88,48 @@ class EcomLifecycle extends React.Component<IEcomLifecycleProps, IState> {
             const initialStep = getInitialStep(this.props.orderOptions);
 
             this.setState({
-                stepHistory: [ initialStep ],
-                step: initialStep
+                stepHistory: [initialStep],
+                step: initialStep,
             });
         }
 
         if (this.state.hasNewStep) {
-            this.setState({
-                hasNewStep: false
-            }, () => {
-                if (this.frameBodyRef.current) {
-                    this.frameBodyRef.current.scrollTop = 0;
-                }
+            this.setState(
+                {
+                    hasNewStep: false,
+                },
+                () => {
+                    if (this.frameBodyRef.current) {
+                        this.frameBodyRef.current.scrollTop = 0;
+                    }
 
-                if (this.rootRef.current) {
-                    this.rootRef.current.scrollTop = 0;
+                    if (this.rootRef.current) {
+                        this.rootRef.current.scrollTop = 0;
+                    }
                 }
-            })
+            );
         }
     }
 
     handleProceedToNextStep() {
-        const nextStep = getNextStep(this.state.step, this.props.data, this.props.orderOptions);
+        const nextStep = getNextStep(
+            this.state.step,
+            this.props.data,
+            this.props.orderOptions
+        );
 
         if (!nextStep) {
             return;
         }
 
-        const newHistory = [ ...this.state.stepHistory ];
+        const newHistory = [...this.state.stepHistory];
         newHistory.push(nextStep);
 
         this.setState({
             step: nextStep,
             stepHistory: newHistory,
             isBackwardsStepForbidden: nextStep === EcomStep.FINAL_CONFIRMATION,
-            hasNewStep: true
+            hasNewStep: true,
         });
     }
 
@@ -118,7 +138,7 @@ class EcomLifecycle extends React.Component<IEcomLifecycleProps, IState> {
             return;
         }
 
-        const newHistory = [ ...this.state.stepHistory ];
+        const newHistory = [...this.state.stepHistory];
         newHistory.pop();
 
         if (newHistory.length === 0) {
@@ -129,12 +149,12 @@ class EcomLifecycle extends React.Component<IEcomLifecycleProps, IState> {
 
         this.setState({
             step: previousStep,
-            stepHistory: newHistory
+            stepHistory: newHistory,
         });
     }
 
     handleSpecificStepClick(step: EcomStep) {
-        let newHistory = [ ...this.state.stepHistory ];
+        let newHistory = [...this.state.stepHistory];
         const hasStepInHistory = newHistory.includes(step);
 
         if (hasStepInHistory) {
@@ -146,7 +166,7 @@ class EcomLifecycle extends React.Component<IEcomLifecycleProps, IState> {
 
         this.setState({
             step,
-            stepHistory: newHistory
+            stepHistory: newHistory,
         });
     }
 
@@ -160,8 +180,23 @@ class EcomLifecycle extends React.Component<IEcomLifecycleProps, IState> {
     }
 
     render() {
-        const canPressBackButton = this.state.stepHistory.length > 1 && !this.state.isBackwardsStepForbidden;
+        const canPressBackButton =
+            this.state.stepHistory.length > 1 &&
+            !this.state.isBackwardsStepForbidden;
         const showCart = shouldShowCart(this.state.step);
+
+        const onShowCustomerInformationInitial = () =>
+            this.handleSpecificStepClick(EcomStep.CUSTOMER_INFORMATION_INITIAL);
+
+        const onShowInsuranceInformationDefinition = () =>
+            this.handleSpecificStepClick(
+                EcomStep.INSURANCE_INFORMATION_DEFINITION
+            );
+
+        const onShowTradeInCarDefinition = () =>
+            this.handleSpecificStepClick(EcomStep.TRADE_IN_CAR_DEFINITION);
+        const onShowPaymentMethodChooser = () =>
+            this.handleSpecificStepClick(EcomStep.PAYMENT_METHOD_CHOOSER);
 
         return (
             <div data-ecom-modal="" className="wayke-ecom" ref={this.rootRef}>
@@ -170,31 +205,57 @@ class EcomLifecycle extends React.Component<IEcomLifecycleProps, IState> {
                         <div className="modal-dialog">
                             <div className="modal-dialog-main">
                                 <div data-ecom-frame="">
-                                    <div className="frame-body" ref={this.frameBodyRef}>
+                                    <div
+                                        className="frame-body"
+                                        ref={this.frameBodyRef}
+                                    >
                                         <EcomHeader
                                             {...this.props}
                                             step={this.state.step}
-                                            canPressBackButton={canPressBackButton}
-                                            onPreviousStepClick={this.handlePreviousStepClick}
-                                            onIncompleteUserEvent={this.handleIncompleteUserEvent} />
+                                            canPressBackButton={
+                                                canPressBackButton
+                                            }
+                                            onPreviousStepClick={
+                                                this.handlePreviousStepClick
+                                            }
+                                            onIncompleteUserEvent={
+                                                this.handleIncompleteUserEvent
+                                            }
+                                        />
 
-                                        <EcomTimeline currentStep={this.state.step} options={this.props.orderOptions} />
+                                        <EcomTimeline
+                                            currentStep={this.state.step}
+                                            options={this.props.orderOptions}
+                                        />
 
                                         <div data-ecom-page="">
                                             <EcomStepContent
                                                 step={this.state.step}
                                                 {...this.props}
-
-                                                onProceedToNextStep={this.handleProceedToNextStep}
-                                                onShowCustomerInformationInitial={() => this.handleSpecificStepClick(EcomStep.CUSTOMER_INFORMATION_INITIAL)}
-                                                onShowInsuranceInformationDefinition={() => this.handleSpecificStepClick(EcomStep.INSURANCE_INFORMATION_DEFINITION)}
-                                                onShowTradeInCarDefinition={() => this.handleSpecificStepClick(EcomStep.TRADE_IN_CAR_DEFINITION)}
-                                                onShowPaymentMethodChooser={() => this.handleSpecificStepClick(EcomStep.PAYMENT_METHOD_CHOOSER)}
-                                                onIncompleteUserEvent={this.handleIncompleteUserEvent} />
+                                                onProceedToNextStep={
+                                                    this.handleProceedToNextStep
+                                                }
+                                                onShowCustomerInformationInitial={
+                                                    onShowCustomerInformationInitial
+                                                }
+                                                onShowInsuranceInformationDefinition={
+                                                    onShowInsuranceInformationDefinition
+                                                }
+                                                onShowTradeInCarDefinition={
+                                                    onShowTradeInCarDefinition
+                                                }
+                                                onShowPaymentMethodChooser={
+                                                    onShowPaymentMethodChooser
+                                                }
+                                                onIncompleteUserEvent={
+                                                    this
+                                                        .handleIncompleteUserEvent
+                                                }
+                                            />
                                         </div>
                                     </div>
 
-                                    { showCart && <EcomCart {...this.props} /> }
+                                    {showCart && <EcomCart {...this.props} />}
                                 </div>
                             </div>
                         </div>
@@ -203,6 +264,6 @@ class EcomLifecycle extends React.Component<IEcomLifecycleProps, IState> {
             </div>
         );
     }
-};
+}
 
 export default EcomLifecycle;

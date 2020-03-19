@@ -3,15 +3,18 @@
   "extends": [
       "tslint:latest",
       "tslint-config-airbnb",
-      "tslint-config-prettier",
-      "tslint-react"
+      "tslint-react",
+      "tslint-config-prettier"
+  ],
+  "rulesDirectory": [
+    "tslint-plugin-prettier"
   ],
   "jsRules": {},
   "rules": {
+    "prettier": true,
     "import-name": [false],
     "no-implicit-dependencies": [true, "dev"],
     "object-literal-sort-keys": [false],
     "prefer-array-literal": [false]
-  },
-  "rulesDirectory": []
+  }
 }

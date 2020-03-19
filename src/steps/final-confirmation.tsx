@@ -1,28 +1,33 @@
-import React from 'react';
+import React from "react";
 
-import CustomerInformationSummary from '../components/customer-information-summary';
-import OrderSummary from '../components/order-summary';
+import CustomerInformationSummary from "../components/customer-information-summary";
+import OrderSummary from "../components/order-summary";
 
-import { getRetailerInformation } from '../utils/retailer';
-import { IEcomStore, IEcomContext, IEcomExternalProps } from '../types';
+import { getRetailerInformation } from "../utils/retailer";
+import { IEcomStore, IEcomContext, IEcomExternalProps } from "../types";
 
-interface IFinalConfirmationProps extends IEcomExternalProps, IEcomContext, IEcomStore {
-};
+interface IFinalConfirmationProps
+    extends IEcomExternalProps,
+        IEcomContext,
+        IEcomStore {}
 
-const FinalConfirmation = (props: IFinalConfirmationProps) => {
+export default (props: IFinalConfirmationProps) => {
     const retailerInformation = getRetailerInformation(props.orderOptions);
-    const {
-        name,
-        email,
-        phoneNumber
-    } = retailerInformation;
+    const { name, email, phoneNumber } = retailerInformation;
 
     return (
         <div data-ecom-page="">
             <section className="page-section">
                 <h1 className="h6">Tack för din order!</h1>
                 <div data-ecom-content="">
-                    <p>En orderbekräftelse kommer att skickas till din e-postadress <span className="font-medium">{props.data.customer.email}</span>. Vi kontaktar dig sedan inom kort.</p>
+                    <p>
+                        En orderbekräftelse kommer att skickas till din
+                        e-postadress{" "}
+                        <span className="font-medium">
+                            {props.data.customer.email}
+                        </span>
+                        . Vi kontaktar dig sedan inom kort.
+                    </p>
                 </div>
             </section>
 
@@ -44,9 +49,22 @@ const FinalConfirmation = (props: IFinalConfirmationProps) => {
                 <h1 className="h6">Har du frågor?</h1>
                 <div data-ecom-content="">
                     <p>
-                        { name && <React.Fragment>Kontakta {name}</React.Fragment> }
-                        { email && <React.Fragment> - <a href={`mailto:${email}`}>{email}</a></React.Fragment> }
-                        { phoneNumber && <React.Fragment> - <a href={`tel:${phoneNumber}`}>{phoneNumber}</a></React.Fragment> }
+                        {name && (
+                            <React.Fragment>Kontakta {name}</React.Fragment>
+                        )}
+                        {email && (
+                            <React.Fragment>
+                                {" "}
+                                - <a href={`mailto:${email}`}>{email}</a>
+                            </React.Fragment>
+                        )}
+                        {phoneNumber && (
+                            <React.Fragment>
+                                {" "}
+                                -{" "}
+                                <a href={`tel:${phoneNumber}`}>{phoneNumber}</a>
+                            </React.Fragment>
+                        )}
                     </p>
                 </div>
             </section>
@@ -58,6 +76,4 @@ const FinalConfirmation = (props: IFinalConfirmationProps) => {
             </section>
         </div>
     );
-}
-
-export default FinalConfirmation;
+};

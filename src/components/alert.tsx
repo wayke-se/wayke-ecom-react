@@ -1,22 +1,18 @@
-import React from 'react';
+import React from "react";
 
 export interface AlertProps {
     message: string;
-};
+}
 
-const Alert = (props: AlertProps) => {
+export default (props: AlertProps) => {
     return (
         <div data-ecom-alert="error">
             <div className="alert-icon-section">
                 <div className="alert-icon">
-                    <i className="icon-exclamation no-margin"></i>
+                    <i className="icon-exclamation no-margin" />
                 </div>
             </div>
-            <div className="alert-content">
-                {props.message}
-            </div>
+            <div className="alert-content">{props.message}</div>
         </div>
     );
-}
-
-export default Alert;
+};

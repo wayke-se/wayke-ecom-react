@@ -1,16 +1,20 @@
-import { PaymentType, IOrderOptionsResponse, IPaymentLookupResponse } from '@wayke-se/ecom';
-import { ILoanInformation } from '../types';
+import {
+    PaymentType,
+    IOrderOptionsResponse,
+    IPaymentLookupResponse,
+} from "@wayke-se/ecom";
+import { ILoanInformation } from "../types";
 
 export const getPaymentMethodTitle = (type: PaymentType) => {
-    switch(type) {
+    switch (type) {
         case PaymentType.Lease:
-            return 'Privatleasing';
+            return "Privatleasing";
         case PaymentType.Loan:
-            return 'Finansiering';
+            return "Finansiering";
         case PaymentType.Cash:
-            return 'Kontant';
+            return "Kontant";
         default:
-            return '';
+            return "";
     }
 };
 
@@ -19,25 +23,34 @@ const getLoanPaymentOptions = (orderOptions: IOrderOptionsResponse) => {
         return null;
     }
 
-    return orderOptions.getPaymentOptions().find(p => p.type === PaymentType.Loan);
+    return orderOptions
+        .getPaymentOptions()
+        .find(p => p.type === PaymentType.Loan);
 };
 
-export const getLoanDetails = (orderOptions: IOrderOptionsResponse, paymentLookup: IPaymentLookupResponse | undefined): IPaymentLookupResponse => {
-    return paymentLookup ? paymentLookup : getLoanPaymentOptions(orderOptions).loanDetails;
+export const getLoanDetails = (
+    orderOptions: IOrderOptionsResponse,
+    paymentLookup: IPaymentLookupResponse | undefined
+): IPaymentLookupResponse => {
+    return paymentLookup
+        ? paymentLookup
+        : getLoanPaymentOptions(orderOptions).loanDetails;
 };
 
-export const getLoanInformation = (orderOptions: IOrderOptionsResponse): ILoanInformation => {
+export const getLoanInformation = (
+    orderOptions: IOrderOptionsResponse
+): ILoanInformation => {
     const loanPaymentOptions = getLoanPaymentOptions(orderOptions);
 
     if (loanPaymentOptions) {
         return {
             name: loanPaymentOptions.name,
-            unit: loanPaymentOptions.unit
-        };
-    } else {
-        return {
-            name: '',
-            unit: ''
+            unit: loanPaymentOptions.unit,
         };
     }
+
+    return {
+        name: "",
+        unit: "",
+    };
 };
