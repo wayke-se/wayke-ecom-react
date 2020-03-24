@@ -10,6 +10,7 @@ import {
     DrivingDistance,
     PaymentType,
     IPaymentLookupResponse,
+    VehicleCondition,
 } from "@wayke-se/ecom";
 
 export interface IVehicle {
@@ -58,6 +59,7 @@ export interface IEcomContext {
 
 export interface IEcomLifecycle {
     onProceedToNextStep: () => void;
+    onPreviousStepClick: () => void;
     onShowCustomerInformationInitial: () => void;
     onShowInsuranceInformationDefinition: () => void;
     onShowTradeInCarDefinition: () => void;
@@ -86,9 +88,11 @@ export interface IEcomData {
 export interface ITradeInCarData {
     wantsToDefineTradeIn: boolean;
     hasProvidedTradeInInfo: boolean;
+    hasProvidedTradeInCondition: boolean;
     hasTradeInCar: boolean;
     registrationNumber: string;
     milage: string;
+    condition: VehicleCondition;
     description: string;
 }
 

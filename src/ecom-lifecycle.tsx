@@ -235,6 +235,9 @@ class EcomLifecycle extends React.Component<IEcomLifecycleProps, IState> {
                                                 onProceedToNextStep={
                                                     this.handleProceedToNextStep
                                                 }
+                                                onPreviousStepClick={
+                                                    this.handlePreviousStepClick
+                                                }
                                                 onShowCustomerInformationInitial={
                                                     onShowCustomerInformationInitial
                                                 }

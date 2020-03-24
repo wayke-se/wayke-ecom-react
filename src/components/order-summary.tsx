@@ -1,16 +1,16 @@
 import React from "react";
 
-import { IEcomStore, IEcomContext, IEcomExternalProps } from "../types";
-import { PaymentType } from "@wayke-se/ecom";
+import { PaymentType, VehicleCondition } from "@wayke-se/ecom";
+import { IEcomContext, IEcomExternalProps, IEcomStore } from "../types";
 
 import { formatPrice } from "../utils/helpers";
 import {
-    getPaymentMethodTitle,
     getLoanDetails,
     getLoanInformation,
+    getPaymentMethodTitle,
 } from "../utils/payment";
-import { getVehicleTitle, getVehicleDescription } from "../utils/trade-in-car";
 import { getRetailerInformation } from "../utils/retailer";
+import { getVehicleDescription, getVehicleTitle } from "../utils/trade-in-car";
 
 import ProductItem from "./product-item";
 
@@ -79,6 +79,17 @@ export default (props: IOrderSummaryProps) => {
         const tradeInTitle = `${getVehicleTitle(
             vehicleInformation
         )} ${getVehicleDescription(vehicleInformation)}`;
+        const valuation = !!vehicleInformation.valuation
+            ? formatPrice(Math.round(vehicleInformation.valuation / 100) * 100)
+            : null;
+
+        let condition = "mycket bra skick";
+        switch (props.data.tradeInCar.condition) {
+            case VehicleCondition.Good:
+                condition = "bra skick";
+            case VehicleCondition.Ok:
+                condition = "helt okej skick";
+        }
 
         tradeInItem = (
             <div className="repeat-m">
@@ -87,7 +98,7 @@ export default (props: IOrderSummaryProps) => {
                         <div className="product-card-content">
                             <div className="product-card-title">
                                 <div className="product-card-heading">
-                                    Inbytesbil
+                                    Inbytesbil i {condition}
                                 </div>
                             </div>
                             <ul className="product-card-usp-list">
@@ -98,6 +109,11 @@ export default (props: IOrderSummaryProps) => {
                                     {tradeInTitle}
                                 </li>
                             </ul>
+                            {valuation && (
+                                <div className="m-t-mini">
+                                    Uppskattat värde: {valuation} kr
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>

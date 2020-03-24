@@ -94,7 +94,8 @@ export default (props: IEcomCartProps) => {
                 vehicleInformation
             ),
             price: null,
-            unit: null,
+            valuation: Math.round(vehicleInformation.valuation / 100) * 100,
+            unit: "kr",
             addons: [],
         });
     }

@@ -63,9 +63,11 @@ class EcomStore extends React.Component<IEcomExternalProps, IEcomData> {
             tradeInCar: {
                 wantsToDefineTradeIn: false,
                 hasProvidedTradeInInfo: false,
+                hasProvidedTradeInCondition: false,
                 hasTradeInCar: false,
                 registrationNumber: "",
                 milage: "",
+                condition: undefined,
                 description: "",
             },
         };

@@ -40,6 +40,13 @@ export const getAllTransitions = () => ({
     },
     [EcomStep.TRADE_IN_CAR_DEFINITION]: (data: IEcomData) => {
         if (data.tradeInCar.hasProvidedTradeInInfo) {
+            return EcomStep.TRADE_IN_CAR_CONDITION;
+        }
+
+        return EcomStep.PAYMENT_METHOD_CHOOSER;
+    },
+    [EcomStep.TRADE_IN_CAR_CONDITION]: (data: IEcomData) => {
+        if (data.tradeInCar.hasProvidedTradeInCondition) {
             return EcomStep.TRADE_IN_CONFIRM_CAR;
         }
 
