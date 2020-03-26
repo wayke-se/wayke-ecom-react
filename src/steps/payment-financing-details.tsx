@@ -699,6 +699,7 @@ class PaymentFinancingDetails extends React.Component<
                                         data-ecom-link=""
                                         href={publicUrl}
                                         target="_blank"
+                                        rel="noopener noreferrer"
                                     >
                                         Mer information
                                         <i className="icon-link-external m-l-half" />

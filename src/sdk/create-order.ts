@@ -121,7 +121,7 @@ export const createOrder = (
         .then(() => {
             callback(true);
         })
-        .catch(e => {
+        .catch(() => {
             callback(false);
         });
 };
