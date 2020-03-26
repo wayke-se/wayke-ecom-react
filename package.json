@@ -1,6 +1,6 @@
 {
   "name": "@wayke-se/ecom-react",
-  "version": "1.1.5",
+  "version": "2.0.0-alpha7",
   "description": "React components for wayke ecom.",
   "main": "src/index.tsx",
   "scripts": {
@@ -9,7 +9,7 @@
     "build:tsc": "tsc",
     "prebuild:tsc": "npm run clean",
     "clean": "rimraf ./dist ./pkg",
-    "lint": "tslint -c ./tslint.json -p ./tsconfig.json -e 'src/test/**/*' -e 'src/**/*.spec.{ts}' 'src/**/*.{ts,tsx}'",
+    "lint": "eslint -c .eslintrc.js --ext .ts,.tsx 'src/**/*.{ts,tsx}'",
     "prettify": "prettier --write 'src/**/*.{ts,tsx}'",
     "prepare": "npm run prettify && npm run type-check && npm run lint",
     "type-check": "tsc --noEmit --skipLibCheck"
@@ -44,18 +44,21 @@
     "@pika/plugin-ts-standard-pkg": "^0.9.2",
     "@types/node": "^13.9.2",
     "@types/react": "^16.9.23",
+    "@types/react-dom": "^16.9.5",
+    "@typescript-eslint/eslint-plugin": "^2.25.0",
+    "@typescript-eslint/parser": "^2.25.0",
+    "eslint": "^6.8.0",
+    "eslint-config-prettier": "^6.10.1",
+    "eslint-plugin-import": "^2.20.1",
+    "eslint-plugin-prettier": "^3.1.2",
+    "eslint-plugin-react": "^7.19.0",
     "parcel-bundler": "^1.12.4",
     "prettier": "^1.19.1",
     "rimraf": "^3.0.2",
-    "tslint": "^6.1.0",
-    "tslint-config-airbnb": "^5.11.1",
-    "tslint-config-prettier": "^1.18.0",
-    "tslint-plugin-prettier": "^2.2.0",
-    "tslint-react": "^4.2.0",
     "typescript": "^3.8.3"
   },
   "dependencies": {
-    "@wayke-se/ecom": "^1.0.9",
+    "@wayke-se/ecom": "^2.0.0-alpha2",
     "marked": "^0.8.1",
     "react": "^16.13.0",
     "react-dom": "^16.13.0"

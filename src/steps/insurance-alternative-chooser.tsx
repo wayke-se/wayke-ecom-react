@@ -137,6 +137,7 @@ export default (props: IInsuranceAlternativeChooserProps) => {
                                     data-ecom-link=""
                                     href={insuranceOption.conditions.url}
                                     target="_blank"
+                                    rel="noopener noreferrer"
                                 >
                                     {insuranceOption.conditions.description}
                                     <i className="icon-link-external m-l-half" />

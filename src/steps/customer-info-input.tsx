@@ -121,7 +121,7 @@ export default (props: ICustomerInformationDetailsProps) => {
                     </div>
 
                     <div className="form-alert">
-                        Ange postnummer i formatet "XXX XX"
+                        Ange postnummer i formatet &quot;XXX XX&quot;
                     </div>
                 </div>
 
