@@ -44,7 +44,6 @@
     "@pika/plugin-ts-standard-pkg": "^0.9.2",
     "@types/node": "^13.9.2",
     "@types/react": "^16.9.23",
-    "@types/react-dom": "^16.9.5",
     "@typescript-eslint/eslint-plugin": "^2.25.0",
     "@typescript-eslint/parser": "^2.25.0",
     "eslint": "^6.8.0",
@@ -52,16 +51,13 @@
     "eslint-plugin-import": "^2.20.1",
     "eslint-plugin-prettier": "^3.1.2",
     "eslint-plugin-react": "^7.19.0",
-    "parcel-bundler": "^1.12.4",
     "prettier": "^1.19.1",
     "rimraf": "^3.0.2",
     "typescript": "^3.8.3"
   },
   "dependencies": {
     "@wayke-se/ecom": "^2.0.0-alpha2",
-    "marked": "^0.8.1",
-    "react": "^16.13.0",
-    "react-dom": "^16.13.0"
+    "marked": "^0.8.1"
   },
   "@pika/pack": {
     "pipeline": [
