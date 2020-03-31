@@ -8,6 +8,7 @@ import InsuranceInformationDefinition from "./steps/insurance-information-defini
 import PaymentFinancingDetails from "./steps/payment-financing-details";
 import PaymentMethodChooser from "./steps/payment-method-chooser";
 import TradeInCarDefinition from "./steps/trade-in-car-definition";
+import TradeInCarCondition from "./steps/trade-in-car-condition";
 import TradeInConfirmCar from "./steps/trade-in-confirm-car";
 import TradeInExistsChooser from "./steps/trade-in-exists-chooser";
 
@@ -42,6 +43,9 @@ export default (props: AllProps) => {
 
         case EcomStep.TRADE_IN_CAR_DEFINITION:
             return <TradeInCarDefinition {...props} />;
+
+        case EcomStep.TRADE_IN_CAR_CONDITION:
+            return <TradeInCarCondition {...props} />;
 
         case EcomStep.TRADE_IN_CONFIRM_CAR:
             return <TradeInConfirmCar {...props} />;

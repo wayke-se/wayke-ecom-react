@@ -15,6 +15,8 @@ export const getVehicleLookup = (
     const request = vehicles
         .newLookupRequest()
         .withRegistrationNumber(data.ecomData.registrationNumber)
+        .withMileage(parseInt(data.ecomData.milage, 10))
+        .withCondition(data.ecomData.condition)
         .build();
 
     vehicles

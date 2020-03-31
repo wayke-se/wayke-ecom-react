@@ -105,7 +105,7 @@ export const makeVehicleLookupRequest = (
     data: IVehicleLookupSdkData,
     callback: (response: IVehicleLookupResponse | null) => void
 ) => {
-    const requestIdentifier = `${data.ecomData.registrationNumber}${data.ecomData.milage}`;
+    const requestIdentifier = `${data.ecomData.registrationNumber}${data.ecomData.milage}${data.ecomData.condition}`;
 
     makeRequest(
         getVehicleLookup,

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 
 import {
     validateRegistrationNumber,
@@ -6,9 +6,7 @@ import {
 } from "../utils/validation";
 import { IEcomLifecycle, IEcomStore, IEcomContext } from "../types";
 import StoreAction from "../constants/store-action";
-import { validateTradeIn } from "../tools/data-validation";
 
-import Alert from "../components/alert";
 import Spinner from "../components/spinner";
 import { handleEnterPress } from "../utils/events";
 import UserEvent from "../constants/user-event";
@@ -19,8 +17,6 @@ export interface ITradeInCarDefinitionProps
         IEcomLifecycle {}
 
 export default (props: ITradeInCarDefinitionProps) => {
-    const [hasRequestError, setHasRequestError] = useState(false);
-
     const handleInputChange = e => {
         props.dispatchStoreAction(StoreAction.UPDATE_NAMED_VALUE, {
             type: "tradeInCar",
@@ -36,37 +32,16 @@ export default (props: ITradeInCarDefinitionProps) => {
         });
     };
 
-    const handleNextStepClick = () => {
-        const isValidData = validateTradeIn(props.data.tradeInCar);
-
-        if (!isValidData) {
-            return props.dispatchStoreAction(
-                StoreAction.INTERACT_SET_ALL_FOR_TYPE,
-                "tradeInCar"
-            );
-        }
-
-        setHasRequestError(false);
-
-        props.onFetchVehicleInformation((isSuccessful: boolean) => {
-            if (isSuccessful) {
-                props.dispatchStoreAction(
-                    StoreAction.UPDATE_NAMED_VALUE,
-                    {
-                        type: "tradeInCar",
-                        name: "hasProvidedTradeInInfo",
-                        value: true,
-                    },
-                    () => {
-                        props.onIncompleteUserEvent(UserEvent.TRADE_IN_DEFINED);
-                        props.onProceedToNextStep();
-                    }
-                );
-            } else {
-                setHasRequestError(true);
-            }
-        });
-    };
+    const handleNextStepClick = () =>
+        props.dispatchStoreAction(
+            StoreAction.UPDATE_NAMED_VALUE,
+            {
+                type: "tradeInCar",
+                name: "hasProvidedTradeInInfo",
+                value: true,
+            },
+            props.onProceedToNextStep
+        );
 
     const handleSkipClick = () => {
         props.dispatchStoreAction(
@@ -91,7 +66,7 @@ export default (props: ITradeInCarDefinitionProps) => {
         !validateMilage(props.data.tradeInCar.milage);
 
     const onKeyPress = (e: React.KeyboardEvent) =>
-        handleEnterPress(e, handleNextStepClick);
+        handleEnterPress(e, props.onProceedToNextStep);
 
     return (
         <div className="page-main">
@@ -176,7 +151,7 @@ export default (props: ITradeInCarDefinitionProps) => {
                             <textarea
                                 id="exchange-input-description"
                                 name="description"
-                                placeholder="Beskriv gärna bilens servicehistorik, extrautrustning och skick i allmänhet..."
+                                placeholder="Är det något mer om din inbytesbil du vill berätta för bilhandlaren, något som kan påverka värdet såsom servicehistorik, extrautrustning, vinterdäck?"
                                 value={props.data.tradeInCar.description}
                                 onChange={handleInputChange}
                                 style={{ height: "100px" }}
@@ -185,14 +160,6 @@ export default (props: ITradeInCarDefinitionProps) => {
                     </div>
                 </div>
             </section>
-
-            {hasRequestError && (
-                <section className="page-section">
-                    <Alert
-                        message={`Tyvärr fick vi ingen träff på registreringsnumret ${props.data.tradeInCar.registrationNumber}. Kontrollera registreringsnumret igen eller gå vidare utan inbytesbil (kan kompletteras vid senare kontakt med handlaren).`}
-                    />
-                </section>
-            )}
 
             {!props.isWaitingForResponse && (
                 <React.Fragment>

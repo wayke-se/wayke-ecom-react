@@ -4,7 +4,6 @@ import {
     customers,
     IAddress,
     PaymentType,
-    VehicleCondition,
     DeliveryType,
 } from "@wayke-se/ecom";
 import { ICreateOrderSdkData } from "../types";
@@ -94,7 +93,7 @@ export const createOrder = (
             .newVehicleTrade()
             .forVehicle(ecomData.tradeInCar.registrationNumber)
             .withMileage(milage)
-            .withCondition(VehicleCondition.Ok)
+            .withCondition(ecomData.tradeInCar.condition)
             .withComment(ecomData.tradeInCar.description)
             .build();
     }
