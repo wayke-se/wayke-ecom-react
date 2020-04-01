@@ -1,7 +1,7 @@
 {
   "name": "@wayke-se/ecom-react",
-  "version": "2.0.1",
-  "description": "React components for wayke ecom.",
+  "version": "2.1.0",
+  "description": "React components for Wayke ecom",
   "main": "src/index.tsx",
   "typings": "src/index.d.ts",
   "scripts": {
@@ -25,7 +25,7 @@
     "ecom",
     "react"
   ],
-  "author": "Robin Sveningson",
+  "author": "Björn Wikström, Robin Sveningson",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/wayke-se/wayke-ecom-react/issues"
@@ -38,7 +38,7 @@
     "react": "^16.8.0"
   },
   "dependencies": {
-    "@wayke-se/ecom": "^2.0.0",
+    "@wayke-se/ecom": "^2.1.0",
     "marked": "^0.8.1"
   },
   "devDependencies": {

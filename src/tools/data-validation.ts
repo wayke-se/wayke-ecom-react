@@ -4,6 +4,7 @@ import {
     DrivingDistance,
     IOrderOptionsResponse,
     IPaymentLookupResponse,
+    DeliveryType,
 } from "@wayke-se/ecom";
 import {
     ITradeInCarData,
@@ -11,6 +12,7 @@ import {
     IInsuranceData,
     ICustomerObject,
     IEcomData,
+    IDeliveryMethodData,
 } from "../types";
 
 import {
@@ -45,6 +47,11 @@ export const validateEcomData = (
     );
     const isValidInsurance = validateInsurance(data.insurance);
 
+    const isValidDeliveryType = validateDeliveryType(
+        orderOptions,
+        data.delivery
+    );
+
     const customerObject = createCustomerObject(data.customer, addressLookup);
     const isValidCustomer = validateCustomerObject(customerObject);
 
@@ -60,6 +67,7 @@ export const validateEcomData = (
     return (
         isValidTradeIn &&
         isValidPayment &&
+        isValidDeliveryType &&
         isValidInsurance &&
         isValidCustomer &&
         hasAcceptedConditions &&
@@ -78,6 +86,19 @@ export const validateTradeIn = (data: ITradeInCarData) => {
     );
 
     return isValidMilage && isValidRegistrationNumber;
+};
+
+export const validateDeliveryType = (
+    options: IOrderOptionsResponse,
+    delivery: IDeliveryMethodData
+) => {
+    const deliveryOptions = options.getDeliveryOptions() || [];
+    const validDeliveryTypes = deliveryOptions.map(x => x.type);
+
+    return (
+        validDeliveryTypes.includes(delivery.type) ||
+        delivery.type === DeliveryType.None
+    );
 };
 
 export const validatePayment = (

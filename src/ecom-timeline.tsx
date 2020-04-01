@@ -21,6 +21,10 @@ const getLabel = (step: EcomStep): string => {
             return "Försäkring";
         case EcomStep.CUSTOMER_INFORMATION_INITIAL:
             return "Uppgifter";
+        case EcomStep.DELIVERY_METHOD:
+            return "Leverans";
+        case EcomStep.FINAL_SUMMARY:
+            return "Sammanställning";
         case EcomStep.FINAL_CONFIRMATION:
             return "Bekräftelse";
         default:

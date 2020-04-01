@@ -1,7 +1,11 @@
-import EcomStep from "./constants/ecom-step";
+import {
+    PaymentType,
+    IOrderOptionsResponse,
+    DeliveryType,
+} from "@wayke-se/ecom";
 
+import EcomStep from "./constants/ecom-step";
 import { IEcomData } from "./types";
-import { PaymentType, IOrderOptionsResponse } from "@wayke-se/ecom";
 
 export const getInitialStep = (options: IOrderOptionsResponse): EcomStep => {
     return options.allowsTradeIn()
@@ -9,6 +13,7 @@ export const getInitialStep = (options: IOrderOptionsResponse): EcomStep => {
         : EcomStep.PAYMENT_METHOD_CHOOSER;
 };
 
+const emptyList = [];
 export const getPrimarySteps = (options: IOrderOptionsResponse): EcomStep[] => {
     const result = [];
 
@@ -22,10 +27,19 @@ export const getPrimarySteps = (options: IOrderOptionsResponse): EcomStep[] => {
         result.push(EcomStep.INSURANCE_INFORMATION_DEFINITION);
     }
 
-    result.push(
-        EcomStep.CUSTOMER_INFORMATION_INITIAL,
-        EcomStep.FINAL_CONFIRMATION
-    );
+    result.push(EcomStep.CUSTOMER_INFORMATION_INITIAL);
+
+    const deliveryOptions = options.getDeliveryOptions() || emptyList;
+    if (
+        deliveryOptions.length > 1 ||
+        (deliveryOptions.length === 1 &&
+            deliveryOptions[0].type !== DeliveryType.Pickup)
+    ) {
+        result.push(EcomStep.DELIVERY_METHOD);
+    }
+
+    result.push(EcomStep.FINAL_SUMMARY);
+    result.push(EcomStep.FINAL_CONFIRMATION);
 
     return result;
 };
@@ -89,5 +103,20 @@ export const getAllTransitions = () => ({
         EcomStep.CUSTOMER_INFORMATION_INITIAL,
     [EcomStep.CUSTOMER_INFORMATION_INITIAL]: () =>
         EcomStep.CUSTOMER_INFORMATION_DETAILS,
-    [EcomStep.CUSTOMER_INFORMATION_DETAILS]: () => EcomStep.FINAL_CONFIRMATION,
+    [EcomStep.CUSTOMER_INFORMATION_DETAILS]: (
+        data: IEcomData,
+        options: IOrderOptionsResponse
+    ) => {
+        const deliveryOptions = options.getDeliveryOptions() || emptyList;
+        if (
+            deliveryOptions.length === 1 &&
+            deliveryOptions[0].type === DeliveryType.Pickup
+        ) {
+            return EcomStep.FINAL_SUMMARY;
+        }
+
+        return EcomStep.DELIVERY_METHOD;
+    },
+    [EcomStep.DELIVERY_METHOD]: () => EcomStep.FINAL_SUMMARY,
+    [EcomStep.FINAL_SUMMARY]: () => EcomStep.FINAL_CONFIRMATION,
 });

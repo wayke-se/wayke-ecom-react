@@ -12,6 +12,7 @@ import {
 import { getRetailerInformation } from "../utils/retailer";
 import { getVehicleDescription, getVehicleTitle } from "../utils/trade-in-car";
 
+import DeliveryInformation from "./delivery-information";
 import ProductItem from "./product-item";
 
 interface IOrderSummaryProps
@@ -183,6 +184,8 @@ export default (props: IOrderSummaryProps) => {
                     {items}
                 </div>
             </div>
+
+            <DeliveryInformation {...props} />
 
             {tradeInItem}
         </React.Fragment>
