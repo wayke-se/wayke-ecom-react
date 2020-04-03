@@ -17,7 +17,8 @@ module.exports = {
         "react"
     ],
     "ignorePatterns": [
-        "src/**/*.spec.ts"
+        "src/**/*.spec.ts",
+        "src/**/*.spec.tsx"
     ],
     "rules": {
         "semi": "error",

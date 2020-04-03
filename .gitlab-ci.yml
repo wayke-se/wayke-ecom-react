@@ -1,0 +1,12 @@
+stages:
+    - test
+
+  test:
+    stage: test
+    image: node:10
+    script:
+      - npm ci
+      - npm run lint
+      - npm run type-check
+      - npm run build:tsc
+      - npm test

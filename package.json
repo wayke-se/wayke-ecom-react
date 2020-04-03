@@ -3,6 +3,7 @@
   "version": "2.0.0",
   "description": "React components for wayke ecom.",
   "main": "src/index.tsx",
+  "typings": "src/index.d.ts",
   "scripts": {
     "build": "pika build",
     "prebuild": "npm run clean",
@@ -11,7 +12,8 @@
     "clean": "rimraf ./dist ./pkg",
     "lint": "eslint -c .eslintrc.js --ext .ts,.tsx 'src/**/*.{ts,tsx}'",
     "prettify": "prettier --write 'src/**/*.{ts,tsx}'",
-    "prepare": "npm run prettify && npm run type-check && npm run lint",
+    "prepare": "npm run prettify && npm run type-check && npm run lint && npm run test",
+    "test": "jest --verbose",
     "type-check": "tsc --noEmit --skipLibCheck"
   },
   "repository": {
@@ -29,11 +31,15 @@
     "url": "https://github.com/wayke-se/wayke-ecom-react/issues"
   },
   "homepage": "https://github.com/wayke-se/wayke-ecom-react#readme",
+  "engines": {
+    "node": ">= 10.0.0"
+  },
   "peerDependencies": {
     "react": "^16.8.0"
   },
-  "engines": {
-    "node": ">= 10.0.0"
+  "dependencies": {
+    "@wayke-se/ecom": "^2.0.0",
+    "marked": "^0.8.1"
   },
   "devDependencies": {
     "@pika/pack": "^0.5.0",
@@ -42,22 +48,38 @@
     "@pika/plugin-build-web": "^0.9.2",
     "@pika/plugin-copy-assets": "^0.9.2",
     "@pika/plugin-ts-standard-pkg": "^0.9.2",
+    "@types/jest": "^25.1.5",
     "@types/node": "^13.9.2",
     "@types/react": "^16.9.23",
     "@typescript-eslint/eslint-plugin": "^2.25.0",
     "@typescript-eslint/parser": "^2.25.0",
+    "autofixture": "^1.1.0",
     "eslint": "^6.8.0",
     "eslint-config-prettier": "^6.10.1",
     "eslint-plugin-import": "^2.20.1",
     "eslint-plugin-prettier": "^3.1.2",
     "eslint-plugin-react": "^7.19.0",
+    "jest": "^25.2.6",
     "prettier": "^1.19.1",
+    "react": "^16.13.1",
+    "react-test-renderer": "^16.13.1",
     "rimraf": "^3.0.2",
+    "ts-jest": "^25.3.0",
     "typescript": "^3.8.3"
   },
-  "dependencies": {
-    "@wayke-se/ecom": "^2.0.0",
-    "marked": "^0.8.1"
+  "jest": {
+    "moduleFileExtensions": [
+      "js",
+      "ts",
+      "tsx"
+    ],
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "testMatch": [
+      "<rootDir>/src/**/*.spec.ts",
+      "<rootDir>/src/**/*.spec.tsx"
+    ]
   },
   "@pika/pack": {
     "pipeline": [
