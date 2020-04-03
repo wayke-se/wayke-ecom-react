@@ -1,3 +1,5 @@
+[![build status](https://api.travis-ci.org/wayke-se/wayke-ecom-react.svg?branch=master)](https://api.travis-ci.org/wayke-se/wayke-ecom-react.svg?branch=master)
+
 # React components for Wayke's e-commerce flow
 This project contains react components that can be integrated on a website in order to add the Wayke e-commerce flow, which is a modal that allows the user to go through the different steps of the e-commerce process.
 
