@@ -87,8 +87,10 @@ export default (props: IOrderSummaryProps) => {
         switch (props.data.tradeInCar.condition) {
             case VehicleCondition.Good:
                 condition = "bra skick";
+                break;
             case VehicleCondition.Ok:
                 condition = "helt okej skick";
+                break;
         }
 
         tradeInItem = (
