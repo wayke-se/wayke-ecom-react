@@ -62,6 +62,10 @@ export default ({
         deliveryOption
     );
 
+    const hasUnitPrice =
+        typeof deliveryOption.unitPrice === "number" &&
+        deliveryOption.unitPrice > 0;
+
     return (
         <li className="option-list-item">
             <button
@@ -91,7 +95,7 @@ export default ({
                                     </span>
                                 </>
                             )}
-                            {!totalDeliveryCost && deliveryOption.unitPrice && (
+                            {!totalDeliveryCost && hasUnitPrice && (
                                 <>
                                     Startkostnad:{" "}
                                     {formatPrice(deliveryOption.startupCost)} kr{" "}
@@ -99,7 +103,7 @@ export default ({
                                     {deliveryOption.unit}
                                 </>
                             )}
-                            {!deliveryOption.unitPrice && (
+                            {!hasUnitPrice && (
                                 <>
                                     {formatPrice(deliveryOption.startupCost)} kr
                                 </>

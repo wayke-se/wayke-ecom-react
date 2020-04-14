@@ -39,6 +39,10 @@ export default (props: IDeliveryInfoType) => {
         deliveryOption
     );
 
+    const hasUnitPrice =
+        typeof deliveryOption.unitPrice === "number" &&
+        deliveryOption.unitPrice > 0;
+
     return (
         <div className="repeat-m">
             <div data-ecom-productcard="">
@@ -68,7 +72,7 @@ export default (props: IDeliveryInfoType) => {
                                     </span>
                                 </>
                             )}
-                            {!totalDeliveryCost && deliveryOption.unitPrice && (
+                            {!totalDeliveryCost && hasUnitPrice && (
                                 <>
                                     Startkostnad:{" "}
                                     {formatPrice(deliveryOption.startupCost)} kr
@@ -76,10 +80,9 @@ export default (props: IDeliveryInfoType) => {
                                     {deliveryOption.unit}
                                 </>
                             )}
-                            {!deliveryOption.unitPrice &&
+                            {!hasUnitPrice &&
                                 deliveryOption.startupCost > 0 && (
                                     <>
-                                        Startkostnad:{" "}
                                         {formatPrice(
                                             deliveryOption.startupCost
                                         )}{" "}
