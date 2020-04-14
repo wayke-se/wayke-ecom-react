@@ -4,7 +4,6 @@ import {
     customers,
     IAddress,
     PaymentType,
-    DeliveryType,
 } from "@wayke-se/ecom";
 import { ICreateOrderSdkData } from "../types";
 import CustomerInformationInputType from "../constants/customer-information-input-type";
@@ -103,7 +102,7 @@ export const createOrder = (
         .forVehicle(vehicleId)
         .withCustomer(customer)
         .withPayment(payment)
-        .withDeliveryType(DeliveryType.Pickup);
+        .withDeliveryType(ecomData.delivery.type);
 
     if (insurance) {
         createRequestBuilder.withInsurance(insurance);

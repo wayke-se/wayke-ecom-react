@@ -2,7 +2,9 @@ import React from "react";
 
 import CustomerInformationDetails from "./steps/customer-information-details";
 import CustomerInformationInitial from "./steps/customer-information-initial";
+import DeliveryMethodChooser from "./steps/delivery-method-chooser";
 import FinalConfirmation from "./steps/final-confirmation";
+import FinalSummary from "./steps/final-summary";
 import InsuranceAlternativeChooser from "./steps/insurance-alternative-chooser";
 import InsuranceInformationDefinition from "./steps/insurance-information-definition";
 import PaymentFinancingDetails from "./steps/payment-financing-details";
@@ -67,6 +69,12 @@ export default (props: AllProps) => {
 
         case EcomStep.CUSTOMER_INFORMATION_DETAILS:
             return <CustomerInformationDetails {...props} />;
+
+        case EcomStep.DELIVERY_METHOD:
+            return <DeliveryMethodChooser {...props} />;
+
+        case EcomStep.FINAL_SUMMARY:
+            return <FinalSummary {...props} />;
 
         case EcomStep.FINAL_CONFIRMATION:
             return <FinalConfirmation {...props} />;

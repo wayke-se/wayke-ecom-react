@@ -1,4 +1,5 @@
 import React from "react";
+import { DeliveryType } from "@wayke-se/ecom";
 
 import EcomContext from "./ecom-context";
 import { IEcomExternalProps, IEcomData } from "./types";
@@ -23,6 +24,9 @@ class EcomStore extends React.Component<IEcomExternalProps, IEcomData> {
                 city: "",
                 email: "",
                 phone: "",
+            },
+            delivery: {
+                type: DeliveryType.None,
             },
             insurance: {
                 personalNumber: "",
@@ -51,6 +55,10 @@ class EcomStore extends React.Component<IEcomExternalProps, IEcomData> {
                     city: false,
                     email: false,
                     phone: false,
+                },
+
+                delivery: {
+                    type: false,
                 },
             },
             payment: {

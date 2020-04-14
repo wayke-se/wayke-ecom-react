@@ -11,6 +11,7 @@ import {
     PaymentType,
     IPaymentLookupResponse,
     VehicleCondition,
+    DeliveryType,
 } from "@wayke-se/ecom";
 
 export interface IVehicle {
@@ -79,10 +80,15 @@ export interface IEcomStore {
 
 export interface IEcomData {
     customer: ICustomerData;
+    delivery: IDeliveryMethodData;
     insurance: IInsuranceData;
     interact: IInteractData;
     payment: IPaymentData;
     tradeInCar: ITradeInCarData;
+}
+
+export interface IDeliveryMethodData {
+    type: DeliveryType;
 }
 
 export interface ITradeInCarData {
@@ -157,6 +163,10 @@ export interface IInteractData {
         city: boolean;
         email: boolean;
         phone: boolean;
+    };
+
+    delivery: {
+        type: boolean;
     };
 }
 

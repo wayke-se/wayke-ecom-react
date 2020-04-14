@@ -1,4 +1,5 @@
 import React from "react";
+import { IOrderOptionsResponse } from "@wayke-se/ecom";
 
 import EcomStep from "./constants/ecom-step";
 import UserEvent from "./constants/user-event";
@@ -15,7 +16,6 @@ import {
     IEcomStore,
     IEcomData,
 } from "./types";
-import { IOrderOptionsResponse } from "@wayke-se/ecom";
 
 interface IEcomLifecycleProps
     extends IEcomExternalProps,
