@@ -1,6 +1,6 @@
 {
   "name": "@wayke-se/ecom-react",
-  "version": "2.1.1",
+  "version": "2.2.0",
   "description": "React components for Wayke ecom",
   "main": "src/index.tsx",
   "typings": "src/index.d.ts",
@@ -38,7 +38,7 @@
     "react": "^16.8.0"
   },
   "dependencies": {
-    "@wayke-se/ecom": "^2.1.0",
+    "@wayke-se/ecom": "^2.2.0",
     "marked": "^0.8.1"
   },
   "devDependencies": {

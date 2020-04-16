@@ -16,10 +16,15 @@ config.bind({
     api: {
         address: [E-COMMERCE API URL],
     },
+    /** Specifying an origin is optional **/
+    origin: {
+        topic: [E-COMMERCE-TOPIC],
+        channel: [E-COMMERCE-CHANNEL],
+    },
 });
 ```
 
-See https://github.com/wayke-se/wayke-ecom-js for more info about for instance the API address.
+See https://github.com/wayke-se/wayke-ecom-js for more info about for instance the API address, and configuration for order origination.
 
 ## Usage
 
