@@ -1,6 +1,7 @@
 import CustomerInformationInputType from "./constants/customer-information-input-type";
 import StoreAction from "./constants/store-action";
 import UserEvent from "./constants/user-event";
+import OverlayType from "./constants/overlay-type";
 
 import {
     IInsuranceOptionsResponse,
@@ -66,6 +67,7 @@ export interface IEcomLifecycle {
     onShowTradeInCarDefinition: () => void;
     onShowPaymentMethodChooser: () => void;
     onIncompleteUserEvent: (userEvent: UserEvent) => void;
+    onDisplayOverlay: (overlayType: OverlayType) => void;
 }
 
 export interface IEcomStore {

@@ -27,7 +27,7 @@ export const getPrimarySteps = (options: IOrderOptionsResponse): EcomStep[] => {
         result.push(EcomStep.INSURANCE_INFORMATION_DEFINITION);
     }
 
-    result.push(EcomStep.CUSTOMER_INFORMATION_INITIAL);
+    result.push(EcomStep.BANKID_AUTHENTICATION);
 
     const deliveryOptions = options.getDeliveryOptions() || emptyList;
     if (
@@ -77,7 +77,7 @@ export const getAllTransitions = () => ({
             return EcomStep.PAYMENT_FINANCING_DETAILS;
         }
         if (!options.getInsuranceOption()) {
-            return EcomStep.CUSTOMER_INFORMATION_INITIAL;
+            return EcomStep.BANKID_AUTHENTICATION;
         }
 
         return EcomStep.INSURANCE_INFORMATION_DEFINITION;
@@ -87,7 +87,7 @@ export const getAllTransitions = () => ({
         options: IOrderOptionsResponse
     ) => {
         if (!options.getInsuranceOption()) {
-            return EcomStep.CUSTOMER_INFORMATION_INITIAL;
+            return EcomStep.BANKID_AUTHENTICATION;
         }
 
         return EcomStep.INSURANCE_INFORMATION_DEFINITION;
@@ -97,11 +97,11 @@ export const getAllTransitions = () => ({
             return EcomStep.INSURANCE_ALTERNATIVE_CHOOSER;
         }
 
-        return EcomStep.CUSTOMER_INFORMATION_INITIAL;
+        return EcomStep.BANKID_AUTHENTICATION;
     },
     [EcomStep.INSURANCE_ALTERNATIVE_CHOOSER]: () =>
-        EcomStep.CUSTOMER_INFORMATION_INITIAL,
-    [EcomStep.CUSTOMER_INFORMATION_INITIAL]: () =>
+        EcomStep.BANKID_AUTHENTICATION,
+    [EcomStep.BANKID_AUTHENTICATION]: () =>
         EcomStep.CUSTOMER_INFORMATION_DETAILS,
     [EcomStep.CUSTOMER_INFORMATION_DETAILS]: (
         data: IEcomData,

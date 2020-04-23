@@ -1,13 +1,15 @@
 import React from "react";
 
 import { IEcomLifecycle, IEcomStore, IEcomContext } from "../types";
+import OverlayType from "../constants/overlay-type";
 
-export interface IBankIdAuthenticationInitialProps
+interface IBankIdAuthenticationProps
     extends IEcomContext,
         IEcomStore,
         IEcomLifecycle {}
 
-export default (props: IBankIdAuthenticationInitialProps) => {
+export default (props: IBankIdAuthenticationProps) => {
+    const { onDisplayOverlay } = props;
     return (
         <div data-ecom-page="">
             <section className="page-section">
@@ -17,7 +19,10 @@ export default (props: IBankIdAuthenticationInitialProps) => {
                 </div>
             </section>
             <section className="page-section">
-                <button data-ecom-button="full-width">
+                <button
+                    data-ecom-button="full-width"
+                    onClick={() => onDisplayOverlay(OverlayType.BANK_ID)}
+                >
                     <div className="button-section">
                         <svg
                             xmlns="http://www.w3.org/2000/svg"

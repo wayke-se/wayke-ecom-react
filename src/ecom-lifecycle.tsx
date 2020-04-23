@@ -3,12 +3,14 @@ import { IOrderOptionsResponse } from "@wayke-se/ecom";
 
 import EcomStep from "./constants/ecom-step";
 import UserEvent from "./constants/user-event";
+import OverlayType from "./constants/overlay-type";
 import { getAllTransitions, getInitialStep } from "./ecom-step-transitions";
 
 import EcomHeader from "./ecom-header";
 import EcomStepContent from "./ecom-step-content";
 import EcomCart from "./ecom-cart";
 import EcomTimeline from "./ecom-timeline";
+import EcomOverlayContent from "./ecom-overlay-content";
 
 import {
     IEcomExternalProps,
@@ -27,6 +29,8 @@ interface IState {
     stepHistory: EcomStep[];
     isBackwardsStepForbidden: boolean;
     hasNewStep: boolean;
+    displayOverlay: boolean;
+    overlayType: OverlayType;
 }
 
 const getNextStep = (
@@ -66,6 +70,8 @@ class EcomLifecycle extends React.Component<IEcomLifecycleProps, IState> {
         this.handleIncompleteUserEvent = this.handleIncompleteUserEvent.bind(
             this
         );
+        this.onDisplayOverlay = this.onDisplayOverlay.bind(this);
+        this.onHideOverlay = this.onHideOverlay.bind(this);
 
         this.frameBodyRef = React.createRef();
         this.rootRef = React.createRef();
@@ -75,6 +81,8 @@ class EcomLifecycle extends React.Component<IEcomLifecycleProps, IState> {
             stepHistory: [],
             isBackwardsStepForbidden: false,
             hasNewStep: false,
+            displayOverlay: false,
+            overlayType: undefined,
         };
     }
 
@@ -179,6 +187,15 @@ class EcomLifecycle extends React.Component<IEcomLifecycleProps, IState> {
         }
     }
 
+    onDisplayOverlay(overlayType: OverlayType) {
+        this.setState({ overlayType });
+        this.setState({ displayOverlay: true });
+    }
+
+    onHideOverlay() {
+        this.setState({ displayOverlay: false });
+    }
+
     render() {
         const canPressBackButton =
             this.state.stepHistory.length > 1 &&
@@ -186,7 +203,7 @@ class EcomLifecycle extends React.Component<IEcomLifecycleProps, IState> {
         const showCart = shouldShowCart(this.state.step);
 
         const onShowCustomerInformationInitial = () =>
-            this.handleSpecificStepClick(EcomStep.CUSTOMER_INFORMATION_INITIAL);
+            this.handleSpecificStepClick(EcomStep.BANKID_AUTHENTICATION);
 
         const onShowInsuranceInformationDefinition = () =>
             this.handleSpecificStepClick(
@@ -204,62 +221,80 @@ class EcomLifecycle extends React.Component<IEcomLifecycleProps, IState> {
                     <div className="modal-center">
                         <div className="modal-dialog">
                             <div className="modal-dialog-main">
-                                <div data-ecom-frame="">
-                                    <div
-                                        className="frame-body"
-                                        ref={this.frameBodyRef}
-                                    >
-                                        <EcomHeader
-                                            {...this.props}
-                                            step={this.state.step}
-                                            canPressBackButton={
-                                                canPressBackButton
-                                            }
-                                            onPreviousStepClick={
-                                                this.handlePreviousStepClick
-                                            }
-                                            onIncompleteUserEvent={
-                                                this.handleIncompleteUserEvent
-                                            }
-                                        />
-
-                                        <EcomTimeline
-                                            currentStep={this.state.step}
-                                            options={this.props.orderOptions}
-                                        />
-
-                                        <div data-ecom-page="">
-                                            <EcomStepContent
-                                                step={this.state.step}
+                                {!this.state.displayOverlay && (
+                                    <div data-ecom-frame="">
+                                        <div
+                                            className="frame-body"
+                                            ref={this.frameBodyRef}
+                                        >
+                                            <EcomHeader
                                                 {...this.props}
-                                                onProceedToNextStep={
-                                                    this.handleProceedToNextStep
+                                                step={this.state.step}
+                                                canPressBackButton={
+                                                    canPressBackButton
                                                 }
                                                 onPreviousStepClick={
                                                     this.handlePreviousStepClick
-                                                }
-                                                onShowCustomerInformationInitial={
-                                                    onShowCustomerInformationInitial
-                                                }
-                                                onShowInsuranceInformationDefinition={
-                                                    onShowInsuranceInformationDefinition
-                                                }
-                                                onShowTradeInCarDefinition={
-                                                    onShowTradeInCarDefinition
-                                                }
-                                                onShowPaymentMethodChooser={
-                                                    onShowPaymentMethodChooser
                                                 }
                                                 onIncompleteUserEvent={
                                                     this
                                                         .handleIncompleteUserEvent
                                                 }
                                             />
-                                        </div>
-                                    </div>
 
-                                    {showCart && <EcomCart {...this.props} />}
-                                </div>
+                                            <EcomTimeline
+                                                currentStep={this.state.step}
+                                                options={
+                                                    this.props.orderOptions
+                                                }
+                                            />
+
+                                            <div data-ecom-page="">
+                                                <EcomStepContent
+                                                    step={this.state.step}
+                                                    {...this.props}
+                                                    onProceedToNextStep={
+                                                        this
+                                                            .handleProceedToNextStep
+                                                    }
+                                                    onPreviousStepClick={
+                                                        this
+                                                            .handlePreviousStepClick
+                                                    }
+                                                    onShowCustomerInformationInitial={
+                                                        onShowCustomerInformationInitial
+                                                    }
+                                                    onShowInsuranceInformationDefinition={
+                                                        onShowInsuranceInformationDefinition
+                                                    }
+                                                    onShowTradeInCarDefinition={
+                                                        onShowTradeInCarDefinition
+                                                    }
+                                                    onShowPaymentMethodChooser={
+                                                        onShowPaymentMethodChooser
+                                                    }
+                                                    onIncompleteUserEvent={
+                                                        this
+                                                            .handleIncompleteUserEvent
+                                                    }
+                                                    onDisplayOverlay={
+                                                        this.onDisplayOverlay
+                                                    }
+                                                />
+                                            </div>
+                                        </div>
+
+                                        {showCart && (
+                                            <EcomCart {...this.props} />
+                                        )}
+                                    </div>
+                                )}
+                                {this.state.displayOverlay && (
+                                    <EcomOverlayContent
+                                        onHideOverlay={this.onHideOverlay}
+                                        type={this.state.overlayType}
+                                    />
+                                )}
                             </div>
                         </div>
                     </div>
