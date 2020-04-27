@@ -1,6 +1,7 @@
 import React from "react";
 
 import { IEcomContext } from "./../types";
+import { isMobile } from "../utils/device";
 
 interface IBankIdProps extends IEcomContext {
     onCancel: () => void;
@@ -21,7 +22,11 @@ const QrCode = (props: { qrCodeAsBase64: string }) => {
 export default (props: IBankIdProps) => {
     const { onCancel, bankIdAuth, onBankIdQrCodeAuth } = props;
 
-    React.useEffect(() => onBankIdQrCodeAuth(() => {}), []);
+    React.useEffect(() => {
+        if (!isMobile()) {
+            onBankIdQrCodeAuth(() => {});
+        }
+    }, []);
 
     return (
         <div data-ecom-frame="">
