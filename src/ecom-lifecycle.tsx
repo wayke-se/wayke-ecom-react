@@ -194,6 +194,7 @@ class EcomLifecycle extends React.Component<IEcomLifecycleProps, IState> {
 
     onHideOverlay() {
         this.setState({ displayOverlay: false });
+        this.setState({ overlayType: undefined });
     }
 
     render() {
@@ -293,6 +294,7 @@ class EcomLifecycle extends React.Component<IEcomLifecycleProps, IState> {
                                     <EcomOverlayContent
                                         onHideOverlay={this.onHideOverlay}
                                         type={this.state.overlayType}
+                                        {...this.props}
                                     />
                                 )}
                             </div>

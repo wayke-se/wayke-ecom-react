@@ -7,6 +7,8 @@ import {
     IVehicleLookupResponse,
     IAddressLookupResponse,
     IPaymentLookupResponse,
+    IBankIdAuthResponse,
+    AuthMethod,
 } from "@wayke-se/ecom";
 
 import EcomLifecycle from "./ecom-lifecycle";
@@ -17,6 +19,7 @@ import {
     makeAddressLookupRequest,
     makeCreateOrderRequest,
     makePaymentLookupRequest,
+    makeBankIdAuthRequest,
 } from "./tools/request-service";
 
 export interface IEcomContextProps extends IEcomExternalProps, IEcomStore {}
@@ -29,6 +32,7 @@ interface IState {
     vehicleLookup: IVehicleLookupResponse | null;
     addressLookup: IAddressLookupResponse | null;
     paymentLookup: IPaymentLookupResponse | null;
+    bankIdAuth: IBankIdAuthResponse | null;
 }
 
 class EcomContext extends React.Component<IEcomContextProps, IState> {
@@ -48,6 +52,7 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
             this
         );
         this.handleCreateOrder = this.handleCreateOrder.bind(this);
+        this.handleBankIdQrCodeAuth = this.handleBankIdQrCodeAuth.bind(this);
 
         this.makeRequest = this.makeRequest.bind(this);
         this.saveResponse = this.saveResponse.bind(this);
@@ -60,6 +65,7 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
             vehicleLookup: null,
             addressLookup: null,
             paymentLookup: null,
+            bankIdAuth: null,
         };
     }
 
@@ -202,6 +208,27 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
         this.makeRequest(request);
     }
 
+    handleBankIdQrCodeAuth(callback: (response: IBankIdAuthResponse) => void) {
+        const data = {
+            method: AuthMethod.QrCode,
+            ipAddress: "98.128.167.180",
+        };
+        const request = () => {
+            makeBankIdAuthRequest(data, (response: IBankIdAuthResponse) => {
+                this.saveResponse(
+                    {
+                        bankIdAuth: response,
+                    },
+                    () => {
+                        callback(response);
+                    }
+                );
+            });
+        };
+
+        this.makeRequest(request);
+    }
+
     makeRequest(callback: () => void) {
         this.setState(
             {
@@ -229,6 +256,7 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
                 onFetchAddressInformation={this.handleFetchAddressInformation}
                 onFetchPaymentInformation={this.handleFetchPaymentInformation}
                 onCreateOrder={this.handleCreateOrder}
+                onBankIdQrCodeAuth={this.handleBankIdQrCodeAuth}
                 {...this.state}
                 {...this.props}
             />

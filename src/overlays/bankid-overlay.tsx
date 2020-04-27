@@ -1,11 +1,28 @@
 import React from "react";
 
-interface IBankIdProps {
+import { IEcomContext } from "./../types";
+
+interface IBankIdProps extends IEcomContext {
     onCancel: () => void;
 }
 
+const QrCode = (props: { qrCodeAsBase64: string }) => {
+    const { qrCodeAsBase64 } = props;
+
+    const [qrCodeSrc, setQrCodeSrc] = React.useState("");
+    React.useEffect(() => {
+        const src = `data:image/png;base64, ${qrCodeAsBase64}`;
+        setQrCodeSrc(src);
+    }, [qrCodeAsBase64]);
+
+    return <img src={qrCodeSrc} alt="QR code" style={{ width: "128px" }} />;
+};
+
 export default (props: IBankIdProps) => {
-    const { onCancel } = props;
+    const { onCancel, bankIdAuth, onBankIdQrCodeAuth } = props;
+
+    React.useEffect(() => onBankIdQrCodeAuth(() => {}), []);
+
     return (
         <div data-ecom-frame="">
             <div className="frame-body">
@@ -20,11 +37,9 @@ export default (props: IBankIdProps) => {
                         </div>
                     </section>
                     <section className="page-section">
-                        <img
-                            src="/assets/toolkit/images/sample-qr.png"
-                            alt="QR code"
-                            style={{ width: "128px" }}
-                        />
+                        {bankIdAuth?.isQrCode() && (
+                            <QrCode qrCodeAsBase64={bankIdAuth.getQrCode()} />
+                        )}
                     </section>
                     <section className="page-section">
                         <div className="repeat-m-half">

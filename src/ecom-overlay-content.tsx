@@ -1,14 +1,16 @@
 import React from "react";
 
+import { IEcomContext } from "./types";
+
 import OverlayType from "./constants/overlay-type";
 import BankIdOverlay from "./overlays/bankid-overlay";
 
-interface IOverlayProps {
+interface IOverlayProps extends IEcomContext {
     onHideOverlay: () => void;
     type: OverlayType;
 }
 
-const MissingOverlay = (props: IOverlayProps) => (
+const MissingOverlay = (props: { onHideOverlay: () => void }) => (
     <button data-ecom-button="full-width" onClick={props.onHideOverlay}>
         Tillbaka
     </button>
@@ -19,8 +21,8 @@ export default (props: IOverlayProps) => {
 
     switch (props.type) {
         case OverlayType.BANK_ID:
-            return <BankIdOverlay onCancel={onHideOverlay} />;
+            return <BankIdOverlay onCancel={onHideOverlay} {...props} />;
         default:
-            return <MissingOverlay {...props} />;
+            return <MissingOverlay onHideOverlay={props.onHideOverlay} />;
     }
 };

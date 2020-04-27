@@ -39,7 +39,7 @@
     "react": "^16.8.0"
   },
   "dependencies": {
-    "@wayke-se/ecom": "^2.2.0",
+    "@wayke-se/ecom": "file:../wayke-ecom-js/pkg",
     "marked": "^0.8.1",
     "react-dom": "^16.13.1"
   },
