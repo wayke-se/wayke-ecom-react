@@ -1,6 +1,6 @@
 import { IIpLookupResponse } from "../types";
 
-export const getIp = (): Promise<IIpLookupResponse> => {
+const lookupIpAddress = (): Promise<IIpLookupResponse> => {
     const options = {
         method: "GET",
         headers: {
@@ -15,3 +15,5 @@ export const getIp = (): Promise<IIpLookupResponse> => {
         }
     );
 };
+
+export default lookupIpAddress;

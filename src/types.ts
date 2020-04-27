@@ -46,7 +46,7 @@ export interface IEcomContext {
     addressLookup: IAddressLookupResponse;
     paymentLookup: IPaymentLookupResponse;
     bankIdAuth: IBankIdAuthResponse;
-    ipAddress: string;
+    hasIpAddress: boolean;
 
     onFetchInsuranceOptions: (
         callback: (isSuccessful: boolean) => void

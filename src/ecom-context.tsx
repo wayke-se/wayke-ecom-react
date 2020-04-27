@@ -21,7 +21,7 @@ import {
     makePaymentLookupRequest,
     makeBankIdAuthRequest,
 } from "./tools/request-service";
-import { getIp } from "./tools/ip-service";
+import lookupIpAddress from "./tools/ip-service";
 
 export interface IEcomContextProps extends IEcomExternalProps, IEcomStore {}
 
@@ -218,6 +218,7 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
             method: AuthMethod.QrCode,
             ipAddress,
         };
+
         const request = () => {
             makeBankIdAuthRequest(data, response => {
                 this.saveResponse(
@@ -235,7 +236,7 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
     }
 
     handleIpAddressLookup() {
-        getIp().then(response => {
+        lookupIpAddress().then(response => {
             const { ip } = response;
             this.saveResponse(
                 {
@@ -275,6 +276,7 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
                 onCreateOrder={this.handleCreateOrder}
                 onBankIdQrCodeAuth={this.handleBankIdQrCodeAuth}
                 onLookupIpAddress={this.handleIpAddressLookup}
+                hasIpAddress={!!this.state.ipAddress}
                 {...this.state}
                 {...this.props}
             />
