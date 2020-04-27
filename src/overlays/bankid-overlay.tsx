@@ -20,13 +20,23 @@ const QrCode = (props: { qrCodeAsBase64: string }) => {
 };
 
 export default (props: IBankIdProps) => {
-    const { onCancel, bankIdAuth, onBankIdQrCodeAuth } = props;
+    const {
+        onCancel,
+        bankIdAuth,
+        onLookupIpAddress,
+        ipAddress,
+        onBankIdQrCodeAuth,
+    } = props;
 
     React.useEffect(() => {
-        if (!isMobile()) {
+        onLookupIpAddress();
+    }, []);
+
+    React.useEffect(() => {
+        if (!!ipAddress && !isMobile()) {
             onBankIdQrCodeAuth(() => {});
         }
-    }, []);
+    }, [ipAddress]);
 
     return (
         <div data-ecom-frame="">

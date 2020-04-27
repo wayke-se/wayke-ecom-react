@@ -46,6 +46,7 @@ export interface IEcomContext {
     addressLookup: IAddressLookupResponse;
     paymentLookup: IPaymentLookupResponse;
     bankIdAuth: IBankIdAuthResponse;
+    ipAddress: string;
 
     onFetchInsuranceOptions: (
         callback: (isSuccessful: boolean) => void
@@ -63,6 +64,7 @@ export interface IEcomContext {
     onBankIdQrCodeAuth: (
         callback: (response: IBankIdAuthResponse) => void
     ) => void;
+    onLookupIpAddress: () => void;
 }
 
 export interface IEcomLifecycle {
@@ -225,4 +227,8 @@ export interface ILoanInformation {
 export interface IBankIdAuthSdkData {
     method: AuthMethod;
     ipAddress: string;
+}
+
+export interface IIpLookupResponse {
+    ip: string;
 }
