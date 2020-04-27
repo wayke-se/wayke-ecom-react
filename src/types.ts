@@ -232,3 +232,8 @@ export interface IBankIdAuthSdkData {
 export interface IIpLookupResponse {
     ip: string;
 }
+
+export interface IBankIdCollectSdkData {
+    method: AuthMethod;
+    orderRef: string;
+}

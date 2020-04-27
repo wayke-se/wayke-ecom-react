@@ -26,8 +26,8 @@ export default (props: IBankIdProps) => {
         }
     }, [hasIpAddress]);
 
-    const isQrCode = bankIdAuth?.isQrCode() || false;
-    const qrCodeAsBase64 = bankIdAuth?.getQrCode();
+    const isQrCode = !!bankIdAuth && bankIdAuth.isQrCode();
+    const qrCodeAsBase64 = !!bankIdAuth && bankIdAuth.getQrCode();
 
     return (
         <BankIdOverlay
