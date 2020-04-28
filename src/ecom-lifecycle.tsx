@@ -60,6 +60,14 @@ const shouldShowCart = (step: EcomStep) => {
 class EcomLifecycle extends React.Component<IEcomLifecycleProps, IState> {
     private frameBodyRef: React.RefObject<HTMLDivElement>;
     private rootRef: React.RefObject<HTMLDivElement>;
+    state: {
+        step: any;
+        stepHistory: any[];
+        isBackwardsStepForbidden: boolean;
+        hasNewStep: boolean;
+        displayOverlay: boolean;
+        overlayType: any;
+    };
 
     constructor(props: IEcomLifecycleProps) {
         super(props);

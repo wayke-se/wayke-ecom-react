@@ -6,6 +6,7 @@ enum RequestType {
     GET_PAYMENT_LOOKUP,
     CREATE_ORDER,
     BANK_ID_AUTH,
+    BANK_ID_COLLECT,
 }
 
 export default RequestType;

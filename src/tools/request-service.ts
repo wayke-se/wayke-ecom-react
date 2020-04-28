@@ -7,6 +7,7 @@ import {
     IAddressLookupResponse,
     IPaymentLookupResponse,
     IBankIdAuthResponse,
+    IBankIdCollectResponse,
 } from "@wayke-se/ecom";
 
 import { getOrderOptions } from "../sdk/get-order-options";
@@ -15,7 +16,8 @@ import { getInsuranceOptions } from "../sdk/get-insurance-options";
 import { getAddressLookup } from "../sdk/get-address-lookup";
 import { getPaymentLookup } from "../sdk/get-payment-lookup";
 import { createOrder } from "../sdk/create-order";
-import authWithBankId from "../sdk/bankid/auth";
+import bankIdAuth from "../sdk/bankid/auth";
+import bankIdCollect from "../sdk/bankid/collect";
 import {
     IOrderOptionsSdkData,
     IVehicleLookupSdkData,
@@ -24,6 +26,7 @@ import {
     ICreateOrderSdkData,
     IPaymentLookupSdkData,
     IBankIdAuthSdkData,
+    IBankIdCollectSdkData,
 } from "../types";
 
 const requestCache = {};
@@ -187,8 +190,23 @@ export const makeBankIdAuthRequest = (
     const requestIdentifier = null;
 
     makeRequest(
-        authWithBankId,
+        bankIdAuth,
         RequestType.BANK_ID_AUTH,
+        requestIdentifier,
+        data,
+        callback
+    );
+};
+
+export const makeBankIdCollectRequest = (
+    data: IBankIdCollectSdkData,
+    callback: (response: IBankIdCollectResponse | null) => void
+) => {
+    const requestIdentifier = null;
+
+    makeRequest(
+        bankIdCollect,
+        RequestType.BANK_ID_COLLECT,
         requestIdentifier,
         data,
         callback

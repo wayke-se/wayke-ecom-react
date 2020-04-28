@@ -6,19 +6,17 @@ interface IProps {
     onCancel: () => void;
     isQrCode: boolean;
     qrCodeAsBase64: string | undefined;
+    message: string;
 }
 
-export default ({ onCancel, isQrCode, qrCodeAsBase64 }: IProps) => (
+export default ({ onCancel, isQrCode, qrCodeAsBase64, message }: IProps) => (
     <div data-ecom-frame="">
         <div className="frame-body">
             <div data-ecom-page="justify-center" className="text-center">
                 <section className="page-section">
                     <h1 className="h6">Öppna BankID och skanna QR-koden</h1>
                     <div data-ecom-content="">
-                        <p>
-                            För att hämta dina uppgifter, starta din BankID
-                            applikation på din andra enhet.
-                        </p>
+                        <p>{message}</p>
                     </div>
                 </section>
                 <section className="page-section">
