@@ -1,10 +1,10 @@
 import {
     PaymentType,
-    IAddressLookupResponse,
     DrivingDistance,
     IOrderOptionsResponse,
     IPaymentLookupResponse,
     DeliveryType,
+    IBankIdCollectResponse,
 } from "@wayke-se/ecom";
 import {
     ITradeInCarData,
@@ -32,7 +32,7 @@ import { isResidualEnabled } from "../utils/residual";
 
 export const validateEcomData = (
     data: IEcomData,
-    addressLookup: IAddressLookupResponse,
+    bankIdCollect: IBankIdCollectResponse,
     orderOptions: IOrderOptionsResponse,
     paymentLookup: IPaymentLookupResponse | undefined
 ) => {
@@ -52,7 +52,10 @@ export const validateEcomData = (
         data.delivery
     );
 
-    const customerObject = createCustomerObject(data.customer, addressLookup);
+    const customerObject = createCustomerObject(
+        data.customer,
+        bankIdCollect.getAddress()
+    );
     const isValidCustomer = validateCustomerObject(customerObject);
 
     const hasAcceptedConditions = data.customer.hasAcceptedConditions;
@@ -185,7 +188,7 @@ export const validateCustomerObject = (customerObject: ICustomerObject) => {
     const isValidPhone = validatePhoneNumber(customerObject.phone);
 
     const isValidName = !!customerObject.name;
-    const isValidAddress = !!customerObject.address;
+    const isValidAddress = !!customerObject.street;
     const isValidCity = !!customerObject.city;
 
     const isValidZip = customerObject.isMasked

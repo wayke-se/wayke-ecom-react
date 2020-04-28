@@ -28,8 +28,8 @@ export default (props: IDeliveryInfoType) => {
 
     if (!deliveryOption) return null;
 
-    const address = props.addressLookup
-        ? props.addressLookup.getAddress()
+    const address = props.bankIdCollect.isCompleted()
+        ? props.bankIdCollect.getAddress()
         : null;
 
     const addressDistance = address !== null ? address.distance : undefined;

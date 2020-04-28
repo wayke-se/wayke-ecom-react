@@ -19,7 +19,7 @@ class EcomStore extends React.Component<IEcomExternalProps, IEcomData> {
                 inputType: null,
                 personalNumber: null,
                 name: "",
-                address: "",
+                street: "",
                 zip: "",
                 city: "",
                 email: "",
@@ -55,6 +55,7 @@ class EcomStore extends React.Component<IEcomExternalProps, IEcomData> {
                     city: false,
                     email: false,
                     phone: false,
+                    isAuthenticated: false,
                 },
 
                 delivery: {

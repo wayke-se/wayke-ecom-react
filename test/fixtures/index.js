@@ -44,7 +44,7 @@ factory.define("ICustomerData", [
     "inputType".pickFrom([CustomerInformationInputType.AUTOMATIC, CustomerInformationInputType.MANUAL]),
     "personalNumber",
     "name",
-    "address",
+    "street",
     "zip",
     "city",
     "email",

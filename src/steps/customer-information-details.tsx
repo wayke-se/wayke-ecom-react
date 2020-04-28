@@ -1,6 +1,6 @@
 import React from "react";
 
-import CustomerInformationInputType from "../constants/customer-information-input-type";
+//import CustomerInformationInputType from "../constants/customer-information-input-type";
 import StoreAction from "../constants/store-action";
 import UserEvent from "../constants/user-event";
 
@@ -34,9 +34,12 @@ const handleBlur = (
 };
 
 export default (props: ICustomerInformationDetailsProps) => {
+    const isAutomatic = true;
+    /*
     const isAutomatic =
         props.data.customer.inputType ===
         CustomerInformationInputType.AUTOMATIC;
+    */
 
     const handleContinueClick = () => {
         if (isAutomatic) {

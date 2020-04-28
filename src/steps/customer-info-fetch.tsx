@@ -3,7 +3,8 @@ import React from "react";
 import { ICustomerInformationDetailsProps } from "./customer-information-props";
 
 export default (props: ICustomerInformationDetailsProps) => {
-    const address = props.addressLookup.getAddress();
+    const personalNumber = props.bankIdCollect.getPersonalNumber();
+    const address = props.bankIdCollect.getAddress();
 
     return (
         <React.Fragment>
@@ -26,7 +27,7 @@ export default (props: ICustomerInformationDetailsProps) => {
                 </div>
                 <div className="m-t-half">
                     <i className="icon-profile m-r-half" />
-                    {props.data.customer.personalNumber}
+                    {personalNumber}
                 </div>
             </section>
 

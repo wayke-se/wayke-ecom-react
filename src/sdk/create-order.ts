@@ -57,7 +57,7 @@ export const createOrder = (
             city: ecomData.customer.city,
             name: ecomData.customer.name,
             postalCode: ecomData.customer.zip,
-            street: ecomData.customer.address,
+            street: ecomData.customer.street,
             street2: "",
         };
 

@@ -7,7 +7,7 @@ interface ICustomerInformationSummaryProps extends IEcomContext, IEcomStore {}
 export default (props: ICustomerInformationSummaryProps) => {
     const customerObject = createCustomerObject(
         props.data.customer,
-        props.addressLookup
+        props.bankIdCollect.getAddress()
     );
 
     return (
@@ -27,7 +27,7 @@ export default (props: ICustomerInformationSummaryProps) => {
                         Gatuadress
                     </div>
                 </div>
-                <div className="column">{customerObject.address}</div>
+                <div className="column">{customerObject.street}</div>
             </div>
 
             <div data-ecom-columnrow="" className="repeat-m-half">

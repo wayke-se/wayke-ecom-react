@@ -284,7 +284,6 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
     handleBankIdReset() {
         this.setState({
             bankIdAuth: null,
-            bankIdCollect: null,
         });
     }
 
