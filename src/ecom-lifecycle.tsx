@@ -301,6 +301,9 @@ class EcomLifecycle extends React.Component<IEcomLifecycleProps, IState> {
                                 {this.state.displayOverlay && (
                                     <EcomOverlayContent
                                         onHideOverlay={this.onHideOverlay}
+                                        onProceedToNextStep={
+                                            this.handleProceedToNextStep
+                                        }
                                         type={this.state.overlayType}
                                         {...this.props}
                                     />

@@ -70,6 +70,7 @@ export interface IEcomContext {
     onBankIdCollect: (
         callback: (response: IBankIdCollectResponse) => void
     ) => void;
+    onBankIdSuccess: () => void;
 }
 
 export interface IEcomLifecycle {
@@ -178,6 +179,7 @@ export interface IInteractData {
         city: boolean;
         email: boolean;
         phone: boolean;
+        isAuthenticated: boolean;
     };
 
     delivery: {

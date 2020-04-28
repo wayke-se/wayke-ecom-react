@@ -60,6 +60,7 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
         this.handleIpAddressLookup = this.handleIpAddressLookup.bind(this);
         this.handleBankIdQrCodeAuth = this.handleBankIdQrCodeAuth.bind(this);
         this.handleBankIdCollect = this.handleBankIdCollect.bind(this);
+        this.handleBankIdReset = this.handleBankIdReset.bind(this);
 
         this.makeRequest = this.makeRequest.bind(this);
         this.saveResponse = this.saveResponse.bind(this);
@@ -280,6 +281,13 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
         this.makeRequest(request);
     }
 
+    handleBankIdReset() {
+        this.setState({
+            bankIdAuth: null,
+            bankIdCollect: null,
+        });
+    }
+
     makeRequest(callback: () => void) {
         this.setState(
             {
@@ -310,6 +318,7 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
                 onLookupIpAddress={this.handleIpAddressLookup}
                 onBankIdQrCodeAuth={this.handleBankIdQrCodeAuth}
                 onBankIdCollect={this.handleBankIdCollect}
+                onBankIdSuccess={this.handleBankIdReset}
                 hasIpAddress={!!this.state.ipAddress}
                 {...this.state}
                 {...this.props}

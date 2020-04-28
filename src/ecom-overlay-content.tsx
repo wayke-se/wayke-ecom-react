@@ -1,12 +1,13 @@
 import React from "react";
 
-import { IEcomContext } from "./types";
+import { IEcomContext, IEcomStore } from "./types";
 
 import OverlayType from "./constants/overlay-type";
-import BankIdOverlay from "./overlays/bankid-overlay";
+import BankIdOverlay from "./overlays/bankid";
 
-interface IOverlayProps extends IEcomContext {
+interface IOverlayProps extends IEcomContext, IEcomStore {
     onHideOverlay: () => void;
+    onProceedToNextStep: () => void;
     type: OverlayType;
 }
 
@@ -17,11 +18,17 @@ const MissingOverlay = (props: { onHideOverlay: () => void }) => (
 );
 
 export default (props: IOverlayProps) => {
-    const { onHideOverlay } = props;
+    const { onHideOverlay, onProceedToNextStep } = props;
 
     switch (props.type) {
         case OverlayType.BANK_ID:
-            return <BankIdOverlay onCancel={onHideOverlay} {...props} />;
+            return (
+                <BankIdOverlay
+                    onCompleted={onProceedToNextStep}
+                    onCancel={onHideOverlay}
+                    {...props}
+                />
+            );
         default:
             return <MissingOverlay onHideOverlay={props.onHideOverlay} />;
     }
