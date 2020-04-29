@@ -18,6 +18,7 @@ import { getPaymentLookup } from "../sdk/get-payment-lookup";
 import { createOrder } from "../sdk/create-order";
 import bankIdAuth from "../sdk/bankid/auth";
 import bankIdCollect from "../sdk/bankid/collect";
+import bankIdCancel from "../sdk/bankid/cancel";
 import {
     IOrderOptionsSdkData,
     IVehicleLookupSdkData,
@@ -27,6 +28,7 @@ import {
     IPaymentLookupSdkData,
     IBankIdAuthSdkData,
     IBankIdCollectSdkData,
+    IBankIdCancelSdkData,
 } from "../types";
 
 const requestCache = {};
@@ -207,6 +209,21 @@ export const makeBankIdCollectRequest = (
     makeRequest(
         bankIdCollect,
         RequestType.BANK_ID_COLLECT,
+        requestIdentifier,
+        data,
+        callback
+    );
+};
+
+export const makeBankIdCancelRequest = (
+    data: IBankIdCancelSdkData,
+    callback: (response: boolean) => void
+) => {
+    const requestIdentifier = null;
+
+    makeRequest(
+        bankIdCancel,
+        RequestType.BANK_ID_CANCEL,
         requestIdentifier,
         data,
         callback

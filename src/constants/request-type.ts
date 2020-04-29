@@ -7,6 +7,7 @@ enum RequestType {
     CREATE_ORDER,
     BANK_ID_AUTH,
     BANK_ID_COLLECT,
+    BANK_ID_CANCEL,
 }
 
 export default RequestType;

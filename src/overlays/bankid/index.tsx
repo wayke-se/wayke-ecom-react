@@ -4,7 +4,6 @@ import { IEcomContext, IEcomStore } from "../../types";
 import { isMobile } from "../../utils/device";
 
 import BankIdOverlay from "./base";
-import { AuthStatus } from "@wayke-se/ecom";
 import StoreAction from "../../constants/store-action";
 
 const getDefaultMessage = () => {
@@ -12,13 +11,13 @@ const getDefaultMessage = () => {
 };
 
 interface IBankIdProps extends IEcomContext, IEcomStore {
-    onCancel: () => void;
-    onCompleted: () => void;
+    onHideOverlay: () => void;
+    onProceedToNextStep: () => void;
 }
 
 export default (props: IBankIdProps) => {
     const {
-        onCancel,
+        onHideOverlay,
         hasIpAddress,
         onLookupIpAddress,
         bankIdAuth,
@@ -26,9 +25,10 @@ export default (props: IBankIdProps) => {
         onBankIdSameDeviceAuth,
         bankIdCollect,
         onBankIdCollect,
-        onCompleted,
+        onBankIdCancel,
         dispatchStoreAction,
-        onBankIdSuccess,
+        onBankIdReset,
+        onProceedToNextStep,
     } = props;
 
     React.useEffect(() => {
@@ -59,12 +59,19 @@ export default (props: IBankIdProps) => {
     }, [bankIdAuth]);
 
     const onComplete = () => {
-        onCancel();
-        onCompleted();
-        onBankIdSuccess();
         dispatchStoreAction(StoreAction.INTERACT_UPDATE_SPECIFIC, {
             type: "customer",
             name: "isAuthenticated",
+        });
+        onBankIdReset();
+        onHideOverlay();
+        onProceedToNextStep();
+    };
+
+    const onCancel = () => {
+        onBankIdCancel(() => {
+            onBankIdReset();
+            onHideOverlay();
         });
     };
 

@@ -22,6 +22,7 @@ import {
     makePaymentLookupRequest,
     makeBankIdAuthRequest,
     makeBankIdCollectRequest,
+    makeBankIdCancelRequest,
 } from "./tools/request-service";
 import lookupIpAddress from "./tools/ip-service";
 
@@ -64,6 +65,7 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
             this
         );
         this.handleBankIdCollect = this.handleBankIdCollect.bind(this);
+        this.handleBankIdCancel = this.handleBankIdCancel.bind(this);
         this.handleBankIdReset = this.handleBankIdReset.bind(this);
 
         this.makeRequest = this.makeRequest.bind(this);
@@ -318,6 +320,24 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
         this.makeRequest(request);
     }
 
+    handleBankIdCancel(callback: (response: boolean) => void) {
+        const { bankIdAuth } = this.state;
+        const noActiveBankIdProcess = !bankIdAuth;
+        if (noActiveBankIdProcess) {
+            callback(false);
+        }
+
+        const data = {
+            orderRef: bankIdAuth.getOrderRef(),
+        };
+
+        const request = () => {
+            makeBankIdCancelRequest(data, callback);
+        };
+
+        this.makeRequest(request);
+    }
+
     handleBankIdReset() {
         this.setState({
             bankIdAuth: null,
@@ -356,7 +376,8 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
                 onBankIdQrCodeAuth={this.handleBankIdQrCodeAuth}
                 onBankIdSameDeviceAuth={this.handleBankIdSameDeviceAuth}
                 onBankIdCollect={this.handleBankIdCollect}
-                onBankIdSuccess={this.handleBankIdReset}
+                onBankIdReset={this.handleBankIdReset}
+                onBankIdCancel={this.handleBankIdCancel}
                 hasIpAddress={!!this.state.ipAddress}
                 {...this.state}
                 {...this.props}

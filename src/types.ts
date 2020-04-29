@@ -76,7 +76,8 @@ export interface IEcomContext {
     onBankIdCollect: (
         callback: (response: IBankIdCollectResponse) => void
     ) => void;
-    onBankIdSuccess: () => void;
+    onBankIdCancel: (callback: (response: boolean) => void) => void;
+    onBankIdReset: () => void;
 }
 
 export interface IEcomLifecycle {
@@ -248,5 +249,9 @@ export interface IIpLookupResponse {
 
 export interface IBankIdCollectSdkData {
     method: AuthMethod;
+    orderRef: string;
+}
+
+export interface IBankIdCancelSdkData {
     orderRef: string;
 }

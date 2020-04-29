@@ -24,8 +24,8 @@ export default (props: IOverlayProps) => {
         case OverlayType.BANK_ID:
             return (
                 <BankIdOverlay
-                    onCompleted={onProceedToNextStep}
-                    onCancel={onHideOverlay}
+                    onProceedToNextStep={onProceedToNextStep}
+                    onHideOverlay={onHideOverlay}
                     {...props}
                 />
             );
