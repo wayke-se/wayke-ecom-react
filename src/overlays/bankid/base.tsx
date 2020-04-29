@@ -1,15 +1,29 @@
 import React from "react";
 
 import QrCode from "./qr-code";
+import LaunchButton from "./launch-button";
 
 interface IProps {
     onCancel: () => void;
+    onSwitchMethod: () => void;
     isQrCode: boolean;
     qrCodeAsBase64: string | undefined;
     message: string;
+    switchMessage: string;
+    canLaunch: boolean;
+    onLaunch: () => void;
 }
 
-export default ({ onCancel, isQrCode, qrCodeAsBase64, message }: IProps) => (
+export default ({
+    onCancel,
+    onSwitchMethod,
+    isQrCode,
+    qrCodeAsBase64,
+    message,
+    switchMessage,
+    canLaunch,
+    onLaunch,
+}: IProps) => (
     <div data-ecom-frame="">
         <div className="frame-body">
             <div data-ecom-page="justify-center" className="text-center">
@@ -37,9 +51,10 @@ export default ({ onCancel, isQrCode, qrCodeAsBase64, message }: IProps) => (
                     </div>
                 </section>
                 <section className="page-section">
+                    {canLaunch && <LaunchButton onLaunch={onLaunch} />}
                     <div className="repeat-m">
-                        <button data-ecom-link="">
-                            Öppna BankID på den här enheten
+                        <button data-ecom-link="" onClick={onSwitchMethod}>
+                            {switchMessage}
                         </button>
                     </div>
                     <div className="repeat-m">
