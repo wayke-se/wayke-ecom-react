@@ -14,16 +14,16 @@ export const createOrder = (
     callback: (wasOrderCreated: boolean) => void
 ) => {
     const ecomData = data.ecomData;
-    const addressLookup = data.addressLookup;
     const orderOptions = data.orderOptions;
     const paymentLookup = data.paymentLookup;
     const vehicleId = data.vehicleId;
+    const address = data.address;
 
     const isValidRequestData = validateEcomData(
         ecomData,
-        addressLookup,
         orderOptions,
-        paymentLookup
+        paymentLookup,
+        address
     );
 
     if (!isValidRequestData) {

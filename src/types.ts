@@ -16,6 +16,7 @@ import {
     IBankIdAuthResponse,
     AuthMethod,
     IBankIdCollectResponse,
+    IAddress,
 } from "@wayke-se/ecom";
 
 export interface IVehicle {
@@ -50,6 +51,8 @@ export interface IEcomContext {
     bankIdAuth: IBankIdAuthResponse;
     bankIdCollect: IBankIdCollectResponse;
 
+    getAddress: () => IAddress;
+
     onFetchInsuranceOptions: (
         callback: (isSuccessful: boolean) => void
     ) => void;
@@ -65,6 +68,9 @@ export interface IEcomContext {
     onCreateOrder: (callback: (isSuccessful: boolean) => void) => void;
     onLookupIpAddress: () => void;
     onBankIdQrCodeAuth: (
+        callback: (response: IBankIdAuthResponse) => void
+    ) => void;
+    onBankIdSameDeviceAuth: (
         callback: (response: IBankIdAuthResponse) => void
     ) => void;
     onBankIdCollect: (
@@ -208,9 +214,9 @@ export interface IAddressLookupSdkData {
 export interface ICreateOrderSdkData {
     vehicleId: string;
     ecomData: IEcomData;
-    addressLookup: IAddressLookupResponse;
     orderOptions: IOrderOptionsResponse;
     paymentLookup: IPaymentLookupResponse | undefined;
+    address: IAddress;
 }
 
 export interface IPaymentLookupSdkData {

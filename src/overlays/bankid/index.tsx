@@ -23,6 +23,7 @@ export default (props: IBankIdProps) => {
         onLookupIpAddress,
         bankIdAuth,
         onBankIdQrCodeAuth,
+        onBankIdSameDeviceAuth,
         bankIdCollect,
         onBankIdCollect,
         onCompleted,
@@ -40,6 +41,8 @@ export default (props: IBankIdProps) => {
             onLookupIpAddress();
         } else if (!isMobile()) {
             onBankIdQrCodeAuth(() => {});
+        } else {
+            onBankIdSameDeviceAuth(() => {});
         }
     }, [hasIpAddress]);
 
@@ -49,6 +52,9 @@ export default (props: IBankIdProps) => {
             return;
         }
 
+        if (bankIdAuth.isSameDevice()) {
+            window.open(bankIdAuth.getAutoLaunchUrl(), "_blank");
+        }
         onBankIdCollect(() => {});
     }, [bankIdAuth]);
 
@@ -69,18 +75,24 @@ export default (props: IBankIdProps) => {
                 return;
             }
 
+            // TODO Improve this
             if (bankIdCollect.isPending()) {
                 onBankIdCollect(() => {});
             } else if (bankIdCollect.shouldRenew()) {
                 onBankIdQrCodeAuth(() => {});
-            } else if (bankIdCollect.getStatus() === AuthStatus.Complete) {
+            } else if (bankIdCollect.isCompleted()) {
+                props.dispatchStoreAction(StoreAction.UPDATE_NAMED_VALUE, {
+                    type: "customer",
+                    name: "personalNumber",
+                    value: bankIdCollect.getPersonalNumber(),
+                });
                 onComplete();
             }
         }, 2000);
     }, [bankIdCollect]);
 
     const isQrCode = !!bankIdAuth && bankIdAuth.isQrCode();
-    const qrCodeAsBase64 = !!bankIdAuth && bankIdAuth.getQrCode();
+    const qrCodeAsBase64 = !!bankIdAuth && isQrCode && bankIdAuth.getQrCode();
     const message = !!bankIdCollect
         ? bankIdCollect.getMessage()
         : getDefaultMessage();

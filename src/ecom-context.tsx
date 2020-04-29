@@ -44,6 +44,7 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
     constructor(props: IEcomContextProps) {
         super(props);
 
+        this.getAddress = this.getAddress.bind(this);
         this.handleFetchVehicleInformation = this.handleFetchVehicleInformation.bind(
             this
         );
@@ -59,6 +60,9 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
         this.handleCreateOrder = this.handleCreateOrder.bind(this);
         this.handleIpAddressLookup = this.handleIpAddressLookup.bind(this);
         this.handleBankIdQrCodeAuth = this.handleBankIdQrCodeAuth.bind(this);
+        this.handleBankIdSameDeviceAuth = this.handleBankIdSameDeviceAuth.bind(
+            this
+        );
         this.handleBankIdCollect = this.handleBankIdCollect.bind(this);
         this.handleBankIdReset = this.handleBankIdReset.bind(this);
 
@@ -97,6 +101,13 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
         };
 
         this.makeRequest(request);
+    }
+
+    getAddress() {
+        const { addressLookup, bankIdCollect } = this.state;
+        return !!bankIdCollect
+            ? bankIdCollect.getAddress()
+            : addressLookup.getAddress();
     }
 
     handleFetchVehicleInformation(callback: (isSuccessful: boolean) => void) {
@@ -194,13 +205,14 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
 
     handleCreateOrder(callback: (isSuccessful: boolean) => void) {
         const request = () => {
+            const address = this.getAddress();
             makeCreateOrderRequest(
                 {
                     ecomData: this.props.data,
-                    addressLookup: this.state.addressLookup,
                     vehicleId: this.props.vehicle.id,
                     orderOptions: this.state.orderOptions,
                     paymentLookup: this.state.paymentLookup,
+                    address,
                 },
                 (wasOrderCreated: boolean) => {
                     this.setState(
@@ -234,6 +246,31 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
         const { ipAddress } = this.state;
         const data = {
             method: AuthMethod.QrCode,
+            ipAddress,
+        };
+
+        const request = () => {
+            makeBankIdAuthRequest(data, response => {
+                this.saveResponse(
+                    {
+                        bankIdAuth: response,
+                    },
+                    () => {
+                        callback(response);
+                    }
+                );
+            });
+        };
+
+        this.makeRequest(request);
+    }
+
+    handleBankIdSameDeviceAuth(
+        callback: (response: IBankIdAuthResponse) => void
+    ) {
+        const { ipAddress } = this.state;
+        const data = {
+            method: AuthMethod.SameDevice,
             ipAddress,
         };
 
@@ -309,6 +346,7 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
     render() {
         return (
             <EcomLifecycle
+                getAddress={this.getAddress}
                 onFetchInsuranceOptions={this.handleFetchInsuranceOptions}
                 onFetchVehicleInformation={this.handleFetchVehicleInformation}
                 onFetchAddressInformation={this.handleFetchAddressInformation}
@@ -316,6 +354,7 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
                 onCreateOrder={this.handleCreateOrder}
                 onLookupIpAddress={this.handleIpAddressLookup}
                 onBankIdQrCodeAuth={this.handleBankIdQrCodeAuth}
+                onBankIdSameDeviceAuth={this.handleBankIdSameDeviceAuth}
                 onBankIdCollect={this.handleBankIdCollect}
                 onBankIdSuccess={this.handleBankIdReset}
                 hasIpAddress={!!this.state.ipAddress}

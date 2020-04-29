@@ -4,7 +4,7 @@ import {
     IOrderOptionsResponse,
     IPaymentLookupResponse,
     DeliveryType,
-    IBankIdCollectResponse,
+    IAddress,
 } from "@wayke-se/ecom";
 import {
     ITradeInCarData,
@@ -32,9 +32,9 @@ import { isResidualEnabled } from "../utils/residual";
 
 export const validateEcomData = (
     data: IEcomData,
-    bankIdCollect: IBankIdCollectResponse,
     orderOptions: IOrderOptionsResponse,
-    paymentLookup: IPaymentLookupResponse | undefined
+    paymentLookup: IPaymentLookupResponse | undefined,
+    address: IAddress
 ) => {
     const isValidTradeIn =
         data.tradeInCar.hasProvidedTradeInInfo && data.tradeInCar.hasTradeInCar
@@ -52,10 +52,7 @@ export const validateEcomData = (
         data.delivery
     );
 
-    const customerObject = createCustomerObject(
-        data.customer,
-        bankIdCollect.getAddress()
-    );
+    const customerObject = createCustomerObject(data.customer, address);
     const isValidCustomer = validateCustomerObject(customerObject);
 
     const hasAcceptedConditions = data.customer.hasAcceptedConditions;
