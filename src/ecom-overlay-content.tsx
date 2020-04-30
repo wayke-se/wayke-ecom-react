@@ -3,7 +3,7 @@ import React from "react";
 import { IEcomContext, IEcomStore } from "./types";
 
 import OverlayType from "./constants/overlay-type";
-import BankIdOverlay from "./overlays/bankid";
+import BankIdOverlay from "./overlays/bankid/index";
 
 interface IOverlayProps extends IEcomContext, IEcomStore {
     onHideOverlay: () => void;
