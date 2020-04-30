@@ -256,6 +256,7 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
                 this.saveResponse(
                     {
                         bankIdAuth: response,
+                        bankIdCollect: null,
                     },
                     () => {
                         callback(response);
@@ -278,9 +279,13 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
 
         const request = () => {
             makeBankIdAuthRequest(data, response => {
+                this.setState({
+                    bankIdCollect: null,
+                });
                 this.saveResponse(
                     {
                         bankIdAuth: response,
+                        bankIdCollect: null,
                     },
                     () => {
                         callback(response);
@@ -306,6 +311,9 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
 
         const request = () => {
             makeBankIdCollectRequest(data, response => {
+                this.setState({
+                    bankIdCollect: null,
+                });
                 this.saveResponse(
                     {
                         bankIdCollect: response,

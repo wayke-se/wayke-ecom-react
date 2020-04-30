@@ -57,7 +57,7 @@ export default (props: IBankIdProps) => {
         if (noProcessStarted) {
             auth();
         }
-    }, [hasIpAddress, bankIdAuth]);
+    }, [hasIpAddress, bankIdAuth, useQrCode]);
 
     React.useEffect(() => {
         const noProcessStarted = !bankIdAuth;
@@ -77,8 +77,13 @@ export default (props: IBankIdProps) => {
             type: "customer",
             name: "isAuthenticated",
         });
-        onBankIdReset();
+        props.dispatchStoreAction(StoreAction.UPDATE_NAMED_VALUE, {
+            type: "customer",
+            name: "personalNumber",
+            value: bankIdCollect.getPersonalNumber(),
+        });
         onHideOverlay();
+        onBankIdReset();
         onProceedToNextStep();
     };
 
@@ -86,8 +91,8 @@ export default (props: IBankIdProps) => {
         clearTimeout(cancellationToken);
         onBankIdCancel(() => {
             setUseQrCode(!isMobile());
-            onBankIdReset();
             onHideOverlay();
+            onBankIdReset();
         });
     };
 
@@ -104,11 +109,6 @@ export default (props: IBankIdProps) => {
             } else if (bankIdCollect.shouldRenew()) {
                 onBankIdQrCodeAuth(() => {});
             } else if (bankIdCollect.isCompleted()) {
-                props.dispatchStoreAction(StoreAction.UPDATE_NAMED_VALUE, {
-                    type: "customer",
-                    name: "personalNumber",
-                    value: bankIdCollect.getPersonalNumber(),
-                });
                 onComplete();
             }
         }, 2000);
