@@ -17,7 +17,7 @@ export default (
         .then((response: IBankIdAuthResponse) => {
             callback(response);
         })
-        .catch((err: Error) => {
-            callback(err);
+        .catch(() => {
+            callback(null);
         });
 };

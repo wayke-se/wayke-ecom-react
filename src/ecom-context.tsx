@@ -37,6 +37,7 @@ interface IState {
     addressLookup: IAddressLookupResponse | null;
     paymentLookup: IPaymentLookupResponse | null;
     bankIdAuth: IBankIdAuthResponse | null;
+    pendingBankIdAuthRequest: boolean;
     bankIdCollect: IBankIdCollectResponse | null;
     ipAddress: string;
 }
@@ -80,6 +81,7 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
             addressLookup: null,
             paymentLookup: null,
             bankIdAuth: null,
+            pendingBankIdAuthRequest: false,
             bankIdCollect: null,
             ipAddress: "",
         };
@@ -257,6 +259,7 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
                     {
                         bankIdAuth: response,
                         bankIdCollect: null,
+                        pendingBankIdAuthRequest: false,
                     },
                     () => {
                         callback(response);
@@ -265,6 +268,7 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
             });
         };
 
+        this.setState({ pendingBankIdAuthRequest: true });
         this.makeRequest(request);
     }
 
@@ -279,13 +283,11 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
 
         const request = () => {
             makeBankIdAuthRequest(data, response => {
-                this.setState({
-                    bankIdCollect: null,
-                });
                 this.saveResponse(
                     {
                         bankIdAuth: response,
                         bankIdCollect: null,
+                        pendingBankIdAuthRequest: false,
                     },
                     () => {
                         callback(response);
@@ -294,6 +296,7 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
             });
         };
 
+        this.setState({ pendingBankIdAuthRequest: true });
         this.makeRequest(request);
     }
 
@@ -330,9 +333,11 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
 
     handleBankIdCancel(callback: (response: boolean) => void) {
         const { bankIdAuth } = this.state;
+
         const noActiveBankIdProcess = !bankIdAuth;
         if (noActiveBankIdProcess) {
             callback(false);
+            return;
         }
 
         const data = {

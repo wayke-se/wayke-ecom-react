@@ -49,6 +49,7 @@ export interface IEcomContext {
     paymentLookup: IPaymentLookupResponse;
     hasIpAddress: boolean;
     bankIdAuth: IBankIdAuthResponse;
+    pendingBankIdAuthRequest: boolean;
     bankIdCollect: IBankIdCollectResponse;
 
     getAddress: () => IAddress;
