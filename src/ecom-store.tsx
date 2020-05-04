@@ -12,6 +12,7 @@ class EcomStore extends React.Component<IEcomExternalProps, IEcomData> {
 
         this.dispatchStoreAction = this.dispatchStoreAction.bind(this);
 
+        const { useBankId } = props;
         this.state = {
             customer: {
                 hasAcceptedConditions: false,
@@ -79,6 +80,7 @@ class EcomStore extends React.Component<IEcomExternalProps, IEcomData> {
                 condition: undefined,
                 description: "",
             },
+            useBankId,
         };
     }
 

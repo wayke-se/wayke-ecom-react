@@ -24,7 +24,6 @@ import {
     makeBankIdCollectRequest,
     makeBankIdCancelRequest,
 } from "./tools/request-service";
-import lookupIpAddress from "./tools/ip-service";
 
 export interface IEcomContextProps extends IEcomExternalProps, IEcomStore {}
 
@@ -37,8 +36,8 @@ interface IState {
     addressLookup: IAddressLookupResponse | null;
     paymentLookup: IPaymentLookupResponse | null;
     bankIdAuth: IBankIdAuthResponse | null;
+    pendingBankIdAuthRequest: boolean;
     bankIdCollect: IBankIdCollectResponse | null;
-    ipAddress: string;
 }
 
 class EcomContext extends React.Component<IEcomContextProps, IState> {
@@ -59,7 +58,6 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
             this
         );
         this.handleCreateOrder = this.handleCreateOrder.bind(this);
-        this.handleIpAddressLookup = this.handleIpAddressLookup.bind(this);
         this.handleBankIdQrCodeAuth = this.handleBankIdQrCodeAuth.bind(this);
         this.handleBankIdSameDeviceAuth = this.handleBankIdSameDeviceAuth.bind(
             this
@@ -80,8 +78,8 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
             addressLookup: null,
             paymentLookup: null,
             bankIdAuth: null,
+            pendingBankIdAuthRequest: false,
             bankIdCollect: null,
-            ipAddress: "",
         };
     }
 
@@ -107,9 +105,13 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
 
     getAddress() {
         const { addressLookup, bankIdCollect } = this.state;
-        return !!bankIdCollect
-            ? bankIdCollect.getAddress()
-            : addressLookup.getAddress();
+        const { useBankId } = this.props;
+
+        if (useBankId) {
+            return bankIdCollect.getAddress();
+        }
+
+        return !!addressLookup ? addressLookup.getAddress() : null;
     }
 
     handleFetchVehicleInformation(callback: (isSuccessful: boolean) => void) {
@@ -232,72 +234,41 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
         this.makeRequest(request);
     }
 
-    handleIpAddressLookup() {
-        lookupIpAddress().then(response => {
-            const { ip } = response;
-            this.saveResponse(
-                {
-                    ipAddress: ip,
-                },
-                () => {}
-            );
-        });
-    }
-
-    handleBankIdQrCodeAuth(callback: (response: IBankIdAuthResponse) => void) {
-        const { ipAddress } = this.state;
-        const data = {
-            method: AuthMethod.QrCode,
-            ipAddress,
-        };
+    handleBankIdQrCodeAuth() {
+        const data = { method: AuthMethod.QrCode };
 
         const request = () => {
             makeBankIdAuthRequest(data, response => {
-                this.saveResponse(
-                    {
-                        bankIdAuth: response,
-                        bankIdCollect: null,
-                    },
-                    () => {
-                        callback(response);
-                    }
-                );
-            });
-        };
-
-        this.makeRequest(request);
-    }
-
-    handleBankIdSameDeviceAuth(
-        callback: (response: IBankIdAuthResponse) => void
-    ) {
-        const { ipAddress } = this.state;
-        const data = {
-            method: AuthMethod.SameDevice,
-            ipAddress,
-        };
-
-        const request = () => {
-            makeBankIdAuthRequest(data, response => {
-                this.setState({
+                this.saveResponse({
+                    bankIdAuth: response,
                     bankIdCollect: null,
+                    pendingBankIdAuthRequest: false,
                 });
-                this.saveResponse(
-                    {
-                        bankIdAuth: response,
-                        bankIdCollect: null,
-                    },
-                    () => {
-                        callback(response);
-                    }
-                );
             });
         };
 
+        this.setState({ pendingBankIdAuthRequest: true });
         this.makeRequest(request);
     }
 
-    handleBankIdCollect(callback: (response: IBankIdCollectResponse) => void) {
+    handleBankIdSameDeviceAuth() {
+        const data = { method: AuthMethod.SameDevice };
+
+        const request = () => {
+            makeBankIdAuthRequest(data, response => {
+                this.saveResponse({
+                    bankIdAuth: response,
+                    bankIdCollect: null,
+                    pendingBankIdAuthRequest: false,
+                });
+            });
+        };
+
+        this.setState({ pendingBankIdAuthRequest: true });
+        this.makeRequest(request);
+    }
+
+    handleBankIdCollect() {
         const { bankIdAuth } = this.state;
         const noActiveBankIdProcess = !bankIdAuth;
         if (noActiveBankIdProcess) {
@@ -314,14 +285,9 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
                 this.setState({
                     bankIdCollect: null,
                 });
-                this.saveResponse(
-                    {
-                        bankIdCollect: response,
-                    },
-                    () => {
-                        callback(response);
-                    }
-                );
+                this.saveResponse({
+                    bankIdCollect: response,
+                });
             });
         };
 
@@ -330,9 +296,11 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
 
     handleBankIdCancel(callback: (response: boolean) => void) {
         const { bankIdAuth } = this.state;
+
         const noActiveBankIdProcess = !bankIdAuth;
         if (noActiveBankIdProcess) {
             callback(false);
+            return;
         }
 
         const data = {
@@ -361,7 +329,7 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
         );
     }
 
-    saveResponse(responseState: any, callback: () => void) {
+    saveResponse(responseState: any, callback?: () => void) {
         this.setState(
             {
                 ...responseState,
@@ -380,13 +348,11 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
                 onFetchAddressInformation={this.handleFetchAddressInformation}
                 onFetchPaymentInformation={this.handleFetchPaymentInformation}
                 onCreateOrder={this.handleCreateOrder}
-                onLookupIpAddress={this.handleIpAddressLookup}
                 onBankIdQrCodeAuth={this.handleBankIdQrCodeAuth}
                 onBankIdSameDeviceAuth={this.handleBankIdSameDeviceAuth}
                 onBankIdCollect={this.handleBankIdCollect}
                 onBankIdReset={this.handleBankIdReset}
                 onBankIdCancel={this.handleBankIdCancel}
-                hasIpAddress={!!this.state.ipAddress}
                 {...this.state}
                 {...this.props}
             />

@@ -37,6 +37,8 @@ export interface IEcomExternalProps {
 
     onExit: () => void;
     onUserEvent?: (userEvent: string, currentStep: string) => void;
+    useBankId?: boolean;
+    displayBankIdAlert?: boolean;
 }
 
 export interface IEcomContext {
@@ -47,8 +49,8 @@ export interface IEcomContext {
     vehicleLookup: IVehicleLookupResponse;
     addressLookup: IAddressLookupResponse;
     paymentLookup: IPaymentLookupResponse;
-    hasIpAddress: boolean;
     bankIdAuth: IBankIdAuthResponse;
+    pendingBankIdAuthRequest: boolean;
     bankIdCollect: IBankIdCollectResponse;
 
     getAddress: () => IAddress;
@@ -66,16 +68,9 @@ export interface IEcomContext {
         callback: (isSuccessful: boolean) => void
     ) => void;
     onCreateOrder: (callback: (isSuccessful: boolean) => void) => void;
-    onLookupIpAddress: () => void;
-    onBankIdQrCodeAuth: (
-        callback: (response: IBankIdAuthResponse) => void
-    ) => void;
-    onBankIdSameDeviceAuth: (
-        callback: (response: IBankIdAuthResponse) => void
-    ) => void;
-    onBankIdCollect: (
-        callback: (response: IBankIdCollectResponse) => void
-    ) => void;
+    onBankIdQrCodeAuth: () => void;
+    onBankIdSameDeviceAuth: () => void;
+    onBankIdCollect: () => void;
     onBankIdCancel: (callback: (response: boolean) => void) => void;
     onBankIdReset: () => void;
 }
@@ -108,6 +103,7 @@ export interface IEcomData {
     interact: IInteractData;
     payment: IPaymentData;
     tradeInCar: ITradeInCarData;
+    useBankId: boolean;
 }
 
 export interface IDeliveryMethodData {
@@ -240,7 +236,6 @@ export interface ILoanInformation {
 
 export interface IBankIdAuthSdkData {
     method: AuthMethod;
-    ipAddress: string;
 }
 
 export interface IIpLookupResponse {

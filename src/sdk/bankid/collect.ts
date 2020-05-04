@@ -1,7 +1,6 @@
 import { bankid, IBankIdCollectResponse } from "@wayke-se/ecom";
 import { IBankIdCollectSdkData } from "../../types";
 
-// TODO improve error handling.
 export default (
     data: IBankIdCollectSdkData,
     callback: (response: IBankIdCollectResponse | Error | null) => void
@@ -9,7 +8,6 @@ export default (
     const request = bankid
         .newCollectRequest()
         .withOrderRef(data.orderRef)
-        .withMethod(data.method)
         .build();
 
     bankid
@@ -17,7 +15,7 @@ export default (
         .then((response: IBankIdCollectResponse) => {
             callback(response);
         })
-        .catch((err: Error) => {
-            callback(err);
+        .catch(() => {
+            callback(null);
         });
 };

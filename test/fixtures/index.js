@@ -89,6 +89,7 @@ factory.define("IEcomData", [
     "interact".pickFrom([null]),
     "payment".fromFixture("IPaymentData"),
     "tradeInCar".fromFixture("ITradeInCarData"),
+    "useBankId".asBoolean(),
 ]);
 
 factory.define("IEcomExternalProps", [
@@ -97,5 +98,50 @@ factory.define("IEcomExternalProps", [
     "onExit".as(() => () => null),
     "onUserEvent".as(() => () => null),
 ]);
+
+factory.define("IOrderOptionsResponse", [
+    "getPaymentOptions".as(() => []),
+    "getDeliveryOptions".as(() => []),
+    "getInsuranceOption".as(() => undefined),
+    "getOrderConditions".as(() => undefined),
+    "getOrderReturnConditions".as(() => undefined),
+    "getConditionsPdfUri".as(() => null),
+    "getContactInformation".as(() => null),
+    "allowsTradeIn".as(() => false),
+]);
+
+factory.define("IAvailableInsuranceOption", [
+    "description",
+    "logo",
+    "title",
+    "url",
+    "ecomInsuranceText",
+]);
+
+factory.define("IBankIdPresenterProps", [
+    "hasQrCode".asBoolean(),
+    "canLaunch".asBoolean(),
+    "useQrCode".asBoolean(),
+    "hasOngoingProcess".asBoolean(),
+    "qrCodeAsBase64",
+    "onCancel".as(() => {}),
+    "onSwitchMethod".as(() => {}),
+    "onCancel".as(() => {}),
+    "bankIdCollect".fromFixture("IBankIdCollectResponse"),
+]);
+
+factory.define("IBankIdCollectResponse", [
+    "getOrderRef".as(() => ""),
+    "getStatus".as(() => undefined),
+    "isPending".as(() => false),
+    "hasMessage".as(() => false),
+    "shouldRenew".as(() => false),
+    "isCompleted".as(() => false),
+    "getHintCode".as(() => undefined),
+    "getPersonalNumber".as(() => undefined),
+    "getAddress".as(() => undefined),
+    "getMessage".as(() => ""),
+]);
+
 
 module.exports = factory;

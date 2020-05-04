@@ -3,153 +3,241 @@ import React from "react";
 import { IEcomContext, IEcomStore } from "../../types";
 import { isMobile } from "../../utils/device";
 
-import BankIdOverlay from "./base";
+import BankIdPresenter from "./presenter";
 import StoreAction from "../../constants/store-action";
-
-const getDefaultMessage = () => {
-    return "För att hämta dina uppgifter, starta din BankID applikation på din andra enhet.";
-};
 
 interface IBankIdProps extends IEcomContext, IEcomStore {
     onHideOverlay: () => void;
     onProceedToNextStep: () => void;
 }
 
-export default (props: IBankIdProps) => {
-    const {
-        onHideOverlay,
-        hasIpAddress,
-        onLookupIpAddress,
-        bankIdAuth,
-        onBankIdQrCodeAuth,
-        onBankIdSameDeviceAuth,
-        bankIdCollect,
-        onBankIdCollect,
-        onBankIdCancel,
-        dispatchStoreAction,
-        onBankIdReset,
-        onProceedToNextStep,
-    } = props;
+interface IState {
+    useQrCode: boolean;
+    cancellationToken?: NodeJS.Timeout;
+}
 
-    const [useQrCode, setUseQrCode] = React.useState(!isMobile());
-    const [cancellationToken, setCancellationToken] = React.useState<
-        NodeJS.Timeout
-    >();
+class BankId extends React.Component<IBankIdProps, IState> {
+    constructor(props: IBankIdProps) {
+        super(props);
 
-    const auth = () => {
+        const useQrCode = !isMobile();
+        this.state = {
+            useQrCode,
+            cancellationToken: null,
+        };
+
+        this.cancel = this.cancel.bind(this);
+        this.switchMethod = this.switchMethod.bind(this);
+        this.launch = this.launch.bind(this);
+        this.onCancelled = this.onCancelled.bind(this);
+        this.onCancelledForSwitch = this.onCancelledForSwitch.bind(this);
+    }
+
+    componentDidMount() {
+        this.startAuth();
+    }
+
+    componentDidUpdate(prevProps: IBankIdProps, prevState: IState) {
+        this.restartAuth(prevState);
+        this.onAuthStarted(prevProps);
+        this.onCollect(prevProps);
+    }
+
+    componentWillUnmount() {
+        const { onBankIdReset } = this.props;
+        onBankIdReset();
+    }
+
+    startAuth() {
+        if (this.shouldAuth()) {
+            this.auth();
+        }
+    }
+
+    shouldAuth() {
+        const { bankIdAuth, pendingBankIdAuthRequest } = this.props;
+
+        const authNotStarted = !bankIdAuth;
+        const noPendingAuth = !pendingBankIdAuthRequest;
+        const shouldAuth = authNotStarted && noPendingAuth;
+        return shouldAuth;
+    }
+
+    auth() {
+        const { onBankIdQrCodeAuth, onBankIdSameDeviceAuth } = this.props;
+        const { useQrCode } = this.state;
+
         if (useQrCode) {
-            onBankIdQrCodeAuth(() => {});
+            onBankIdQrCodeAuth();
+        } else {
+            onBankIdSameDeviceAuth();
         }
-    };
+    }
 
-    React.useEffect(() => {
-        const processStarted = !!bankIdAuth;
-        if (processStarted) {
-            return;
+    restartAuth(prevState: IState) {
+        const { useQrCode } = this.state;
+        const { useQrCode: prevUseQrCode } = prevState;
+
+        const methodUpdated = useQrCode !== prevUseQrCode;
+        const shouldReauth = methodUpdated && this.shouldAuth();
+
+        if (shouldReauth) {
+            this.auth();
         }
+    }
 
-        if (!hasIpAddress) {
-            onLookupIpAddress();
-            return;
+    onAuthStarted(prevProps: IBankIdProps) {
+        const { bankIdAuth: prevAuth } = prevProps;
+        const { bankIdAuth, onBankIdCollect } = this.props;
+
+        const authStarted = !!bankIdAuth;
+        const authIsNew = prevAuth !== bankIdAuth;
+        const newAuthStarted = authStarted && authIsNew;
+
+        if (newAuthStarted) {
+            onBankIdCollect();
         }
+    }
 
-        const noProcessStarted = !bankIdAuth;
-        if (noProcessStarted) {
-            auth();
+    onCollect(prevProps: IBankIdProps) {
+        const { bankIdCollect: prevCollect } = prevProps;
+        const { bankIdCollect } = this.props;
+
+        const collectUpdated = prevCollect !== bankIdCollect;
+        const shouldCollect = this.hasOngoingProcess() && collectUpdated;
+
+        if (shouldCollect) {
+            this.collect();
         }
-    }, [hasIpAddress, bankIdAuth, useQrCode]);
+    }
 
-    React.useEffect(() => {
-        const noProcessStarted = !bankIdAuth;
-        if (noProcessStarted) {
-            return;
+    hasOngoingProcess() {
+        const { bankIdAuth, bankIdCollect } = this.props;
+
+        return (
+            !!bankIdAuth &&
+            !!bankIdCollect &&
+            bankIdAuth.getOrderRef() === bankIdCollect.getOrderRef()
+        );
+    }
+
+    collect() {
+        const { bankIdCollect } = this.props;
+
+        if (bankIdCollect.isCompleted()) {
+            this.onComplete();
+        } else if (bankIdCollect.isPending()) {
+            this.scheduleNewCollect();
+        } else if (bankIdCollect.shouldRenew()) {
+            this.auth();
         }
+    }
 
-        if (bankIdAuth.isSameDevice()) {
-            window.open(bankIdAuth.getAutoLaunchUrl(), "_blank");
-        }
+    scheduleNewCollect() {
+        const { onBankIdCollect } = this.props;
 
-        onBankIdCollect(() => {});
-    }, [bankIdAuth]);
+        const cancellationToken = setTimeout(() => {
+            if (this.hasOngoingProcess()) {
+                onBankIdCollect();
+            }
+        }, 2000);
+        this.setState({ cancellationToken });
+    }
 
-    const onComplete = () => {
+    onComplete() {
+        const {
+            dispatchStoreAction,
+            bankIdCollect,
+            onHideOverlay,
+            onProceedToNextStep,
+        } = this.props;
+
         dispatchStoreAction(StoreAction.INTERACT_UPDATE_SPECIFIC, {
             type: "customer",
             name: "isAuthenticated",
         });
-        props.dispatchStoreAction(StoreAction.UPDATE_NAMED_VALUE, {
+        dispatchStoreAction(StoreAction.UPDATE_NAMED_VALUE, {
             type: "customer",
             name: "personalNumber",
             value: bankIdCollect.getPersonalNumber(),
         });
+
         onHideOverlay();
-        onBankIdReset();
         onProceedToNextStep();
-    };
+    }
 
-    const onCancel = () => {
+    cancel() {
+        const { cancellationToken } = this.state;
+        const { onBankIdCancel } = this.props;
+
         clearTimeout(cancellationToken);
-        onBankIdCancel(() => {
-            setUseQrCode(!isMobile());
-            onHideOverlay();
-            onBankIdReset();
-        });
-    };
+        onBankIdCancel(this.onCancelled);
+    }
 
-    React.useEffect(() => {
-        const token = setTimeout(() => {
-            const noCurrentProceess = !bankIdCollect || !bankIdAuth;
-            if (noCurrentProceess) {
-                return;
-            }
+    onCancelled() {
+        const { onHideOverlay } = this.props;
 
-            // TODO Improve this
-            if (bankIdCollect.isPending()) {
-                onBankIdCollect(() => {});
-            } else if (bankIdCollect.shouldRenew()) {
-                onBankIdQrCodeAuth(() => {});
-            } else if (bankIdCollect.isCompleted()) {
-                onComplete();
-            }
-        }, 2000);
-        setCancellationToken(token);
-    }, [bankIdCollect]);
+        const useQrCode = !isMobile();
+        this.setState({ useQrCode });
 
-    const onSwitchMethod = () => {
+        onHideOverlay();
+    }
+
+    switchMethod() {
+        const { cancellationToken } = this.state;
+        const { onBankIdCancel } = this.props;
+
         clearTimeout(cancellationToken);
-        onBankIdCancel(() => {
-            setUseQrCode(!useQrCode);
-            onBankIdReset();
-        });
-    };
+        onBankIdCancel(this.onCancelledForSwitch);
+    }
 
-    const hasQrCode = !!bankIdAuth && bankIdAuth.isQrCode();
-    const qrCodeAsBase64 = !!bankIdAuth && hasQrCode && bankIdAuth.getQrCode();
-    const canLaunch = !!hasIpAddress && !bankIdAuth && !useQrCode;
-    const message =
-        !!bankIdAuth && !!bankIdCollect
-            ? bankIdCollect.getMessage()
-            : getDefaultMessage();
-    const switchMessage = useQrCode
-        ? "Öppna BankID på den här enheten"
-        : "Mitt BankId är på en annan enhet";
+    onCancelledForSwitch() {
+        const { onBankIdReset } = this.props;
+        const { useQrCode } = this.state;
 
-    const onLaunch = () => {
-        if (canLaunch) {
-            onBankIdSameDeviceAuth(() => {});
+        onBankIdReset();
+        this.setState({ useQrCode: !useQrCode });
+    }
+
+    canLaunch() {
+        const { useQrCode } = this.state;
+        const { bankIdAuth } = this.props;
+
+        const canLaunch =
+            !!bankIdAuth && !useQrCode && bankIdAuth.isSameDevice();
+        return canLaunch;
+    }
+
+    launch() {
+        const { bankIdAuth } = this.props;
+        if (this.canLaunch()) {
+            window.open(bankIdAuth.getAutoLaunchUrl(), "_blank");
         }
-    };
+    }
 
-    return (
-        <BankIdOverlay
-            onCancel={onCancel}
-            onSwitchMethod={onSwitchMethod}
-            isQrCode={hasQrCode}
-            qrCodeAsBase64={qrCodeAsBase64}
-            canLaunch={canLaunch}
-            onLaunch={onLaunch}
-            message={message}
-            switchMessage={switchMessage}
-        />
-    );
-};
+    render() {
+        const { useQrCode } = this.state;
+        const { bankIdAuth, bankIdCollect } = this.props;
+
+        const hasQrCode = useQrCode && !!bankIdAuth && bankIdAuth.isQrCode();
+        const qrCodeAsBase64 = hasQrCode && bankIdAuth.getQrCode();
+        const canLaunch = this.canLaunch();
+        const hasOngoingProcess = this.hasOngoingProcess();
+
+        return (
+            <BankIdPresenter
+                onCancel={this.cancel}
+                onSwitchMethod={this.switchMethod}
+                hasQrCode={hasQrCode}
+                qrCodeAsBase64={qrCodeAsBase64}
+                canLaunch={canLaunch}
+                onLaunch={this.launch}
+                useQrCode={useQrCode}
+                bankIdCollect={bankIdCollect}
+                hasOngoingProcess={hasOngoingProcess}
+            />
+        );
+    }
+}
+
+export default BankId;

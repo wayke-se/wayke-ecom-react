@@ -1,14 +1,12 @@
 import { bankid, IBankIdAuthResponse } from "@wayke-se/ecom";
 import { IBankIdAuthSdkData } from "../../types";
 
-// TODO improve error handling.
 export default (
     data: IBankIdAuthSdkData,
     callback: (response: IBankIdAuthResponse | Error | null) => void
 ) => {
     const request = bankid
         .newAuthRequest()
-        .withIpAddress(data.ipAddress)
         .withMethod(data.method)
         .build();
 
@@ -17,7 +15,7 @@ export default (
         .then((response: IBankIdAuthResponse) => {
             callback(response);
         })
-        .catch((err: Error) => {
-            callback(err);
+        .catch(() => {
+            callback(null);
         });
 };

@@ -9,6 +9,7 @@ import TimelineItem from "./ecom-timeline-item";
 export interface IEcomTimelineProps {
     options: IOrderOptionsResponse;
     currentStep: EcomStep;
+    useBankId: boolean;
 }
 
 const getLabel = (step: EcomStep): string => {
@@ -37,7 +38,7 @@ export default (props: IEcomTimelineProps) => {
         return <div />;
     }
 
-    const primarySteps = getPrimarySteps(props.options);
+    const primarySteps = getPrimarySteps(props.options, props.useBankId);
     const items = [];
 
     let timelineItemKey = 0;

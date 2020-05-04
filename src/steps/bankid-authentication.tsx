@@ -1,21 +1,68 @@
 import React from "react";
 
-import { IEcomLifecycle, IEcomStore, IEcomContext } from "../types";
+import {
+    IEcomLifecycle,
+    IEcomStore,
+    IEcomContext,
+    IEcomExternalProps,
+} from "../types";
 import OverlayType from "../constants/overlay-type";
+import StoreAction from "../constants/store-action";
+import CustomerInformationInputType from "../constants/customer-information-input-type";
+import { IOrderOptionsResponse } from "@wayke-se/ecom";
+
+interface IExplanationAlertProps {
+    orderOptions: IOrderOptionsResponse;
+}
+
+const ExplanationAlert = ({ orderOptions }: IExplanationAlertProps) => {
+    const contact = orderOptions.getContactInformation();
+    const name = !!contact && !!contact.name ? contact.name : "oss";
+
+    const text = `Identifiering med BankID sker mot vår teknikleverantör Wayke, men köpet sker mot ${name}.`;
+
+    return (
+        <section className="page-section">
+            <div data-ecom-alert="">
+                <div className="alert-icon-section">
+                    <div className="alert-icon">
+                        <i className="icon-info no-margin" />
+                    </div>
+                </div>
+                <div className="alert-content">{text}</div>
+            </div>
+        </section>
+    );
+};
 
 interface IBankIdAuthenticationProps
     extends IEcomContext,
         IEcomStore,
-        IEcomLifecycle {}
+        IEcomLifecycle,
+        IEcomExternalProps {}
 
 export default (props: IBankIdAuthenticationProps) => {
-    const { onDisplayOverlay } = props;
+    const {
+        onDisplayOverlay,
+        dispatchStoreAction,
+        displayBankIdAlert,
+        orderOptions,
+    } = props;
+
+    React.useEffect(() => {
+        dispatchStoreAction(StoreAction.UPDATE_NAMED_VALUE, {
+            type: "customer",
+            name: "inputType",
+            value: CustomerInformationInputType.AUTOMATIC,
+        });
+    }, []);
+
     return (
         <div data-ecom-page="">
             <section className="page-section">
                 <h1 className="h6">Kunduppgifter</h1>
                 <div data-ecom-content="">
-                    <p>Signera med BankID för att hämta din adress.</p>
+                    <p>Identifiera dig med BankId för att hämta adress</p>
                 </div>
             </section>
             <section className="page-section">
@@ -37,6 +84,10 @@ export default (props: IBankIdAuthenticationProps) => {
                     </div>
                 </button>
             </section>
+
+            {displayBankIdAlert && (
+                <ExplanationAlert orderOptions={orderOptions} />
+            )}
         </div>
     );
 };

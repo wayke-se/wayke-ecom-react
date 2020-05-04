@@ -7,7 +7,7 @@ interface ICustomerInformationSummaryProps extends IEcomContext, IEcomStore {}
 export default (props: ICustomerInformationSummaryProps) => {
     const customerObject = createCustomerObject(
         props.data.customer,
-        props.bankIdCollect.getAddress()
+        props.getAddress()
     );
 
     return (

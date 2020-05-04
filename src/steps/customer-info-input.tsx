@@ -87,7 +87,7 @@ export default (props: ICustomerInformationDetailsProps) => {
                         <input
                             type="text"
                             id="information-2-input-street"
-                            name="address"
+                            name="street"
                             placeholder="Gatuadress"
                             value={props.data.customer.street}
                             onChange={onHandleInputChange}
