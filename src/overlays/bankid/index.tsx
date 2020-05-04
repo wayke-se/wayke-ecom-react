@@ -35,7 +35,7 @@ class BankId extends React.Component<IBankIdProps, IState> {
         this.launch = this.launch.bind(this);
         this.onCancelled = this.onCancelled.bind(this);
         this.getSwitchMessage = this.getSwitchMessage.bind(this);
-        this.onSwitch = this.onSwitch.bind(this);
+        this.onCancelledForSwitch = this.onCancelledForSwitch.bind(this);
     }
 
     componentDidMount() {
@@ -45,8 +45,13 @@ class BankId extends React.Component<IBankIdProps, IState> {
 
     componentDidUpdate(prevProps: IBankIdProps) {
         this.auth();
-        this.collectNewAuth(prevProps);
+        this.startCollectProcess(prevProps);
         this.onCollect(prevProps);
+    }
+
+    componentWillUnmount() {
+        const { onBankIdReset } = this.props;
+        onBankIdReset();
     }
 
     lookupIpAddress() {
@@ -77,19 +82,14 @@ class BankId extends React.Component<IBankIdProps, IState> {
         }
     }
 
-    collectNewAuth(prevProps: IBankIdProps) {
+    startCollectProcess(prevProps: IBankIdProps) {
         const { bankIdAuth: prevAuth } = prevProps;
-        const { bankIdAuth, onBankIdCollect, hasIpAddress } = this.props;
-
-        const noIpAddress = !hasIpAddress;
-        if (noIpAddress) {
-            return;
-        }
+        const { bankIdAuth, onBankIdCollect } = this.props;
 
         const authNotStarted = !bankIdAuth;
         const authNotNew = prevAuth === bankIdAuth;
-        const noNewlyStartedAuth = authNotStarted || authNotNew;
-        if (noNewlyStartedAuth) {
+        const noNewAuthTrigger = authNotStarted || authNotNew;
+        if (noNewAuthTrigger) {
             return;
         }
 
@@ -106,14 +106,14 @@ class BankId extends React.Component<IBankIdProps, IState> {
         const { bankIdCollect } = this.props;
 
         const collectUpdated = prevCollect !== bankIdCollect;
-        const shouldCollect = this.haveOngoingProcess() && collectUpdated;
+        const shouldCollect = this.hasOngoingProcess() && collectUpdated;
 
         if (shouldCollect) {
             this.collect();
         }
     }
 
-    haveOngoingProcess() {
+    hasOngoingProcess() {
         const { bankIdAuth, bankIdCollect } = this.props;
 
         return (
@@ -139,7 +139,7 @@ class BankId extends React.Component<IBankIdProps, IState> {
         const { onBankIdCollect } = this.props;
 
         const cancellationToken = setTimeout(() => {
-            if (this.haveOngoingProcess()) {
+            if (this.hasOngoingProcess()) {
                 onBankIdCollect(() => {});
             }
         }, 2000);
@@ -151,7 +151,6 @@ class BankId extends React.Component<IBankIdProps, IState> {
             dispatchStoreAction,
             bankIdCollect,
             onHideOverlay,
-            onBankIdReset,
             onProceedToNextStep,
         } = this.props;
 
@@ -166,7 +165,6 @@ class BankId extends React.Component<IBankIdProps, IState> {
         });
 
         onHideOverlay();
-        onBankIdReset();
         onProceedToNextStep();
     }
 
@@ -179,12 +177,11 @@ class BankId extends React.Component<IBankIdProps, IState> {
     }
 
     onCancelled() {
-        const { onBankIdReset, onHideOverlay } = this.props;
+        const { onHideOverlay } = this.props;
 
         const useQrCode = !isMobile();
         this.setState({ useQrCode });
 
-        onBankIdReset();
         onHideOverlay();
     }
 
@@ -193,15 +190,14 @@ class BankId extends React.Component<IBankIdProps, IState> {
         const { onBankIdCancel } = this.props;
 
         clearTimeout(cancellationToken);
-        onBankIdCancel(this.onSwitch);
+        onBankIdCancel(this.onCancelledForSwitch);
     }
 
-    onSwitch() {
+    onCancelledForSwitch() {
         const { onBankIdReset } = this.props;
         const { useQrCode } = this.state;
 
         this.setState({ useQrCode: !useQrCode });
-
         onBankIdReset();
     }
 
@@ -215,7 +211,6 @@ class BankId extends React.Component<IBankIdProps, IState> {
 
     launch() {
         const { onBankIdSameDeviceAuth } = this.props;
-
         if (this.canLaunch()) {
             onBankIdSameDeviceAuth(() => {});
         }
@@ -229,16 +224,24 @@ class BankId extends React.Component<IBankIdProps, IState> {
         return switchMessage;
     }
 
+    getLogoDimensions() {
+        const { useQrCode } = this.state;
+        return useQrCode
+            ? { width: "32px", height: "32px" }
+            : { width: "128px", height: "128px" };
+    }
+
     render() {
         const { bankIdAuth, bankIdCollect } = this.props;
 
         const hasQrCode = !!bankIdAuth && bankIdAuth.isQrCode();
         const qrCodeAsBase64 = hasQrCode && bankIdAuth.getQrCode();
         const canLaunch = this.canLaunch();
-        const message = this.haveOngoingProcess()
+        const message = this.hasOngoingProcess()
             ? bankIdCollect.getMessage()
             : getDefaultMessage();
         const switchMessage = this.getSwitchMessage();
+        const logoDimensions = this.getLogoDimensions();
 
         return (
             <BankIdOverlay
@@ -250,6 +253,7 @@ class BankId extends React.Component<IBankIdProps, IState> {
                 onLaunch={this.launch}
                 message={message}
                 switchMessage={switchMessage}
+                logoDimensions={logoDimensions}
             />
         );
     }
