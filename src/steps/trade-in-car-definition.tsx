@@ -68,6 +68,10 @@ export default (props: ITradeInCarDefinitionProps) => {
     const onKeyPress = (e: React.KeyboardEvent) =>
         handleEnterPress(e, props.onProceedToNextStep);
 
+    const isValid =
+        validateMilage(props.data.tradeInCar.milage) &&
+        validateRegistrationNumber(props.data.tradeInCar.registrationNumber);
+
     return (
         <div className="page-main">
             <section className="page-section">
@@ -168,6 +172,7 @@ export default (props: ITradeInCarDefinitionProps) => {
                             <button
                                 data-ecom-button="full-width"
                                 onClick={handleNextStepClick}
+                                disabled={!isValid}
                             >
                                 Gå vidare
                             </button>
