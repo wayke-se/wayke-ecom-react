@@ -4,6 +4,7 @@ import QrCode from "./qr-code";
 import LaunchButton from "./launch-button";
 
 interface IProps {
+    title: string;
     onCancel: () => void;
     onSwitchMethod: () => void;
     isQrCode: boolean;
@@ -16,6 +17,7 @@ interface IProps {
 }
 
 export default ({
+    title,
     onCancel,
     onSwitchMethod,
     isQrCode,
@@ -30,7 +32,7 @@ export default ({
         <div className="frame-body">
             <div data-ecom-page="justify-center" className="text-center">
                 <section className="page-section">
-                    <h1 className="h6">Öppna BankID och skanna QR-koden</h1>
+                    <h1 className="h6">{title}</h1>
                     <div data-ecom-content="">
                         <p>{message}</p>
                     </div>

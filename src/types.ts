@@ -34,6 +34,7 @@ export interface IVehicle {
 export interface IEcomExternalProps {
     vehicle: IVehicle;
     serviceLogotypeUrl: string;
+    useBankId: boolean;
 
     onExit: () => void;
     onUserEvent?: (userEvent: string, currentStep: string) => void;

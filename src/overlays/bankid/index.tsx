@@ -6,10 +6,6 @@ import { isMobile } from "../../utils/device";
 import BankIdOverlay from "./base";
 import StoreAction from "../../constants/store-action";
 
-const getDefaultMessage = () => {
-    return "För att hämta dina uppgifter, starta din BankID applikation på din andra enhet.";
-};
-
 interface IBankIdProps extends IEcomContext, IEcomStore {
     onHideOverlay: () => void;
     onProceedToNextStep: () => void;
@@ -224,6 +220,25 @@ class BankId extends React.Component<IBankIdProps, IState> {
         return switchMessage;
     }
 
+    getTitle() {
+        const { useQrCode } = this.state;
+        return useQrCode
+            ? "Öppna BankID och skanna QR-koden"
+            : "Skriv in din säkerhetskod i BankID-appen";
+    }
+
+    getMessage() {
+        const { bankIdCollect } = this.props;
+        const { useQrCode } = this.state;
+
+        if (this.hasOngoingProcess()) {
+            return bankIdCollect.getMessage();
+        } else if (useQrCode) {
+            return "För att hämta dina uppgifter, starta din BankID applikation på din andra enhet.";
+        }
+        return "För att hämta dina uppgifter, starta din BankID applikation.";
+    }
+
     getLogoDimensions() {
         const { useQrCode } = this.state;
         return useQrCode
@@ -232,19 +247,19 @@ class BankId extends React.Component<IBankIdProps, IState> {
     }
 
     render() {
-        const { bankIdAuth, bankIdCollect } = this.props;
+        const { bankIdAuth } = this.props;
 
         const hasQrCode = !!bankIdAuth && bankIdAuth.isQrCode();
         const qrCodeAsBase64 = hasQrCode && bankIdAuth.getQrCode();
         const canLaunch = this.canLaunch();
-        const message = this.hasOngoingProcess()
-            ? bankIdCollect.getMessage()
-            : getDefaultMessage();
+        const title = this.getTitle();
+        const message = this.getMessage();
         const switchMessage = this.getSwitchMessage();
         const logoDimensions = this.getLogoDimensions();
 
         return (
             <BankIdOverlay
+                title={title}
                 onCancel={this.cancel}
                 onSwitchMethod={this.switchMethod}
                 isQrCode={hasQrCode}
