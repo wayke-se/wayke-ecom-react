@@ -3,9 +3,10 @@ import React from "react";
 import { ICustomerInformationDetailsProps } from "./customer-information-props";
 
 export default (props: ICustomerInformationDetailsProps) => {
+    // TODO Oscar make this dynamic
     const personalNumber = props.bankIdCollect.getPersonalNumber();
     const address = props.bankIdCollect.getAddress();
-    const allowPersonalNumberEdit = !props.useBankId;
+    const allowPersonalNumberEdit = !props.orderOptions.useBankId();
 
     return (
         <React.Fragment>

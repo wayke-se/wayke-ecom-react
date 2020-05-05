@@ -13,6 +13,13 @@ export const getInitialStep = (options: IOrderOptionsResponse): EcomStep => {
         : EcomStep.PAYMENT_METHOD_CHOOSER;
 };
 
+export const getIdentificationStep = (options: IOrderOptionsResponse) => {
+    const useBankId = options.useBankId();
+    return useBankId
+        ? EcomStep.BANKID_AUTHENTICATION
+        : EcomStep.CUSTOMER_INFORMATION_INITIAL;
+};
+
 const emptyList = [];
 export const getPrimarySteps = (options: IOrderOptionsResponse): EcomStep[] => {
     const result = [];
@@ -27,7 +34,7 @@ export const getPrimarySteps = (options: IOrderOptionsResponse): EcomStep[] => {
         result.push(EcomStep.INSURANCE_INFORMATION_DEFINITION);
     }
 
-    result.push(EcomStep.BANKID_AUTHENTICATION);
+    result.push(getIdentificationStep(options));
 
     const deliveryOptions = options.getDeliveryOptions() || emptyList;
     if (
@@ -44,6 +51,8 @@ export const getPrimarySteps = (options: IOrderOptionsResponse): EcomStep[] => {
     return result;
 };
 
+/*
+TODO Oscar Remove this stuff...?
 const getAuthenticationTransition = (data: IEcomData) => {
     const alreadyAuthenticated = data.interact.customer.isAuthenticated;
     if (alreadyAuthenticated) {
@@ -52,6 +61,7 @@ const getAuthenticationTransition = (data: IEcomData) => {
 
     return EcomStep.BANKID_AUTHENTICATION;
 };
+*/
 
 export const getAllTransitions = () => ({
     [EcomStep.TRADE_IN_EXISTS_CHOOSER]: (data: IEcomData) => {
@@ -86,7 +96,8 @@ export const getAllTransitions = () => ({
             return EcomStep.PAYMENT_FINANCING_DETAILS;
         }
         if (!options.getInsuranceOption()) {
-            return getAuthenticationTransition(data);
+            //return getAuthenticationTransition(data);
+            return getIdentificationStep(options);
         }
 
         return EcomStep.INSURANCE_INFORMATION_DEFINITION;
@@ -96,20 +107,29 @@ export const getAllTransitions = () => ({
         options: IOrderOptionsResponse
     ) => {
         if (!options.getInsuranceOption()) {
-            return getAuthenticationTransition(data);
+            //return getAuthenticationTransition(data);
+            return getIdentificationStep(options);
         }
 
         return EcomStep.INSURANCE_INFORMATION_DEFINITION;
     },
-    [EcomStep.INSURANCE_INFORMATION_DEFINITION]: (data: IEcomData) => {
+    [EcomStep.INSURANCE_INFORMATION_DEFINITION]: (
+        data: IEcomData,
+        options: IOrderOptionsResponse
+    ) => {
         if (data.insurance.wantsToSeeInsuranceOptions) {
             return EcomStep.INSURANCE_ALTERNATIVE_CHOOSER;
         }
 
-        return getAuthenticationTransition(data);
+        //return getAuthenticationTransition(data);
+        return getIdentificationStep(options);
     },
-    [EcomStep.INSURANCE_ALTERNATIVE_CHOOSER]: (data: IEcomData) => {
-        return getAuthenticationTransition(data);
+    [EcomStep.INSURANCE_ALTERNATIVE_CHOOSER]: (
+        data: IEcomData,
+        options: IOrderOptionsResponse
+    ) => {
+        //return getAuthenticationTransition(data);
+        return getIdentificationStep(options);
     },
     [EcomStep.BANKID_AUTHENTICATION]: () =>
         EcomStep.CUSTOMER_INFORMATION_DETAILS,

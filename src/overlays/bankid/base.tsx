@@ -2,6 +2,7 @@ import React from "react";
 
 import QrCode from "./qr-code";
 import LaunchButton from "./launch-button";
+import Logo from "./logo";
 
 interface IProps {
     title: string;
@@ -41,15 +42,7 @@ export default ({
                     {isQrCode && <QrCode qrCodeAsBase64={qrCodeAsBase64} />}
                 </section>
                 <section className="page-section">
-                    <div className="repeat-m-half">
-                        <img
-                            width={logoDimensions.width}
-                            height={logoDimensions.height}
-                            src="https://www.bankid.com/_themes/bankid-www/img/logo1-default.svg"
-                            srcSet="https://www.bankid.com/_themes/bankid-www/img/logo1-default.svg 2x"
-                            alt="BankID"
-                        />
-                    </div>
+                    <Logo dimensions={logoDimensions} />
                     <div className="repeat-m-half">
                         <div data-ecom-spinner="center third-party">
                             <div className="spinner"></div>

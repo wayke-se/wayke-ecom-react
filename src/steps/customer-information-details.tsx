@@ -1,6 +1,5 @@
 import React from "react";
 
-//import CustomerInformationInputType from "../constants/customer-information-input-type";
 import StoreAction from "../constants/store-action";
 import UserEvent from "../constants/user-event";
 
@@ -11,6 +10,7 @@ import { ICustomerInformationDetailsProps } from "./customer-information-props";
 import OrderSummary from "../components/order-summary";
 import FetchCustomerInfo from "./customer-info-fetch";
 import InputCustomerInfo from "./customer-info-input";
+import CustomerInformationInputType from "../constants/customer-information-input-type";
 
 const handleInputChange = (
     props: ICustomerInformationDetailsProps,
@@ -34,12 +34,9 @@ const handleBlur = (
 };
 
 export default (props: ICustomerInformationDetailsProps) => {
-    const isAutomatic = true;
-    /*
     const isAutomatic =
         props.data.customer.inputType ===
         CustomerInformationInputType.AUTOMATIC;
-    */
 
     const handleContinueClick = () => {
         if (isAutomatic) {

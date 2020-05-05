@@ -2,6 +2,8 @@ import React from "react";
 
 import { IEcomLifecycle, IEcomStore, IEcomContext } from "../types";
 import OverlayType from "../constants/overlay-type";
+import StoreAction from "../constants/store-action";
+import CustomerInformationInputType from "../constants/customer-information-input-type";
 
 interface IBankIdAuthenticationProps
     extends IEcomContext,
@@ -9,7 +11,16 @@ interface IBankIdAuthenticationProps
         IEcomLifecycle {}
 
 export default (props: IBankIdAuthenticationProps) => {
-    const { onDisplayOverlay } = props;
+    const { onDisplayOverlay, dispatchStoreAction } = props;
+
+    React.useEffect(() => {
+        dispatchStoreAction(StoreAction.UPDATE_NAMED_VALUE, {
+            type: "customer",
+            name: "inputType",
+            value: CustomerInformationInputType.AUTOMATIC,
+        });
+    }, []);
+
     return (
         <div data-ecom-page="">
             <section className="page-section">

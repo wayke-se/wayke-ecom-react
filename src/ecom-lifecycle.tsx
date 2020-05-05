@@ -4,7 +4,11 @@ import { IOrderOptionsResponse } from "@wayke-se/ecom";
 import EcomStep from "./constants/ecom-step";
 import UserEvent from "./constants/user-event";
 import OverlayType from "./constants/overlay-type";
-import { getAllTransitions, getInitialStep } from "./ecom-step-transitions";
+import {
+    getAllTransitions,
+    getInitialStep,
+    getIdentificationStep,
+} from "./ecom-step-transitions";
 
 import EcomHeader from "./ecom-header";
 import EcomStepContent from "./ecom-step-content";
@@ -212,7 +216,9 @@ class EcomLifecycle extends React.Component<IEcomLifecycleProps, IState> {
         const showCart = shouldShowCart(this.state.step);
 
         const onShowCustomerInformationInitial = () =>
-            this.handleSpecificStepClick(EcomStep.BANKID_AUTHENTICATION);
+            this.handleSpecificStepClick(
+                getIdentificationStep(this.props.orderOptions)
+            );
 
         const onShowInsuranceInformationDefinition = () =>
             this.handleSpecificStepClick(
