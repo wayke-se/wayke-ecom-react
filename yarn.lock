@@ -1325,8 +1325,10 @@
     semver "^6.3.0"
     tsutils "^3.17.1"
 
-"@wayke-se/ecom@file:../wayke-ecom-js/pkg":
-  version "2.3.0-alpha.1"
+"@wayke-se/ecom@2.3.0-alpha.3":
+  version "2.3.0-alpha.3"
+  resolved "https://registry.yarnpkg.com/@wayke-se/ecom/-/ecom-2.3.0-alpha.3.tgz#962ebf355ce54fdb3bc2f484fd4682729cd30254"
+  integrity sha512-yX5rdFcJoMEAMcs9+a8faK9txdOEMKu9vwELFhgwBVPf0s1fkpVUXQzl6SrSWME/QJM7MZhrZaJ/inbLYG79Og==
 
 abab@^2.0.0:
   version "2.0.3"

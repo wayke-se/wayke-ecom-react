@@ -1,7 +1,6 @@
 import { bankid, IBankIdAuthResponse } from "@wayke-se/ecom";
 import { IBankIdAuthSdkData } from "../../types";
 
-// TODO improve error handling.
 export default (
     data: IBankIdAuthSdkData,
     callback: (response: IBankIdAuthResponse | Error | null) => void

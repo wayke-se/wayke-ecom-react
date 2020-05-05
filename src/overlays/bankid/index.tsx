@@ -249,9 +249,10 @@ class BankId extends React.Component<IBankIdProps, IState> {
     }
 
     render() {
+        const { useQrCode } = this.state;
         const { bankIdAuth } = this.props;
 
-        const hasQrCode = !!bankIdAuth && bankIdAuth.isQrCode();
+        const hasQrCode = useQrCode && !!bankIdAuth && bankIdAuth.isQrCode();
         const qrCodeAsBase64 = hasQrCode && bankIdAuth.getQrCode();
         const canLaunch = this.canLaunch();
         const title = this.getTitle();

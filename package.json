@@ -14,8 +14,7 @@
     "prettify": "prettier --write 'src/**/*.{ts,tsx}'",
     "prepare": "npm run prettify && npm run type-check && npm run lint && npm run test",
     "test": "jest --verbose",
-    "type-check": "tsc --noEmit --skipLibCheck",
-    "parcel": "parcel dev/index.html"
+    "type-check": "tsc --noEmit --skipLibCheck"
   },
   "repository": {
     "type": "git",
@@ -39,7 +38,7 @@
     "react": "^16.8.0"
   },
   "dependencies": {
-    "@wayke-se/ecom": "file:../wayke-ecom-js/pkg",
+    "@wayke-se/ecom": "2.3.0-alpha.3",
     "marked": "^0.8.1",
     "react-dom": "^16.13.1"
   },
