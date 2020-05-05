@@ -68,15 +68,9 @@ export interface IEcomContext {
     ) => void;
     onCreateOrder: (callback: (isSuccessful: boolean) => void) => void;
     onLookupIpAddress: () => void;
-    onBankIdQrCodeAuth: (
-        callback: (response: IBankIdAuthResponse) => void
-    ) => void;
-    onBankIdSameDeviceAuth: (
-        callback: (response: IBankIdAuthResponse) => void
-    ) => void;
-    onBankIdCollect: (
-        callback: (response: IBankIdCollectResponse) => void
-    ) => void;
+    onBankIdQrCodeAuth: () => void;
+    onBankIdSameDeviceAuth: () => void;
+    onBankIdCollect: () => void;
     onBankIdCancel: (callback: (response: boolean) => void) => void;
     onBankIdReset: () => void;
 }

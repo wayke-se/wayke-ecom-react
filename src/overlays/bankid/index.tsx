@@ -74,7 +74,7 @@ class BankId extends React.Component<IBankIdProps, IState> {
             authNotStarted && shouldAutoAuth && noPendingAuth && hasIpAddress;
 
         if (shouldAuth) {
-            onBankIdQrCodeAuth(() => {});
+            onBankIdQrCodeAuth();
         }
     }
 
@@ -94,7 +94,7 @@ class BankId extends React.Component<IBankIdProps, IState> {
             window.open(bankIdAuth.getAutoLaunchUrl(), "_blank");
         }
 
-        onBankIdCollect(() => {});
+        onBankIdCollect();
     }
 
     onCollect(prevProps: IBankIdProps) {
@@ -127,7 +127,7 @@ class BankId extends React.Component<IBankIdProps, IState> {
         } else if (bankIdCollect.isPending()) {
             this.scheduleNewCollect();
         } else if (bankIdCollect.shouldRenew()) {
-            onBankIdQrCodeAuth(() => {});
+            onBankIdQrCodeAuth();
         }
     }
 
@@ -136,7 +136,7 @@ class BankId extends React.Component<IBankIdProps, IState> {
 
         const cancellationToken = setTimeout(() => {
             if (this.hasOngoingProcess()) {
-                onBankIdCollect(() => {});
+                onBankIdCollect();
             }
         }, 2000);
         this.setState({ cancellationToken });
@@ -208,7 +208,7 @@ class BankId extends React.Component<IBankIdProps, IState> {
     launch() {
         const { onBankIdSameDeviceAuth } = this.props;
         if (this.canLaunch()) {
-            onBankIdSameDeviceAuth(() => {});
+            onBankIdSameDeviceAuth();
         }
     }
 
