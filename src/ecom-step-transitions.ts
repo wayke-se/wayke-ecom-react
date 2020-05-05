@@ -51,18 +51,6 @@ export const getPrimarySteps = (options: IOrderOptionsResponse): EcomStep[] => {
     return result;
 };
 
-/*
-TODO Oscar Remove this stuff...?
-const getAuthenticationTransition = (data: IEcomData) => {
-    const alreadyAuthenticated = data.interact.customer.isAuthenticated;
-    if (alreadyAuthenticated) {
-        return EcomStep.CUSTOMER_INFORMATION_DETAILS;
-    }
-
-    return EcomStep.BANKID_AUTHENTICATION;
-};
-*/
-
 export const getAllTransitions = () => ({
     [EcomStep.TRADE_IN_EXISTS_CHOOSER]: (data: IEcomData) => {
         if (data.tradeInCar.wantsToDefineTradeIn) {
@@ -96,7 +84,6 @@ export const getAllTransitions = () => ({
             return EcomStep.PAYMENT_FINANCING_DETAILS;
         }
         if (!options.getInsuranceOption()) {
-            //return getAuthenticationTransition(data);
             return getIdentificationStep(options);
         }
 
@@ -107,7 +94,6 @@ export const getAllTransitions = () => ({
         options: IOrderOptionsResponse
     ) => {
         if (!options.getInsuranceOption()) {
-            //return getAuthenticationTransition(data);
             return getIdentificationStep(options);
         }
 
@@ -121,14 +107,12 @@ export const getAllTransitions = () => ({
             return EcomStep.INSURANCE_ALTERNATIVE_CHOOSER;
         }
 
-        //return getAuthenticationTransition(data);
         return getIdentificationStep(options);
     },
     [EcomStep.INSURANCE_ALTERNATIVE_CHOOSER]: (
         data: IEcomData,
         options: IOrderOptionsResponse
     ) => {
-        //return getAuthenticationTransition(data);
         return getIdentificationStep(options);
     },
     [EcomStep.BANKID_AUTHENTICATION]: () =>
