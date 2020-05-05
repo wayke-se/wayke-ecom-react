@@ -133,6 +133,8 @@ export const getAllTransitions = () => ({
     },
     [EcomStep.BANKID_AUTHENTICATION]: () =>
         EcomStep.CUSTOMER_INFORMATION_DETAILS,
+    [EcomStep.CUSTOMER_INFORMATION_INITIAL]: () =>
+        EcomStep.CUSTOMER_INFORMATION_DETAILS,
     [EcomStep.CUSTOMER_INFORMATION_DETAILS]: (
         data: IEcomData,
         options: IOrderOptionsResponse
