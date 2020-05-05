@@ -3,9 +3,7 @@ import React from "react";
 import { ICustomerInformationDetailsProps } from "./customer-information-props";
 
 export default (props: ICustomerInformationDetailsProps) => {
-    // TODO Oscar make this dynamic
-    const personalNumber = props.bankIdCollect.getPersonalNumber();
-    const address = props.bankIdCollect.getAddress();
+    const address = props.getAddress();
     const allowPersonalNumberEdit = !props.orderOptions.useBankId();
 
     return (
@@ -31,7 +29,7 @@ export default (props: ICustomerInformationDetailsProps) => {
                 </div>
                 <div className="m-t-half">
                     <i className="icon-profile m-r-half" />
-                    {personalNumber}
+                    {props.data.customer.personalNumber}
                 </div>
             </section>
 
