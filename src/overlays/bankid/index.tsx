@@ -36,12 +36,12 @@ class BankId extends React.Component<IBankIdProps, IState> {
 
     componentDidMount() {
         this.lookupIpAddress();
-        this.auth();
+        this.startAuth();
     }
 
     componentDidUpdate(prevProps: IBankIdProps) {
-        this.auth();
-        this.startCollectProcess(prevProps);
+        this.startAuth();
+        this.onAuthStarted(prevProps);
         this.onCollect(prevProps);
     }
 
@@ -58,43 +58,44 @@ class BankId extends React.Component<IBankIdProps, IState> {
         }
     }
 
-    auth() {
+    startAuth() {
         const {
             bankIdAuth,
-            onBankIdQrCodeAuth,
             pendingBankIdAuthRequest,
             hasIpAddress,
         } = this.props;
-        const { useQrCode } = this.state;
 
         const authNotStarted = !bankIdAuth;
-        const shouldAutoAuth = useQrCode;
         const noPendingAuth = !pendingBankIdAuthRequest;
-        const shouldAuth =
-            authNotStarted && shouldAutoAuth && noPendingAuth && hasIpAddress;
+        const shouldAuth = authNotStarted && noPendingAuth && hasIpAddress;
 
         if (shouldAuth) {
-            onBankIdQrCodeAuth();
+            this.auth();
         }
     }
 
-    startCollectProcess(prevProps: IBankIdProps) {
+    auth() {
+        const { onBankIdQrCodeAuth, onBankIdSameDeviceAuth } = this.props;
+        const { useQrCode } = this.state;
+
+        if (useQrCode) {
+            onBankIdQrCodeAuth();
+        } else {
+            onBankIdSameDeviceAuth();
+        }
+    }
+
+    onAuthStarted(prevProps: IBankIdProps) {
         const { bankIdAuth: prevAuth } = prevProps;
         const { bankIdAuth, onBankIdCollect } = this.props;
 
-        const authNotStarted = !bankIdAuth;
-        const authNotNew = prevAuth === bankIdAuth;
-        const noNewAuthTrigger = authNotStarted || authNotNew;
-        if (noNewAuthTrigger) {
-            return;
-        }
+        const authStarted = !!bankIdAuth;
+        const authIsNew = prevAuth !== bankIdAuth;
+        const newAuthStarted = authStarted && authIsNew;
 
-        const shouldAutoLaunch = bankIdAuth.isSameDevice();
-        if (shouldAutoLaunch) {
-            window.open(bankIdAuth.getAutoLaunchUrl(), "_blank");
+        if (newAuthStarted) {
+            onBankIdCollect();
         }
-
-        onBankIdCollect();
     }
 
     onCollect(prevProps: IBankIdProps) {
@@ -120,14 +121,14 @@ class BankId extends React.Component<IBankIdProps, IState> {
     }
 
     collect() {
-        const { bankIdCollect, onBankIdQrCodeAuth } = this.props;
+        const { bankIdCollect } = this.props;
 
         if (bankIdCollect.isCompleted()) {
             this.onComplete();
         } else if (bankIdCollect.isPending()) {
             this.scheduleNewCollect();
         } else if (bankIdCollect.shouldRenew()) {
-            onBankIdQrCodeAuth();
+            this.auth();
         }
     }
 
@@ -199,16 +200,17 @@ class BankId extends React.Component<IBankIdProps, IState> {
 
     canLaunch() {
         const { useQrCode } = this.state;
-        const { hasIpAddress, bankIdAuth } = this.props;
+        const { bankIdAuth } = this.props;
 
-        const canLaunch = hasIpAddress && !bankIdAuth && !useQrCode;
+        const canLaunch =
+            !!bankIdAuth && !useQrCode && bankIdAuth.isSameDevice();
         return canLaunch;
     }
 
     launch() {
-        const { onBankIdSameDeviceAuth } = this.props;
+        const { bankIdAuth } = this.props;
         if (this.canLaunch()) {
-            onBankIdSameDeviceAuth();
+            window.open(bankIdAuth.getAutoLaunchUrl(), "_blank");
         }
     }
 
