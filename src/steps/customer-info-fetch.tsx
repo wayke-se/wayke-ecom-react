@@ -4,7 +4,7 @@ import { ICustomerInformationDetailsProps } from "./customer-information-props";
 
 export default (props: ICustomerInformationDetailsProps) => {
     const address = props.getAddress();
-    const allowPersonalNumberEdit = !props.orderOptions.useBankId();
+    const allowPersonalNumberEdit = !props.useBankId;
 
     return (
         <React.Fragment>

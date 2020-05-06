@@ -37,6 +37,7 @@ export interface IEcomExternalProps {
 
     onExit: () => void;
     onUserEvent?: (userEvent: string, currentStep: string) => void;
+    useBankId: boolean;
 }
 
 export interface IEcomContext {
@@ -103,6 +104,7 @@ export interface IEcomData {
     interact: IInteractData;
     payment: IPaymentData;
     tradeInCar: ITradeInCarData;
+    useBankId: boolean;
 }
 
 export interface IDeliveryMethodData {

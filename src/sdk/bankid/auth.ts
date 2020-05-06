@@ -7,7 +7,6 @@ export default (
 ) => {
     const request = bankid
         .newAuthRequest()
-        .withIpAddress(data.ipAddress)
         .withMethod(data.method)
         .build();
 

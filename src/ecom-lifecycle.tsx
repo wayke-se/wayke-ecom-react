@@ -217,7 +217,7 @@ class EcomLifecycle extends React.Component<IEcomLifecycleProps, IState> {
 
         const onShowCustomerInformationInitial = () =>
             this.handleSpecificStepClick(
-                getIdentificationStep(this.props.orderOptions)
+                getIdentificationStep(this.props.useBankId)
             );
 
         const onShowInsuranceInformationDefinition = () =>
@@ -262,6 +262,7 @@ class EcomLifecycle extends React.Component<IEcomLifecycleProps, IState> {
                                                 options={
                                                     this.props.orderOptions
                                                 }
+                                                useBankId={this.props.useBankId}
                                             />
 
                                             <div data-ecom-page="">
