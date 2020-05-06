@@ -24,7 +24,6 @@ import {
     makeBankIdCollectRequest,
     makeBankIdCancelRequest,
 } from "./tools/request-service";
-import lookupIpAddress from "./tools/ip-service";
 
 export interface IEcomContextProps extends IEcomExternalProps, IEcomStore {}
 
@@ -39,7 +38,6 @@ interface IState {
     bankIdAuth: IBankIdAuthResponse | null;
     pendingBankIdAuthRequest: boolean;
     bankIdCollect: IBankIdCollectResponse | null;
-    ipAddress: string;
 }
 
 class EcomContext extends React.Component<IEcomContextProps, IState> {
@@ -60,7 +58,6 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
             this
         );
         this.handleCreateOrder = this.handleCreateOrder.bind(this);
-        this.handleIpAddressLookup = this.handleIpAddressLookup.bind(this);
         this.handleBankIdQrCodeAuth = this.handleBankIdQrCodeAuth.bind(this);
         this.handleBankIdSameDeviceAuth = this.handleBankIdSameDeviceAuth.bind(
             this
@@ -83,7 +80,6 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
             bankIdAuth: null,
             pendingBankIdAuthRequest: false,
             bankIdCollect: null,
-            ipAddress: "",
         };
     }
 
@@ -238,21 +234,8 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
         this.makeRequest(request);
     }
 
-    handleIpAddressLookup() {
-        lookupIpAddress().then(response => {
-            const { ip } = response;
-            this.saveResponse({
-                ipAddress: ip,
-            });
-        });
-    }
-
     handleBankIdQrCodeAuth() {
-        const { ipAddress } = this.state;
-        const data = {
-            method: AuthMethod.QrCode,
-            ipAddress,
-        };
+        const data = { method: AuthMethod.QrCode };
 
         const request = () => {
             makeBankIdAuthRequest(data, response => {
@@ -269,11 +252,7 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
     }
 
     handleBankIdSameDeviceAuth() {
-        const { ipAddress } = this.state;
-        const data = {
-            method: AuthMethod.SameDevice,
-            ipAddress,
-        };
+        const data = { method: AuthMethod.SameDevice };
 
         const request = () => {
             makeBankIdAuthRequest(data, response => {
@@ -369,13 +348,11 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
                 onFetchAddressInformation={this.handleFetchAddressInformation}
                 onFetchPaymentInformation={this.handleFetchPaymentInformation}
                 onCreateOrder={this.handleCreateOrder}
-                onLookupIpAddress={this.handleIpAddressLookup}
                 onBankIdQrCodeAuth={this.handleBankIdQrCodeAuth}
                 onBankIdSameDeviceAuth={this.handleBankIdSameDeviceAuth}
                 onBankIdCollect={this.handleBankIdCollect}
                 onBankIdReset={this.handleBankIdReset}
                 onBankIdCancel={this.handleBankIdCancel}
-                hasIpAddress={!!this.state.ipAddress}
                 {...this.state}
                 {...this.props}
             />

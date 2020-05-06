@@ -35,7 +35,6 @@ class BankId extends React.Component<IBankIdProps, IState> {
     }
 
     componentDidMount() {
-        this.lookupIpAddress();
         this.startAuth();
     }
 
@@ -50,24 +49,12 @@ class BankId extends React.Component<IBankIdProps, IState> {
         onBankIdReset();
     }
 
-    lookupIpAddress() {
-        const { hasIpAddress, onLookupIpAddress } = this.props;
-
-        if (!hasIpAddress) {
-            onLookupIpAddress();
-        }
-    }
-
     startAuth() {
-        const {
-            bankIdAuth,
-            pendingBankIdAuthRequest,
-            hasIpAddress,
-        } = this.props;
+        const { bankIdAuth, pendingBankIdAuthRequest } = this.props;
 
         const authNotStarted = !bankIdAuth;
         const noPendingAuth = !pendingBankIdAuthRequest;
-        const shouldAuth = authNotStarted && noPendingAuth && hasIpAddress;
+        const shouldAuth = authNotStarted && noPendingAuth;
 
         if (shouldAuth) {
             this.auth();

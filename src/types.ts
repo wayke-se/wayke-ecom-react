@@ -48,7 +48,6 @@ export interface IEcomContext {
     vehicleLookup: IVehicleLookupResponse;
     addressLookup: IAddressLookupResponse;
     paymentLookup: IPaymentLookupResponse;
-    hasIpAddress: boolean;
     bankIdAuth: IBankIdAuthResponse;
     pendingBankIdAuthRequest: boolean;
     bankIdCollect: IBankIdCollectResponse;
@@ -68,7 +67,6 @@ export interface IEcomContext {
         callback: (isSuccessful: boolean) => void
     ) => void;
     onCreateOrder: (callback: (isSuccessful: boolean) => void) => void;
-    onLookupIpAddress: () => void;
     onBankIdQrCodeAuth: () => void;
     onBankIdSameDeviceAuth: () => void;
     onBankIdCollect: () => void;
@@ -237,7 +235,6 @@ export interface ILoanInformation {
 
 export interface IBankIdAuthSdkData {
     method: AuthMethod;
-    ipAddress: string;
 }
 
 export interface IIpLookupResponse {
