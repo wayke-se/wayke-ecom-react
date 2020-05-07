@@ -26,7 +26,7 @@ export default (props: IBankIdAuthenticationProps) => {
             <section className="page-section">
                 <h1 className="h6">Kunduppgifter</h1>
                 <div data-ecom-content="">
-                    <p>Signera med BankID för att hämta din adress.</p>
+                    <p>Identifiera dig med BankId för att hämta adress</p>
                 </div>
             </section>
             <section className="page-section">
