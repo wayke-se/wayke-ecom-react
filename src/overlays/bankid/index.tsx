@@ -30,7 +30,6 @@ class BankId extends React.Component<IBankIdProps, IState> {
         this.switchMethod = this.switchMethod.bind(this);
         this.launch = this.launch.bind(this);
         this.onCancelled = this.onCancelled.bind(this);
-        this.getSwitchMessage = this.getSwitchMessage.bind(this);
         this.onCancelledForSwitch = this.onCancelledForSwitch.bind(this);
     }
 
