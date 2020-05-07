@@ -19,7 +19,7 @@ const ExplanationAlert = ({ orderOptions }: IExplanationAlertProps) => {
     const contact = orderOptions.getContactInformation();
     const name = !!contact && !!contact.name ? contact.name : "oss";
 
-    const text = `Identifiering med BankID sker mot vår teknikleverantör Wayke, men köpet sker fortsatt mot ${name}.`;
+    const text = `Identifiering med BankID sker mot vår teknikleverantör Wayke, men köpet sker mot ${name}.`;
 
     return (
         <section className="page-section">

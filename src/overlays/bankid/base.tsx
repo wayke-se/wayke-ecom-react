@@ -8,10 +8,10 @@ interface IProps {
     title: string;
     onCancel: () => void;
     onSwitchMethod: () => void;
-    isQrCode: boolean;
+    hasQrCode: boolean;
     qrCodeAsBase64: string | undefined;
-    message: string;
-    switchMessage: string;
+    description: string;
+    switchDescription: string;
     canLaunch: boolean;
     onLaunch: () => void;
     logoDimensions: { width: string; height: string };
@@ -21,10 +21,10 @@ export default ({
     title,
     onCancel,
     onSwitchMethod,
-    isQrCode,
+    hasQrCode,
     qrCodeAsBase64,
-    message,
-    switchMessage,
+    description,
+    switchDescription,
     canLaunch,
     onLaunch,
     logoDimensions,
@@ -35,11 +35,11 @@ export default ({
                 <section className="page-section">
                     <h1 className="h6">{title}</h1>
                     <div data-ecom-content="">
-                        <p>{message}</p>
+                        <p>{description}</p>
                     </div>
                 </section>
                 <section className="page-section">
-                    {isQrCode && <QrCode qrCodeAsBase64={qrCodeAsBase64} />}
+                    {hasQrCode && <QrCode qrCodeAsBase64={qrCodeAsBase64} />}
                 </section>
                 <section className="page-section">
                     <Logo dimensions={logoDimensions} />
@@ -53,7 +53,7 @@ export default ({
                     {canLaunch && <LaunchButton onLaunch={onLaunch} />}
                     <div className="repeat-m">
                         <button data-ecom-link="" onClick={onSwitchMethod}>
-                            {switchMessage}
+                            {switchDescription}
                         </button>
                     </div>
                     <div className="repeat-m">

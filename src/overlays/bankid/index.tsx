@@ -3,7 +3,7 @@ import React from "react";
 import { IEcomContext, IEcomStore } from "../../types";
 import { isMobile } from "../../utils/device";
 
-import BankIdOverlay from "./base";
+import BankIdPresenter from "./presenter";
 import StoreAction from "../../constants/store-action";
 
 interface IBankIdProps extends IEcomContext, IEcomStore {
@@ -215,64 +215,26 @@ class BankId extends React.Component<IBankIdProps, IState> {
         }
     }
 
-    getSwitchMessage() {
-        const { useQrCode } = this.state;
-        const switchMessage = useQrCode
-            ? "Öppna BankID på den här enheten"
-            : "Mitt BankId är på en annan enhet";
-        return switchMessage;
-    }
-
-    getTitle() {
-        const { useQrCode } = this.state;
-        return useQrCode
-            ? "Öppna BankID och skanna QR-koden"
-            : "Skriv in din säkerhetskod i BankID-appen";
-    }
-
-    getMessage() {
-        const { bankIdCollect } = this.props;
-        const { useQrCode } = this.state;
-
-        if (this.hasOngoingProcess()) {
-            return bankIdCollect.getMessage();
-        } else if (useQrCode) {
-            return "För att hämta dina uppgifter, starta din BankID applikation på din andra enhet.";
-        }
-        return "För att hämta dina uppgifter, starta din BankID applikation.";
-    }
-
-    getLogoDimensions() {
-        const { useQrCode } = this.state;
-        return useQrCode
-            ? { width: "32px", height: "32px" }
-            : { width: "128px", height: "128px" };
-    }
-
     render() {
         const { useQrCode } = this.state;
-        const { bankIdAuth } = this.props;
+        const { bankIdAuth, bankIdCollect } = this.props;
 
         const hasQrCode = useQrCode && !!bankIdAuth && bankIdAuth.isQrCode();
         const qrCodeAsBase64 = hasQrCode && bankIdAuth.getQrCode();
         const canLaunch = this.canLaunch();
-        const title = this.getTitle();
-        const message = this.getMessage();
-        const switchMessage = this.getSwitchMessage();
-        const logoDimensions = this.getLogoDimensions();
+        const hasOngoingProcess = this.hasOngoingProcess();
 
         return (
-            <BankIdOverlay
-                title={title}
+            <BankIdPresenter
                 onCancel={this.cancel}
                 onSwitchMethod={this.switchMethod}
-                isQrCode={hasQrCode}
+                hasQrCode={hasQrCode}
                 qrCodeAsBase64={qrCodeAsBase64}
                 canLaunch={canLaunch}
                 onLaunch={this.launch}
-                message={message}
-                switchMessage={switchMessage}
-                logoDimensions={logoDimensions}
+                useQrCode={useQrCode}
+                bankIdCollect={bankIdCollect}
+                hasOngoingProcess={hasOngoingProcess}
             />
         );
     }
