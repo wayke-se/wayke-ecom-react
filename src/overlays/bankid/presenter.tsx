@@ -3,7 +3,7 @@ import React from "react";
 import BankIdOverlay from "./base";
 import { IBankIdCollectResponse } from "@wayke-se/ecom";
 
-interface IProps {
+export interface IBankIdPresenterProps {
     onCancel: () => void;
     onSwitchMethod: () => void;
     hasQrCode: boolean;
@@ -25,28 +25,8 @@ export default ({
     useQrCode,
     bankIdCollect,
     hasOngoingProcess,
-}: IProps) => {
-    const [title, setTitle] = React.useState("");
+}: IBankIdPresenterProps) => {
     const [description, setDescription] = React.useState("");
-    const [switchDescription, setSwitchDescription] = React.useState("");
-
-    const logoDimensions = useQrCode
-        ? { width: "32px", height: "32px" }
-        : { width: "128px", height: "128px" };
-
-    React.useEffect(() => {
-        const text = useQrCode
-            ? "Öppna BankID och skanna QR-koden"
-            : "Skriv in din säkerhetskod i BankID-appen";
-        setTitle(text);
-    }, [useQrCode]);
-
-    React.useEffect(() => {
-        const text = useQrCode
-            ? "Öppna BankID på den här enheten"
-            : "Mitt BankId är på en annan enhet";
-        setSwitchDescription(text);
-    }, [useQrCode]);
 
     React.useEffect(() => {
         if (hasOngoingProcess) {
@@ -62,6 +42,18 @@ export default ({
             );
         }
     }, [bankIdCollect, useQrCode]);
+
+    const logoDimensions = useQrCode
+        ? { width: "32px", height: "32px" }
+        : { width: "128px", height: "128px" };
+
+    const title = useQrCode
+        ? "Öppna BankID och skanna QR-koden"
+        : "Skriv in din säkerhetskod i BankID-appen";
+
+    const switchDescription = useQrCode
+        ? "Öppna BankID på den här enheten"
+        : "Mitt BankId är på en annan enhet";
 
     return (
         <BankIdOverlay

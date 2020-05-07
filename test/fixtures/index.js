@@ -118,4 +118,30 @@ factory.define("IAvailableInsuranceOption", [
     "ecomInsuranceText",
 ]);
 
+factory.define("IBankIdPresenterProps", [
+    "hasQrCode".asBoolean(),
+    "canLaunch".asBoolean(),
+    "useQrCode".asBoolean(),
+    "hasOngoingProcess".asBoolean(),
+    "qrCodeAsBase64",
+    "onCancel".as(() => {}),
+    "onSwitchMethod".as(() => {}),
+    "onCancel".as(() => {}),
+    "bankIdCollect".fromFixture("IBankIdCollectResponse"),
+]);
+
+factory.define("IBankIdCollectResponse", [
+    "getOrderRef".as(() => ""),
+    "getStatus".as(() => undefined),
+    "isPending".as(() => false),
+    "hasMessage".as(() => false),
+    "shouldRenew".as(() => false),
+    "isCompleted".as(() => false),
+    "getHintCode".as(() => undefined),
+    "getPersonalNumber".as(() => undefined),
+    "getAddress".as(() => undefined),
+    "getMessage".as(() => ""),
+]);
+
+
 module.exports = factory;
