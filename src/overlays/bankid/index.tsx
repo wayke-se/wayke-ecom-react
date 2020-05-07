@@ -38,8 +38,8 @@ class BankId extends React.Component<IBankIdProps, IState> {
         this.startAuth();
     }
 
-    componentDidUpdate(prevProps: IBankIdProps) {
-        this.startAuth();
+    componentDidUpdate(prevProps: IBankIdProps, prevState: IState) {
+        this.restartAuth(prevState);
         this.onAuthStarted(prevProps);
         this.onCollect(prevProps);
     }
@@ -50,15 +50,18 @@ class BankId extends React.Component<IBankIdProps, IState> {
     }
 
     startAuth() {
+        if (this.shouldAuth()) {
+            this.auth();
+        }
+    }
+
+    shouldAuth() {
         const { bankIdAuth, pendingBankIdAuthRequest } = this.props;
 
         const authNotStarted = !bankIdAuth;
         const noPendingAuth = !pendingBankIdAuthRequest;
         const shouldAuth = authNotStarted && noPendingAuth;
-
-        if (shouldAuth) {
-            this.auth();
-        }
+        return shouldAuth;
     }
 
     auth() {
@@ -69,6 +72,18 @@ class BankId extends React.Component<IBankIdProps, IState> {
             onBankIdQrCodeAuth();
         } else {
             onBankIdSameDeviceAuth();
+        }
+    }
+
+    restartAuth(prevState: IState) {
+        const { useQrCode } = this.state;
+        const { useQrCode: prevUseQrCode } = prevState;
+
+        const methodUpdated = useQrCode !== prevUseQrCode;
+        const shouldReauth = methodUpdated && this.shouldAuth();
+
+        if (shouldReauth) {
+            this.auth();
         }
     }
 
@@ -181,8 +196,8 @@ class BankId extends React.Component<IBankIdProps, IState> {
         const { onBankIdReset } = this.props;
         const { useQrCode } = this.state;
 
-        this.setState({ useQrCode: !useQrCode });
         onBankIdReset();
+        this.setState({ useQrCode: !useQrCode });
     }
 
     canLaunch() {
