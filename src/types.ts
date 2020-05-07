@@ -38,6 +38,7 @@ export interface IEcomExternalProps {
     onExit: () => void;
     onUserEvent?: (userEvent: string, currentStep: string) => void;
     useBankId: boolean;
+    displayBankIdAlert?: boolean;
 }
 
 export interface IEcomContext {

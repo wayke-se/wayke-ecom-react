@@ -1,17 +1,53 @@
 import React from "react";
 
-import { IEcomLifecycle, IEcomStore, IEcomContext } from "../types";
+import {
+    IEcomLifecycle,
+    IEcomStore,
+    IEcomContext,
+    IEcomExternalProps,
+} from "../types";
 import OverlayType from "../constants/overlay-type";
 import StoreAction from "../constants/store-action";
 import CustomerInformationInputType from "../constants/customer-information-input-type";
+import { IOrderOptionsResponse } from "@wayke-se/ecom";
+
+interface IExplanationAlertProps {
+    orderOptions: IOrderOptionsResponse;
+}
+
+const ExplanationAlert = ({ orderOptions }: IExplanationAlertProps) => {
+    const contact = orderOptions.getContactInformation();
+    const name = !!contact && !!contact.name ? contact.name : "oss";
+
+    const text = `Identifiering med BankID sker mot vår teknikleverantör Wayke, men köpet sker fortsatt mot ${name}.`;
+
+    return (
+        <section className="page-section">
+            <div data-ecom-alert="">
+                <div className="alert-icon-section">
+                    <div className="alert-icon">
+                        <i className="icon-info no-margin" />
+                    </div>
+                </div>
+                <div className="alert-content">{text}</div>
+            </div>
+        </section>
+    );
+};
 
 interface IBankIdAuthenticationProps
     extends IEcomContext,
         IEcomStore,
-        IEcomLifecycle {}
+        IEcomLifecycle,
+        IEcomExternalProps {}
 
 export default (props: IBankIdAuthenticationProps) => {
-    const { onDisplayOverlay, dispatchStoreAction } = props;
+    const {
+        onDisplayOverlay,
+        dispatchStoreAction,
+        displayBankIdAlert,
+        orderOptions,
+    } = props;
 
     React.useEffect(() => {
         dispatchStoreAction(StoreAction.UPDATE_NAMED_VALUE, {
@@ -48,6 +84,10 @@ export default (props: IBankIdAuthenticationProps) => {
                     </div>
                 </button>
             </section>
+
+            {displayBankIdAlert && (
+                <ExplanationAlert orderOptions={orderOptions} />
+            )}
         </div>
     );
 };
