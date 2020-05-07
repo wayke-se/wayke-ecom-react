@@ -89,6 +89,7 @@ factory.define("IEcomData", [
     "interact".pickFrom([null]),
     "payment".fromFixture("IPaymentData"),
     "tradeInCar".fromFixture("ITradeInCarData"),
+    "useBankId".asBoolean(),
 ]);
 
 factory.define("IEcomExternalProps", [
@@ -96,6 +97,25 @@ factory.define("IEcomExternalProps", [
     "serviceLogotypeUrl",
     "onExit".as(() => () => null),
     "onUserEvent".as(() => () => null),
+]);
+
+factory.define("IOrderOptionsResponse", [
+    "getPaymentOptions".as(() => []),
+    "getDeliveryOptions".as(() => []),
+    "getInsuranceOption".as(() => undefined),
+    "getOrderConditions".as(() => undefined),
+    "getOrderReturnConditions".as(() => undefined),
+    "getConditionsPdfUri".as(() => null),
+    "getContactInformation".as(() => null),
+    "allowsTradeIn".as(() => false),
+]);
+
+factory.define("IAvailableInsuranceOption", [
+    "description",
+    "logo",
+    "title",
+    "url",
+    "ecomInsuranceText",
 ]);
 
 module.exports = factory;
