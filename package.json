@@ -1,6 +1,6 @@
 {
   "name": "@wayke-se/ecom-react",
-  "version": "2.3.0-alpha.3",
+  "version": "2.3.0-alpha.4",
   "description": "React components for Wayke ecom",
   "main": "src/index.tsx",
   "typings": "src/index.d.ts",
@@ -14,8 +14,7 @@
     "prettify": "prettier --write 'src/**/*.{ts,tsx}'",
     "prepare": "npm run prettify && npm run type-check && npm run lint && npm run test",
     "test": "jest --verbose",
-    "type-check": "tsc --noEmit --skipLibCheck",
-    "parcel": "parcel dev/index.html"
+    "type-check": "tsc --noEmit --skipLibCheck"
   },
   "repository": {
     "type": "git",
@@ -86,7 +85,9 @@
       "<rootDir>/src/**/*.spec.ts",
       "<rootDir>/src/**/*.spec.tsx"
     ],
-    "setupFilesAfterEnv": ["<rootDir>test/setup.ts"]
+    "setupFilesAfterEnv": [
+      "<rootDir>test/setup.ts"
+    ]
   },
   "@pika/pack": {
     "pipeline": [
