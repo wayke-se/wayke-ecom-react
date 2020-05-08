@@ -85,9 +85,7 @@
       "<rootDir>/src/**/*.spec.ts",
       "<rootDir>/src/**/*.spec.tsx"
     ],
-    "setupFilesAfterEnv": [
-      "<rootDir>test/setup.ts"
-    ]
+    "setupFilesAfterEnv": ["<rootDir>test/setup.ts"]
   },
   "@pika/pack": {
     "pipeline": [

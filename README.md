@@ -46,7 +46,9 @@ const ecomData = {
     },
     serviceLogotypeUrl: [string],
     onExit: [function],
-    onUserEvent: [function]
+    onUserEvent: [function],
+    skipBankId: [boolean],
+    displayBankIdAlert: [boolean]
 };
 ```
 
@@ -54,6 +56,8 @@ const ecomData = {
 * `serviceLogotypeUrl` - This should be an url to an image that is shown in the "header" of the e-commerce modal.
 * `onExit` - This should be a function that determines what should happen when the user either clicks the exit button on the modal, or if the user goes through the whole flow, makes the order and now is finished. (this code should probably hide the modal)
 * `onUserEvent` - This is an *optional* method to provide if you want to be informed about how the user navigates through the ecom modal. This could for instance be used for analytics purposes. The method will receive two parameters: 1) `userEvent: string` and 2) `currentStep: string`. The first one indicating what the user did, and the second one which step the user was on when they performed the event.
+* `skipBankId`: An *optional* flag. The e-commerce modal uses Swedish BankId to identify the user and fetch personal information such as address. If you want to skip BankId identification, set this to true _(`false` by default)_.
+* `displayBankIdAlert`: An *optional* flag. By default, the user is identified with BankId to _Wayke_. To clarify that the purchase is to another retailer, an optional alert can be displayed in the BankId identification step _(`false` by default)_.
 
 When you want to show the Ecom component you simply import it and instantiate it with the above mentioned data.
 
