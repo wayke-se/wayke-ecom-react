@@ -105,8 +105,9 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
 
     getAddress() {
         const { addressLookup, bankIdCollect } = this.state;
-        const { useBankId } = this.props;
+        const { skipBankId } = this.props;
 
+        const useBankId = !skipBankId;
         if (useBankId) {
             return bankIdCollect.getAddress();
         }

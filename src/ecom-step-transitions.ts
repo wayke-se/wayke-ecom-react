@@ -13,15 +13,15 @@ export const getInitialStep = (options: IOrderOptionsResponse): EcomStep => {
         : EcomStep.PAYMENT_METHOD_CHOOSER;
 };
 
-export const getIdentificationStep = (useBankId: boolean) =>
-    useBankId
-        ? EcomStep.BANKID_AUTHENTICATION
-        : EcomStep.CUSTOMER_INFORMATION_INITIAL;
+export const getIdentificationStep = (skipBankId: boolean) =>
+    skipBankId
+        ? EcomStep.CUSTOMER_INFORMATION_INITIAL
+        : EcomStep.BANKID_AUTHENTICATION;
 
 const emptyList = [];
 export const getPrimarySteps = (
     options: IOrderOptionsResponse,
-    useBankId: boolean
+    skipBankId: boolean
 ): EcomStep[] => {
     const result = [];
 
@@ -35,7 +35,7 @@ export const getPrimarySteps = (
         result.push(EcomStep.INSURANCE_INFORMATION_DEFINITION);
     }
 
-    result.push(getIdentificationStep(useBankId));
+    result.push(getIdentificationStep(skipBankId));
 
     const deliveryOptions = options.getDeliveryOptions() || emptyList;
     if (
@@ -85,7 +85,7 @@ export const getAllTransitions = () => ({
             return EcomStep.PAYMENT_FINANCING_DETAILS;
         }
         if (!options.getInsuranceOption()) {
-            return getIdentificationStep(data.useBankId);
+            return getIdentificationStep(data.skipBankId);
         }
 
         return EcomStep.INSURANCE_INFORMATION_DEFINITION;
@@ -95,7 +95,7 @@ export const getAllTransitions = () => ({
         options: IOrderOptionsResponse
     ) => {
         if (!options.getInsuranceOption()) {
-            return getIdentificationStep(data.useBankId);
+            return getIdentificationStep(data.skipBankId);
         }
 
         return EcomStep.INSURANCE_INFORMATION_DEFINITION;
@@ -105,10 +105,10 @@ export const getAllTransitions = () => ({
             return EcomStep.INSURANCE_ALTERNATIVE_CHOOSER;
         }
 
-        return getIdentificationStep(data.useBankId);
+        return getIdentificationStep(data.skipBankId);
     },
     [EcomStep.INSURANCE_ALTERNATIVE_CHOOSER]: (data: IEcomData) => {
-        return getIdentificationStep(data.useBankId);
+        return getIdentificationStep(data.skipBankId);
     },
     [EcomStep.BANKID_AUTHENTICATION]: () =>
         EcomStep.CUSTOMER_INFORMATION_DETAILS,

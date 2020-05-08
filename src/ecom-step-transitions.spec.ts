@@ -148,7 +148,7 @@ describe("Get transitions", () => {
                     "IEcomData",
                     (d: IEcomData) => {
                         d.payment.paymentType = PaymentType.Cash;
-                        d.useBankId = true;
+                        d.skipBankId = false;
                         return d;
                     }
                 );
@@ -172,7 +172,7 @@ describe("Get transitions", () => {
                     "IEcomData",
                     (d: IEcomData) => {
                         d.payment.paymentType = PaymentType.Cash;
-                        d.useBankId = false;
+                        d.skipBankId = true;
                         return d;
                     }
                 );

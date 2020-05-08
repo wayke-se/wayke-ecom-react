@@ -12,7 +12,7 @@ class EcomStore extends React.Component<IEcomExternalProps, IEcomData> {
 
         this.dispatchStoreAction = this.dispatchStoreAction.bind(this);
 
-        const { useBankId } = props;
+        const { skipBankId } = props;
         this.state = {
             customer: {
                 hasAcceptedConditions: false,
@@ -80,7 +80,7 @@ class EcomStore extends React.Component<IEcomExternalProps, IEcomData> {
                 condition: undefined,
                 description: "",
             },
-            useBankId,
+            skipBankId,
         };
     }
 
