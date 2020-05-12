@@ -109,6 +109,7 @@ export default (props: IPaymentMethodItemProps) => {
                                 src={scaledImage!}
                                 alt="logotype"
                                 className="l-block"
+                                style={{ maxWidth: "100px", maxHeight: "60px" }}
                             />
                         </div>
                     )}

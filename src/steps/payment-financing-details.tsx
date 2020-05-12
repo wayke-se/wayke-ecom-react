@@ -383,6 +383,10 @@ class PaymentFinancingDetails extends React.Component<
                                     src={scaledImage}
                                     alt="Logotype"
                                     className="l-block"
+                                    style={{
+                                        maxWidth: "100px",
+                                        maxHeight: "60px",
+                                    }}
                                 />
                             </div>
                         )}
