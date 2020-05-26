@@ -29,7 +29,7 @@ export default (props: ICustomerInformationDetailsProps) => {
     const hasNameError =
         props.data.interact.customer.name && !props.data.customer.name;
     const hasAddressError =
-        props.data.interact.customer.address && !props.data.customer.address;
+        props.data.interact.customer.address && !props.data.customer.street;
     const hasZipError =
         props.data.interact.customer.zip &&
         !validateZip(props.data.customer.zip);
@@ -87,9 +87,9 @@ export default (props: ICustomerInformationDetailsProps) => {
                         <input
                             type="text"
                             id="information-2-input-street"
-                            name="address"
+                            name="street"
                             placeholder="Gatuadress"
-                            value={props.data.customer.address}
+                            value={props.data.customer.street}
                             onChange={onHandleInputChange}
                             onBlur={onHandleBlur}
                         />

@@ -66,12 +66,13 @@ export default (props: IFinalSummaryProps) => {
     ] = React.useState(false);
     const [hasRequestError, setHasRequestError] = React.useState(false);
 
+    const address = props.getAddress();
     const handleCreateOrderClick = () => {
         const isValidData = validateEcomData(
             props.data,
-            props.addressLookup,
             props.orderOptions,
-            props.paymentLookup
+            props.paymentLookup,
+            address
         );
 
         if (!isValidData) {

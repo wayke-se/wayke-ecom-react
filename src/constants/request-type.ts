@@ -5,6 +5,9 @@ enum RequestType {
     GET_ADDRESS_LOOKUP,
     GET_PAYMENT_LOOKUP,
     CREATE_ORDER,
+    BANK_ID_AUTH,
+    BANK_ID_COLLECT,
+    BANK_ID_CANCEL,
 }
 
 export default RequestType;

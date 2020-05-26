@@ -28,9 +28,7 @@ export default (props: IDeliveryInfoType) => {
 
     if (!deliveryOption) return null;
 
-    const address = props.addressLookup
-        ? props.addressLookup.getAddress()
-        : null;
+    const address = props.getAddress();
 
     const addressDistance = address !== null ? address.distance : undefined;
     const distance = getDeliveryDistance(addressDistance, deliveryOption);

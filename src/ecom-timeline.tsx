@@ -9,6 +9,7 @@ import TimelineItem from "./ecom-timeline-item";
 export interface IEcomTimelineProps {
     options: IOrderOptionsResponse;
     currentStep: EcomStep;
+    useBankId: boolean;
 }
 
 const getLabel = (step: EcomStep): string => {
@@ -19,7 +20,7 @@ const getLabel = (step: EcomStep): string => {
             return "Betalsätt";
         case EcomStep.INSURANCE_INFORMATION_DEFINITION:
             return "Försäkring";
-        case EcomStep.CUSTOMER_INFORMATION_INITIAL:
+        case EcomStep.BANKID_AUTHENTICATION:
             return "Uppgifter";
         case EcomStep.DELIVERY_METHOD:
             return "Leverans";
@@ -37,7 +38,7 @@ export default (props: IEcomTimelineProps) => {
         return <div />;
     }
 
-    const primarySteps = getPrimarySteps(props.options);
+    const primarySteps = getPrimarySteps(props.options, props.useBankId);
     const items = [];
 
     let timelineItemKey = 0;

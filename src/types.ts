@@ -1,6 +1,7 @@
 import CustomerInformationInputType from "./constants/customer-information-input-type";
 import StoreAction from "./constants/store-action";
 import UserEvent from "./constants/user-event";
+import OverlayType from "./constants/overlay-type";
 
 import {
     IInsuranceOptionsResponse,
@@ -12,6 +13,10 @@ import {
     IPaymentLookupResponse,
     VehicleCondition,
     DeliveryType,
+    IBankIdAuthResponse,
+    AuthMethod,
+    IBankIdCollectResponse,
+    IAddress,
 } from "@wayke-se/ecom";
 
 export interface IVehicle {
@@ -32,6 +37,8 @@ export interface IEcomExternalProps {
 
     onExit: () => void;
     onUserEvent?: (userEvent: string, currentStep: string) => void;
+    useBankId?: boolean;
+    displayBankIdAlert?: boolean;
 }
 
 export interface IEcomContext {
@@ -42,6 +49,11 @@ export interface IEcomContext {
     vehicleLookup: IVehicleLookupResponse;
     addressLookup: IAddressLookupResponse;
     paymentLookup: IPaymentLookupResponse;
+    bankIdAuth: IBankIdAuthResponse;
+    pendingBankIdAuthRequest: boolean;
+    bankIdCollect: IBankIdCollectResponse;
+
+    getAddress: () => IAddress;
 
     onFetchInsuranceOptions: (
         callback: (isSuccessful: boolean) => void
@@ -56,6 +68,11 @@ export interface IEcomContext {
         callback: (isSuccessful: boolean) => void
     ) => void;
     onCreateOrder: (callback: (isSuccessful: boolean) => void) => void;
+    onBankIdQrCodeAuth: () => void;
+    onBankIdSameDeviceAuth: () => void;
+    onBankIdCollect: () => void;
+    onBankIdCancel: (callback: (response: boolean) => void) => void;
+    onBankIdReset: () => void;
 }
 
 export interface IEcomLifecycle {
@@ -66,6 +83,7 @@ export interface IEcomLifecycle {
     onShowTradeInCarDefinition: () => void;
     onShowPaymentMethodChooser: () => void;
     onIncompleteUserEvent: (userEvent: UserEvent) => void;
+    onDisplayOverlay: (overlayType: OverlayType) => void;
 }
 
 export interface IEcomStore {
@@ -85,6 +103,7 @@ export interface IEcomData {
     interact: IInteractData;
     payment: IPaymentData;
     tradeInCar: ITradeInCarData;
+    useBankId: boolean;
 }
 
 export interface IDeliveryMethodData {
@@ -124,7 +143,7 @@ export interface ICustomerData {
     inputType: CustomerInformationInputType;
     personalNumber: string;
     name: string;
-    address: string;
+    street: string;
     zip: string;
     city: string;
     email: string;
@@ -138,7 +157,7 @@ export interface ICustomerObject {
     email: string;
     phone: string;
     name: string;
-    address: string;
+    street: string;
     zip: string;
     city: string;
 }
@@ -163,6 +182,7 @@ export interface IInteractData {
         city: boolean;
         email: boolean;
         phone: boolean;
+        isAuthenticated: boolean;
     };
 
     delivery: {
@@ -191,9 +211,9 @@ export interface IAddressLookupSdkData {
 export interface ICreateOrderSdkData {
     vehicleId: string;
     ecomData: IEcomData;
-    addressLookup: IAddressLookupResponse;
     orderOptions: IOrderOptionsResponse;
     paymentLookup: IPaymentLookupResponse | undefined;
+    address: IAddress;
 }
 
 export interface IPaymentLookupSdkData {
@@ -212,4 +232,21 @@ export interface IRetailerInformation {
 export interface ILoanInformation {
     name: string;
     unit: string;
+}
+
+export interface IBankIdAuthSdkData {
+    method: AuthMethod;
+}
+
+export interface IIpLookupResponse {
+    ip: string;
+}
+
+export interface IBankIdCollectSdkData {
+    method: AuthMethod;
+    orderRef: string;
+}
+
+export interface IBankIdCancelSdkData {
+    orderRef: string;
 }
