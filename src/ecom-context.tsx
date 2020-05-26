@@ -7,6 +7,9 @@ import {
     IVehicleLookupResponse,
     IAddressLookupResponse,
     IPaymentLookupResponse,
+    IBankIdAuthResponse,
+    AuthMethod,
+    IBankIdCollectResponse,
 } from "@wayke-se/ecom";
 
 import EcomLifecycle from "./ecom-lifecycle";
@@ -17,6 +20,9 @@ import {
     makeAddressLookupRequest,
     makeCreateOrderRequest,
     makePaymentLookupRequest,
+    makeBankIdAuthRequest,
+    makeBankIdCollectRequest,
+    makeBankIdCancelRequest,
 } from "./tools/request-service";
 
 export interface IEcomContextProps extends IEcomExternalProps, IEcomStore {}
@@ -29,12 +35,16 @@ interface IState {
     vehicleLookup: IVehicleLookupResponse | null;
     addressLookup: IAddressLookupResponse | null;
     paymentLookup: IPaymentLookupResponse | null;
+    bankIdAuth: IBankIdAuthResponse | null;
+    pendingBankIdAuthRequest: boolean;
+    bankIdCollect: IBankIdCollectResponse | null;
 }
 
 class EcomContext extends React.Component<IEcomContextProps, IState> {
     constructor(props: IEcomContextProps) {
         super(props);
 
+        this.getAddress = this.getAddress.bind(this);
         this.handleFetchVehicleInformation = this.handleFetchVehicleInformation.bind(
             this
         );
@@ -48,6 +58,13 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
             this
         );
         this.handleCreateOrder = this.handleCreateOrder.bind(this);
+        this.handleBankIdQrCodeAuth = this.handleBankIdQrCodeAuth.bind(this);
+        this.handleBankIdSameDeviceAuth = this.handleBankIdSameDeviceAuth.bind(
+            this
+        );
+        this.handleBankIdCollect = this.handleBankIdCollect.bind(this);
+        this.handleBankIdCancel = this.handleBankIdCancel.bind(this);
+        this.handleBankIdReset = this.handleBankIdReset.bind(this);
 
         this.makeRequest = this.makeRequest.bind(this);
         this.saveResponse = this.saveResponse.bind(this);
@@ -60,6 +77,9 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
             vehicleLookup: null,
             addressLookup: null,
             paymentLookup: null,
+            bankIdAuth: null,
+            pendingBankIdAuthRequest: false,
+            bankIdCollect: null,
         };
     }
 
@@ -81,6 +101,17 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
         };
 
         this.makeRequest(request);
+    }
+
+    getAddress() {
+        const { addressLookup, bankIdCollect } = this.state;
+        const { useBankId } = this.props;
+
+        if (useBankId) {
+            return bankIdCollect.getAddress();
+        }
+
+        return !!addressLookup ? addressLookup.getAddress() : null;
     }
 
     handleFetchVehicleInformation(callback: (isSuccessful: boolean) => void) {
@@ -178,13 +209,14 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
 
     handleCreateOrder(callback: (isSuccessful: boolean) => void) {
         const request = () => {
+            const address = this.getAddress();
             makeCreateOrderRequest(
                 {
                     ecomData: this.props.data,
-                    addressLookup: this.state.addressLookup,
                     vehicleId: this.props.vehicle.id,
                     orderOptions: this.state.orderOptions,
                     paymentLookup: this.state.paymentLookup,
+                    address,
                 },
                 (wasOrderCreated: boolean) => {
                     this.setState(
@@ -202,6 +234,92 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
         this.makeRequest(request);
     }
 
+    handleBankIdQrCodeAuth() {
+        const data = { method: AuthMethod.QrCode };
+
+        const request = () => {
+            makeBankIdAuthRequest(data, response => {
+                this.saveResponse({
+                    bankIdAuth: response,
+                    bankIdCollect: null,
+                    pendingBankIdAuthRequest: false,
+                });
+            });
+        };
+
+        this.setState({ pendingBankIdAuthRequest: true });
+        this.makeRequest(request);
+    }
+
+    handleBankIdSameDeviceAuth() {
+        const data = { method: AuthMethod.SameDevice };
+
+        const request = () => {
+            makeBankIdAuthRequest(data, response => {
+                this.saveResponse({
+                    bankIdAuth: response,
+                    bankIdCollect: null,
+                    pendingBankIdAuthRequest: false,
+                });
+            });
+        };
+
+        this.setState({ pendingBankIdAuthRequest: true });
+        this.makeRequest(request);
+    }
+
+    handleBankIdCollect() {
+        const { bankIdAuth } = this.state;
+        const noActiveBankIdProcess = !bankIdAuth;
+        if (noActiveBankIdProcess) {
+            return;
+        }
+
+        const data = {
+            method: bankIdAuth.getMethod(),
+            orderRef: bankIdAuth.getOrderRef(),
+        };
+
+        const request = () => {
+            makeBankIdCollectRequest(data, response => {
+                this.setState({
+                    bankIdCollect: null,
+                });
+                this.saveResponse({
+                    bankIdCollect: response,
+                });
+            });
+        };
+
+        this.makeRequest(request);
+    }
+
+    handleBankIdCancel(callback: (response: boolean) => void) {
+        const { bankIdAuth } = this.state;
+
+        const noActiveBankIdProcess = !bankIdAuth;
+        if (noActiveBankIdProcess) {
+            callback(false);
+            return;
+        }
+
+        const data = {
+            orderRef: bankIdAuth.getOrderRef(),
+        };
+
+        const request = () => {
+            makeBankIdCancelRequest(data, callback);
+        };
+
+        this.makeRequest(request);
+    }
+
+    handleBankIdReset() {
+        this.setState({
+            bankIdAuth: null,
+        });
+    }
+
     makeRequest(callback: () => void) {
         this.setState(
             {
@@ -211,7 +329,7 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
         );
     }
 
-    saveResponse(responseState: any, callback: () => void) {
+    saveResponse(responseState: any, callback?: () => void) {
         this.setState(
             {
                 ...responseState,
@@ -224,11 +342,17 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
     render() {
         return (
             <EcomLifecycle
+                getAddress={this.getAddress}
                 onFetchInsuranceOptions={this.handleFetchInsuranceOptions}
                 onFetchVehicleInformation={this.handleFetchVehicleInformation}
                 onFetchAddressInformation={this.handleFetchAddressInformation}
                 onFetchPaymentInformation={this.handleFetchPaymentInformation}
                 onCreateOrder={this.handleCreateOrder}
+                onBankIdQrCodeAuth={this.handleBankIdQrCodeAuth}
+                onBankIdSameDeviceAuth={this.handleBankIdSameDeviceAuth}
+                onBankIdCollect={this.handleBankIdCollect}
+                onBankIdReset={this.handleBankIdReset}
+                onBankIdCancel={this.handleBankIdCancel}
                 {...this.state}
                 {...this.props}
             />

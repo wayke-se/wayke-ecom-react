@@ -3,7 +3,8 @@ import React from "react";
 import { ICustomerInformationDetailsProps } from "./customer-information-props";
 
 export default (props: ICustomerInformationDetailsProps) => {
-    const address = props.addressLookup.getAddress();
+    const address = props.getAddress();
+    const allowPersonalNumberEdit = !props.useBankId;
 
     return (
         <React.Fragment>
@@ -15,14 +16,16 @@ export default (props: ICustomerInformationDetailsProps) => {
                     <div className="column">
                         <div className="font-medium">Personnummer</div>
                     </div>
-                    <div className="column">
-                        <button
-                            data-ecom-link="font-inerit"
-                            onClick={props.onShowCustomerInformationInitial}
-                        >
-                            Ändra
-                        </button>
-                    </div>
+                    {allowPersonalNumberEdit && (
+                        <div className="column">
+                            <button
+                                data-ecom-link="font-inerit"
+                                onClick={props.onShowCustomerInformationInitial}
+                            >
+                                Ändra
+                            </button>
+                        </div>
+                    )}
                 </div>
                 <div className="m-t-half">
                     <i className="icon-profile m-r-half" />

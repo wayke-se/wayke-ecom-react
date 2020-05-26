@@ -6,6 +6,8 @@ import {
     IVehicleLookupResponse,
     IAddressLookupResponse,
     IPaymentLookupResponse,
+    IBankIdAuthResponse,
+    IBankIdCollectResponse,
 } from "@wayke-se/ecom";
 
 import { getOrderOptions } from "../sdk/get-order-options";
@@ -14,6 +16,9 @@ import { getInsuranceOptions } from "../sdk/get-insurance-options";
 import { getAddressLookup } from "../sdk/get-address-lookup";
 import { getPaymentLookup } from "../sdk/get-payment-lookup";
 import { createOrder } from "../sdk/create-order";
+import bankIdAuth from "../sdk/bankid/auth";
+import bankIdCollect from "../sdk/bankid/collect";
+import bankIdCancel from "../sdk/bankid/cancel";
 import {
     IOrderOptionsSdkData,
     IVehicleLookupSdkData,
@@ -21,6 +26,9 @@ import {
     IAddressLookupSdkData,
     ICreateOrderSdkData,
     IPaymentLookupSdkData,
+    IBankIdAuthSdkData,
+    IBankIdCollectSdkData,
+    IBankIdCancelSdkData,
 } from "../types";
 
 const requestCache = {};
@@ -171,6 +179,51 @@ export const makeCreateOrderRequest = (
     makeRequest(
         createOrder,
         RequestType.CREATE_ORDER,
+        requestIdentifier,
+        data,
+        callback
+    );
+};
+
+export const makeBankIdAuthRequest = (
+    data: IBankIdAuthSdkData,
+    callback: (response: IBankIdAuthResponse | null) => void
+) => {
+    const requestIdentifier = null;
+
+    makeRequest(
+        bankIdAuth,
+        RequestType.BANK_ID_AUTH,
+        requestIdentifier,
+        data,
+        callback
+    );
+};
+
+export const makeBankIdCollectRequest = (
+    data: IBankIdCollectSdkData,
+    callback: (response: IBankIdCollectResponse | null) => void
+) => {
+    const requestIdentifier = null;
+
+    makeRequest(
+        bankIdCollect,
+        RequestType.BANK_ID_COLLECT,
+        requestIdentifier,
+        data,
+        callback
+    );
+};
+
+export const makeBankIdCancelRequest = (
+    data: IBankIdCancelSdkData,
+    callback: (response: boolean) => void
+) => {
+    const requestIdentifier = null;
+
+    makeRequest(
+        bankIdCancel,
+        RequestType.BANK_ID_CANCEL,
         requestIdentifier,
         data,
         callback

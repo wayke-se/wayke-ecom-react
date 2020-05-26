@@ -13,8 +13,16 @@ export const getInitialStep = (options: IOrderOptionsResponse): EcomStep => {
         : EcomStep.PAYMENT_METHOD_CHOOSER;
 };
 
+export const getIdentificationStep = (useBankId: boolean) =>
+    useBankId
+        ? EcomStep.BANKID_AUTHENTICATION
+        : EcomStep.CUSTOMER_INFORMATION_INITIAL;
+
 const emptyList = [];
-export const getPrimarySteps = (options: IOrderOptionsResponse): EcomStep[] => {
+export const getPrimarySteps = (
+    options: IOrderOptionsResponse,
+    useBankId: boolean
+): EcomStep[] => {
     const result = [];
 
     if (options.allowsTradeIn()) {
@@ -27,7 +35,7 @@ export const getPrimarySteps = (options: IOrderOptionsResponse): EcomStep[] => {
         result.push(EcomStep.INSURANCE_INFORMATION_DEFINITION);
     }
 
-    result.push(EcomStep.CUSTOMER_INFORMATION_INITIAL);
+    result.push(getIdentificationStep(useBankId));
 
     const deliveryOptions = options.getDeliveryOptions() || emptyList;
     if (
@@ -77,7 +85,7 @@ export const getAllTransitions = () => ({
             return EcomStep.PAYMENT_FINANCING_DETAILS;
         }
         if (!options.getInsuranceOption()) {
-            return EcomStep.CUSTOMER_INFORMATION_INITIAL;
+            return getIdentificationStep(data.useBankId);
         }
 
         return EcomStep.INSURANCE_INFORMATION_DEFINITION;
@@ -87,7 +95,7 @@ export const getAllTransitions = () => ({
         options: IOrderOptionsResponse
     ) => {
         if (!options.getInsuranceOption()) {
-            return EcomStep.CUSTOMER_INFORMATION_INITIAL;
+            return getIdentificationStep(data.useBankId);
         }
 
         return EcomStep.INSURANCE_INFORMATION_DEFINITION;
@@ -97,10 +105,13 @@ export const getAllTransitions = () => ({
             return EcomStep.INSURANCE_ALTERNATIVE_CHOOSER;
         }
 
-        return EcomStep.CUSTOMER_INFORMATION_INITIAL;
+        return getIdentificationStep(data.useBankId);
     },
-    [EcomStep.INSURANCE_ALTERNATIVE_CHOOSER]: () =>
-        EcomStep.CUSTOMER_INFORMATION_INITIAL,
+    [EcomStep.INSURANCE_ALTERNATIVE_CHOOSER]: (data: IEcomData) => {
+        return getIdentificationStep(data.useBankId);
+    },
+    [EcomStep.BANKID_AUTHENTICATION]: () =>
+        EcomStep.CUSTOMER_INFORMATION_DETAILS,
     [EcomStep.CUSTOMER_INFORMATION_INITIAL]: () =>
         EcomStep.CUSTOMER_INFORMATION_DETAILS,
     [EcomStep.CUSTOMER_INFORMATION_DETAILS]: (

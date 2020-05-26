@@ -1,7 +1,8 @@
 import React from "react";
 
-import CustomerInformationDetails from "./steps/customer-information-details";
+import BankIdAuthentication from "./steps/bankid-authentication";
 import CustomerInformationInitial from "./steps/customer-information-initial";
+import CustomerInformationDetails from "./steps/customer-information-details";
 import DeliveryMethodChooser from "./steps/delivery-method-chooser";
 import FinalConfirmation from "./steps/final-confirmation";
 import FinalSummary from "./steps/final-summary";
@@ -63,6 +64,9 @@ export default (props: AllProps) => {
 
         case EcomStep.INSURANCE_ALTERNATIVE_CHOOSER:
             return <InsuranceAlternativeChooser {...props} />;
+
+        case EcomStep.BANKID_AUTHENTICATION:
+            return <BankIdAuthentication {...props} />;
 
         case EcomStep.CUSTOMER_INFORMATION_INITIAL:
             return <CustomerInformationInitial {...props} />;
