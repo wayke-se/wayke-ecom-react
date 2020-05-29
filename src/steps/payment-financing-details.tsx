@@ -359,6 +359,11 @@ class PaymentFinancingDetails extends React.Component<
             this.handleSliderChange("residual", value);
         };
 
+        const footNote =
+            hasResidual || hasFixedResidual
+                ? `Beräknat på ${formattedInterest} % ränta (effektivt ${formattedEffectiveInterest} %) och en årlig körsträcka om 1500 mil.`
+                : `Beräknat på ${formattedInterest} % ränta (effektivt ${formattedEffectiveInterest} %).`;
+
         return (
             <div className="page-main">
                 <section className="page-section">
@@ -585,10 +590,7 @@ class PaymentFinancingDetails extends React.Component<
                         )}{" "}
                         kr/mån
                     </div>
-                    <div className="font-size-small">
-                        Beräknat på {formattedInterest} % ränta (effektivt{" "}
-                        {formattedEffectiveInterest} %)
-                    </div>
+                    <div className="font-size-small">{footNote}</div>
 
                     <div className="m-t-half">
                         <button
