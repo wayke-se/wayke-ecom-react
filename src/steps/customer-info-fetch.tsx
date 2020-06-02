@@ -2,6 +2,8 @@ import React from "react";
 
 import { ICustomerInformationDetailsProps } from "./customer-information-props";
 
+const mask = (raw: string) => `${raw.substr(0, raw.length - 4)}xxxx`;
+
 export default (props: ICustomerInformationDetailsProps) => {
     const address = props.getAddress();
     const allowPersonalNumberEdit = !props.useBankId;
@@ -29,7 +31,7 @@ export default (props: ICustomerInformationDetailsProps) => {
                 </div>
                 <div className="m-t-half">
                     <i className="icon-profile m-r-half" />
-                    {props.data.customer.personalNumber}
+                    {mask(props.data.customer.personalNumber)}
                 </div>
             </section>
 
