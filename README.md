@@ -21,10 +21,12 @@ config.bind({
         topic: [E-COMMERCE-TOPIC],
         channel: [E-COMMERCE-CHANNEL],
     },
+    /** Specifying a bank id thumbprint is optional **/
+    bankIdThumbprint: "[CUSTOM BANK ID CERTIFICATE THUMBPRINT]"
 });
 ```
 
-See https://github.com/wayke-se/wayke-ecom-js for more info about for instance the API address, and configuration for order origination.
+See https://github.com/wayke-se/wayke-ecom-js for more info about for instance the API address, as well as configuration for order origination and bank id thumbprint.
 
 ## Usage
 
