@@ -298,12 +298,12 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
 
         const request = () => {
             makeBankIdCollectRequest(data, response => {
-                this.setState({
-                    bankIdCollect: null,
-                });
+                const hasError = response instanceof Error;
+                const bankIdCollect = !hasError ? response : null;
+
                 this.saveResponse({
-                    bankIdCollect: response,
-                    hasBankIdError: false,
+                    bankIdCollect,
+                    hasBankIdError: hasError,
                 });
             });
         };
@@ -329,7 +329,6 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
             makeBankIdCancelRequest(data, callback);
         };
 
-        this.setState({ hasBankIdError: false });
         this.makeRequest(request);
     }
 
