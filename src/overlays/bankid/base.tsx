@@ -46,7 +46,7 @@ export default ({
                 </section>
                 <section className="page-section">
                     <Logo dimensions={logoDimensions} />
-                    <Spinner hasError={hasError} />
+                    {!hasError && <Spinner />}
                 </section>
                 <section className="page-section">
                     {canLaunch && <LaunchButton onLaunch={onLaunch} />}
