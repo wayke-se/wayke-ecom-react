@@ -38,6 +38,7 @@ interface IState {
     bankIdAuth: IBankIdAuthResponse | null;
     pendingBankIdAuthRequest: boolean;
     bankIdCollect: IBankIdCollectResponse | null;
+    hasBankIdError: boolean;
 }
 
 class EcomContext extends React.Component<IEcomContextProps, IState> {
@@ -80,6 +81,7 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
             bankIdAuth: null,
             pendingBankIdAuthRequest: false,
             bankIdCollect: null,
+            hasBankIdError: false,
         };
     }
 
@@ -239,15 +241,22 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
 
         const request = () => {
             makeBankIdAuthRequest(data, response => {
+                const hasError = response instanceof Error;
+                const bankIdAuth = !hasError ? response : null;
+
                 this.saveResponse({
-                    bankIdAuth: response,
+                    bankIdAuth,
                     bankIdCollect: null,
                     pendingBankIdAuthRequest: false,
+                    hasBankIdError: hasError,
                 });
             });
         };
 
-        this.setState({ pendingBankIdAuthRequest: true });
+        this.setState({
+            hasBankIdError: false,
+            pendingBankIdAuthRequest: true,
+        });
         this.makeRequest(request);
     }
 
@@ -256,15 +265,22 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
 
         const request = () => {
             makeBankIdAuthRequest(data, response => {
+                const hasError = response instanceof Error;
+                const bankIdAuth = !hasError ? response : null;
+
                 this.saveResponse({
-                    bankIdAuth: response,
+                    bankIdAuth,
                     bankIdCollect: null,
                     pendingBankIdAuthRequest: false,
+                    hasBankIdError: hasError,
                 });
             });
         };
 
-        this.setState({ pendingBankIdAuthRequest: true });
+        this.setState({
+            hasBankIdError: false,
+            pendingBankIdAuthRequest: true,
+        });
         this.makeRequest(request);
     }
 
@@ -287,10 +303,12 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
                 });
                 this.saveResponse({
                     bankIdCollect: response,
+                    hasBankIdError: false,
                 });
             });
         };
 
+        this.setState({ hasBankIdError: false });
         this.makeRequest(request);
     }
 
@@ -311,11 +329,13 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
             makeBankIdCancelRequest(data, callback);
         };
 
+        this.setState({ hasBankIdError: false });
         this.makeRequest(request);
     }
 
     handleBankIdReset() {
         this.setState({
+            hasBankIdError: false,
             bankIdAuth: null,
         });
     }

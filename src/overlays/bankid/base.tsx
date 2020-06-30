@@ -3,6 +3,7 @@ import React from "react";
 import QrCode from "./qr-code";
 import LaunchButton from "./launch-button";
 import Logo from "./logo";
+import Spinner from "./spinner";
 
 interface IProps {
     title: string;
@@ -15,6 +16,7 @@ interface IProps {
     canLaunch: boolean;
     onLaunch: () => void;
     logoDimensions: { width: string; height: string };
+    hasError: boolean;
 }
 
 export default ({
@@ -28,6 +30,7 @@ export default ({
     canLaunch,
     onLaunch,
     logoDimensions,
+    hasError,
 }: IProps) => (
     <div data-ecom-frame="">
         <div className="frame-body">
@@ -43,11 +46,7 @@ export default ({
                 </section>
                 <section className="page-section">
                     <Logo dimensions={logoDimensions} />
-                    <div className="repeat-m-half">
-                        <div data-ecom-spinner="center third-party">
-                            <div className="spinner"></div>
-                        </div>
-                    </div>
+                    <Spinner hasError={hasError} />
                 </section>
                 <section className="page-section">
                     {canLaunch && <LaunchButton onLaunch={onLaunch} />}
