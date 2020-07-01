@@ -217,7 +217,7 @@ class BankId extends React.Component<IBankIdProps, IState> {
 
     render() {
         const { useQrCode } = this.state;
-        const { bankIdAuth, bankIdCollect } = this.props;
+        const { bankIdAuth, bankIdCollect, hasBankIdError } = this.props;
 
         const hasQrCode = useQrCode && !!bankIdAuth && bankIdAuth.isQrCode();
         const qrCodeAsBase64 = hasQrCode && bankIdAuth.getQrCode();
@@ -235,6 +235,7 @@ class BankId extends React.Component<IBankIdProps, IState> {
                 useQrCode={useQrCode}
                 bankIdCollect={bankIdCollect}
                 hasOngoingProcess={hasOngoingProcess}
+                hasError={hasBankIdError}
             />
         );
     }

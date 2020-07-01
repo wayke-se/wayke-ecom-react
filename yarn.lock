@@ -1347,10 +1347,10 @@
     semver "^6.3.0"
     tsutils "^3.17.1"
 
-"@wayke-se/ecom@3.0.0":
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/@wayke-se/ecom/-/ecom-3.0.0.tgz#4b24202c79fbec1882c6debf96940573fc0157a8"
-  integrity sha512-j0YInw3zTW9AbnqRjf6nRWjXGm9w3QNo6LlxXoayeOD7yOskyscVx7iMlxuTT+zBgHydfqXUavTfJ97dCKj4nw==
+"@wayke-se/ecom@3.1.0":
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/@wayke-se/ecom/-/ecom-3.1.0.tgz#6bebec075724e5e79e5796bec27fab3b14c0f42e"
+  integrity sha512-Z8ZCMtuDgtqfSkTmzw3DCidh/rRaU47F0n39C/1ATardBjFWFNpMFzLPqkYY5Hbtzumr5IGayB14sI+wHyPUAQ==
 
 abab@^2.0.0:
   version "2.0.3"

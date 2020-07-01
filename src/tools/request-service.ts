@@ -187,7 +187,7 @@ export const makeCreateOrderRequest = (
 
 export const makeBankIdAuthRequest = (
     data: IBankIdAuthSdkData,
-    callback: (response: IBankIdAuthResponse | null) => void
+    callback: (response: IBankIdAuthResponse | Error | null) => void
 ) => {
     const requestIdentifier = null;
 

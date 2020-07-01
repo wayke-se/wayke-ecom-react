@@ -52,6 +52,7 @@ export interface IEcomContext {
     bankIdAuth: IBankIdAuthResponse;
     pendingBankIdAuthRequest: boolean;
     bankIdCollect: IBankIdCollectResponse;
+    hasBankIdError: boolean;
 
     getAddress: () => IAddress;
 

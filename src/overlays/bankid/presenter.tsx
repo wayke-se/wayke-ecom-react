@@ -13,6 +13,7 @@ export interface IBankIdPresenterProps {
     useQrCode: boolean;
     hasOngoingProcess: boolean;
     bankIdCollect?: IBankIdCollectResponse;
+    hasError: boolean;
 }
 
 export default ({
@@ -25,6 +26,7 @@ export default ({
     useQrCode,
     bankIdCollect,
     hasOngoingProcess,
+    hasError,
 }: IBankIdPresenterProps) => {
     const [description, setDescription] = React.useState("");
 
@@ -42,6 +44,12 @@ export default ({
             );
         }
     }, [bankIdCollect, useQrCode]);
+
+    React.useEffect(() => {
+        if (hasError) {
+            setDescription("Någonting gick fel.");
+        }
+    }, [hasError]);
 
     const logoDimensions = useQrCode
         ? { width: "32px", height: "32px" }
@@ -67,6 +75,7 @@ export default ({
             description={description}
             switchDescription={switchDescription}
             logoDimensions={logoDimensions}
+            hasError={hasError}
         />
     );
 };
