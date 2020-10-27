@@ -10,7 +10,7 @@ describe("Order Summary: Delivery Information", () => {
     it("doesn't render if no delivery type has been chosen", () => {
         const props = {
             ...fixtures.create("IEcomExternalProps"),
-            data: fixtures.create("IEcomData", d => {
+            data: fixtures.create("IEcomData", (d) => {
                 d.interact = {
                     delivery: false,
                 };
@@ -26,7 +26,7 @@ describe("Order Summary: Delivery Information", () => {
     it("doesn't render if chosen delivery type is DeliveryType.None", () => {
         const props = {
             ...fixtures.create("IEcomExternalProps"),
-            data: fixtures.create("IEcomData", d => {
+            data: fixtures.create("IEcomData", (d) => {
                 d.delivery = {
                     type: DeliveryType.None,
                 };
@@ -45,7 +45,7 @@ describe("Order Summary: Delivery Information", () => {
     it("doesn't render if no delivery options are available", () => {
         const props = {
             ...fixtures.create("IEcomExternalProps"),
-            data: fixtures.create("IEcomData", d => {
+            data: fixtures.create("IEcomData", (d) => {
                 d.delivery = {
                     type: DeliveryType.Delivery,
                 };
@@ -67,7 +67,7 @@ describe("Order Summary: Delivery Information", () => {
     it("doesn't render if chosen delivery options is missing", () => {
         const props = {
             ...fixtures.create("IEcomExternalProps"),
-            data: fixtures.create("IEcomData", d => {
+            data: fixtures.create("IEcomData", (d) => {
                 d.delivery = {
                     type: DeliveryType.Delivery,
                 };

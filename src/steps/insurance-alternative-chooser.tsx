@@ -52,11 +52,11 @@ export default (props: IInsuranceAlternativeChooserProps) => {
     ));
     const hasAccordionItems = accordionItems.length > 0;
 
-    const allIncludedAddons = insuranceOption.addons.filter(a =>
+    const allIncludedAddons = insuranceOption.addons.filter((a) =>
         props.data.insurance.addons.includes(a.name)
     );
     const allExcludedAddons = [].concat(
-        ...allIncludedAddons.map(a => a.excludes)
+        ...allIncludedAddons.map((a) => a.excludes)
     );
 
     const addonItems = insuranceOption.addons.map((a, index) => {

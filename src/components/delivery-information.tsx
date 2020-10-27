@@ -23,7 +23,7 @@ export default (props: IDeliveryInfoType) => {
 
     const deliveryOptions = props.orderOptions.getDeliveryOptions() || [];
     const deliveryOption = deliveryOptions.find(
-        option => option.type === props.data.delivery.type
+        (option) => option.type === props.data.delivery.type
     );
 
     if (!deliveryOption) return null;

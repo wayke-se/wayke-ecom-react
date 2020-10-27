@@ -17,7 +17,7 @@ export interface ITradeInCarDefinitionProps
         IEcomLifecycle {}
 
 export default (props: ITradeInCarDefinitionProps) => {
-    const handleInputChange = e => {
+    const handleInputChange = (e) => {
         props.dispatchStoreAction(StoreAction.UPDATE_NAMED_VALUE, {
             type: "tradeInCar",
             name: e.target.name,
@@ -25,7 +25,7 @@ export default (props: ITradeInCarDefinitionProps) => {
         });
     };
 
-    const handleBlur = e => {
+    const handleBlur = (e) => {
         props.dispatchStoreAction(StoreAction.INTERACT_UPDATE_SPECIFIC, {
             type: "tradeInCar",
             name: e.target.name,

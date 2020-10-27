@@ -5,10 +5,7 @@ export default (
     data: IBankIdAuthSdkData,
     callback: (response: IBankIdAuthResponse | Error | null) => void
 ) => {
-    const request = bankid
-        .newAuthRequest()
-        .withMethod(data.method)
-        .build();
+    const request = bankid.newAuthRequest().withMethod(data.method).build();
 
     bankid
         .auth(request)

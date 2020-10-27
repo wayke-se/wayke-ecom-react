@@ -84,7 +84,7 @@ export default (props: IPaymentMethodChooserProps) => {
     const items = props.orderOptions
         .getDeliveryOptions()
         .sort((a, b) => sort.indexOf(a.type) - sort.indexOf(b.type))
-        .map(option => (
+        .map((option) => (
             <DeliveryMethodItem
                 key={option.type}
                 address={address}
@@ -97,8 +97,9 @@ export default (props: IPaymentMethodChooserProps) => {
     const hasAvailableOptions =
         props.orderOptions
             .getDeliveryOptions()
-            .filter(option => isAvailable(option, address, isAutomaticAddress))
-            .length > 0;
+            .filter((option) =>
+                isAvailable(option, address, isAutomaticAddress)
+            ).length > 0;
 
     return (
         <div className="page-main">

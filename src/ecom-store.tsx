@@ -111,7 +111,7 @@ class EcomStore extends React.Component<IEcomExternalProps, IEcomData> {
                 const newInteract = {};
                 const stateKeys = Object.keys(this.state.interact[value]);
 
-                stateKeys.forEach(stateKey => {
+                stateKeys.forEach((stateKey) => {
                     newInteract[stateKey] = true;
                 });
 
