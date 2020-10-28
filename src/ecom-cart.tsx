@@ -68,8 +68,8 @@ export default (props: IEcomCartProps) => {
     if (hasInsurance) {
         const insuranceOption = props.insuranceOptions.getInsuranceOption();
         const addons = insuranceOption.addons
-            .filter(a => props.data.insurance.addons.includes(a.name))
-            .map(a => ({
+            .filter((a) => props.data.insurance.addons.includes(a.name))
+            .map((a) => ({
                 title: a.title,
                 price: a.monthlyPrice,
                 unit: "kr/mån",

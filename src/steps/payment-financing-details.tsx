@@ -62,7 +62,7 @@ const getIndexFromDuration = (
     duration: number,
     durationSpecification: IPaymentRangeSpec
 ): number =>
-    getAllDurationSteps(durationSpecification).findIndex(s => s === duration);
+    getAllDurationSteps(durationSpecification).findIndex((s) => s === duration);
 
 const getDurationFromIndex = (
     index: number,
@@ -272,7 +272,7 @@ class PaymentFinancingDetails extends React.Component<
         );
 
         const options = getAllDurationSteps(durationSpecification).map(
-            s => `${s} mån`
+            (s) => `${s} mån`
         );
 
         const optionItems = options.map((o, index) => (
@@ -324,7 +324,7 @@ class PaymentFinancingDetails extends React.Component<
 
         const paymentOption = this.props.orderOptions
             .getPaymentOptions()
-            .find(p => p.type === PaymentType.Loan);
+            .find((p) => p.type === PaymentType.Loan);
         const scaledImage = addSizeQuery(paymentOption.logo, 100, 60);
 
         const formattedPrice = formatPrice(loanDetails.getCosts().monthlyCost);
@@ -347,15 +347,15 @@ class PaymentFinancingDetails extends React.Component<
 
         const publicUrl = loanDetails.getPublicURL();
 
-        const onDepositChange = value => {
+        const onDepositChange = (value) => {
             this.handleSliderChange("deposit", value);
         };
 
-        const onDurationChange = value => {
+        const onDurationChange = (value) => {
             this.handleSliderChange("durationIndex", value);
         };
 
-        const onResidualValueChange = value => {
+        const onResidualValueChange = (value) => {
             this.handleSliderChange("residual", value);
         };
 

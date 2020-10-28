@@ -13,7 +13,7 @@ interface IBankIdProps extends IEcomContext, IEcomStore {
 
 interface IState {
     useQrCode: boolean;
-    cancellationToken?: NodeJS.Timeout;
+    cancellationToken?: number;
 }
 
 class BankId extends React.Component<IBankIdProps, IState> {
@@ -136,7 +136,7 @@ class BankId extends React.Component<IBankIdProps, IState> {
     scheduleNewCollect() {
         const { onBankIdCollect } = this.props;
 
-        const cancellationToken = setTimeout(() => {
+        const cancellationToken = window.setTimeout(() => {
             if (this.hasOngoingProcess()) {
                 onBankIdCollect();
             }

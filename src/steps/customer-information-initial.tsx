@@ -37,7 +37,7 @@ export default (props: ICustomerInformationInitialProps) => {
         }
     });
 
-    const handleInputChange = e => {
+    const handleInputChange = (e) => {
         props.dispatchStoreAction(StoreAction.UPDATE_NAMED_VALUE, {
             type: "customer",
             name: e.target.name,
@@ -45,7 +45,7 @@ export default (props: ICustomerInformationInitialProps) => {
         });
     };
 
-    const handleBlur = e => {
+    const handleBlur = (e) => {
         props.dispatchStoreAction(StoreAction.INTERACT_UPDATE_SPECIFIC, {
             type: "customer",
             name: e.target.name,

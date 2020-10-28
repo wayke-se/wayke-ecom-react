@@ -240,7 +240,7 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
         const data = { method: AuthMethod.QrCode };
 
         const request = () => {
-            makeBankIdAuthRequest(data, response => {
+            makeBankIdAuthRequest(data, (response) => {
                 const hasError = response instanceof Error;
                 const bankIdAuth = !hasError ? response : null;
 
@@ -264,7 +264,7 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
         const data = { method: AuthMethod.SameDevice };
 
         const request = () => {
-            makeBankIdAuthRequest(data, response => {
+            makeBankIdAuthRequest(data, (response) => {
                 const hasError = response instanceof Error;
                 const bankIdAuth = !hasError ? response : null;
 
@@ -297,7 +297,7 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
         };
 
         const request = () => {
-            makeBankIdCollectRequest(data, response => {
+            makeBankIdCollectRequest(data, (response) => {
                 const hasError = response instanceof Error;
                 const bankIdCollect = !hasError ? response : null;
 

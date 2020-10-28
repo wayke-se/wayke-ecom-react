@@ -25,7 +25,7 @@ const getLoanPaymentOptions = (orderOptions: IOrderOptionsResponse) => {
 
     return orderOptions
         .getPaymentOptions()
-        .find(p => p.type === PaymentType.Loan);
+        .find((p) => p.type === PaymentType.Loan);
 };
 
 export const getLoanDetails = (

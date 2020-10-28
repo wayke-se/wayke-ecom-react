@@ -25,7 +25,7 @@ export default (props: IAddonItemProps) => {
         });
     };
 
-    const handleCheckChange = e => {
+    const handleCheckChange = (e) => {
         const addons = [...props.data.insurance.addons];
 
         const index = addons.indexOf(props.name);

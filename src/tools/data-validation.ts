@@ -93,7 +93,7 @@ export const validateDeliveryType = (
     delivery: IDeliveryMethodData
 ) => {
     const deliveryOptions = options.getDeliveryOptions() || [];
-    const validDeliveryTypes = deliveryOptions.map(x => x.type);
+    const validDeliveryTypes = deliveryOptions.map((x) => x.type);
 
     return (
         validDeliveryTypes.includes(delivery.type) ||
