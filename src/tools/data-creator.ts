@@ -6,7 +6,7 @@ export const createCustomerObject = (
     customer: ICustomerData,
     address: IAddress | undefined
 ): ICustomerObject => {
-    const { personalNumber, email, phone } = customer;
+    const { personalNumber, email, phone, givenName, surname } = customer;
     let { name, zip, city, street } = customer;
 
     const isAutomatic =
@@ -24,6 +24,8 @@ export const createCustomerObject = (
         email,
         phone,
         name,
+        givenName,
+        surname,
         street,
         zip,
         city,

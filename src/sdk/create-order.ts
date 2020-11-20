@@ -44,7 +44,9 @@ export const createOrder = (
     const customerBuilder = customers
         .newCustomer()
         .withEmail(ecomData.customer.email)
-        .withPhoneNumber(ecomData.customer.phone);
+        .withPhoneNumber(ecomData.customer.phone)
+        .withGivenName(ecomData.customer.givenName)
+        .withSurname(ecomData.customer.surname);
 
     const paymentBuilder = orders
         .newPayment()

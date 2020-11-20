@@ -144,6 +144,8 @@ export interface ICustomerData {
     inputType: CustomerInformationInputType;
     personalNumber: string;
     name: string;
+    givenName: string;
+    surname: string;
     street: string;
     zip: string;
     city: string;
@@ -158,6 +160,8 @@ export interface ICustomerObject {
     email: string;
     phone: string;
     name: string;
+    givenName: string;
+    surname: string;
     street: string;
     zip: string;
     city: string;
