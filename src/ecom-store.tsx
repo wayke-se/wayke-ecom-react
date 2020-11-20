@@ -113,7 +113,7 @@ class EcomStore extends React.Component<IEcomExternalProps, IEcomData> {
 
                 stateUpdate = {
                     [objectType]: {
-                        ...this.state[namedValueType],
+                        ...this.state[objectType],
                         ...objectValues,
                     },
                 };
