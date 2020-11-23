@@ -156,13 +156,10 @@ class BankId extends React.Component<IBankIdProps, IState> {
             type: "customer",
             name: "isAuthenticated",
         });
-        dispatchStoreAction(StoreAction.UPDATE_MULTIPLE, {
+        dispatchStoreAction(StoreAction.UPDATE_NAMED_VALUE, {
             type: "customer",
-            value: {
-                personalNumber: bankIdCollect.getPersonalNumber(),
-                givenName: bankIdCollect.getGivenName(),
-                surname: bankIdCollect.getSurname(),
-            },
+            name: "personalNumber",
+            value: bankIdCollect.getPersonalNumber(),
         });
 
         onHideOverlay();

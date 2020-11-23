@@ -48,14 +48,14 @@ export const createOrder = (
     if (isAutomaticCustomerInfo) {
         customerBuilder
             .withPersonalNumber(ecomData.customer.personalNumber)
-            .withGivenName(ecomData.customer.givenName)
-            .withSurname(ecomData.customer.surname);
+            .withGivenName(address.givenName)
+            .withSurname(address.surname);
     } else {
         const customerAdress: IAddress = {
             city: ecomData.customer.city,
             name: ecomData.customer.name,
-            givenName: ecomData.customer.givenName,
-            surname: ecomData.customer.surname,
+            givenName: address.givenName,
+            surname: address.surname,
             postalCode: ecomData.customer.zip,
             street: ecomData.customer.street,
             street2: "",

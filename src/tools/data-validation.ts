@@ -23,6 +23,7 @@ import {
     validateEmail,
     validatePhoneNumber,
     validateZip,
+    validateName,
 } from "../utils/validation";
 
 import { createCustomerObject } from "./data-creator";
@@ -184,7 +185,7 @@ export const validateCustomerObject = (customerObject: ICustomerObject) => {
     const isValidEmail = validateEmail(customerObject.email);
     const isValidPhone = validatePhoneNumber(customerObject.phone);
 
-    const isValidName = !!customerObject.name;
+    const isValidName = validateName(customerObject);
     const isValidAddress = !!customerObject.street;
     const isValidCity = !!customerObject.city;
 
