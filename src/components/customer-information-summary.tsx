@@ -2,6 +2,8 @@ import React from "react";
 import { IEcomStore, IEcomContext } from "../types";
 import { createCustomerObject } from "../tools/data-creator";
 
+import { maskText } from "../utils/mask";
+
 interface ICustomerInformationSummaryProps extends IEcomContext, IEcomStore {}
 
 export default (props: ICustomerInformationSummaryProps) => {
@@ -16,14 +18,16 @@ export default (props: ICustomerInformationSummaryProps) => {
                 <div className="column">
                     <div className="font-medium font-size-small">Förnamn</div>
                 </div>
-                <div className="column">{customerObject.givenName}</div>
+                <div className="column">
+                    {maskText(customerObject.givenName)}
+                </div>
             </div>
 
             <div data-ecom-columnrow="" className="repeat-m-half">
                 <div className="column">
                     <div className="font-medium font-size-small">Efternamn</div>
                 </div>
-                <div className="column">{customerObject.surname}</div>
+                <div className="column">{maskText(customerObject.surname)}</div>
             </div>
 
             <div data-ecom-columnrow="" className="repeat-m-half">
