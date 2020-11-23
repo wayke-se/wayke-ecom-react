@@ -76,12 +76,7 @@ export default (props: IPaymentMethodChooserProps) => {
         );
     };
 
-    // TODO Improve... use address from non bank id solution as well.
-    const hasCompletedBankId =
-        !!props.bankIdCollect && props.bankIdCollect.isCompleted();
-    const address = hasCompletedBankId
-        ? props.bankIdCollect.getAddress()
-        : null;
+    const address = props.getAddress();
     const isAutomaticAddress =
         props.data.customer.inputType == CustomerInformationInputType.AUTOMATIC;
     const items = props.orderOptions
