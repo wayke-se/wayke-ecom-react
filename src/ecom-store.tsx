@@ -53,6 +53,8 @@ class EcomStore extends React.Component<IEcomExternalProps, IEcomData> {
                     hasAcceptedReturnConditions: false,
                     personalNumber: false,
                     name: false,
+                    givenName: false,
+                    surname: false,
                     address: false,
                     zip: false,
                     city: false,

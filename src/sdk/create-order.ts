@@ -54,8 +54,8 @@ export const createOrder = (
         const customerAdress: IAddress = {
             city: ecomData.customer.city,
             name: ecomData.customer.name,
-            givenName: address.givenName,
-            surname: address.surname,
+            givenName: ecomData.customer.givenName,
+            surname: ecomData.customer.surname,
             postalCode: ecomData.customer.zip,
             street: ecomData.customer.street,
             street2: "",

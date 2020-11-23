@@ -182,6 +182,8 @@ export interface IInteractData {
         hasAcceptedReturnConditions: boolean;
         personalNumber: boolean;
         name: boolean;
+        givenName: boolean;
+        surname: boolean;
         address: boolean;
         zip: boolean;
         city: boolean;
