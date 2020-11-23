@@ -143,7 +143,6 @@ export interface ICustomerData {
     hasAcceptedReturnConditions: boolean;
     inputType: CustomerInformationInputType;
     personalNumber: string;
-    name: string;
     givenName: string;
     surname: string;
     street: string;
@@ -159,7 +158,6 @@ export interface ICustomerObject {
     personalNumber: string;
     email: string;
     phone: string;
-    name: string;
     givenName: string;
     surname: string;
     street: string;
@@ -181,7 +179,6 @@ export interface IInteractData {
         hasAcceptedConditions: boolean;
         hasAcceptedReturnConditions: boolean;
         personalNumber: boolean;
-        name: boolean;
         givenName: boolean;
         surname: boolean;
         address: boolean;

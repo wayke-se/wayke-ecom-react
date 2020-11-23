@@ -39,10 +39,19 @@ export default (props: ICustomerInformationDetailsProps) => {
                 <div data-ecom-columnrow="" className="repeat-m-half">
                     <div className="column">
                         <div className="font-medium font-size-small">
-                            För- och efternamn
+                            Förnamn
                         </div>
                     </div>
-                    <div className="column">{address.name}</div>
+                    <div className="column">{address.givenName}</div>
+                </div>
+
+                <div data-ecom-columnrow="" className="repeat-m-half">
+                    <div className="column">
+                        <div className="font-medium font-size-small">
+                            Efternamn
+                        </div>
+                    </div>
+                    <div className="column">{address.surname}</div>
                 </div>
 
                 <div data-ecom-columnrow="" className="repeat-m-half">

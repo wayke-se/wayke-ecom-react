@@ -14,11 +14,16 @@ export default (props: ICustomerInformationSummaryProps) => {
         <React.Fragment>
             <div data-ecom-columnrow="" className="repeat-m-half">
                 <div className="column">
-                    <div className="font-medium font-size-small">
-                        För- och efternamn
-                    </div>
+                    <div className="font-medium font-size-small">Förnamn</div>
                 </div>
-                <div className="column">{customerObject.name}</div>
+                <div className="column">{customerObject.givenName}</div>
+            </div>
+
+            <div data-ecom-columnrow="" className="repeat-m-half">
+                <div className="column">
+                    <div className="font-medium font-size-small">Efternamn</div>
+                </div>
+                <div className="column">{customerObject.surname}</div>
             </div>
 
             <div data-ecom-columnrow="" className="repeat-m-half">

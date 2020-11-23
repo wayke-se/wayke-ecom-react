@@ -143,18 +143,4 @@ factory.define("IBankIdCollectResponse", [
     "getMessage".as(() => ""),
 ]);
 
-factory.define("ICustomerObject", [
-    "isMasked".asBoolean(),
-    "isAutomaticLookup".asBoolean(),
-    "personalNumber",
-    "email",
-    "phone",
-    "name",
-    "givenName",
-    "surname",
-    "street",
-    "zip",
-    "city",
-]);
-
 module.exports = factory;
