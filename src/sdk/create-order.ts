@@ -53,7 +53,6 @@ export const createOrder = (
     } else {
         const customerAdress: IAddress = {
             city: ecomData.customer.city,
-            name: null,
             givenName: ecomData.customer.givenName,
             surname: ecomData.customer.surname,
             postalCode: ecomData.customer.zip,
