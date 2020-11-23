@@ -107,18 +107,6 @@ class EcomStore extends React.Component<IEcomExternalProps, IEcomData> {
                 };
                 break;
 
-            case StoreAction.UPDATE_MULTIPLE:
-                const objectType = value.type;
-                const objectValues = value.value;
-
-                stateUpdate = {
-                    [objectType]: {
-                        ...this.state[objectType],
-                        ...objectValues,
-                    },
-                };
-                break;
-
             case StoreAction.INTERACT_SET_ALL_FOR_TYPE:
                 const newInteract = {};
                 const stateKeys = Object.keys(this.state.interact[value]);
