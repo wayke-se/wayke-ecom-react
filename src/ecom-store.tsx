@@ -19,12 +19,13 @@ class EcomStore extends React.Component<IEcomExternalProps, IEcomData> {
                 hasAcceptedReturnConditions: false,
                 inputType: null,
                 personalNumber: null,
-                name: "",
                 street: "",
                 zip: "",
                 city: "",
                 email: "",
                 phone: "",
+                givenName: "",
+                surname: "",
             },
             delivery: {
                 type: DeliveryType.None,
@@ -50,7 +51,8 @@ class EcomStore extends React.Component<IEcomExternalProps, IEcomData> {
                     hasAcceptedConditions: false,
                     hasAcceptedReturnConditions: false,
                     personalNumber: false,
-                    name: false,
+                    givenName: false,
+                    surname: false,
                     address: false,
                     zip: false,
                     city: false,
@@ -97,11 +99,9 @@ class EcomStore extends React.Component<IEcomExternalProps, IEcomData> {
                 const namedValueName = value.name;
                 const namedValueValue = value.value;
 
-                const oldContent = this.state[namedValueType];
-
                 stateUpdate = {
                     [namedValueType]: {
-                        ...oldContent,
+                        ...this.state[namedValueType],
                         [namedValueName]: namedValueValue,
                     },
                 };

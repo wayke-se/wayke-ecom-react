@@ -90,3 +90,7 @@ export const validatePhoneNumber = (phoneNumber: string) => {
 
     return regexPhoneNumberVariant.test(phoneNumber);
 };
+
+export const validateName = (givenName: string, surname: string) => {
+    return !!givenName && !!surname;
+};

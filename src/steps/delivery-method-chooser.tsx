@@ -76,9 +76,7 @@ export default (props: IPaymentMethodChooserProps) => {
         );
     };
 
-    const address = props.bankIdCollect.isCompleted()
-        ? props.bankIdCollect.getAddress()
-        : null;
+    const address = props.getAddress();
     const isAutomaticAddress =
         props.data.customer.inputType == CustomerInformationInputType.AUTOMATIC;
     const items = props.orderOptions

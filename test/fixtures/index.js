@@ -143,5 +143,4 @@ factory.define("IBankIdCollectResponse", [
     "getMessage".as(() => ""),
 ]);
 
-
 module.exports = factory;

@@ -2,6 +2,8 @@ import React from "react";
 
 import { ICustomerInformationDetailsProps } from "./customer-information-props";
 
+import { maskText } from "../utils/mask";
+
 const mask = (raw: string) => `${raw.substr(0, raw.length - 4)}xxxx`;
 
 export default (props: ICustomerInformationDetailsProps) => {
@@ -39,10 +41,19 @@ export default (props: ICustomerInformationDetailsProps) => {
                 <div data-ecom-columnrow="" className="repeat-m-half">
                     <div className="column">
                         <div className="font-medium font-size-small">
-                            För- och efternamn
+                            Förnamn
                         </div>
                     </div>
-                    <div className="column">{address.name}</div>
+                    <div className="column">{maskText(address.givenName)}</div>
+                </div>
+
+                <div data-ecom-columnrow="" className="repeat-m-half">
+                    <div className="column">
+                        <div className="font-medium font-size-small">
+                            Efternamn
+                        </div>
+                    </div>
+                    <div className="column">{maskText(address.surname)}</div>
                 </div>
 
                 <div data-ecom-columnrow="" className="repeat-m-half">

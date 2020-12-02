@@ -45,17 +45,16 @@ export const createOrder = (
         .newCustomer()
         .withEmail(ecomData.customer.email)
         .withPhoneNumber(ecomData.customer.phone);
-
-    const paymentBuilder = orders
-        .newPayment()
-        .withType(ecomData.payment.paymentType);
-
     if (isAutomaticCustomerInfo) {
-        customerBuilder.withPersonalNumber(ecomData.customer.personalNumber);
+        customerBuilder
+            .withPersonalNumber(ecomData.customer.personalNumber)
+            .withGivenName(address.givenName)
+            .withSurname(address.surname);
     } else {
         const customerAdress: IAddress = {
             city: ecomData.customer.city,
-            name: ecomData.customer.name,
+            givenName: ecomData.customer.givenName,
+            surname: ecomData.customer.surname,
             postalCode: ecomData.customer.zip,
             street: ecomData.customer.street,
             street2: "",
@@ -64,6 +63,9 @@ export const createOrder = (
         customerBuilder.withAddress(customerAdress);
     }
 
+    const paymentBuilder = orders
+        .newPayment()
+        .withType(ecomData.payment.paymentType);
     if (isLoan) {
         paymentBuilder
             .withDownPayment(ecomData.payment.loanDeposit)

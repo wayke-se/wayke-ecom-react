@@ -26,8 +26,11 @@ const handleBlur = (
 };
 
 export default (props: ICustomerInformationDetailsProps) => {
-    const hasNameError =
-        props.data.interact.customer.name && !props.data.customer.name;
+    const hasGivenNameError =
+        props.data.interact.customer.givenName &&
+        !props.data.customer.givenName;
+    const hasSurnameError =
+        props.data.interact.customer.surname && !props.data.customer.surname;
     const hasAddressError =
         props.data.interact.customer.address && !props.data.customer.street;
     const hasZipError =
@@ -45,30 +48,57 @@ export default (props: ICustomerInformationDetailsProps) => {
         <section className="page-section">
             <div data-ecom-form="">
                 <div
-                    className={`form-group ${hasNameError ? " has-error" : ""}`}
+                    className={`form-group ${
+                        hasGivenNameError ? " has-error" : ""
+                    }`}
                 >
                     <label
                         data-ecom-inputlabel=""
-                        htmlFor="information-2-input-name"
+                        htmlFor="information-2-input-given-name"
                     >
-                        För- och efternamn
+                        Förnamn
                     </label>
 
                     <div data-ecom-inputtext="">
                         <input
                             type="text"
-                            id="information-2-input-name"
-                            name="name"
-                            placeholder="Förnamn Efternamn"
-                            value={props.data.customer.name}
+                            id="information-2-input-given-name"
+                            name="givenName"
+                            placeholder="Förnamn"
+                            value={props.data.customer.givenName}
                             onChange={onHandleInputChange}
                             onBlur={onHandleBlur}
                         />
                     </div>
 
-                    <div className="form-alert">
-                        För- och efternamn måste anges
+                    <div className="form-alert">Förnamn måste anges</div>
+                </div>
+
+                <div
+                    className={`form-group ${
+                        hasSurnameError ? " has-error" : ""
+                    }`}
+                >
+                    <label
+                        data-ecom-inputlabel=""
+                        htmlFor="information-2-input-surname"
+                    >
+                        Efternamn
+                    </label>
+
+                    <div data-ecom-inputtext="">
+                        <input
+                            type="text"
+                            id="information-2-input-surname"
+                            name="surname"
+                            placeholder="Efternamn"
+                            value={props.data.customer.surname}
+                            onChange={onHandleInputChange}
+                            onBlur={onHandleBlur}
+                        />
                     </div>
+
+                    <div className="form-alert">Efternamn måste anges</div>
                 </div>
 
                 <div

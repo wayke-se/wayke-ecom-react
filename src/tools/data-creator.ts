@@ -7,23 +7,25 @@ export const createCustomerObject = (
     address: IAddress | undefined
 ): ICustomerObject => {
     const { personalNumber, email, phone } = customer;
-    let { name, zip, city, street } = customer;
+    let { zip, city, street, givenName, surname } = customer;
 
     const isAutomatic =
         customer.inputType === CustomerInformationInputType.AUTOMATIC;
 
     if (address) {
-        name = address.name;
         street = address.street;
         zip = address.postalCode;
         city = address.city;
+        givenName = address.givenName;
+        surname = address.surname;
     }
 
     return {
         personalNumber,
         email,
         phone,
-        name,
+        givenName,
+        surname,
         street,
         zip,
         city,
