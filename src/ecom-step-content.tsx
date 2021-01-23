@@ -1,5 +1,6 @@
 import React from "react";
 
+import DealerChooser from "./steps/dealer-chooser";
 import BankIdAuthentication from "./steps/bankid-authentication";
 import CustomerInformationInitial from "./steps/customer-information-initial";
 import CustomerInformationDetails from "./steps/customer-information-details";
@@ -41,6 +42,9 @@ export default (props: AllProps) => {
     }
 
     switch (props.step) {
+        case EcomStep.DEALER_CHOOSER:
+            return <DealerChooser {...props} />;
+
         case EcomStep.TRADE_IN_EXISTS_CHOOSER:
             return <TradeInExistsChooser {...props} />;
 

@@ -5,13 +5,12 @@ export const getOrderOptions = (
     data: IOrderOptionsSdkData,
     callback: (options: IOrderOptionsResponse | null) => void
 ) => {
-    const request = orders
-        .newOptionsRequest()
-        .forVehicle(data.vehicleId)
-        .build();
+    const request = orders.newOptionsRequest().forVehicle(data.vehicleId);
+
+    if (data.dealerId) request.forDealer(data.dealerId);
 
     orders
-        .getOptions(request)
+        .getOptions(request.build())
         .then((response: IOrderOptionsResponse) => {
             callback(response);
         })

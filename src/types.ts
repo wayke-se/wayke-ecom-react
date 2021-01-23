@@ -18,6 +18,7 @@ import {
     IBankIdCollectResponse,
     IAddress,
 } from "@wayke-se/ecom";
+import { IDealerOption } from "@wayke-se/ecom/dist-types/orders/types";
 
 export interface IVehicle {
     id: string;
@@ -32,6 +33,7 @@ export interface IVehicle {
 }
 
 export interface IEcomExternalProps {
+    dealer?: string;
     vehicle: IVehicle;
     serviceLogotypeUrl: string;
 
@@ -56,6 +58,7 @@ export interface IEcomContext {
 
     getAddress: () => IAddress;
 
+    onHandleDealerSelection: (dealer: IDealerOption) => void;
     onFetchInsuranceOptions: (
         callback: (isSuccessful: boolean) => void
     ) => void;
@@ -98,6 +101,7 @@ export interface IEcomStore {
 }
 
 export interface IEcomData {
+    dealer?: string;
     customer: ICustomerData;
     delivery: IDeliveryMethodData;
     insurance: IInsuranceData;
@@ -196,6 +200,7 @@ export interface IInteractData {
 
 export interface IOrderOptionsSdkData {
     vehicleId: string;
+    dealerId?: string;
 }
 
 export interface IInsuranceOptionsSdkData {
@@ -221,6 +226,7 @@ export interface ICreateOrderSdkData {
 }
 
 export interface IPaymentLookupSdkData {
+    dealerId?: string;
     vehicleId: string;
     ecomData: IPaymentData;
     orderOptions: IOrderOptionsResponse;

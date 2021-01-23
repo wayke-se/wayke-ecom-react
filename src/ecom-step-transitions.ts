@@ -8,6 +8,10 @@ import EcomStep from "./constants/ecom-step";
 import { IEcomData } from "./types";
 
 export const getInitialStep = (options: IOrderOptionsResponse): EcomStep => {
+    if (options.requiresDealerSelection()) {
+        return EcomStep.DEALER_CHOOSER;
+    }
+
     return options.allowsTradeIn()
         ? EcomStep.TRADE_IN_EXISTS_CHOOSER
         : EcomStep.PAYMENT_METHOD_CHOOSER;
@@ -24,6 +28,10 @@ export const getPrimarySteps = (
     useBankId: boolean
 ): EcomStep[] => {
     const result = [];
+
+    if (options.requiresDealerSelection()) {
+        result.push(EcomStep.DEALER_CHOOSER);
+    }
 
     if (options.allowsTradeIn()) {
         result.push(EcomStep.TRADE_IN_EXISTS_CHOOSER);
@@ -53,6 +61,14 @@ export const getPrimarySteps = (
 };
 
 export const getAllTransitions = () => ({
+    [EcomStep.DEALER_CHOOSER]: (
+        _: IEcomData,
+        options: IOrderOptionsResponse
+    ) => {
+        return options.allowsTradeIn()
+            ? EcomStep.TRADE_IN_EXISTS_CHOOSER
+            : EcomStep.PAYMENT_METHOD_CHOOSER;
+    },
     [EcomStep.TRADE_IN_EXISTS_CHOOSER]: (data: IEcomData) => {
         if (data.tradeInCar.wantsToDefineTradeIn) {
             return EcomStep.TRADE_IN_CAR_DEFINITION;
