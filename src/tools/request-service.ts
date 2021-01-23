@@ -35,7 +35,8 @@ const requestCache = {};
 
 const getCachedRequestResponse = <T>(
     requestType: RequestType,
-    requestIdentifier: string | null
+    requestIdentifier: string | null,
+    dealerIdentifier: string | null
 ): T | null => {
     if (requestIdentifier === null) {
         return null;
@@ -47,22 +48,29 @@ const getCachedRequestResponse = <T>(
         return null;
     }
 
-    const isSameIdentifier = requestIdentifier === cachedRequest.identifier;
+    let key = requestIdentifier;
+    if (dealerIdentifier) key = `${key}/${dealerIdentifier}`;
+
+    const isSameIdentifier = key === cachedRequest.identifier;
     return isSameIdentifier ? cachedRequest.response : null;
 };
 
 const addRequestToCache = <T>(
     requestType: RequestType,
     requestIdentifier: string | null,
+    dealerIdentifier: string | null,
     response: T
 ) => {
     if (requestIdentifier === null) {
         return;
     }
 
+    let key = requestIdentifier;
+    if (dealerIdentifier) key = `${key}/${dealerIdentifier}`;
+
     requestCache[requestType] = {
         response,
-        identifier: requestIdentifier,
+        identifier: key,
     };
 };
 
@@ -73,12 +81,14 @@ const makeRequest = <S, T>(
     ) => void,
     requestType: RequestType,
     requestIdentifier: string | null,
+    dealerIdentifier: string | null,
     data: S,
     callback: (response: T | null) => void
 ) => {
     const cachedRequestResponse = getCachedRequestResponse<T>(
         requestType,
-        requestIdentifier
+        requestIdentifier,
+        dealerIdentifier
     );
 
     if (cachedRequestResponse) {
@@ -87,7 +97,12 @@ const makeRequest = <S, T>(
 
     requestAction(data, (response: T | null) => {
         if (response) {
-            addRequestToCache(requestType, requestIdentifier, response);
+            addRequestToCache(
+                requestType,
+                requestIdentifier,
+                dealerIdentifier,
+                response
+            );
         }
 
         callback(response);
@@ -99,11 +114,13 @@ export const makeOrderOptionsRequest = (
     callback: (response: IOrderOptionsResponse | null) => void
 ) => {
     const requestIdentifier = data.vehicleId;
+    const dealerIdentifier = data.dealerId;
 
     makeRequest(
         getOrderOptions,
         RequestType.GET_ORDER_OPTIONS,
         requestIdentifier,
+        dealerIdentifier,
         data,
         callback
     );
@@ -119,6 +136,7 @@ export const makeVehicleLookupRequest = (
         getVehicleLookup,
         RequestType.GET_VEHICLE_LOOKUP,
         requestIdentifier,
+        null,
         data,
         callback
     );
@@ -134,6 +152,7 @@ export const makeInsuranceOptionsRequest = (
         getInsuranceOptions,
         RequestType.GET_INSURANCE_OPTIONS,
         requestIdentifier,
+        null,
         data,
         callback
     );
@@ -149,6 +168,7 @@ export const makeAddressLookupRequest = (
         getAddressLookup,
         RequestType.GET_ADDRESS_LOOKUP,
         requestIdentifier,
+        null,
         data,
         callback
     );
@@ -159,11 +179,13 @@ export const makePaymentLookupRequest = (
     callback: (response: IPaymentLookupResponse | null) => void
 ) => {
     const requestIdentifier = `${data.ecomData.loanDeposit}${data.ecomData.loanDuration}${data.ecomData.loanResidual}`;
+    const dealerIdentifier = data.dealerId;
 
     makeRequest(
         getPaymentLookup,
         RequestType.GET_PAYMENT_LOOKUP,
         requestIdentifier,
+        dealerIdentifier,
         data,
         callback
     );
@@ -175,11 +197,11 @@ export const makeCreateOrderRequest = (
 ) => {
     const requestIdentifier = null;
 
-    // @ts-ignore
     makeRequest(
         createOrder,
         RequestType.CREATE_ORDER,
         requestIdentifier,
+        null,
         data,
         callback
     );
@@ -195,6 +217,7 @@ export const makeBankIdAuthRequest = (
         bankIdAuth,
         RequestType.BANK_ID_AUTH,
         requestIdentifier,
+        null,
         data,
         callback
     );
@@ -210,6 +233,7 @@ export const makeBankIdCollectRequest = (
         bankIdCollect,
         RequestType.BANK_ID_COLLECT,
         requestIdentifier,
+        null,
         data,
         callback
     );
@@ -225,6 +249,7 @@ export const makeBankIdCancelRequest = (
         bankIdCancel,
         RequestType.BANK_ID_CANCEL,
         requestIdentifier,
+        null,
         data,
         callback
     );
