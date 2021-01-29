@@ -128,6 +128,8 @@ export interface IPaymentData {
     loanDuration: number;
     loanResidual: number;
     hasAcceptedLoanDetails: boolean;
+    externalId?: string;
+    financialProductCode?: string;
 }
 
 export interface IInsuranceData {

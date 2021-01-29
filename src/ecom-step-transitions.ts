@@ -6,6 +6,7 @@ import {
 
 import EcomStep from "./constants/ecom-step";
 import { IEcomData } from "./types";
+import { shouldUseCreditAssessment } from "./utils/credit-assessment";
 
 export const getInitialStep = (options: IOrderOptionsResponse): EcomStep => {
     return options.allowsTradeIn()
@@ -13,10 +14,19 @@ export const getInitialStep = (options: IOrderOptionsResponse): EcomStep => {
         : EcomStep.PAYMENT_METHOD_CHOOSER;
 };
 
-export const getIdentificationStep = (useBankId: boolean) =>
-    useBankId
-        ? EcomStep.BANKID_AUTHENTICATION
-        : EcomStep.CUSTOMER_INFORMATION_INITIAL;
+// TODO Refactor using two variables here to two separate methods. Not sure if this break initial steps.
+export const getIdentificationStep = (
+    useBankId: boolean,
+    useCreditAssessment?: boolean
+) => {
+    if (useBankId) {
+        if (useCreditAssessment) {
+            return EcomStep.CREDIT_ASSESSMENT_INFORMATION;
+        }
+        return EcomStep.BANKID_AUTHENTICATION;
+    }
+    return EcomStep.CUSTOMER_INFORMATION_INITIAL;
+};
 
 const emptyList = [];
 export const getPrimarySteps = (
@@ -94,21 +104,32 @@ export const getAllTransitions = () => ({
         data: IEcomData,
         options: IOrderOptionsResponse
     ) => {
+        const useCreditAssessment = shouldUseCreditAssessment(data, options);
+
         if (!options.getInsuranceOption()) {
-            return getIdentificationStep(data.useBankId);
+            return getIdentificationStep(data.useBankId, useCreditAssessment);
         }
 
         return EcomStep.INSURANCE_INFORMATION_DEFINITION;
     },
-    [EcomStep.INSURANCE_INFORMATION_DEFINITION]: (data: IEcomData) => {
+    [EcomStep.INSURANCE_INFORMATION_DEFINITION]: (
+        data: IEcomData,
+        options: IOrderOptionsResponse
+    ) => {
+        const useCreditAssessment = shouldUseCreditAssessment(data, options);
+
         if (data.insurance.wantsToSeeInsuranceOptions) {
             return EcomStep.INSURANCE_ALTERNATIVE_CHOOSER;
         }
 
-        return getIdentificationStep(data.useBankId);
+        return getIdentificationStep(data.useBankId, useCreditAssessment);
     },
-    [EcomStep.INSURANCE_ALTERNATIVE_CHOOSER]: (data: IEcomData) => {
-        return getIdentificationStep(data.useBankId);
+    [EcomStep.INSURANCE_ALTERNATIVE_CHOOSER]: (
+        data: IEcomData,
+        options: IOrderOptionsResponse
+    ) => {
+        const useCreditAssessment = shouldUseCreditAssessment(data, options);
+        return getIdentificationStep(data.useBankId, useCreditAssessment);
     },
     [EcomStep.BANKID_AUTHENTICATION]: () =>
         EcomStep.CUSTOMER_INFORMATION_DETAILS,

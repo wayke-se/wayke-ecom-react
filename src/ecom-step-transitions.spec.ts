@@ -8,7 +8,10 @@ import {
     IDeliveryOption,
 } from "@wayke-se/ecom";
 
-import { getAllTransitions } from "./ecom-step-transitions";
+import {
+    getAllTransitions,
+    getIdentificationStep,
+} from "./ecom-step-transitions";
 import EcomStep from "./constants/ecom-step";
 import { IEcomData } from "./types";
 
@@ -289,6 +292,31 @@ describe("Get transitions", () => {
         it("Should transition to FINAL_CONFIRMATION", () => {
             const step = getAllTransitions()[EcomStep.FINAL_SUMMARY]();
             expect(step).toBe(EcomStep.FINAL_CONFIRMATION);
+        });
+    });
+});
+
+describe("Get identification step", () => {
+    describe("Given use bank id", () => {
+        describe("Given credit assessment", () => {
+            it("Should return credit assessment information step", () => {
+                const step = getIdentificationStep(true, true);
+                expect(step).toBe(EcomStep.CREDIT_ASSESSMENT_INFORMATION);
+            });
+        });
+
+        describe("Given no credit assessment", () => {
+            it("Should return bank id authentication step", () => {
+                const step = getIdentificationStep(true);
+                expect(step).toBe(EcomStep.BANKID_AUTHENTICATION);
+            });
+        });
+    });
+
+    describe("Given no bank id", () => {
+        it("Should return initial customer information step", () => {
+            const step = getIdentificationStep(false);
+            expect(step).toBe(EcomStep.CUSTOMER_INFORMATION_INITIAL);
         });
     });
 });
