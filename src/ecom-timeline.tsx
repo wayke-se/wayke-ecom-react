@@ -21,6 +21,7 @@ const getLabel = (step: EcomStep): string => {
         case EcomStep.INSURANCE_INFORMATION_DEFINITION:
             return "Försäkring";
         case EcomStep.BANKID_AUTHENTICATION:
+        case EcomStep.CREDIT_ASSESSMENT_INFORMATION:
             return "Uppgifter";
         case EcomStep.DELIVERY_METHOD:
             return "Leverans";
