@@ -1,6 +1,10 @@
 import React from "react";
 
-const CreditAssessmentInformation = () => (
+interface IProps {
+    logoSrc: string;
+}
+
+const CreditAssessmentInformation = ({ logoSrc }: IProps) => (
     <div data-ecom-page>
         <section className="page-section">
             <div data-ecom-columnrow>
@@ -16,9 +20,10 @@ const CreditAssessmentInformation = () => (
                 </div>
                 <div className="column valign-top minimal">
                     <img
-                        src="/assets/toolkit/images/audi-logo.png"
-                        alt="Audi logotype"
+                        src={logoSrc}
+                        alt="logotyp"
                         className="l-block"
+                        style={{ maxWidth: "100px", maxHeight: "60px" }}
                     />
                 </div>
             </div>
@@ -58,7 +63,7 @@ const CreditAssessmentInformation = () => (
                             />
                         </div>{" "}
                     </div>
-                    <div className="form-group is-half">
+                    <div className="form-group is-half has-error">
                         <label
                             data-ecom-inputlabel
                             htmlFor="finance-input-phone"
@@ -72,7 +77,10 @@ const CreditAssessmentInformation = () => (
                                 placeholder="Telefonnummer"
                                 // defaultValue
                             />
-                        </div>{" "}
+                        </div>
+                        <div className="form-alert">
+                            Ange personnummer i formatet ÅÅÅÅMMDD-XXXX
+                        </div>
                     </div>
                 </div>
                 <div className="form-group">
