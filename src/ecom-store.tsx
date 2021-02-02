@@ -26,6 +26,7 @@ class EcomStore extends React.Component<IEcomExternalProps, IEcomData> {
                 phone: "",
                 givenName: "",
                 surname: "",
+                civilStatus: "",
             },
             delivery: {
                 type: DeliveryType.None,

@@ -152,6 +152,7 @@ export interface ICustomerData {
     city: string;
     email: string;
     phone: string;
+    civilStatus: string;
 }
 
 export interface ICustomerObject {

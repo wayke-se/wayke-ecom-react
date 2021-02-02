@@ -9,7 +9,11 @@ import {
     IEcomStore,
 } from "../../types";
 import { addSizeQuery } from "../../utils/image";
-import { validatePhoneNumber, validateEmail } from "../../utils/validation";
+import {
+    validatePhoneNumber,
+    validateEmail,
+    validatePersonalNumber,
+} from "../../utils/validation";
 
 import View from "./view";
 
@@ -34,13 +38,16 @@ const getScaledLogo = (props: IProps) => {
 const Presenter = (props: IProps) => {
     const [phoneIsValid, setPhoneIsValid] = React.useState(true);
     const [emailIsValid, setEmailIsValid] = React.useState(true);
+    const [personalNumberIsValid, setPersonalNumberIsValid] = React.useState(
+        true
+    );
 
     const scaledLogo = getScaledLogo(props);
 
     const updateField = (name: string, value: string) =>
         props.dispatchStoreAction(StoreAction.UPDATE_NAMED_VALUE, {
             type: "customer",
-            name: "phone",
+            name,
             value,
         });
 
@@ -68,6 +75,26 @@ const Presenter = (props: IProps) => {
         deselect: validateEmailValue,
     };
 
+    const updatePersonalNumber = (value: string) =>
+        updateField("personalNumber", value);
+    const validatePersonalNumberValue = () => {
+        const isValid = validatePersonalNumber(props.data.customer.phone);
+        setPersonalNumberIsValid(isValid);
+    };
+    const personalNumber = {
+        value: props.data.customer.personalNumber,
+        displayError: !personalNumberIsValid,
+        onChange: updatePersonalNumber,
+        deselect: validatePersonalNumberValue,
+    };
+
+    const updateCivilStatus = (value: string) =>
+        updateField("civilStatus", value);
+    const civilStatus = {
+        value: props.data.customer.civilStatus,
+        onChange: updateCivilStatus,
+    };
+
     const submit = () => {
         const allFieldsAreValid = phoneIsValid && emailIsValid;
 
@@ -78,11 +105,14 @@ const Presenter = (props: IProps) => {
         }
     };
 
+    console.log(civilStatus);
     return (
         <View
             logoSrc={scaledLogo}
             phone={phone}
             email={email}
+            personalNumber={personalNumber}
+            civilStatus={civilStatus}
             submit={submit}
         />
     );

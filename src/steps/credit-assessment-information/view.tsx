@@ -2,18 +2,19 @@ import React from "react";
 
 interface InfoItem {
     value: string | number;
-    displayError: boolean;
+    displayError?: boolean;
     onChange: (value: string) => void;
-    deselect: () => void;
+    deselect?: () => void;
 }
 
-interface IInfoInputProps extends InfoItem {
+interface ITextInputProps extends InfoItem {
     errorText: string;
     placeholder: string;
     label: string;
+    wide?: boolean;
 }
 
-const InfoInput = ({
+const TextInput = ({
     value,
     displayError,
     onChange,
@@ -21,8 +22,12 @@ const InfoInput = ({
     errorText,
     placeholder,
     label,
-}: IInfoInputProps) => {
-    let className = "form-group is-half";
+    wide,
+}: ITextInputProps) => {
+    let className = "form-group";
+    if (!wide) {
+        className += " is-half";
+    }
     if (displayError) {
         className += " has-error";
     }
@@ -36,7 +41,7 @@ const InfoInput = ({
                 <input
                     type="text"
                     placeholder={placeholder}
-                    value={value}
+                    value={value ?? ""}
                     onChange={(e) => onChange(e.target.value)}
                     onBlur={deselect}
                 />
@@ -46,10 +51,39 @@ const InfoInput = ({
     );
 };
 
+interface IDropDownInputProps extends InfoItem {
+    label: string;
+    options: string[];
+}
+
+const DropDownInput = ({
+    value,
+    label,
+    options,
+    onChange,
+}: IDropDownInputProps) => (
+    <div className="form-group">
+        <label data-ecom-inputlabel>{label}</label>
+        <div data-ecom-select>
+            <select
+                className="select"
+                onChange={(e) => onChange(e.target.value)}
+                value={value}
+            >
+                {options.map((option, index) => (
+                    <option key={`${index}-${option}`}>{option}</option>
+                ))}
+            </select>
+        </div>
+    </div>
+);
+
 interface IProps {
     logoSrc: string;
     phone: InfoItem;
     email: InfoItem;
+    personalNumber: InfoItem;
+    civilStatus: InfoItem;
     submit: () => void;
 }
 
@@ -57,6 +91,8 @@ const CreditAssessmentInformation = ({
     logoSrc,
     phone,
     email,
+    personalNumber,
+    civilStatus,
     submit,
 }: IProps) => (
     <div data-ecom-page>
@@ -79,50 +115,32 @@ const CreditAssessmentInformation = ({
         </section>
         <section className="page-section">
             <div data-ecom-form>
-                <div className="form-group">
-                    <label
-                        data-ecom-inputlabel
-                        htmlFor="finance-input-personalnr"
-                    >
-                        Personnummer
-                    </label>{" "}
-                    <div data-ecom-inputtext>
-                        <input
-                            type="text"
-                            id="finance-input-personalnr"
-                            placeholder="ÅÅMMDD-XXXX"
-                            // defaultValue
-                        />
-                    </div>
-                </div>
+                <TextInput
+                    {...personalNumber}
+                    label="Personnummer"
+                    placeholder="ÅÅMMDD-XXXX"
+                    errorText="Ange personnummer i formatet ÅÅÅÅMMDD-XXXX"
+                    wide
+                />
                 <div className="form-group-row">
-                    <InfoInput
+                    <TextInput
                         {...email}
                         label="E-postadress"
                         placeholder="E-postadress"
                         errorText="En giltig e-postadress måste anges"
                     />
-                    <InfoInput
+                    <TextInput
                         {...phone}
                         label="Telefonnummer"
                         placeholder="07X-XXXXXXX"
                         errorText="Ange ditt telefonnummer"
                     />
                 </div>
-                <div className="form-group">
-                    <label data-ecom-inputlabel htmlFor="finance-input-status">
-                        Civilstatus
-                    </label>{" "}
-                    <div data-ecom-select>
-                        <select className="select">
-                            <option>Option 1</option>
-                            <option>Option 2</option>
-                            <option>Option 3</option>
-                            <option>Option 4</option>
-                            <option>Option 5</option>
-                        </select>
-                    </div>
-                </div>
+                <DropDownInput
+                    {...civilStatus}
+                    label="Civilstatus"
+                    options={["Gift", "Singel"]}
+                />
                 <div className="form-group">
                     <label data-ecom-inputlabel htmlFor="finance-input-income">
                         Inkomst per månad före skatt (kr)
