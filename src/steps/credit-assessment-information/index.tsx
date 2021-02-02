@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React from "react";
 import StoreAction from "../../constants/store-action";
 
@@ -8,7 +9,7 @@ import {
     IEcomStore,
 } from "../../types";
 import { addSizeQuery } from "../../utils/image";
-import { validatePhoneNumber } from "../../utils/validation";
+import { validatePhoneNumber, validateEmail } from "../../utils/validation";
 
 import View from "./view";
 
@@ -32,17 +33,19 @@ const getScaledLogo = (props: IProps) => {
 
 const Presenter = (props: IProps) => {
     const [phoneIsValid, setPhoneIsValid] = React.useState(true);
+    const [emailIsValid, setEmailIsValid] = React.useState(true);
 
     const scaledLogo = getScaledLogo(props);
 
-    const updatePhone = (value: string) => {
+    const updateField = (name: string, value: string) =>
         props.dispatchStoreAction(StoreAction.UPDATE_NAMED_VALUE, {
             type: "customer",
             name: "phone",
             value,
         });
-    };
-    const deselectPhoneInput = () => {
+
+    const updatePhone = (value: string) => updateField("phone", value);
+    const validatePhoneValue = () => {
         const isValid = validatePhoneNumber(props.data.customer.phone);
         setPhoneIsValid(isValid);
     };
@@ -50,10 +53,39 @@ const Presenter = (props: IProps) => {
         value: props.data.customer.phone,
         displayError: !phoneIsValid,
         onChange: updatePhone,
-        deselect: deselectPhoneInput,
+        deselect: validatePhoneValue,
     };
 
-    return <View logoSrc={scaledLogo} phone={phone} />;
+    const updateEmail = (value: string) => updateField("email", value);
+    const validateEmailValue = () => {
+        const isValid = validateEmail(props.data.customer.phone);
+        setEmailIsValid(isValid);
+    };
+    const email = {
+        value: props.data.customer.email,
+        displayError: !emailIsValid,
+        onChange: updateEmail,
+        deselect: validateEmailValue,
+    };
+
+    const submit = () => {
+        const allFieldsAreValid = phoneIsValid && emailIsValid;
+
+        if (allFieldsAreValid) {
+            console.log("All fields are valid. Create case...");
+        } else {
+            console.log("There are invalid fields");
+        }
+    };
+
+    return (
+        <View
+            logoSrc={scaledLogo}
+            phone={phone}
+            email={email}
+            submit={submit}
+        />
+    );
 };
 
 export default Presenter;

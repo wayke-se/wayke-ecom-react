@@ -1,13 +1,27 @@
 import React from "react";
 
-interface InfoField {
+interface InfoItem {
     value: string | number;
     displayError: boolean;
     onChange: (value: string) => void;
     deselect: () => void;
 }
 
-const PhoneField = ({ value, displayError, onChange, deselect }: InfoField) => {
+interface IInfoInputProps extends InfoItem {
+    errorText: string;
+    placeholder: string;
+    label: string;
+}
+
+const InfoInput = ({
+    value,
+    displayError,
+    onChange,
+    deselect,
+    errorText,
+    placeholder,
+    label,
+}: IInfoInputProps) => {
     let className = "form-group is-half";
     if (displayError) {
         className += " has-error";
@@ -16,29 +30,35 @@ const PhoneField = ({ value, displayError, onChange, deselect }: InfoField) => {
     return (
         <div className={className}>
             <label data-ecom-inputlabel htmlFor="finance-input-phone">
-                Telefonnummer
-            </label>{" "}
+                {label}
+            </label>
             <div data-ecom-inputtext>
                 <input
                     type="text"
-                    id="finance-input-phone"
-                    placeholder="07X-XXXXXXX"
+                    placeholder={placeholder}
                     value={value}
                     onChange={(e) => onChange(e.target.value)}
                     onBlur={deselect}
                 />
             </div>
-            <div className="form-alert">Ange ditt telefonnummer</div>
+            <div className="form-alert">{errorText}</div>
         </div>
     );
 };
 
 interface IProps {
     logoSrc: string;
-    phone: InfoField;
+    phone: InfoItem;
+    email: InfoItem;
+    submit: () => void;
 }
 
-const CreditAssessmentInformation = ({ logoSrc, phone }: IProps) => (
+const CreditAssessmentInformation = ({
+    logoSrc,
+    phone,
+    email,
+    submit,
+}: IProps) => (
     <div data-ecom-page>
         <section className="page-section">
             <div data-ecom-columnrow>
@@ -76,23 +96,18 @@ const CreditAssessmentInformation = ({ logoSrc, phone }: IProps) => (
                     </div>
                 </div>
                 <div className="form-group-row">
-                    <div className="form-group is-half">
-                        <label
-                            data-ecom-inputlabel
-                            htmlFor="finance-input-email"
-                        >
-                            E-postadress
-                        </label>{" "}
-                        <div data-ecom-inputtext>
-                            <input
-                                type="text"
-                                id="finance-input-email"
-                                placeholder="E-postadress"
-                                // defaultValue
-                            />
-                        </div>{" "}
-                    </div>
-                    <PhoneField {...phone} />
+                    <InfoInput
+                        {...email}
+                        label="E-postadress"
+                        placeholder="E-postadress"
+                        errorText="En giltig e-postadress måste anges"
+                    />
+                    <InfoInput
+                        {...phone}
+                        label="Telefonnummer"
+                        placeholder="07X-XXXXXXX"
+                        errorText="Ange ditt telefonnummer"
+                    />
                 </div>
                 <div className="form-group">
                     <label data-ecom-inputlabel htmlFor="finance-input-status">
@@ -243,7 +258,7 @@ const CreditAssessmentInformation = ({ logoSrc, phone }: IProps) => (
             </div>
         </section>
         <section className="page-section page-section-bottom">
-            <button data-ecom-button="full-width">
+            <button data-ecom-button="full-width" onClick={submit}>
                 <div className="button-section">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
