@@ -1,10 +1,44 @@
 import React from "react";
 
-interface IProps {
-    logoSrc: string;
+interface InfoField {
+    value: string | number;
+    displayError: boolean;
+    onChange: (value: string) => void;
+    deselect: () => void;
 }
 
-const CreditAssessmentInformation = ({ logoSrc }: IProps) => (
+const PhoneField = ({ value, displayError, onChange, deselect }: InfoField) => {
+    let className = "form-group is-half";
+    if (displayError) {
+        className += " has-error";
+    }
+
+    return (
+        <div className={className}>
+            <label data-ecom-inputlabel htmlFor="finance-input-phone">
+                Telefonnummer
+            </label>{" "}
+            <div data-ecom-inputtext>
+                <input
+                    type="text"
+                    id="finance-input-phone"
+                    placeholder="07X-XXXXXXX"
+                    value={value}
+                    onChange={(e) => onChange(e.target.value)}
+                    onBlur={deselect}
+                />
+            </div>
+            <div className="form-alert">Ange ditt telefonnummer</div>
+        </div>
+    );
+};
+
+interface IProps {
+    logoSrc: string;
+    phone: InfoField;
+}
+
+const CreditAssessmentInformation = ({ logoSrc, phone }: IProps) => (
     <div data-ecom-page>
         <section className="page-section">
             <div data-ecom-columnrow>
@@ -19,12 +53,7 @@ const CreditAssessmentInformation = ({ logoSrc }: IProps) => (
                     </div>
                 </div>
                 <div className="column valign-top minimal">
-                    <img
-                        src={logoSrc}
-                        alt="logotyp"
-                        className="l-block"
-                        style={{ maxWidth: "100px", maxHeight: "60px" }}
-                    />
+                    <img src={logoSrc} alt="logotyp" className="l-block" />
                 </div>
             </div>
         </section>
@@ -63,25 +92,7 @@ const CreditAssessmentInformation = ({ logoSrc }: IProps) => (
                             />
                         </div>{" "}
                     </div>
-                    <div className="form-group is-half has-error">
-                        <label
-                            data-ecom-inputlabel
-                            htmlFor="finance-input-phone"
-                        >
-                            Telefonnummer
-                        </label>{" "}
-                        <div data-ecom-inputtext>
-                            <input
-                                type="text"
-                                id="finance-input-phone"
-                                placeholder="Telefonnummer"
-                                // defaultValue
-                            />
-                        </div>
-                        <div className="form-alert">
-                            Ange personnummer i formatet ÅÅÅÅMMDD-XXXX
-                        </div>
-                    </div>
+                    <PhoneField {...phone} />
                 </div>
                 <div className="form-group">
                     <label data-ecom-inputlabel htmlFor="finance-input-status">

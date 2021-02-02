@@ -1,4 +1,5 @@
 import React from "react";
+import StoreAction from "../../constants/store-action";
 
 import {
     IEcomContext,
@@ -7,6 +8,7 @@ import {
     IEcomStore,
 } from "../../types";
 import { addSizeQuery } from "../../utils/image";
+import { validatePhoneNumber } from "../../utils/validation";
 
 import View from "./view";
 
@@ -29,9 +31,29 @@ const getScaledLogo = (props: IProps) => {
 };
 
 const Presenter = (props: IProps) => {
+    const [phoneIsValid, setPhoneIsValid] = React.useState(true);
+
     const scaledLogo = getScaledLogo(props);
 
-    return <View logoSrc={scaledLogo} />;
+    const updatePhone = (value: string) => {
+        props.dispatchStoreAction(StoreAction.UPDATE_NAMED_VALUE, {
+            type: "customer",
+            name: "phone",
+            value,
+        });
+    };
+    const deselectPhoneInput = () => {
+        const isValid = validatePhoneNumber(props.data.customer.phone);
+        setPhoneIsValid(isValid);
+    };
+    const phone = {
+        value: props.data.customer.phone,
+        displayError: !phoneIsValid,
+        onChange: updatePhone,
+        deselect: deselectPhoneInput,
+    };
+
+    return <View logoSrc={scaledLogo} phone={phone} />;
 };
 
 export default Presenter;
