@@ -1,6 +1,5 @@
 /* eslint-disable no-console */
 import React from "react";
-import StoreAction from "../../constants/store-action";
 
 import {
     IEcomContext,
@@ -9,12 +8,17 @@ import {
     IEcomStore,
 } from "../../types";
 import { addSizeQuery } from "../../utils/image";
-import { validateStringNumberInRange } from "../../utils/validation";
-import createEmploymentField from "./fields/createEmploymentField";
+
+import createEmploymentField from "./fields/employment";
 import createEmailField from "./fields/email";
 import createMaritalStatusField from "./fields/maritalStatus";
 import createPersonalNumberField from "./fields/personalNumber";
 import createPhoneField from "./fields/phone";
+import createIncomeField from "./fields/income";
+import createHouseholdChildrenField from "./fields/householdChildren";
+import createHouseholdIncomeField from "./fields/householdIncome";
+import createHouseholdHousingCostField from "./fields/householdHousingCost";
+import createHouseholdDebtField from "./fields/householdDebt";
 
 import View from "./view";
 
@@ -34,62 +38,6 @@ const getScaledLogo = (props: IProps) => {
     const logo = choosenOption.logo;
     const scaledLogo = addSizeQuery(logo, 100, 60);
     return scaledLogo;
-};
-
-const createHousholdHousingCostField = (
-    props: IProps,
-    isValid: boolean,
-    setIsValid: (value: boolean) => void
-) => {
-    const update = (value: string) =>
-        props.dispatchStoreAction(StoreAction.UPDATE_NAMED_VALUE, {
-            type: "householdEconomy",
-            name: "householdHousingCost",
-            value,
-        });
-    const validate = () => {
-        const isValid = validateStringNumberInRange(
-            props.data.householdEconomy.householdHousingCost,
-            -999999999,
-            999999999
-        );
-        setIsValid(isValid);
-    };
-    const householdHousingCost = {
-        value: props.data.householdEconomy.householdHousingCost,
-        displayError: !isValid,
-        onChange: update,
-        onFinish: validate,
-    };
-    return householdHousingCost;
-};
-
-const createHousholdDebtField = (
-    props: IProps,
-    isValid: boolean,
-    setIsValid: (value: boolean) => void
-) => {
-    const update = (value: string) =>
-        props.dispatchStoreAction(StoreAction.UPDATE_NAMED_VALUE, {
-            type: "householdEconomy",
-            name: "householdDebt",
-            value,
-        });
-    const validate = () => {
-        const isValid = validateStringNumberInRange(
-            props.data.householdEconomy.householdDebt,
-            -999999999,
-            999999999
-        );
-        setIsValid(isValid);
-    };
-    const field = {
-        value: props.data.householdEconomy.householdDebt,
-        displayError: !isValid,
-        onChange: update,
-        onFinish: validate,
-    };
-    return field;
 };
 
 const Presenter = (props: IProps) => {
@@ -116,13 +64,6 @@ const Presenter = (props: IProps) => {
 
     const scaledLogo = getScaledLogo(props);
 
-    const updateHouseholdEconomyField = (name: string, value: string) =>
-        props.dispatchStoreAction(StoreAction.UPDATE_NAMED_VALUE, {
-            type: "householdEconomy",
-            name,
-            value,
-        });
-
     const phone = createPhoneField(props, phoneIsValid, setPhoneIsValid);
     const email = createEmailField(props, emailIsValid, setEmailIsValid);
     const personalNumber = createPersonalNumberField(
@@ -132,64 +73,23 @@ const Presenter = (props: IProps) => {
     );
     const maritalStatus = createMaritalStatusField(props);
     const employment = createEmploymentField(props);
-
-    const updateIncome = (value: string) =>
-        updateHouseholdEconomyField("income", value);
-    const validateIncomeValue = () => {
-        const isValid = validateStringNumberInRange(
-            props.data.householdEconomy.income,
-            -999999999,
-            999999999
-        );
-        setIncomeIsValid(isValid);
-    };
-    const income = {
-        value: props.data.householdEconomy.income,
-        displayError: !incomeIsValid,
-        onChange: updateIncome,
-        onFinish: validateIncomeValue,
-    };
-
-    const updateHouseholdChildren = (value: string) =>
-        updateHouseholdEconomyField("householdChildren", value);
-    const validateHouseholdChildrenValue = () => {
-        const isValid = validateStringNumberInRange(
-            props.data.householdEconomy.householdChildren,
-            0,
-            999
-        );
-        setHouseholdChildrenIsValid(isValid);
-    };
-    const householdChildren = {
-        value: props.data.householdEconomy.householdChildren,
-        displayError: !householdChildrenIsValid,
-        onChange: updateHouseholdChildren,
-        onFinish: validateHouseholdChildrenValue,
-    };
-
-    const updateHouseholdIncome = (value: string) =>
-        updateHouseholdEconomyField("householdIncome", value);
-    const validateHouseholdIncomeValue = () => {
-        const isValid = validateStringNumberInRange(
-            props.data.householdEconomy.householdIncome,
-            -999999999,
-            999999999
-        );
-        setHouseholdIncomeIsValid(isValid);
-    };
-    const householdIncome = {
-        value: props.data.householdEconomy.householdIncome,
-        displayError: !householdIncomeIsValid,
-        onChange: updateHouseholdIncome,
-        onFinish: validateHouseholdIncomeValue,
-    };
-
-    const householdHousingCost = createHousholdHousingCostField(
+    const income = createIncomeField(props, incomeIsValid, setIncomeIsValid);
+    const householdChildren = createHouseholdChildrenField(
+        props,
+        householdChildrenIsValid,
+        setHouseholdChildrenIsValid
+    );
+    const householdIncome = createHouseholdIncomeField(
+        props,
+        householdIncomeIsValid,
+        setHouseholdIncomeIsValid
+    );
+    const householdHousingCost = createHouseholdHousingCostField(
         props,
         householdHousingCostIsValid,
         setHouseholdHousingCostIsValid
     );
-    const householdDebt = createHousholdDebtField(
+    const householdDebt = createHouseholdDebtField(
         props,
         householdDebtIsValid,
         setHouseholdDebtIsValid
