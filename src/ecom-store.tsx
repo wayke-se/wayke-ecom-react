@@ -26,7 +26,15 @@ class EcomStore extends React.Component<IEcomExternalProps, IEcomData> {
                 phone: "",
                 givenName: "",
                 surname: "",
-                civilStatus: "",
+            },
+            householdEconomy: {
+                maritalStatus: "",
+                income: "",
+                employment: "",
+                householdChildren: "",
+                householdIncome: "",
+                householdHousingCost: "",
+                householdDebt: "",
             },
             delivery: {
                 type: DeliveryType.None,

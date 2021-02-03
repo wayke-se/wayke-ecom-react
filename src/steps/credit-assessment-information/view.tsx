@@ -1,13 +1,16 @@
 import React from "react";
 
-interface InfoItem {
-    value: string | number;
-    displayError?: boolean;
+interface IInfoItem {
+    value: string;
     onChange: (value: string) => void;
-    deselect?: () => void;
 }
 
-interface ITextInputProps extends InfoItem {
+interface IValidatableInfoItem extends IInfoItem {
+    displayError: boolean;
+    onFinish: () => void;
+}
+
+interface ITextInputProps extends IValidatableInfoItem {
     errorText: string;
     placeholder: string;
     label: string;
@@ -18,7 +21,7 @@ const TextInput = ({
     value,
     displayError,
     onChange,
-    deselect,
+    onFinish,
     errorText,
     placeholder,
     label,
@@ -43,7 +46,7 @@ const TextInput = ({
                     placeholder={placeholder}
                     value={value ?? ""}
                     onChange={(e) => onChange(e.target.value)}
-                    onBlur={deselect}
+                    onBlur={onFinish}
                 />
             </div>
             <div className="form-alert">{errorText}</div>
@@ -51,7 +54,7 @@ const TextInput = ({
     );
 };
 
-interface IDropDownInputProps extends InfoItem {
+interface IDropDownInputProps extends IInfoItem {
     label: string;
     options: string[];
 }
@@ -80,10 +83,10 @@ const DropDownInput = ({
 
 interface IProps {
     logoSrc: string;
-    phone: InfoItem;
-    email: InfoItem;
-    personalNumber: InfoItem;
-    civilStatus: InfoItem;
+    phone: IValidatableInfoItem;
+    email: IValidatableInfoItem;
+    personalNumber: IValidatableInfoItem;
+    maritalStatus: IInfoItem;
     submit: () => void;
 }
 
@@ -92,7 +95,7 @@ const CreditAssessmentInformation = ({
     phone,
     email,
     personalNumber,
-    civilStatus,
+    maritalStatus,
     submit,
 }: IProps) => (
     <div data-ecom-page>
@@ -137,7 +140,7 @@ const CreditAssessmentInformation = ({
                     />
                 </div>
                 <DropDownInput
-                    {...civilStatus}
+                    {...maritalStatus}
                     label="Civilstatus"
                     options={["Gift", "Singel"]}
                 />

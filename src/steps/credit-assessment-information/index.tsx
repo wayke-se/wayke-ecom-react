@@ -44,14 +44,20 @@ const Presenter = (props: IProps) => {
 
     const scaledLogo = getScaledLogo(props);
 
-    const updateField = (name: string, value: string) =>
+    const updateCustomerField = (name: string, value: string) =>
         props.dispatchStoreAction(StoreAction.UPDATE_NAMED_VALUE, {
             type: "customer",
             name,
             value,
         });
+    const updateHouseholdEconomyField = (name: string, value: string) =>
+        props.dispatchStoreAction(StoreAction.UPDATE_NAMED_VALUE, {
+            type: "householdEconomy",
+            name,
+            value,
+        });
 
-    const updatePhone = (value: string) => updateField("phone", value);
+    const updatePhone = (value: string) => updateCustomerField("phone", value);
     const validatePhoneValue = () => {
         const isValid = validatePhoneNumber(props.data.customer.phone);
         setPhoneIsValid(isValid);
@@ -60,10 +66,10 @@ const Presenter = (props: IProps) => {
         value: props.data.customer.phone,
         displayError: !phoneIsValid,
         onChange: updatePhone,
-        deselect: validatePhoneValue,
+        onFinish: validatePhoneValue,
     };
 
-    const updateEmail = (value: string) => updateField("email", value);
+    const updateEmail = (value: string) => updateCustomerField("email", value);
     const validateEmailValue = () => {
         const isValid = validateEmail(props.data.customer.phone);
         setEmailIsValid(isValid);
@@ -72,11 +78,11 @@ const Presenter = (props: IProps) => {
         value: props.data.customer.email,
         displayError: !emailIsValid,
         onChange: updateEmail,
-        deselect: validateEmailValue,
+        onFinish: validateEmailValue,
     };
 
     const updatePersonalNumber = (value: string) =>
-        updateField("personalNumber", value);
+        updateCustomerField("personalNumber", value);
     const validatePersonalNumberValue = () => {
         const isValid = validatePersonalNumber(props.data.customer.phone);
         setPersonalNumberIsValid(isValid);
@@ -85,14 +91,14 @@ const Presenter = (props: IProps) => {
         value: props.data.customer.personalNumber,
         displayError: !personalNumberIsValid,
         onChange: updatePersonalNumber,
-        deselect: validatePersonalNumberValue,
+        onFinish: validatePersonalNumberValue,
     };
 
-    const updateCivilStatus = (value: string) =>
-        updateField("civilStatus", value);
-    const civilStatus = {
-        value: props.data.customer.civilStatus,
-        onChange: updateCivilStatus,
+    const updateMaritalStatus = (value: string) =>
+        updateHouseholdEconomyField("maritalStatus", value);
+    const maritalStatus = {
+        value: props.data.householdEconomy.maritalStatus,
+        onChange: updateMaritalStatus,
     };
 
     const submit = () => {
@@ -105,14 +111,14 @@ const Presenter = (props: IProps) => {
         }
     };
 
-    console.log(civilStatus);
+    console.log(maritalStatus);
     return (
         <View
             logoSrc={scaledLogo}
             phone={phone}
             email={email}
             personalNumber={personalNumber}
-            civilStatus={civilStatus}
+            maritalStatus={maritalStatus}
             submit={submit}
         />
     );

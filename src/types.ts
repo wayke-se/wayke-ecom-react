@@ -99,6 +99,7 @@ export interface IEcomStore {
 
 export interface IEcomData {
     customer: ICustomerData;
+    householdEconomy: IHouseholdEconomyData;
     delivery: IDeliveryMethodData;
     insurance: IInsuranceData;
     interact: IInteractData;
@@ -152,7 +153,16 @@ export interface ICustomerData {
     city: string;
     email: string;
     phone: string;
-    civilStatus: string;
+}
+
+export interface IHouseholdEconomyData {
+    maritalStatus: string;
+    income: string;
+    employment: string;
+    householdChildren: string;
+    householdIncome: string;
+    householdHousingCost: string;
+    householdDebt: string;
 }
 
 export interface ICustomerObject {
