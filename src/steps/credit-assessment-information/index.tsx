@@ -9,10 +9,10 @@ import {
     IEcomStore,
 } from "../../types";
 import { addSizeQuery } from "../../utils/image";
-import {
-    validateStringNumberInRange,
-} from "../../utils/validation";
+import { validateStringNumberInRange } from "../../utils/validation";
+import createEmploymentField from "./fields/createEmploymentField";
 import createEmailField from "./fields/email";
+import createMaritalStatusField from "./fields/maritalStatus";
 import createPersonalNumberField from "./fields/personalNumber";
 import createPhoneField from "./fields/phone";
 
@@ -116,12 +116,6 @@ const Presenter = (props: IProps) => {
 
     const scaledLogo = getScaledLogo(props);
 
-    const updateCustomerField = (name: string, value: string) =>
-        props.dispatchStoreAction(StoreAction.UPDATE_NAMED_VALUE, {
-            type: "customer",
-            name,
-            value,
-        });
     const updateHouseholdEconomyField = (name: string, value: string) =>
         props.dispatchStoreAction(StoreAction.UPDATE_NAMED_VALUE, {
             type: "householdEconomy",
@@ -136,13 +130,8 @@ const Presenter = (props: IProps) => {
         personalNumberIsValid,
         setPersonalNumberIsValid
     );
-
-    const updateMaritalStatus = (value: string) =>
-        updateHouseholdEconomyField("maritalStatus", value);
-    const maritalStatus = {
-        value: props.data.householdEconomy.maritalStatus,
-        onChange: updateMaritalStatus,
-    };
+    const maritalStatus = createMaritalStatusField(props);
+    const employment = createEmploymentField(props);
 
     const updateIncome = (value: string) =>
         updateHouseholdEconomyField("income", value);
@@ -159,13 +148,6 @@ const Presenter = (props: IProps) => {
         displayError: !incomeIsValid,
         onChange: updateIncome,
         onFinish: validateIncomeValue,
-    };
-
-    const updateEmployment = (value: string) =>
-        updateHouseholdEconomyField("employment", value);
-    const employment = {
-        value: props.data.householdEconomy.employment,
-        onChange: updateEmployment,
     };
 
     const updateHouseholdChildren = (value: string) =>
