@@ -43,7 +43,13 @@ const Presenter = (props: IProps) => {
         true
     );
     const [incomeIsValid, setIncomeIsValid] = React.useState(true);
-    const [householdChildrenIsValid, setHouseholdChildrenIsValid] = React.useState(true);
+    const [
+        householdChildrenIsValid,
+        setHouseholdChildrenIsValid,
+    ] = React.useState(true);
+    const [householdIncomeIsValid, setHouseholdIncomeIsValid] = React.useState(
+        true
+    );
 
     const scaledLogo = getScaledLogo(props);
 
@@ -121,6 +127,13 @@ const Presenter = (props: IProps) => {
         onFinish: validateIncomeValue,
     };
 
+    const updateEmployment = (value: string) =>
+        updateHouseholdEconomyField("employment", value);
+    const employment = {
+        value: props.data.householdEconomy.employment,
+        onChange: updateEmployment,
+    };
+
     const updateHouseholdChildren = (value: string) =>
         updateHouseholdEconomyField("householdChildren", value);
     const validateHouseholdChildrenValue = () => {
@@ -138,11 +151,21 @@ const Presenter = (props: IProps) => {
         onFinish: validateHouseholdChildrenValue,
     };
 
-    const updateEmployment = (value: string) =>
-        updateHouseholdEconomyField("employment", value);
-    const employment = {
-        value: props.data.householdEconomy.employment,
-        onChange: updateEmployment,
+    const updateHouseholdIncome = (value: string) =>
+        updateHouseholdEconomyField("householdIncome", value);
+    const validateHouseholdIncomeValue = () => {
+        const isValid = validateStringNumberInRange(
+            props.data.householdEconomy.householdIncome,
+            -999999999,
+            999999999
+        );
+        setHouseholdIncomeIsValid(isValid);
+    };
+    const householdIncome = {
+        value: props.data.householdEconomy.householdIncome,
+        displayError: !householdIncomeIsValid,
+        onChange: updateHouseholdIncome,
+        onFinish: validateHouseholdIncomeValue,
     };
 
     const submit = () => {
@@ -166,6 +189,7 @@ const Presenter = (props: IProps) => {
             employment={employment}
             income={income}
             householdChildren={householdChildren}
+            householdIncome={householdIncome}
             submit={submit}
         />
     );

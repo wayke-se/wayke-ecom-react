@@ -88,6 +88,7 @@ interface IProps {
     personalNumber: IValidatableInfoItem;
     income: IValidatableInfoItem;
     householdChildren: IValidatableInfoItem;
+    householdIncome: IValidateinfoItem;
     maritalStatus: IInfoItem;
     employment: IInfoItem;
     submit: () => void;
@@ -102,6 +103,7 @@ const CreditAssessmentInformation = ({
     income,
     employment,
     householdChildren,
+    householdIncome,
     submit,
 }: IProps) => (
     <div data-ecom-page>
@@ -176,22 +178,13 @@ const CreditAssessmentInformation = ({
                     errorText="Ange antalet hemmavarande barn i heltal"
                     wide
                 />
-                <div className="form-group">
-                    <label
-                        data-ecom-inputlabel
-                        htmlFor="finance-input-familyincome"
-                    >
-                        Hushållets inkomst per månad före skatt (kr)
-                    </label>{" "}
-                    <div data-ecom-inputtext>
-                        <input
-                            type="text"
-                            id="finance-input-familyincome"
-                            placeholder="Inkomst"
-                            // defaultValue
-                        />
-                    </div>
-                </div>
+                <TextInput
+                    {...householdIncome}
+                    label="Hushållets inkomst per månad före skatt (kr)"
+                    placeholder="Hushållets inkomst"
+                    errorText="Ange hushållets inkomst"
+                    wide
+                />
                 <div className="form-group">
                     <label data-ecom-inputlabel htmlFor="finance-input-living">
                         Hushållets ungefärliga boendekostnad per månad (kr)
