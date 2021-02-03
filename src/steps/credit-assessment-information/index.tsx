@@ -62,6 +62,12 @@ const Presenter = (props: IProps) => {
         true
     );
 
+    const [termsApproved, setTermsApproved] = React.useState(false);
+    const [privacyApproved, setPrivacyApproved] = React.useState(false);
+
+    const [hasError, setHasError] = React.useState(false);
+    const [errorText, setErrorText] = React.useState("");
+
     const scaledLogo = getScaledLogo(props);
 
     const phone = createPhoneField(props, phoneIsValid, setPhoneIsValid);
@@ -96,13 +102,36 @@ const Presenter = (props: IProps) => {
     );
 
     const submit = () => {
-        const allFieldsAreValid = phoneIsValid && emailIsValid;
+        setHasError(false);
+        setErrorText("");
 
-        if (allFieldsAreValid) {
-            console.log("All fields are valid. Create case...");
-        } else {
-            console.log("There are invalid fields");
+        const allFieldsAreValid =
+            phoneIsValid &&
+            emailIsValid &&
+            personalNumberIsValid &&
+            incomeIsValid &&
+            householdChildrenIsValid &&
+            householdIncomeIsValid &&
+            householdHousingCostIsValid &&
+            householdDebtIsValid;
+
+        if (!allFieldsAreValid) {
+            setHasError(true);
+            setErrorText("Infomration saknas eller är inkorrekt.");
+            return;
         }
+
+        const hasRequiredApprovals = termsApproved && privacyApproved;
+
+        if (!hasRequiredApprovals) {
+            setHasError(true);
+            setErrorText(
+                "För att gå vidare behöver villkoren och integritetspolicyn godkännas."
+            );
+            return;
+        }
+
+        console.log("Creating case...");
     };
 
     return (
@@ -118,6 +147,12 @@ const Presenter = (props: IProps) => {
             householdIncome={householdIncome}
             householdHousingCost={householdHousingCost}
             householdDebt={householdDebt}
+            termsApproved={termsApproved}
+            privacyApproved={privacyApproved}
+            hasError={hasError}
+            errorText={errorText}
+            setTermsApproved={setTermsApproved}
+            setPrivacyApproved={setPrivacyApproved}
             submit={submit}
         />
     );

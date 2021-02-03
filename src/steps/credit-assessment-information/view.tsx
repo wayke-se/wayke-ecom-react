@@ -93,6 +93,12 @@ interface IProps {
     householdDebt: IValidatableInfoItem;
     maritalStatus: IInfoItem;
     employment: IInfoItem;
+    termsApproved: boolean;
+    privacyApproved: boolean;
+    hasError: boolean;
+    errorText: string;
+    setTermsApproved: (value: boolean) => void;
+    setPrivacyApproved: (value: boolean) => void;
     submit: () => void;
 }
 
@@ -108,6 +114,12 @@ const CreditAssessmentInformation = ({
     householdIncome,
     householdHousingCost,
     householdDebt,
+    termsApproved,
+    privacyApproved,
+    hasError,
+    errorText,
+    setTermsApproved,
+    setPrivacyApproved,
     submit,
 }: IProps) => (
     <div data-ecom-page>
@@ -220,7 +232,12 @@ const CreditAssessmentInformation = ({
                 </div>
                 <div className="form-group">
                     <div data-ecom-inputselection="checkbox">
-                        <input type="checkbox" id="finance-checkbox-1" />
+                        <input
+                            type="checkbox"
+                            id="finance-checkbox-1"
+                            checked={termsApproved}
+                            onChange={(e) => setTermsApproved(e.target.checked)}
+                        />
                         <label htmlFor="finance-checkbox-1">
                             <span className="text">
                                 Jag har förstått{" "}
@@ -235,7 +252,14 @@ const CreditAssessmentInformation = ({
                         data-ecom-inputselection="checkbox"
                         className="m-t-half"
                     >
-                        <input type="checkbox" id="finance-checkbox-2" />
+                        <input
+                            type="checkbox"
+                            id="finance-checkbox-2"
+                            checked={privacyApproved}
+                            onChange={(e) =>
+                                setPrivacyApproved(e.target.checked)
+                            }
+                        />
                         <label htmlFor="finance-checkbox-2">
                             <span className="text">
                                 Jag har förstått{" "}
@@ -263,6 +287,11 @@ const CreditAssessmentInformation = ({
                 <div className="button-section">Gå vidare med BankID</div>
             </button>
         </section>
+        <div data-ecom-form>
+            <div className={`form-group ${!!hasError && "has-error"}`}>
+                <div className="form-alert">{errorText}</div>
+            </div>
+        </div>
     </div>
 );
 
