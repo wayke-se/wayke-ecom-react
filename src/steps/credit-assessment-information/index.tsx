@@ -43,6 +43,7 @@ const Presenter = (props: IProps) => {
         true
     );
     const [incomeIsValid, setIncomeIsValid] = React.useState(true);
+    const [householdChildrenIsValid, setHouseholdChildrenIsValid] = React.useState(true);
 
     const scaledLogo = getScaledLogo(props);
 
@@ -120,6 +121,23 @@ const Presenter = (props: IProps) => {
         onFinish: validateIncomeValue,
     };
 
+    const updateHouseholdChildren = (value: string) =>
+        updateHouseholdEconomyField("householdChildren", value);
+    const validateHouseholdChildrenValue = () => {
+        const isValid = validateStringNumberInRange(
+            props.data.householdEconomy.householdChildren,
+            0,
+            999
+        );
+        setHouseholdChildrenIsValid(isValid);
+    };
+    const householdChildren = {
+        value: props.data.householdEconomy.householdChildren,
+        displayError: !householdChildrenIsValid,
+        onChange: updateHouseholdChildren,
+        onFinish: validateHouseholdChildrenValue,
+    };
+
     const updateEmployment = (value: string) =>
         updateHouseholdEconomyField("employment", value);
     const employment = {
@@ -145,8 +163,9 @@ const Presenter = (props: IProps) => {
             email={email}
             personalNumber={personalNumber}
             maritalStatus={maritalStatus}
-            employment={updateEmployment}
+            employment={employment}
             income={income}
+            householdChildren={householdChildren}
             submit={submit}
         />
     );

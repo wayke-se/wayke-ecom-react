@@ -87,6 +87,7 @@ interface IProps {
     email: IValidatableInfoItem;
     personalNumber: IValidatableInfoItem;
     income: IValidatableInfoItem;
+    householdChildren: IValidatableInfoItem;
     maritalStatus: IInfoItem;
     employment: IInfoItem;
     submit: () => void;
@@ -100,6 +101,7 @@ const CreditAssessmentInformation = ({
     maritalStatus,
     income,
     employment,
+    householdChildren,
     submit,
 }: IProps) => (
     <div data-ecom-page>
@@ -167,22 +169,13 @@ const CreditAssessmentInformation = ({
                         "Annat",
                     ]}
                 />
-                <div className="form-group">
-                    <label
-                        data-ecom-inputlabel
-                        htmlFor="finance-input-children"
-                    >
-                        Antal hemmavarande barn
-                    </label>{" "}
-                    <div data-ecom-inputtext>
-                        <input
-                            type="text"
-                            id="finance-input-children"
-                            placeholder="Antal hemmavarande barn"
-                            // defaultValue
-                        />
-                    </div>
-                </div>
+                <TextInput
+                    {...householdChildren}
+                    label="Antal hemmavarande barn"
+                    placeholder="Antal hemmavarande barn"
+                    errorText="Ange antalet hemmavarande barn i heltal"
+                    wide
+                />
                 <div className="form-group">
                     <label
                         data-ecom-inputlabel
