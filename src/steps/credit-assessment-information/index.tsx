@@ -10,11 +10,11 @@ import {
 } from "../../types";
 import { addSizeQuery } from "../../utils/image";
 import {
-    validatePhoneNumber,
     validateEmail,
     validatePersonalNumber,
     validateStringNumberInRange,
 } from "../../utils/validation";
+import createPhoneField from "./fields/phone";
 
 import View from "./view";
 
@@ -129,17 +129,7 @@ const Presenter = (props: IProps) => {
             value,
         });
 
-    const updatePhone = (value: string) => updateCustomerField("phone", value);
-    const validatePhoneValue = () => {
-        const isValid = validatePhoneNumber(props.data.customer.phone);
-        setPhoneIsValid(isValid);
-    };
-    const phone = {
-        value: props.data.customer.phone,
-        displayError: !phoneIsValid,
-        onChange: updatePhone,
-        onFinish: validatePhoneValue,
-    };
+    const phone = createPhoneField(props, phoneIsValid, setPhoneIsValid);
 
     const updateEmail = (value: string) => updateCustomerField("email", value);
     const validateEmailValue = () => {
