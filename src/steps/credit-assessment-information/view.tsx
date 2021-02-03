@@ -87,6 +87,7 @@ interface IProps {
     email: IValidatableInfoItem;
     personalNumber: IValidatableInfoItem;
     maritalStatus: IInfoItem;
+    income: IValidatableInfoItem;
     submit: () => void;
 }
 
@@ -96,6 +97,7 @@ const CreditAssessmentInformation = ({
     email,
     personalNumber,
     maritalStatus,
+    income,
     submit,
 }: IProps) => (
     <div data-ecom-page>
@@ -144,19 +146,13 @@ const CreditAssessmentInformation = ({
                     label="Civilstatus"
                     options={["Gift", "Singel"]}
                 />
-                <div className="form-group">
-                    <label data-ecom-inputlabel htmlFor="finance-input-income">
-                        Inkomst per månad före skatt (kr)
-                    </label>{" "}
-                    <div data-ecom-inputtext>
-                        <input
-                            type="text"
-                            id="finance-input-income"
-                            placeholder="Inkomst"
-                            // defaultValue
-                        />
-                    </div>
-                </div>
+                <TextInput
+                    {...income}
+                    label="Inkomst per månad före skatt (kr)"
+                    placeholder="Inkomst"
+                    errorText="Ange din inkomst"
+                    wide
+                />
                 <div className="form-group">
                     <label
                         data-ecom-inputlabel

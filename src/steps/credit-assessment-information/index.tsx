@@ -13,6 +13,7 @@ import {
     validatePhoneNumber,
     validateEmail,
     validatePersonalNumber,
+    validateStringNumberInRange,
 } from "../../utils/validation";
 
 import View from "./view";
@@ -41,6 +42,7 @@ const Presenter = (props: IProps) => {
     const [personalNumberIsValid, setPersonalNumberIsValid] = React.useState(
         true
     );
+    const [incomeIsValid, setIncomeIsValid] = React.useState(true);
 
     const scaledLogo = getScaledLogo(props);
 
@@ -101,6 +103,23 @@ const Presenter = (props: IProps) => {
         onChange: updateMaritalStatus,
     };
 
+    const updateIncome = (value: string) =>
+        updateHouseholdEconomyField("income", value);
+    const validateIncomeValue = () => {
+        const isValid = validateStringNumberInRange(
+            props.data.householdEconomy.income,
+            -999999999,
+            999999999
+        );
+        setIncomeIsValid(isValid);
+    };
+    const income = {
+        value: props.data.householdEconomy.income,
+        displayError: !incomeIsValid,
+        onChange: updateIncome,
+        onFinish: validateIncomeValue,
+    };
+
     const submit = () => {
         const allFieldsAreValid = phoneIsValid && emailIsValid;
 
@@ -119,6 +138,7 @@ const Presenter = (props: IProps) => {
             email={email}
             personalNumber={personalNumber}
             maritalStatus={maritalStatus}
+            income={income}
             submit={submit}
         />
     );
