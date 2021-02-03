@@ -8,6 +8,8 @@ import {
     IPaymentLookupResponse,
     IBankIdAuthResponse,
     IBankIdCollectResponse,
+    ICreditAssessmentInquiry,
+    ICreditAssessmentCase,
 } from "@wayke-se/ecom";
 
 import { getOrderOptions } from "../sdk/get-order-options";
@@ -19,6 +21,8 @@ import { createOrder } from "../sdk/create-order";
 import bankIdAuth from "../sdk/bankid/auth";
 import bankIdCollect from "../sdk/bankid/collect";
 import bankIdCancel from "../sdk/bankid/cancel";
+import createCreditAssessmentCase from "../sdk/credit-assessment/new-case";
+
 import {
     IOrderOptionsSdkData,
     IVehicleLookupSdkData,
@@ -226,6 +230,20 @@ export const makeBankIdCancelRequest = (
         RequestType.BANK_ID_CANCEL,
         requestIdentifier,
         data,
+        callback
+    );
+};
+
+export const makeCreditAssessmentCreateCaseRequest = (
+    inquiry: ICreditAssessmentInquiry,
+    callback: (response: ICreditAssessmentCase | null) => void
+) => {
+    const requestIdentifier = null;
+    makeRequest(
+        createCreditAssessmentCase,
+        RequestType.BANK_ID_CANCEL,
+        requestIdentifier,
+        inquiry,
         callback
     );
 };

@@ -44,7 +44,7 @@ const TextInput = ({
                 <input
                     type="text"
                     placeholder={placeholder}
-                    value={value ?? ""}
+                    value={value || ""}
                     onChange={(e) => onChange(e.target.value)}
                     onBlur={onFinish}
                 />

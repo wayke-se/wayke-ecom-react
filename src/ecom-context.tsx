@@ -10,6 +10,8 @@ import {
     IBankIdAuthResponse,
     AuthMethod,
     IBankIdCollectResponse,
+    ICreditAssessmentStatus,
+    ICreditAssessmentCase,
 } from "@wayke-se/ecom";
 
 import EcomLifecycle from "./ecom-lifecycle";
@@ -23,7 +25,9 @@ import {
     makeBankIdAuthRequest,
     makeBankIdCollectRequest,
     makeBankIdCancelRequest,
+    makeCreditAssessmentCreateCaseRequest,
 } from "./tools/request-service";
+import { asEmployment, asMaritalStatus } from "./utils/credit-assessment";
 
 export interface IEcomContextProps extends IEcomExternalProps, IEcomStore {}
 
@@ -39,6 +43,10 @@ interface IState {
     pendingBankIdAuthRequest: boolean;
     bankIdCollect: IBankIdCollectResponse | null;
     hasBankIdError: boolean;
+    hasCreditAssessmentError: boolean;
+    pendingCreateCreditAssessmentCase: boolean;
+    creditAssessmentCase: ICreditAssessmentCase | null;
+    creditAssessmentStatus: ICreditAssessmentStatus | null;
 }
 
 class EcomContext extends React.Component<IEcomContextProps, IState> {
@@ -82,6 +90,10 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
             pendingBankIdAuthRequest: false,
             bankIdCollect: null,
             hasBankIdError: false,
+            hasCreditAssessmentError: false,
+            pendingCreateCreditAssessmentCase: false,
+            creditAssessmentCase: null,
+            creditAssessmentStatus: null,
         };
     }
 
@@ -337,6 +349,54 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
             hasBankIdError: false,
             bankIdAuth: null,
         });
+    }
+
+    createCreditAssessmentCase() {
+        const inquiry = {
+            externalId: "",
+            customer: {
+                socialId: "",
+                email: "",
+                phone: "",
+            },
+            loan: {
+                financialProductId: "",
+                price: 0,
+                downPayment: 0,
+                credit: 0,
+                interestRate: 0,
+                monthlyCost: 0,
+            },
+            householdEconomy: {
+                maritalStatus: asMaritalStatus(""),
+                income: 0,
+                employment: asEmployment(""),
+                householdChildren: 0,
+                householdIncome: 0,
+                householdHousingCost: 0,
+                householdDebt: 0,
+            },
+        };
+
+        const request = () => {
+            makeCreditAssessmentCreateCaseRequest(inquiry, (response) => {
+                const hasError = response instanceof Error;
+                const creditAssessmentCase = !hasError ? response : null;
+
+                this.saveResponse({
+                    creditAssessmentCase,
+                    creditAssessmentStatus: null,
+                    pendingCreateCreditAssessmentCase: false,
+                    hasCreditAssessmentError: hasError,
+                });
+            });
+        };
+
+        this.setState({
+            hasCreditAssessmentError: false,
+            pendingCreateCreditAssessmentCase: true,
+        });
+        this.makeRequest(request);
     }
 
     makeRequest(callback: () => void) {
