@@ -36,6 +36,34 @@ const getScaledLogo = (props: IProps) => {
     return scaledLogo;
 };
 
+const createHousholdHousingCostField = (
+    props: IProps,
+    isValid: boolean,
+    setIsValid: (value: boolean) => void
+) => {
+    const update = (value: string) =>
+        props.dispatchStoreAction(StoreAction.UPDATE_NAMED_VALUE, {
+            type: "householdEconomy",
+            name: "householdHousingCost",
+            value,
+        });
+    const validate = () => {
+        const isValid = validateStringNumberInRange(
+            props.data.householdEconomy.householdHousingCost,
+            -999999999,
+            999999999
+        );
+        setIsValid(isValid);
+    };
+    const householdHousingCost = {
+        value: props.data.householdEconomy.householdHousingCost,
+        displayError: !isValid,
+        onChange: update,
+        onFinish: validate,
+    };
+    return householdHousingCost;
+};
+
 const Presenter = (props: IProps) => {
     const [phoneIsValid, setPhoneIsValid] = React.useState(true);
     const [emailIsValid, setEmailIsValid] = React.useState(true);
@@ -50,6 +78,10 @@ const Presenter = (props: IProps) => {
     const [householdIncomeIsValid, setHouseholdIncomeIsValid] = React.useState(
         true
     );
+    const [
+        householdHousingCostIsValid,
+        setHouseholdHousingCostIsValid,
+    ] = React.useState(true);
 
     const scaledLogo = getScaledLogo(props);
 
@@ -168,6 +200,12 @@ const Presenter = (props: IProps) => {
         onFinish: validateHouseholdIncomeValue,
     };
 
+    const householdHousingCost = createHousholdHousingCostField(
+        props,
+        householdHousingCostIsValid,
+        setHouseholdHousingCostIsValid
+    );
+
     const submit = () => {
         const allFieldsAreValid = phoneIsValid && emailIsValid;
 
@@ -178,7 +216,6 @@ const Presenter = (props: IProps) => {
         }
     };
 
-    console.log(maritalStatus);
     return (
         <View
             logoSrc={scaledLogo}
@@ -190,6 +227,7 @@ const Presenter = (props: IProps) => {
             income={income}
             householdChildren={householdChildren}
             householdIncome={householdIncome}
+            householdHousingCost={householdHousingCost}
             submit={submit}
         />
     );
