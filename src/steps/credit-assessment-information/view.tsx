@@ -86,8 +86,9 @@ interface IProps {
     phone: IValidatableInfoItem;
     email: IValidatableInfoItem;
     personalNumber: IValidatableInfoItem;
-    maritalStatus: IInfoItem;
     income: IValidatableInfoItem;
+    maritalStatus: IInfoItem;
+    employment: IInfoItem;
     submit: () => void;
 }
 
@@ -98,6 +99,7 @@ const CreditAssessmentInformation = ({
     personalNumber,
     maritalStatus,
     income,
+    employment,
     submit,
 }: IProps) => (
     <div data-ecom-page>
@@ -153,23 +155,18 @@ const CreditAssessmentInformation = ({
                     errorText="Ange din inkomst"
                     wide
                 />
-                <div className="form-group">
-                    <label
-                        data-ecom-inputlabel
-                        htmlFor="finance-input-employment"
-                    >
-                        Sysselsättning
-                    </label>{" "}
-                    <div data-ecom-select>
-                        <select className="select">
-                            <option>Option 1</option>
-                            <option>Option 2</option>
-                            <option>Option 3</option>
-                            <option>Option 4</option>
-                            <option>Option 5</option>
-                        </select>
-                    </div>
-                </div>
+                <DropDownInput
+                    {...employment}
+                    label="Sysselsättning"
+                    options={[
+                        "Fulltidsanställd",
+                        "Student",
+                        "Deltidsanställd",
+                        "Pensionär",
+                        "Egenföretagare",
+                        "Annat",
+                    ]}
+                />
                 <div className="form-group">
                     <label
                         data-ecom-inputlabel

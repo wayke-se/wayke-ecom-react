@@ -120,6 +120,13 @@ const Presenter = (props: IProps) => {
         onFinish: validateIncomeValue,
     };
 
+    const updateEmployment = (value: string) =>
+        updateHouseholdEconomyField("employment", value);
+    const employment = {
+        value: props.data.householdEconomy.employment,
+        onChange: updateEmployment,
+    };
+
     const submit = () => {
         const allFieldsAreValid = phoneIsValid && emailIsValid;
 
@@ -138,6 +145,7 @@ const Presenter = (props: IProps) => {
             email={email}
             personalNumber={personalNumber}
             maritalStatus={maritalStatus}
+            employment={updateEmployment}
             income={income}
             submit={submit}
         />
