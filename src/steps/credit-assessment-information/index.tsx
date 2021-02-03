@@ -10,10 +10,10 @@ import {
 } from "../../types";
 import { addSizeQuery } from "../../utils/image";
 import {
-    validateEmail,
-    validatePersonalNumber,
     validateStringNumberInRange,
 } from "../../utils/validation";
+import createEmailField from "./fields/email";
+import createPersonalNumberField from "./fields/personalNumber";
 import createPhoneField from "./fields/phone";
 
 import View from "./view";
@@ -130,31 +130,12 @@ const Presenter = (props: IProps) => {
         });
 
     const phone = createPhoneField(props, phoneIsValid, setPhoneIsValid);
-
-    const updateEmail = (value: string) => updateCustomerField("email", value);
-    const validateEmailValue = () => {
-        const isValid = validateEmail(props.data.customer.phone);
-        setEmailIsValid(isValid);
-    };
-    const email = {
-        value: props.data.customer.email,
-        displayError: !emailIsValid,
-        onChange: updateEmail,
-        onFinish: validateEmailValue,
-    };
-
-    const updatePersonalNumber = (value: string) =>
-        updateCustomerField("personalNumber", value);
-    const validatePersonalNumberValue = () => {
-        const isValid = validatePersonalNumber(props.data.customer.phone);
-        setPersonalNumberIsValid(isValid);
-    };
-    const personalNumber = {
-        value: props.data.customer.personalNumber,
-        displayError: !personalNumberIsValid,
-        onChange: updatePersonalNumber,
-        onFinish: validatePersonalNumberValue,
-    };
+    const email = createEmailField(props, emailIsValid, setEmailIsValid);
+    const personalNumber = createPersonalNumberField(
+        props,
+        personalNumberIsValid,
+        setPersonalNumberIsValid
+    );
 
     const updateMaritalStatus = (value: string) =>
         updateHouseholdEconomyField("maritalStatus", value);
