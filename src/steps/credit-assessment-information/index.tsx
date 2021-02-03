@@ -64,6 +64,34 @@ const createHousholdHousingCostField = (
     return householdHousingCost;
 };
 
+const createHousholdDebtField = (
+    props: IProps,
+    isValid: boolean,
+    setIsValid: (value: boolean) => void
+) => {
+    const update = (value: string) =>
+        props.dispatchStoreAction(StoreAction.UPDATE_NAMED_VALUE, {
+            type: "householdEconomy",
+            name: "householdDebt",
+            value,
+        });
+    const validate = () => {
+        const isValid = validateStringNumberInRange(
+            props.data.householdEconomy.householdDebt,
+            -999999999,
+            999999999
+        );
+        setIsValid(isValid);
+    };
+    const field = {
+        value: props.data.householdEconomy.householdDebt,
+        displayError: !isValid,
+        onChange: update,
+        onFinish: validate,
+    };
+    return field;
+};
+
 const Presenter = (props: IProps) => {
     const [phoneIsValid, setPhoneIsValid] = React.useState(true);
     const [emailIsValid, setEmailIsValid] = React.useState(true);
@@ -82,6 +110,9 @@ const Presenter = (props: IProps) => {
         householdHousingCostIsValid,
         setHouseholdHousingCostIsValid,
     ] = React.useState(true);
+    const [householdDebtIsValid, setHouseholdDebtIsValid] = React.useState(
+        true
+    );
 
     const scaledLogo = getScaledLogo(props);
 
@@ -205,6 +236,11 @@ const Presenter = (props: IProps) => {
         householdHousingCostIsValid,
         setHouseholdHousingCostIsValid
     );
+    const householdDebt = createHousholdDebtField(
+        props,
+        householdDebtIsValid,
+        setHouseholdDebtIsValid
+    );
 
     const submit = () => {
         const allFieldsAreValid = phoneIsValid && emailIsValid;
@@ -228,6 +264,7 @@ const Presenter = (props: IProps) => {
             householdChildren={householdChildren}
             householdIncome={householdIncome}
             householdHousingCost={householdHousingCost}
+            householdDebt={householdDebt}
             submit={submit}
         />
     );
