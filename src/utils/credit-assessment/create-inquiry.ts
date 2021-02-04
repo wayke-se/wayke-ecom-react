@@ -5,15 +5,21 @@ import {
 
 import { IEcomData } from "../../types";
 import { asEmployment, asMaritalStatus } from "./enums";
+import { formatPersonalNumber } from "./formatting";
 
 const createInquiry = (
     data: IEcomData,
     loan: IPaymentLookupResponse
 ): ICreditAssessmentInquiry => {
+    const formattedPersonalNumber = formatPersonalNumber(
+        data.customer.personalNumber
+    );
+    // Create term
+
     const inquiry = {
         externalId: data.payment.externalId,
         customer: {
-            socialId: data.customer.personalNumber,
+            socialId: formattedPersonalNumber,
             email: data.customer.email,
             phone: data.customer.phone,
         },
