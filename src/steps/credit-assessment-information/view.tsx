@@ -147,7 +147,7 @@ const CreditAssessmentInformation = ({
                 <TextInput
                     {...personalNumber}
                     label="Personnummer"
-                    placeholder="ÅÅMMDD-XXXX"
+                    placeholder="ÅÅÅÅMMDD-XXXX"
                     errorText="Ange personnummer i formatet ÅÅÅÅMMDD-XXXX"
                     wide
                 />

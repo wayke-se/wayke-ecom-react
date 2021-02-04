@@ -131,6 +131,8 @@ export const getAllTransitions = () => ({
         const useCreditAssessment = shouldUseCreditAssessment(data, options);
         return getIdentificationStep(data.useBankId, useCreditAssessment);
     },
+    [EcomStep.CREDIT_ASSESSMENT_INFORMATION]: () =>
+        EcomStep.CREDIT_ASSESSMENT_AUTHENTICATION,
     [EcomStep.BANKID_AUTHENTICATION]: () =>
         EcomStep.CUSTOMER_INFORMATION_DETAILS,
     [EcomStep.CUSTOMER_INFORMATION_INITIAL]: () =>

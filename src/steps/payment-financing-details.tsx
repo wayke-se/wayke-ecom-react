@@ -198,6 +198,15 @@ class PaymentFinancingDetails extends React.Component<
                     this.props.onIncompleteUserEvent(
                         UserEvent.PAYMENT_TYPE_LOAN_CHOSEN
                     );
+
+                    this.props.onFetchPaymentInformation(
+                        (isSuccessful: boolean) => {
+                            this.setState({
+                                hasRequestError: !isSuccessful,
+                            });
+                        }
+                    );
+
                     this.props.onProceedToNextStep();
                 });
             }
