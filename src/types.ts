@@ -53,6 +53,8 @@ export interface IEcomContext {
     pendingBankIdAuthRequest: boolean;
     bankIdCollect: IBankIdCollectResponse;
     hasBankIdError: boolean;
+    hasCreditAssessmentError: boolean;
+    pendingCreateCreditAssessmentCase: boolean;
 
     getAddress: () => IAddress;
 
@@ -74,6 +76,7 @@ export interface IEcomContext {
     onBankIdCollect: () => void;
     onBankIdCancel: (callback: (response: boolean) => void) => void;
     onBankIdReset: () => void;
+    createCreditAssessmentCase: () => void;
 }
 
 export interface IEcomLifecycle {

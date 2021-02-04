@@ -101,6 +101,13 @@ const Presenter = (props: IProps) => {
         setHouseholdDebtIsValid
     );
 
+    React.useEffect(() => {
+        if (props.hasCreditAssessmentError) {
+            setHasError(true);
+            setErrorText("Kunde inte skapa ärende. Kontrollera uppgifter");
+        }
+    }, [props.hasCreditAssessmentError]);
+
     const submit = () => {
         setHasError(false);
         setErrorText("");
@@ -131,7 +138,7 @@ const Presenter = (props: IProps) => {
             return;
         }
 
-        console.log("Creating case...");
+        props.createCreditAssessmentCase();
     };
 
     return (
@@ -153,6 +160,7 @@ const Presenter = (props: IProps) => {
             errorText={errorText}
             setTermsApproved={setTermsApproved}
             setPrivacyApproved={setPrivacyApproved}
+            creatingCase={props.pendingCreateCreditAssessmentCase}
             submit={submit}
         />
     );

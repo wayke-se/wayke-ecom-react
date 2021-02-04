@@ -28,6 +28,7 @@ import {
     makeCreditAssessmentCreateCaseRequest,
 } from "./tools/request-service";
 import { asEmployment, asMaritalStatus } from "./utils/credit-assessment";
+import { getLoanDetails } from "./utils/payment";
 
 export interface IEcomContextProps extends IEcomExternalProps, IEcomStore {}
 
@@ -74,6 +75,10 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
         this.handleBankIdCollect = this.handleBankIdCollect.bind(this);
         this.handleBankIdCancel = this.handleBankIdCancel.bind(this);
         this.handleBankIdReset = this.handleBankIdReset.bind(this);
+
+        this.createCreditAssessmentCase = this.createCreditAssessmentCase.bind(
+            this
+        );
 
         this.makeRequest = this.makeRequest.bind(this);
         this.saveResponse = this.saveResponse.bind(this);
@@ -352,29 +357,42 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
     }
 
     createCreditAssessmentCase() {
+        const loanDetails = getLoanDetails(
+            this.state.orderOptions,
+            this.state.paymentLookup
+        );
+
         const inquiry = {
-            externalId: "",
+            externalId: this.props.data.payment.externalId,
             customer: {
-                socialId: "",
-                email: "",
-                phone: "",
+                socialId: this.props.data.customer.personalNumber,
+                email: this.props.data.customer.email,
+                phone: this.props.data.customer.phone,
             },
             loan: {
-                financialProductId: "",
+                financialProductId: this.props.data.payment
+                    .financialProductCode,
                 price: 0,
-                downPayment: 0,
+                downPayment: loanDetails.getDownPaymentSpec().current,
                 credit: 0,
-                interestRate: 0,
-                monthlyCost: 0,
+                interestRate: loanDetails.getInterests().interest,
+                monthlyCost: loanDetails.getCosts().monthlyCost,
             },
             householdEconomy: {
-                maritalStatus: asMaritalStatus(""),
-                income: 0,
-                employment: asEmployment(""),
-                householdChildren: 0,
-                householdIncome: 0,
-                householdHousingCost: 0,
-                householdDebt: 0,
+                maritalStatus: asMaritalStatus(
+                    this.props.data.householdEconomy.maritalStatus
+                ),
+                income: this.props.data.householdEconomy.income,
+                employment: asEmployment(
+                    this.props.data.householdEconomy.employment
+                ),
+                householdChildren: this.props.data.householdEconomy
+                    .householdChildren,
+                householdIncome: this.props.data.householdEconomy
+                    .householdIncome,
+                householdHousingCost: this.props.data.householdEconomy
+                    .householdHousingCost,
+                householdDebt: this.props.data.householdEconomy.householdDebt,
             },
         };
 
@@ -432,6 +450,7 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
                 onBankIdCollect={this.handleBankIdCollect}
                 onBankIdReset={this.handleBankIdReset}
                 onBankIdCancel={this.handleBankIdCancel}
+                createCreditAssessmentCase={this.createCreditAssessmentCase}
                 {...this.state}
                 {...this.props}
             />

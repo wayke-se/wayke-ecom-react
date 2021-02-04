@@ -42,19 +42,39 @@ export default (props: IPaymentMethodItemProps) => {
             StoreAction.UPDATE_NAMED_VALUE,
             {
                 type: "payment",
-                name: "paymentType",
-                value: props.paymentOption.type,
+                name: "externalId",
+                value: props.paymentOption.externalId,
             },
             () => {
-                const userEvent = getUserEventFromPaymentType(
-                    props.paymentOption.type
-                );
-                const hasUserEvent = userEvent !== null;
+                props.dispatchStoreAction(
+                    StoreAction.UPDATE_NAMED_VALUE,
+                    {
+                        type: "payment",
+                        name: "financialProductCode",
+                        value: props.paymentOption.loanDetails.getFinancialProductCode(),
+                    },
+                    () => {
+                        props.dispatchStoreAction(
+                            StoreAction.UPDATE_NAMED_VALUE,
+                            {
+                                type: "payment",
+                                name: "paymentType",
+                                value: props.paymentOption.type,
+                            },
+                            () => {
+                                const userEvent = getUserEventFromPaymentType(
+                                    props.paymentOption.type
+                                );
+                                const hasUserEvent = userEvent !== null;
 
-                if (hasUserEvent) {
-                    props.onIncompleteUserEvent(userEvent);
-                }
-                props.onProceedToNextStep();
+                                if (hasUserEvent) {
+                                    props.onIncompleteUserEvent(userEvent);
+                                }
+                                props.onProceedToNextStep();
+                            }
+                        );
+                    }
+                );
             }
         );
     };
