@@ -17,6 +17,7 @@ import {
     AuthMethod,
     IBankIdCollectResponse,
     IAddress,
+    ICreditAssessmentCase,
 } from "@wayke-se/ecom";
 
 export interface IVehicle {
@@ -55,6 +56,7 @@ export interface IEcomContext {
     hasBankIdError: boolean;
     hasCreditAssessmentError: boolean;
     pendingCreateCreditAssessmentCase: boolean;
+    creditAssessmentCase: ICreditAssessmentCase;
 
     getAddress: () => IAddress;
 

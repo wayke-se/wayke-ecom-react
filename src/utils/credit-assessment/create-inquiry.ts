@@ -25,7 +25,7 @@ const createInquiry = (
             phone: data.customer.phone,
         },
         loan: {
-            financialProductId: loan.getFinancialProductCode(),
+            financialProductId: data.payment.financialProductCode,
             price: loan.getCreditAmount(),
             downPayment: loan.getDownPaymentSpec().current,
             credit: loan.getPrice(),
