@@ -6,7 +6,7 @@ import {
 
 import EcomStep from "./constants/ecom-step";
 import { IEcomData } from "./types";
-import { shouldUseCreditAssessment } from "./utils/credit-assessment";
+import shouldUseCreditAssessment from "./utils/credit-assessment/usage-resolver";
 
 export const getInitialStep = (options: IOrderOptionsResponse): EcomStep => {
     return options.allowsTradeIn()

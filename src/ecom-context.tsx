@@ -12,6 +12,7 @@ import {
     IBankIdCollectResponse,
     ICreditAssessmentStatus,
     ICreditAssessmentCase,
+    ICreditAssessmentInquiry,
 } from "@wayke-se/ecom";
 
 import EcomLifecycle from "./ecom-lifecycle";
@@ -27,7 +28,7 @@ import {
     makeBankIdCancelRequest,
     makeCreditAssessmentCreateCaseRequest,
 } from "./tools/request-service";
-import { asEmployment, asMaritalStatus } from "./utils/credit-assessment";
+import createCreditAssessmentInquiry from "./utils/credit-assessment/create-inquiry";
 import { getLoanDetails } from "./utils/payment";
 
 export interface IEcomContextProps extends IEcomExternalProps, IEcomStore {}
@@ -362,39 +363,20 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
             this.state.paymentLookup
         );
 
-        const inquiry = {
-            externalId: this.props.data.payment.externalId,
-            customer: {
-                socialId: this.props.data.customer.personalNumber,
-                email: this.props.data.customer.email,
-                phone: this.props.data.customer.phone,
-            },
-            loan: {
-                financialProductId: this.props.data.payment
-                    .financialProductCode,
-                price: 0,
-                downPayment: loanDetails.getDownPaymentSpec().current,
-                credit: 0,
-                interestRate: loanDetails.getInterests().interest,
-                monthlyCost: loanDetails.getCosts().monthlyCost,
-            },
-            householdEconomy: {
-                maritalStatus: asMaritalStatus(
-                    this.props.data.householdEconomy.maritalStatus
-                ),
-                income: this.props.data.householdEconomy.income,
-                employment: asEmployment(
-                    this.props.data.householdEconomy.employment
-                ),
-                householdChildren: this.props.data.householdEconomy
-                    .householdChildren,
-                householdIncome: this.props.data.householdEconomy
-                    .householdIncome,
-                householdHousingCost: this.props.data.householdEconomy
-                    .householdHousingCost,
-                householdDebt: this.props.data.householdEconomy.householdDebt,
-            },
-        };
+        let inquiry: ICreditAssessmentInquiry = null;
+        try {
+            inquiry = createCreditAssessmentInquiry(
+                this.props.data,
+                loanDetails
+            );
+        } catch (error) {
+            if (error instanceof TypeError) {
+                this.setState({
+                    hasCreditAssessmentError: true,
+                });
+                return;
+            }
+        }
 
         const request = () => {
             makeCreditAssessmentCreateCaseRequest(inquiry, (response) => {
