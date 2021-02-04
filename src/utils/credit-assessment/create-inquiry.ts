@@ -4,6 +4,7 @@ import {
 } from "@wayke-se/ecom";
 
 import { IEcomData } from "../../types";
+import createTerm from "./create-term";
 import { asEmployment, asMaritalStatus } from "./enums";
 import { formatPersonalNumber } from "./formatting";
 
@@ -14,7 +15,7 @@ const createInquiry = (
     const formattedPersonalNumber = formatPersonalNumber(
         data.customer.personalNumber
     );
-    // Create term
+    const term = createTerm(loan.getDurationSpec().current);
 
     const inquiry = {
         externalId: data.payment.externalId,
@@ -30,6 +31,7 @@ const createInquiry = (
             credit: loan.getPrice(),
             interestRate: loan.getInterests().interest,
             monthlyCost: loan.getCosts().monthlyCost,
+            term,
         },
         householdEconomy: {
             maritalStatus: asMaritalStatus(data.householdEconomy.maritalStatus),
