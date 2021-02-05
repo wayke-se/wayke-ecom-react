@@ -12,29 +12,30 @@ class EcomStore extends React.Component<IEcomExternalProps, IEcomData> {
 
         this.dispatchStoreAction = this.dispatchStoreAction.bind(this);
 
+        // TODO Remove temp prefill values
         const { useBankId } = props;
         this.state = {
             customer: {
                 hasAcceptedConditions: false,
                 hasAcceptedReturnConditions: false,
                 inputType: null,
-                personalNumber: null,
+                personalNumber: "198802285034",
                 street: "",
                 zip: "",
                 city: "",
-                email: "",
-                phone: "",
+                email: "oscar@ourstudio.se",
+                phone: "0707070707",
                 givenName: "",
                 surname: "",
             },
             householdEconomy: {
-                maritalStatus: "",
-                income: "",
-                employment: "",
-                householdChildren: "",
-                householdIncome: "",
-                householdHousingCost: "",
-                householdDebt: "",
+                maritalStatus: "Gift",
+                income: "124",
+                employment: "Student",
+                householdChildren: "2",
+                householdIncome: "1234",
+                householdHousingCost: "12423",
+                householdDebt: "123",
             },
             delivery: {
                 type: DeliveryType.None,

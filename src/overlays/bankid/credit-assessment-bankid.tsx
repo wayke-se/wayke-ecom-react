@@ -223,10 +223,17 @@ class CreditAssessmentBankId extends React.Component<IBankIdProps, IState> {
 
     render() {
         const { useQrCode } = this.state;
-        const { bankIdAuth, bankIdCollect, hasBankIdError } = this.props;
+        const {
+            creditAssessmentSigning,
+            bankIdCollect,
+            hasBankIdError,
+        } = this.props;
 
-        const hasQrCode = useQrCode && !!bankIdAuth && bankIdAuth.isQrCode();
-        const qrCodeAsBase64 = hasQrCode && bankIdAuth.getQrCode();
+        const hasQrCode =
+            useQrCode &&
+            !!creditAssessmentSigning &&
+            creditAssessmentSigning.isQrCode();
+        const qrCodeAsBase64 = hasQrCode && creditAssessmentSigning.getQrCode();
         const canLaunch = this.canLaunch();
         const hasOngoingProcess = this.hasOngoingProcess();
 
