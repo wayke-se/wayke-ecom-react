@@ -111,7 +111,11 @@ const Presenter = (props: IProps) => {
     }, [props.hasCreditAssessmentError]);
 
     React.useEffect(() => {
-        if (creationInitiated && !!props.creditAssessmentCase?.caseId) {
+        if (
+            creationInitiated &&
+            !!props.creditAssessmentCase &&
+            !!props.creditAssessmentCase.caseId
+        ) {
             props.onProceedToNextStep();
         }
     }, [props.creditAssessmentCase]);

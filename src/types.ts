@@ -85,6 +85,11 @@ export interface IEcomContext {
     onBankIdReset: () => void;
     createCreditAssessmentCase: () => void;
     signCreditAssessmentWithQrCode: () => void;
+    signCreditAssessmentWithSameDevice: () => void;
+    cancelCreditAssessmentSigning: (
+        callback: (response: boolean) => void
+    ) => void;
+    resetCreditAssessmentSigning: () => void;
 }
 
 export interface IEcomLifecycle {

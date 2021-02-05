@@ -15,7 +15,7 @@ import TradeInCarCondition from "./steps/trade-in-car-condition";
 import TradeInConfirmCar from "./steps/trade-in-confirm-car";
 import TradeInExistsChooser from "./steps/trade-in-exists-chooser";
 import CreditAssessmentInformation from "./steps/credit-assessment-information";
-import CreditAssessmentAuthentication from "./steps/credit-assessment-bank-id-authentication";
+import CreditAssessmentSigning from "./steps/credit-assessment-bank-id-signing";
 
 import EcomStep from "./constants/ecom-step";
 import {
@@ -73,8 +73,8 @@ export default (props: AllProps) => {
         case EcomStep.CREDIT_ASSESSMENT_INFORMATION:
             return <CreditAssessmentInformation {...props} />;
 
-        case EcomStep.CREDIT_ASSESSMENT_AUTHENTICATION:
-            return <CreditAssessmentAuthentication {...props} />;
+        case EcomStep.CREDIT_ASSESSMENT_SIGNING:
+            return <CreditAssessmentSigning {...props} />;
 
         case EcomStep.CUSTOMER_INFORMATION_INITIAL:
             return <CustomerInformationInitial {...props} />;

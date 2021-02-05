@@ -11,9 +11,15 @@ describe("Format personal number", () => {
             { value: "84021" },
             { value: "asdf" },
         ];
-        theoretically("Given {value}, should throw type error", theories, (theory) => {
-            expect(() => formatPersonalNumber(theory.value)).toThrow(TypeError);
-        });
+        theoretically(
+            "Given {value}, should throw type error",
+            theories,
+            (theory) => {
+                expect(() => formatPersonalNumber(theory.value)).toThrow(
+                    TypeError
+                );
+            }
+        );
     });
 
     describe("Given valid personal number", () => {
@@ -21,9 +27,13 @@ describe("Format personal number", () => {
             { value: "198402174951", expected: "198402174951" },
             { value: "20010610-3410", expected: "200106103410" },
         ];
-        theoretically("Given {value}, should be {expected}", theories, (theory) => {
-            const formatted = formatPersonalNumber(theory.value);
-            expect(formatted).toBe(theory.expected);
-        });
+        theoretically(
+            "Given {value}, should be {expected}",
+            theories,
+            (theory) => {
+                const formatted = formatPersonalNumber(theory.value);
+                expect(formatted).toBe(theory.expected);
+            }
+        );
     });
 });

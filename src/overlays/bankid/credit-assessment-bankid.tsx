@@ -38,8 +38,8 @@ class CreditAssessmentBankId extends React.Component<IBankIdProps, IState> {
     }
 
     componentDidUpdate(prevProps: IBankIdProps, prevState: IState) {
-        this.restartAuth(prevState);
-        this.onAuthStarted(prevProps);
+        this.renewSigning(prevState);
+        this.onSigningStarted(prevProps);
         this.onCollect(prevProps);
     }
 
@@ -69,30 +69,30 @@ class CreditAssessmentBankId extends React.Component<IBankIdProps, IState> {
     sign() {
         const {
             signCreditAssessmentWithQrCode,
-            onBankIdSameDeviceAuth,
+            signCreditAssessmentWithSameDevice,
         } = this.props;
         const { useQrCode } = this.state;
 
         if (useQrCode) {
             signCreditAssessmentWithQrCode();
         } else {
-            onBankIdSameDeviceAuth();
+            signCreditAssessmentWithSameDevice();
         }
     }
 
-    restartAuth(prevState: IState) {
+    renewSigning(prevState: IState) {
         const { useQrCode } = this.state;
         const { useQrCode: prevUseQrCode } = prevState;
 
         const methodUpdated = useQrCode !== prevUseQrCode;
-        const shouldReauth = methodUpdated && this.shouldSign();
+        const shouldRenewSigning = methodUpdated && this.shouldSign();
 
-        if (shouldReauth) {
+        if (shouldRenewSigning) {
             this.sign();
         }
     }
 
-    onAuthStarted(prevProps: IBankIdProps) {
+    onSigningStarted(prevProps: IBankIdProps) {
         const { bankIdAuth: prevAuth } = prevProps;
         const { bankIdAuth, onBankIdCollect } = this.props;
 
@@ -174,10 +174,10 @@ class CreditAssessmentBankId extends React.Component<IBankIdProps, IState> {
 
     cancel() {
         const { cancellationToken } = this.state;
-        const { onBankIdCancel } = this.props;
+        const { cancelCreditAssessmentSigning } = this.props;
 
         clearTimeout(cancellationToken);
-        onBankIdCancel(this.onCancelled);
+        cancelCreditAssessmentSigning(this.onCancelled);
     }
 
     onCancelled() {
@@ -191,33 +191,35 @@ class CreditAssessmentBankId extends React.Component<IBankIdProps, IState> {
 
     switchMethod() {
         const { cancellationToken } = this.state;
-        const { onBankIdCancel } = this.props;
+        const { cancelCreditAssessmentSigning } = this.props;
 
         clearTimeout(cancellationToken);
-        onBankIdCancel(this.onCancelledForSwitch);
+        cancelCreditAssessmentSigning(this.onCancelledForSwitch);
     }
 
     onCancelledForSwitch() {
-        const { onBankIdReset } = this.props;
+        const { resetCreditAssessmentSigning } = this.props;
         const { useQrCode } = this.state;
 
-        onBankIdReset();
+        resetCreditAssessmentSigning();
         this.setState({ useQrCode: !useQrCode });
     }
 
     canLaunch() {
         const { useQrCode } = this.state;
-        const { bankIdAuth } = this.props;
+        const { creditAssessmentSigning } = this.props;
 
         const canLaunch =
-            !!bankIdAuth && !useQrCode && bankIdAuth.isSameDevice();
+            !!creditAssessmentSigning &&
+            !useQrCode &&
+            creditAssessmentSigning.isSameDevice();
         return canLaunch;
     }
 
     launch() {
-        const { bankIdAuth } = this.props;
+        const { creditAssessmentSigning } = this.props;
         if (this.canLaunch()) {
-            window.open(bankIdAuth.getAutoLaunchUrl(), "_blank");
+            window.open(creditAssessmentSigning.getAutoLaunchUrl(), "_blank");
         }
     }
 

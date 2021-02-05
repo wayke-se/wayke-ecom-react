@@ -27,10 +27,14 @@ describe("Create term", () => {
             { value: 72, expectedTerm: "72months" },
             { value: 84, expectedTerm: "84months" },
         ];
-        
-        theoretically("given {value}, should be {expectedTerm}", theories, (theory) => {
-            const term = createTerm(theory.value);
-            expect(term).toBe(theory.expectedTerm);
-        });
+
+        theoretically(
+            "given {value}, should be {expectedTerm}",
+            theories,
+            (theory) => {
+                const term = createTerm(theory.value);
+                expect(term).toBe(theory.expectedTerm);
+            }
+        );
     });
 });

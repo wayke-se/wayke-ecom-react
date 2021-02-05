@@ -24,6 +24,8 @@ import bankIdCollect from "../sdk/bankid/collect";
 import bankIdCancel from "../sdk/bankid/cancel";
 import createCreditAssessmentCase from "../sdk/credit-assessment/new-case";
 import signCreditAssessmentCaseWithQrCode from "../sdk/credit-assessment/sign-with-qr-code";
+import signCreditAssessmentCaseWithSameDevice from "../sdk/credit-assessment/sign-with-same-device";
+import cancelCreditAssessmentSigning from "../sdk/credit-assessment/cancel-signing";
 
 import {
     IOrderOptionsSdkData,
@@ -258,6 +260,34 @@ export const makeCreditAssessmentQrCodeSignRequest = (
     makeRequest(
         signCreditAssessmentCaseWithQrCode,
         RequestType.SIGN_CREDIT_ASSESSMENT_WITH_QR_CODE,
+        requestIdentifier,
+        caseId,
+        callback
+    );
+};
+
+export const makeCreditAssessmentSameDeviceSignRequest = (
+    caseId: string,
+    callback: (response: ICreditAssessmentSignResponse | Error | null) => void
+) => {
+    const requestIdentifier = null;
+    makeRequest(
+        signCreditAssessmentCaseWithSameDevice,
+        RequestType.SIGN_CREDIT_ASSESSMENT_WITH_SAME_DEVICE,
+        requestIdentifier,
+        caseId,
+        callback
+    );
+};
+
+export const makeCreditAssessmentCancelSigningRequest = (
+    caseId: string,
+    callback: (response: boolean) => void
+) => {
+    const requestIdentifier = null;
+    makeRequest(
+        cancelCreditAssessmentSigning,
+        RequestType.CANCEL_CREDIT_ASSESSMENT_SIGNING,
         requestIdentifier,
         caseId,
         callback

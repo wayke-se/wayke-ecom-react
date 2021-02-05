@@ -29,6 +29,8 @@ import {
     makeBankIdCancelRequest,
     makeCreditAssessmentCreateCaseRequest,
     makeCreditAssessmentQrCodeSignRequest,
+    makeCreditAssessmentSameDeviceSignRequest,
+    makeCreditAssessmentCancelSigningRequest,
 } from "./tools/request-service";
 import createCreditAssessmentInquiry from "./utils/credit-assessment/create-inquiry";
 import { getLoanDetails } from "./utils/payment";
@@ -85,6 +87,15 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
             this
         );
         this.signCreditAssessmentWithQrCode = this.signCreditAssessmentWithQrCode.bind(
+            this
+        );
+        this.signCreditAssessmentWithSameDevice = this.signCreditAssessmentWithSameDevice.bind(
+            this
+        );
+        this.cancelCreditAssessmentSigning = this.cancelCreditAssessmentSigning.bind(
+            this
+        );
+        this.resetCreditAssessmentSigning = this.resetCreditAssessmentSigning.bind(
             this
         );
 
@@ -432,6 +443,56 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
         this.makeRequest(request);
     }
 
+    signCreditAssessmentWithSameDevice() {
+        const caseId = this.state.creditAssessmentCase.caseId;
+
+        const request = () => {
+            makeCreditAssessmentSameDeviceSignRequest(caseId, (response) => {
+                const hasError = response instanceof Error;
+                const creditAssessmentSigning = !hasError ? response : null;
+
+                this.saveResponse({
+                    creditAssessmentSigning,
+                    creditAssessmentStatus: null,
+                    pendingCreditAssessmentSignRequest: false,
+                    hasCreditAssessmentError: hasError,
+                });
+            });
+        };
+
+        this.setState({
+            hasCreditAssessmentError: false,
+            pendingCreditAssessmentSignRequest: true,
+        });
+        this.makeRequest(request);
+    }
+
+    cancelCreditAssessmentSigning(callback: (response: boolean) => void) {
+        const { creditAssessmentSigning } = this.state;
+
+        const noActiveSigning = !creditAssessmentSigning;
+        if (noActiveSigning) {
+            callback(false);
+            return;
+        }
+
+        const request = () => {
+            makeCreditAssessmentCancelSigningRequest(
+                creditAssessmentSigning.getCaseId(),
+                callback
+            );
+        };
+
+        this.makeRequest(request);
+    }
+
+    resetCreditAssessmentSigning() {
+        this.setState({
+            hasCreditAssessmentError: false,
+            creditAssessmentSigning: null,
+        });
+    }
+
     makeRequest(callback: () => void) {
         this.setState(
             {
@@ -469,6 +530,13 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
                 signCreditAssessmentWithQrCode={
                     this.signCreditAssessmentWithQrCode
                 }
+                signCreditAssessmentWithSameDevice={
+                    this.signCreditAssessmentWithSameDevice
+                }
+                cancelCreditAssessmentSigning={
+                    this.cancelCreditAssessmentSigning
+                }
+                resetCreditAssessmentSigning={this.resetCreditAssessmentSigning}
                 {...this.state}
                 {...this.props}
             />
