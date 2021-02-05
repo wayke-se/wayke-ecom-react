@@ -10,6 +10,7 @@ import {
     IBankIdCollectResponse,
     ICreditAssessmentInquiry,
     ICreditAssessmentCase,
+    ICreditAssessmentSignResponse,
 } from "@wayke-se/ecom";
 
 import { getOrderOptions } from "../sdk/get-order-options";
@@ -22,6 +23,7 @@ import bankIdAuth from "../sdk/bankid/auth";
 import bankIdCollect from "../sdk/bankid/collect";
 import bankIdCancel from "../sdk/bankid/cancel";
 import createCreditAssessmentCase from "../sdk/credit-assessment/new-case";
+import signCreditAssessmentCaseWithQrCode from "../sdk/credit-assessment/sign-with-qr-code";
 
 import {
     IOrderOptionsSdkData,
@@ -241,9 +243,23 @@ export const makeCreditAssessmentCreateCaseRequest = (
     const requestIdentifier = null;
     makeRequest(
         createCreditAssessmentCase,
-        RequestType.BANK_ID_CANCEL,
+        RequestType.CREATE_CREDIT_ASSESSMENT_CASE,
         requestIdentifier,
         inquiry,
+        callback
+    );
+};
+
+export const makeCreditAssessmentQrCodeSignRequest = (
+    caseId: string,
+    callback: (response: ICreditAssessmentSignResponse | Error | null) => void
+) => {
+    const requestIdentifier = null;
+    makeRequest(
+        signCreditAssessmentCaseWithQrCode,
+        RequestType.SIGN_CREDIT_ASSESSMENT_WITH_QR_CODE,
+        requestIdentifier,
+        caseId,
         callback
     );
 };

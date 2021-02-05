@@ -4,6 +4,7 @@ import { IEcomContext, IEcomStore } from "./types";
 
 import OverlayType from "./constants/overlay-type";
 import BankIdOverlay from "./overlays/bankid/index";
+import CreditAssessmentBankIdOverlay from "./overlays/bankid/credit-assessment-bankid";
 
 interface IOverlayProps extends IEcomContext, IEcomStore {
     onHideOverlay: () => void;
@@ -24,6 +25,14 @@ export default (props: IOverlayProps) => {
         case OverlayType.BANK_ID:
             return (
                 <BankIdOverlay
+                    onProceedToNextStep={onProceedToNextStep}
+                    onHideOverlay={onHideOverlay}
+                    {...props}
+                />
+            );
+        case OverlayType.CREDIT_ASSESSMENT_BANK_ID:
+            return (
+                <CreditAssessmentBankIdOverlay
                     onProceedToNextStep={onProceedToNextStep}
                     onHideOverlay={onHideOverlay}
                     {...props}

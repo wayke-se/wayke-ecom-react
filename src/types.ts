@@ -18,6 +18,8 @@ import {
     IBankIdCollectResponse,
     IAddress,
     ICreditAssessmentCase,
+    ICreditAssessmentSignResponse,
+    ICreditAssessmentStatus,
 } from "@wayke-se/ecom";
 
 export interface IVehicle {
@@ -57,6 +59,9 @@ export interface IEcomContext {
     hasCreditAssessmentError: boolean;
     pendingCreateCreditAssessmentCase: boolean;
     creditAssessmentCase: ICreditAssessmentCase;
+    creditAssessmentStatus: ICreditAssessmentStatus;
+    creditAssessmentSigning: ICreditAssessmentSignResponse;
+    pendingCreditAssessmentSignRequest: boolean;
 
     getAddress: () => IAddress;
 
@@ -79,6 +84,7 @@ export interface IEcomContext {
     onBankIdCancel: (callback: (response: boolean) => void) => void;
     onBankIdReset: () => void;
     createCreditAssessmentCase: () => void;
+    signCreditAssessmentWithQrCode: () => void;
 }
 
 export interface IEcomLifecycle {

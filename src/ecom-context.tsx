@@ -13,6 +13,7 @@ import {
     ICreditAssessmentStatus,
     ICreditAssessmentCase,
     ICreditAssessmentInquiry,
+    ICreditAssessmentSignResponse,
 } from "@wayke-se/ecom";
 
 import EcomLifecycle from "./ecom-lifecycle";
@@ -27,6 +28,7 @@ import {
     makeBankIdCollectRequest,
     makeBankIdCancelRequest,
     makeCreditAssessmentCreateCaseRequest,
+    makeCreditAssessmentQrCodeSignRequest,
 } from "./tools/request-service";
 import createCreditAssessmentInquiry from "./utils/credit-assessment/create-inquiry";
 import { getLoanDetails } from "./utils/payment";
@@ -49,6 +51,8 @@ interface IState {
     pendingCreateCreditAssessmentCase: boolean;
     creditAssessmentCase: ICreditAssessmentCase | null;
     creditAssessmentStatus: ICreditAssessmentStatus | null;
+    creditAssessmentSigning: ICreditAssessmentSignResponse | null;
+    pendingCreditAssessmentSignRequest: boolean;
 }
 
 class EcomContext extends React.Component<IEcomContextProps, IState> {
@@ -80,6 +84,9 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
         this.createCreditAssessmentCase = this.createCreditAssessmentCase.bind(
             this
         );
+        this.signCreditAssessmentWithQrCode = this.signCreditAssessmentWithQrCode.bind(
+            this
+        );
 
         this.makeRequest = this.makeRequest.bind(this);
         this.saveResponse = this.saveResponse.bind(this);
@@ -100,6 +107,8 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
             pendingCreateCreditAssessmentCase: false,
             creditAssessmentCase: null,
             creditAssessmentStatus: null,
+            creditAssessmentSigning: null,
+            pendingCreditAssessmentSignRequest: false,
         };
     }
 
@@ -399,6 +408,30 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
         this.makeRequest(request);
     }
 
+    signCreditAssessmentWithQrCode() {
+        const caseId = this.state.creditAssessmentCase.caseId;
+
+        const request = () => {
+            makeCreditAssessmentQrCodeSignRequest(caseId, (response) => {
+                const hasError = response instanceof Error;
+                const creditAssessmentSigning = !hasError ? response : null;
+
+                this.saveResponse({
+                    creditAssessmentSigning,
+                    creditAssessmentStatus: null,
+                    pendingCreditAssessmentSignRequest: false,
+                    hasCreditAssessmentError: hasError,
+                });
+            });
+        };
+
+        this.setState({
+            hasCreditAssessmentError: false,
+            pendingCreditAssessmentSignRequest: true,
+        });
+        this.makeRequest(request);
+    }
+
     makeRequest(callback: () => void) {
         this.setState(
             {
@@ -433,6 +466,9 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
                 onBankIdReset={this.handleBankIdReset}
                 onBankIdCancel={this.handleBankIdCancel}
                 createCreditAssessmentCase={this.createCreditAssessmentCase}
+                signCreditAssessmentWithQrCode={
+                    this.signCreditAssessmentWithQrCode
+                }
                 {...this.state}
                 {...this.props}
             />
