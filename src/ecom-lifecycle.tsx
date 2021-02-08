@@ -108,7 +108,7 @@ class EcomLifecycle extends React.Component<IEcomLifecycleProps, IState> {
             : [];
         const shouldForceDealer = hasOrderOptions && dealers.length === 1;
 
-        if (shouldForceDealer) {
+        if (shouldForceDealer && !this.props.dealer) {
             const dealer = this.props.orderOptions.getDealerSites()[0];
             this.props.onHandleDealerSelection(dealer);
             return;

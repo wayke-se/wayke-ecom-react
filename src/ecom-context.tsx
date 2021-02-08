@@ -94,6 +94,7 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
             makeOrderOptionsRequest(
                 {
                     vehicleId: this.props.vehicle.id,
+                    dealerId: this.props.dealer,
                 },
                 (response: IOrderOptionsResponse | null) => {
                     this.saveResponse(
