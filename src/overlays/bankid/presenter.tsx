@@ -1,7 +1,6 @@
 import React from "react";
 
 import BankIdOverlay from "./base";
-import { IBankIdCollectResponse } from "@wayke-se/ecom";
 
 export interface IBankIdPresenterProps {
     onCancel: () => void;
@@ -12,7 +11,7 @@ export interface IBankIdPresenterProps {
     onLaunch: () => void;
     useQrCode: boolean;
     hasOngoingProcess: boolean;
-    bankIdCollect?: IBankIdCollectResponse;
+    message?: string;
     hasError: boolean;
 }
 
@@ -24,7 +23,7 @@ export default ({
     canLaunch,
     onLaunch,
     useQrCode,
-    bankIdCollect,
+    message,
     hasOngoingProcess,
     hasError,
 }: IBankIdPresenterProps) => {
@@ -32,7 +31,6 @@ export default ({
 
     React.useEffect(() => {
         if (hasOngoingProcess) {
-            const message = bankIdCollect.getMessage();
             setDescription(message);
         } else if (useQrCode) {
             setDescription(
@@ -43,7 +41,7 @@ export default ({
                 "För att hämta dina uppgifter, starta din BankID applikation."
             );
         }
-    }, [bankIdCollect, useQrCode]);
+    }, [message, useQrCode]);
 
     React.useEffect(() => {
         if (hasError) {

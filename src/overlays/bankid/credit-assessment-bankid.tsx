@@ -40,12 +40,12 @@ class CreditAssessmentBankId extends React.Component<IBankIdProps, IState> {
     componentDidUpdate(prevProps: IBankIdProps, prevState: IState) {
         this.renewSigning(prevState);
         this.onSigningStarted(prevProps);
-        this.onCollect(prevProps);
+        this.onStatusReceived(prevProps);
     }
 
     componentWillUnmount() {
-        const { onBankIdReset } = this.props;
-        onBankIdReset();
+        const { resetCreditAssessmentSigning } = this.props;
+        resetCreditAssessmentSigning();
     }
 
     startSigning() {
@@ -93,67 +93,62 @@ class CreditAssessmentBankId extends React.Component<IBankIdProps, IState> {
     }
 
     onSigningStarted(prevProps: IBankIdProps) {
-        const { bankIdAuth: prevAuth } = prevProps;
-        const { bankIdAuth, onBankIdCollect } = this.props;
+        const { creditAssessmentSigning: prevSigning } = prevProps;
+        const {
+            creditAssessmentSigning,
+            getCreditAssessmentStatus,
+        } = this.props;
 
-        const authStarted = !!bankIdAuth;
-        const authIsNew = prevAuth !== bankIdAuth;
-        const newAuthStarted = authStarted && authIsNew;
+        const signingStarted = !!creditAssessmentSigning;
+        const signingIsNew = prevSigning !== creditAssessmentSigning;
+        const newSigningStarted = signingStarted && signingIsNew;
 
-        if (newAuthStarted) {
-            onBankIdCollect();
+        if (newSigningStarted) {
+            getCreditAssessmentStatus();
         }
     }
 
-    onCollect(prevProps: IBankIdProps) {
-        const { bankIdCollect: prevCollect } = prevProps;
-        const { bankIdCollect } = this.props;
+    onStatusReceived(prevProps: IBankIdProps) {
+        const { creditAssessmentStatus: prevStatus } = prevProps;
+        const { creditAssessmentStatus } = this.props;
 
-        const collectUpdated = prevCollect !== bankIdCollect;
-        const shouldCollect = this.hasOngoingProcess() && collectUpdated;
+        const statusUpdated = prevStatus !== creditAssessmentStatus;
+        const noNewStatusReceived = !this.hasOngoingProcess() || !statusUpdated;
 
-        if (shouldCollect) {
-            this.collect();
+        if (noNewStatusReceived) {
+            return;
         }
-    }
 
-    hasOngoingProcess() {
-        const { bankIdAuth, bankIdCollect } = this.props;
-
-        return (
-            !!bankIdAuth &&
-            !!bankIdCollect &&
-            bankIdAuth.getOrderRef() === bankIdCollect.getOrderRef()
-        );
-    }
-
-    collect() {
-        const { bankIdCollect } = this.props;
-
-        if (bankIdCollect.isCompleted()) {
-            this.onComplete();
-        } else if (bankIdCollect.isPending()) {
-            this.scheduleNewCollect();
-        } else if (bankIdCollect.shouldRenew()) {
+        if (creditAssessmentStatus.isSigned()) {
+            this.completeSigning();
+        } else if (creditAssessmentStatus.hasPendingSigning()) {
+            this.scheduleNewStatusCollect();
+        } else if (creditAssessmentStatus.shouldRenewSigning()) {
             this.sign();
         }
     }
 
-    scheduleNewCollect() {
-        const { onBankIdCollect } = this.props;
+    // TODO Is this function needed?
+    hasOngoingProcess() {
+        const { creditAssessmentSigning, creditAssessmentStatus } = this.props;
+
+        return !!creditAssessmentSigning && !!creditAssessmentStatus;
+    }
+
+    scheduleNewStatusCollect() {
+        const { getCreditAssessmentStatus } = this.props;
 
         const cancellationToken = window.setTimeout(() => {
             if (this.hasOngoingProcess()) {
-                onBankIdCollect();
+                getCreditAssessmentStatus();
             }
         }, 2000);
         this.setState({ cancellationToken });
     }
 
-    onComplete() {
+    completeSigning() {
         const {
             dispatchStoreAction,
-            bankIdCollect,
             onHideOverlay,
             onProceedToNextStep,
         } = this.props;
@@ -161,11 +156,6 @@ class CreditAssessmentBankId extends React.Component<IBankIdProps, IState> {
         dispatchStoreAction(StoreAction.INTERACT_UPDATE_SPECIFIC, {
             type: "customer",
             name: "isAuthenticated",
-        });
-        dispatchStoreAction(StoreAction.UPDATE_NAMED_VALUE, {
-            type: "customer",
-            name: "personalNumber",
-            value: bankIdCollect.getPersonalNumber(),
         });
 
         onHideOverlay();
@@ -227,8 +217,8 @@ class CreditAssessmentBankId extends React.Component<IBankIdProps, IState> {
         const { useQrCode } = this.state;
         const {
             creditAssessmentSigning,
-            bankIdCollect,
-            hasBankIdError,
+            creditAssessmentStatus,
+            hasCreditAssessmentError,
         } = this.props;
 
         const hasQrCode =
@@ -238,6 +228,9 @@ class CreditAssessmentBankId extends React.Component<IBankIdProps, IState> {
         const qrCodeAsBase64 = hasQrCode && creditAssessmentSigning.getQrCode();
         const canLaunch = this.canLaunch();
         const hasOngoingProcess = this.hasOngoingProcess();
+        const message = !!creditAssessmentStatus
+            ? creditAssessmentStatus.getSigningMessage()
+            : "";
 
         return (
             <BankIdPresenter
@@ -248,9 +241,9 @@ class CreditAssessmentBankId extends React.Component<IBankIdProps, IState> {
                 canLaunch={canLaunch}
                 onLaunch={this.launch}
                 useQrCode={useQrCode}
-                bankIdCollect={bankIdCollect}
+                message={message}
                 hasOngoingProcess={hasOngoingProcess}
-                hasError={hasBankIdError}
+                hasError={hasCreditAssessmentError}
             />
         );
     }

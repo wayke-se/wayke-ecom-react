@@ -10,7 +10,7 @@ import {
     IBankIdAuthResponse,
     AuthMethod,
     IBankIdCollectResponse,
-    ICreditAssessmentStatus,
+    ICreditAssessmentStatusResponse,
     ICreditAssessmentCase,
     ICreditAssessmentInquiry,
     ICreditAssessmentSignResponse,
@@ -31,6 +31,7 @@ import {
     makeCreditAssessmentQrCodeSignRequest,
     makeCreditAssessmentSameDeviceSignRequest,
     makeCreditAssessmentCancelSigningRequest,
+    makeCreditAssessmentGetStatusRequest,
 } from "./tools/request-service";
 import createCreditAssessmentInquiry from "./utils/credit-assessment/create-inquiry";
 import { getLoanDetails } from "./utils/payment";
@@ -52,7 +53,7 @@ interface IState {
     hasCreditAssessmentError: boolean;
     pendingCreateCreditAssessmentCase: boolean;
     creditAssessmentCase: ICreditAssessmentCase | null;
-    creditAssessmentStatus: ICreditAssessmentStatus | null;
+    creditAssessmentStatus: ICreditAssessmentStatusResponse | null;
     creditAssessmentSigning: ICreditAssessmentSignResponse | null;
     pendingCreditAssessmentSignRequest: boolean;
 }
@@ -96,6 +97,9 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
             this
         );
         this.resetCreditAssessmentSigning = this.resetCreditAssessmentSigning.bind(
+            this
+        );
+        this.getCreditAssessmentStatus = this.getCreditAssessmentStatus.bind(
             this
         );
 
@@ -493,6 +497,28 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
         });
     }
 
+    getCreditAssessmentStatus() {
+        const { creditAssessmentCase } = this.state;
+
+        const request = () => {
+            makeCreditAssessmentGetStatusRequest(
+                creditAssessmentCase.caseId,
+                (response) => {
+                    const hasError = response instanceof Error;
+                    const creditAssessmentStatus = !hasError ? response : null;
+
+                    this.saveResponse({
+                        creditAssessmentStatus,
+                        hasBankIdError: hasError,
+                    });
+                }
+            );
+        };
+
+        this.setState({ hasCreditAssessmentError: false });
+        this.makeRequest(request);
+    }
+
     makeRequest(callback: () => void) {
         this.setState(
             {
@@ -537,6 +563,7 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
                     this.cancelCreditAssessmentSigning
                 }
                 resetCreditAssessmentSigning={this.resetCreditAssessmentSigning}
+                getCreditAssessmentStatus={this.getCreditAssessmentStatus}
                 {...this.state}
                 {...this.props}
             />

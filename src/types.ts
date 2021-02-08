@@ -19,7 +19,7 @@ import {
     IAddress,
     ICreditAssessmentCase,
     ICreditAssessmentSignResponse,
-    ICreditAssessmentStatus,
+    ICreditAssessmentStatusResponse,
 } from "@wayke-se/ecom";
 
 export interface IVehicle {
@@ -59,7 +59,7 @@ export interface IEcomContext {
     hasCreditAssessmentError: boolean;
     pendingCreateCreditAssessmentCase: boolean;
     creditAssessmentCase: ICreditAssessmentCase;
-    creditAssessmentStatus: ICreditAssessmentStatus;
+    creditAssessmentStatus: ICreditAssessmentStatusResponse;
     creditAssessmentSigning: ICreditAssessmentSignResponse;
     pendingCreditAssessmentSignRequest: boolean;
 
@@ -90,6 +90,7 @@ export interface IEcomContext {
         callback: (response: boolean) => void
     ) => void;
     resetCreditAssessmentSigning: () => void;
+    getCreditAssessmentStatus: () => void;
 }
 
 export interface IEcomLifecycle {

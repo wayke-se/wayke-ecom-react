@@ -223,6 +223,7 @@ class BankId extends React.Component<IBankIdProps, IState> {
         const qrCodeAsBase64 = hasQrCode && bankIdAuth.getQrCode();
         const canLaunch = this.canLaunch();
         const hasOngoingProcess = this.hasOngoingProcess();
+        const message = bankIdCollect.getMessage();
 
         return (
             <BankIdPresenter
@@ -233,7 +234,7 @@ class BankId extends React.Component<IBankIdProps, IState> {
                 canLaunch={canLaunch}
                 onLaunch={this.launch}
                 useQrCode={useQrCode}
-                bankIdCollect={bankIdCollect}
+                message={message}
                 hasOngoingProcess={hasOngoingProcess}
                 hasError={hasBankIdError}
             />

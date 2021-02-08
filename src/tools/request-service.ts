@@ -11,6 +11,7 @@ import {
     ICreditAssessmentInquiry,
     ICreditAssessmentCase,
     ICreditAssessmentSignResponse,
+    ICreditAssessmentStatusResponse,
 } from "@wayke-se/ecom";
 
 import { getOrderOptions } from "../sdk/get-order-options";
@@ -26,6 +27,7 @@ import createCreditAssessmentCase from "../sdk/credit-assessment/new-case";
 import signCreditAssessmentCaseWithQrCode from "../sdk/credit-assessment/sign-with-qr-code";
 import signCreditAssessmentCaseWithSameDevice from "../sdk/credit-assessment/sign-with-same-device";
 import cancelCreditAssessmentSigning from "../sdk/credit-assessment/cancel-signing";
+import getCreditAssessmentStatus from "../sdk/credit-assessment/get-status";
 
 import {
     IOrderOptionsSdkData,
@@ -288,6 +290,20 @@ export const makeCreditAssessmentCancelSigningRequest = (
     makeRequest(
         cancelCreditAssessmentSigning,
         RequestType.CANCEL_CREDIT_ASSESSMENT_SIGNING,
+        requestIdentifier,
+        caseId,
+        callback
+    );
+};
+
+export const makeCreditAssessmentGetStatusRequest = (
+    caseId: string,
+    callback: (response: ICreditAssessmentStatusResponse | Error | null) => void
+) => {
+    const requestIdentifier = null;
+    makeRequest(
+        getCreditAssessmentStatus,
+        RequestType.GET_CREDIT_ASSESSMENT_STATUS,
         requestIdentifier,
         caseId,
         callback
