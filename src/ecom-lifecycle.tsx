@@ -103,6 +103,13 @@ class EcomLifecycle extends React.Component<IEcomLifecycleProps, IState> {
         const hasNoStep = this.state.step === undefined;
 
         const shouldSetInitialStep = hasOrderOptions && hasNoStep;
+        const shouldForceDealer = shouldSetInitialStep && this.props.orderOptions.getDealerSites()?.length === 1;
+
+        if (shouldForceDealer) {
+            const dealer = this.props.orderOptions.getDealerSites()[0];
+            this.props.onHandleDealerSelection(dealer);
+            return;
+        }
 
         if (shouldSetInitialStep) {
             const initialStep = getInitialStep(this.props.orderOptions);
