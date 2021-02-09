@@ -29,6 +29,9 @@ export interface IEcomCartProps
 export default (props: IEcomCartProps) => {
     const [isExtended, setIsExtended] = React.useState(false);
 
+    if (!!props.orderOptions && props.orderOptions.requiresDealerSelection())
+        return null;
+
     const cartContent = [];
 
     const hasLoan =
