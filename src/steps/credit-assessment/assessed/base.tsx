@@ -6,6 +6,7 @@ interface IProps {
     logoSrc: string;
     downPayment: string;
     monthlyCost: string;
+    duration: string;
     interest: string;
     effectiveInterest: string;
     decision?: string;
@@ -17,6 +18,7 @@ const CreditAssessed = ({
     logoSrc,
     downPayment,
     monthlyCost,
+    duration,
     interest,
     effectiveInterest,
     decision,
@@ -51,7 +53,7 @@ const CreditAssessed = ({
                         Avbetalning
                     </div>
                 </div>
-                <div className="column">72 mån</div>
+                <div className="column">{duration}</div>
             </div>
         </section>
         <section className="page-section">
@@ -72,7 +74,7 @@ const CreditAssessed = ({
             <div data-ecom-buttonnav>
                 <div className="button-nav-item">
                     <button data-ecom-button="full-width" onClick={onProceed}>
-                        Välj finansiering
+                        Gå vidare
                     </button>
                 </div>
             </div>

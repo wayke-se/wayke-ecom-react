@@ -1,6 +1,6 @@
 import React from "react";
 import { IEcomContext, IEcomLifecycle, IEcomStore } from "../../../types";
-import { formatPercentage, formatPrice } from "../../../utils/helpers";
+import Formatter from "./formatter";
 import { getLoanDetails } from "../../../utils/payment";
 import { getScaledLogoOfPaymentOption } from "../utils";
 
@@ -29,30 +29,25 @@ const CreditAssessedPresenter = (props: IProps) => {
     const loanDetails = getLoanDetails(orderOptions, paymentLookup);
 
     const paymentOption = getPaymentOption(props);
-    const logoSrc = getScaledLogoOfPaymentOption(paymentOption);
+    const logoSrc =
+        !!paymentOption && getScaledLogoOfPaymentOption(paymentOption);
 
-    const formattedDownPayment = formatPrice(
-        loanDetails.getDownPaymentSpec().current
-    );
-    const formattedMonthlyCost = formatPrice(
-        loanDetails.getCosts().monthlyCost
-    );
-    const formattedInterest = formatPercentage(
-        loanDetails.getInterests().interest
-    );
-    const formattedEffectiveInterest = formatPercentage(
-        loanDetails.getInterests().effectiveInterest
-    );
-    // Add duration.
+    const formatter = new Formatter(loanDetails);
+    const downPayment = formatter.getDownPayment();
+    const monthlyCost = formatter.getMonthlyCost();
+    const interest = formatter.getInterest();
+    const effectiveInterest = formatter.getEffectiveInterest();
+    const duration = formatter.getDuration();
 
     return (
         <Base
             financialInstitutionName={paymentOption.name}
             logoSrc={logoSrc}
-            downPayment={formattedDownPayment}
-            monthlyCost={formattedMonthlyCost}
-            interest={formattedInterest}
-            effectiveInterest={formattedEffectiveInterest}
+            downPayment={downPayment}
+            monthlyCost={monthlyCost}
+            duration={duration}
+            interest={interest}
+            effectiveInterest={effectiveInterest}
             decision={creditAssessmentStatus.getDecision()}
             onProceed={onProceedToNextStep}
         />
