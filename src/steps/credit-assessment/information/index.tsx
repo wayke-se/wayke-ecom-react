@@ -6,8 +6,8 @@ import {
     IEcomExternalProps,
     IEcomLifecycle,
     IEcomStore,
-} from "../../types";
-import { addSizeQuery } from "../../utils/image";
+} from "../../../types";
+import { getScaledLogoOfPaymentOption } from "../utils";
 
 import createEmploymentField from "./fields/employment";
 import createEmailField from "./fields/email";
@@ -20,7 +20,7 @@ import createHouseholdIncomeField from "./fields/householdIncome";
 import createHouseholdHousingCostField from "./fields/householdHousingCost";
 import createHouseholdDebtField from "./fields/householdDebt";
 
-import View from "./view";
+import Base from "./base";
 
 interface IProps
     extends IEcomContext,
@@ -35,12 +35,10 @@ const getScaledLogo = (props: IProps) => {
         (option) => option.type === paymentType
     );
 
-    const logo = choosenOption.logo;
-    const scaledLogo = addSizeQuery(logo, 100, 60);
-    return scaledLogo;
+    return getScaledLogoOfPaymentOption(choosenOption);
 };
 
-const Presenter = (props: IProps) => {
+const CreditAssessmentInformationPresenter = (props: IProps) => {
     const [phoneIsValid, setPhoneIsValid] = React.useState(true);
     const [emailIsValid, setEmailIsValid] = React.useState(true);
     const [personalNumberIsValid, setPersonalNumberIsValid] = React.useState(
@@ -155,7 +153,7 @@ const Presenter = (props: IProps) => {
     };
 
     return (
-        <View
+        <Base
             logoSrc={scaledLogo}
             phone={phone}
             email={email}
@@ -179,4 +177,4 @@ const Presenter = (props: IProps) => {
     );
 };
 
-export default Presenter;
+export default CreditAssessmentInformationPresenter;

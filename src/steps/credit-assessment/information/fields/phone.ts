@@ -1,6 +1,6 @@
-import StoreAction from "../../../constants/store-action";
-import { IEcomStore } from "../../../types";
-import { validatePhoneNumber } from "../../../utils/validation";
+import StoreAction from "../../../../constants/store-action";
+import { IEcomStore } from "../../../../types";
+import { validatePhoneNumber } from "../../../../utils/validation";
 
 const createPhoneField = (
     store: IEcomStore,

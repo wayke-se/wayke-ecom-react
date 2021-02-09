@@ -1,5 +1,5 @@
-import StoreAction from "../../../constants/store-action";
-import { IEcomStore } from "../../../types";
+import StoreAction from "../../../../constants/store-action";
+import { IEcomStore } from "../../../../types";
 
 const createEmploymentField = (store: IEcomStore) => {
     const value = store.data.householdEconomy.employment;

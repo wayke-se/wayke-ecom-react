@@ -294,6 +294,27 @@ describe("Get transitions", () => {
             expect(step).toBe(EcomStep.FINAL_CONFIRMATION);
         });
     });
+
+    describe("Given step CREDIT_ASSESSMENT_INFORMATION", () => {
+        it("Should transition to CREDIT_ASSESSMENT_SIGNING", () => {
+            const step = getAllTransitions()[EcomStep.CREDIT_ASSESSMENT_INFORMATION]();
+            expect(step).toBe(EcomStep.CREDIT_ASSESSMENT_SIGNING);
+        });
+    });
+
+    describe("Given step CREDIT_ASSESSMENT_SIGNING", () => {
+        it("Should transition to CREDIT_ASSESSED", () => {
+            const step = getAllTransitions()[EcomStep.CREDIT_ASSESSMENT_SIGNING]();
+            expect(step).toBe(EcomStep.CREDIT_ASSESSED);
+        });
+    });
+
+    describe("Given step CREDIT_ASSESSED", () => {
+        it("Should transition to CREDIT_ASSESSED", () => {
+            const step = getAllTransitions()[EcomStep.CREDIT_ASSESSED]();
+            expect(step).toBe(EcomStep.CUSTOMER_INFORMATION_DETAILS);
+        });
+    });
 });
 
 describe("Get identification step", () => {

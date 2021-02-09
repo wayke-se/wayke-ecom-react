@@ -1,6 +1,6 @@
-import StoreAction from "../../../constants/store-action";
-import { IEcomStore } from "../../../types";
-import { validatePersonalNumber } from "../../../utils/validation";
+import StoreAction from "../../../../constants/store-action";
+import { IEcomStore } from "../../../../types";
+import { validatePersonalNumber } from "../../../../utils/validation";
 
 const createPersonalNumberField = (
     store: IEcomStore,

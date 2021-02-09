@@ -133,6 +133,8 @@ export const getAllTransitions = () => ({
     },
     [EcomStep.CREDIT_ASSESSMENT_INFORMATION]: () =>
         EcomStep.CREDIT_ASSESSMENT_SIGNING,
+    [EcomStep.CREDIT_ASSESSMENT_SIGNING]: () => EcomStep.CREDIT_ASSESSED,
+    [EcomStep.CREDIT_ASSESSED]: () => EcomStep.CUSTOMER_INFORMATION_DETAILS,
     [EcomStep.BANKID_AUTHENTICATION]: () =>
         EcomStep.CUSTOMER_INFORMATION_DETAILS,
     [EcomStep.CUSTOMER_INFORMATION_INITIAL]: () =>

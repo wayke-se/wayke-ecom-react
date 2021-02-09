@@ -1,6 +1,6 @@
-import StoreAction from "../../../constants/store-action";
-import { IEcomStore } from "../../../types";
-import { validateStringNumberInRange } from "../../../utils/validation";
+import StoreAction from "../../../../constants/store-action";
+import { IEcomStore } from "../../../../types";
+import { validateStringNumberInRange } from "../../../../utils/validation";
 
 const createHouseholdChildrenField = (
     store: IEcomStore,

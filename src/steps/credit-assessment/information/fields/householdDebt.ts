@@ -1,18 +1,18 @@
-import StoreAction from "../../../constants/store-action";
-import { IEcomStore } from "../../../types";
-import { validateStringNumberInRange } from "../../../utils/validation";
+import StoreAction from "../../../../constants/store-action";
+import { IEcomStore } from "../../../../types";
+import { validateStringNumberInRange } from "../../../../utils/validation";
 
-const createIncomeField = (
+const createHouseholdDebtField = (
     store: IEcomStore,
     isValid: boolean,
     setIsValid: (value: boolean) => void
 ) => {
-    const value = store.data.householdEconomy.income;
+    const value = store.data.householdEconomy.householdDebt;
 
     const update = (newValue: string) =>
         store.dispatchStoreAction(StoreAction.UPDATE_NAMED_VALUE, {
             type: "householdEconomy",
-            name: "income",
+            name: "householdDebt",
             value: newValue,
         });
 
@@ -34,4 +34,4 @@ const createIncomeField = (
     return field;
 };
 
-export default createIncomeField;
+export default createHouseholdDebtField;

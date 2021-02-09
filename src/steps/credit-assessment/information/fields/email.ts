@@ -1,6 +1,6 @@
-import StoreAction from "../../../constants/store-action";
-import { IEcomStore } from "../../../types";
-import { validateEmail } from "../../../utils/validation";
+import StoreAction from "../../../../constants/store-action";
+import { IEcomStore } from "../../../../types";
+import { validateEmail } from "../../../../utils/validation";
 
 const createEmailField = (
     store: IEcomStore,

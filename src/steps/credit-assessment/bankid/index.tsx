@@ -5,10 +5,10 @@ import {
     IEcomStore,
     IEcomContext,
     IEcomExternalProps,
-} from "../types";
-import OverlayType from "../constants/overlay-type";
-import StoreAction from "../constants/store-action";
-import CustomerInformationInputType from "../constants/customer-information-input-type";
+} from "../../../types";
+import OverlayType from "../../../constants/overlay-type";
+import StoreAction from "../../../constants/store-action";
+import CustomerInformationInputType from "../../../constants/customer-information-input-type";
 
 interface IBankIdAuthenticationProps
     extends IEcomContext,

@@ -1,6 +1,10 @@
 import React from "react";
 
-export default ({}) => (
+interface IProps {
+    onCancel: () => void;
+}
+
+export default ({ onCancel }: IProps) => (
     <div data-ecom-frame>
         <div className="frame-body">
             <div data-ecom-page="justify-center" className="text-center">
@@ -19,7 +23,9 @@ export default ({}) => (
                     </div>
                 </section>
                 <section className="page-section">
-                    <button data-ecom-link>Avbryt</button>
+                    <button data-ecom-link onClick={onCancel}>
+                        Avbryt
+                    </button>
                 </section>
             </div>
         </div>
