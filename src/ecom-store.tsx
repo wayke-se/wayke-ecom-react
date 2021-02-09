@@ -19,7 +19,7 @@ class EcomStore extends React.Component<IEcomExternalProps, IEcomData> {
                 hasAcceptedConditions: false,
                 hasAcceptedReturnConditions: false,
                 inputType: null,
-                personalNumber: "198802285034",
+                personalNumber: "199607202380",
                 street: "",
                 zip: "",
                 city: "",

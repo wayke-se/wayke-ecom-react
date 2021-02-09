@@ -5,10 +5,11 @@ import { isMobile } from "../../utils/device";
 
 import BankIdPresenter from "./presenter";
 import StoreAction from "../../constants/store-action";
+import OverlayType from "../../constants/overlay-type";
 
 interface IBankIdProps extends IEcomContext, IEcomStore {
     onHideOverlay: () => void;
-    onProceedToNextStep: () => void;
+    onDisplayOverlay: (OverlayType) => void;
 }
 
 interface IState {
@@ -147,19 +148,14 @@ class CreditAssessmentBankId extends React.Component<IBankIdProps, IState> {
     }
 
     completeSigning() {
-        const {
-            dispatchStoreAction,
-            onHideOverlay,
-            onProceedToNextStep,
-        } = this.props;
+        const { dispatchStoreAction, onDisplayOverlay } = this.props;
 
         dispatchStoreAction(StoreAction.INTERACT_UPDATE_SPECIFIC, {
             type: "customer",
             name: "isAuthenticated",
         });
 
-        onHideOverlay();
-        onProceedToNextStep();
+        onDisplayOverlay(OverlayType.CREDIT_ASSESSMENT_SCORING);
     }
 
     cancel() {

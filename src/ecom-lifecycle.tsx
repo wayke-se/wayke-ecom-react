@@ -311,6 +311,7 @@ class EcomLifecycle extends React.Component<IEcomLifecycleProps, IState> {
                                         onProceedToNextStep={
                                             this.handleProceedToNextStep
                                         }
+                                        onDisplayOverlay={this.onDisplayOverlay}
                                         type={this.state.overlayType}
                                         {...this.props}
                                     />
