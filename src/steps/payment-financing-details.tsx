@@ -28,6 +28,34 @@ import { validatePayment } from "../tools/data-validation";
 import { PaymentType, IPaymentRangeSpec } from "@wayke-se/ecom";
 import UserEvent from "../constants/user-event";
 
+interface IProceedButtonProps {
+    updating: boolean;
+    onClick: () => void;
+}
+
+const ProceedButton = ({ updating, onClick }: IProceedButtonProps) => (
+    <div data-ecom-buttonnav="">
+        <div className="button-nav-item">
+            <button
+                data-ecom-button="full-width"
+                disabled={updating}
+                onClick={onClick}
+            >
+                {!updating ? (
+                    "Välj finansiering"
+                ) : (
+                    <>
+                        <div data-ecom-spinner="inline" className="m-r-half">
+                            <div className="spinner" />
+                        </div>
+                        Uppdaterar
+                    </>
+                )}
+            </button>
+        </div>
+    </div>
+);
+
 export interface IPaymentFinancingDetailsProps
     extends IEcomExternalProps,
         IEcomContext,
@@ -201,13 +229,18 @@ class PaymentFinancingDetails extends React.Component<
 
                     this.props.onFetchPaymentInformation(
                         (isSuccessful: boolean) => {
-                            this.setState({
-                                hasRequestError: !isSuccessful,
-                            });
+                            if (isSuccessful) {
+                                this.setState({
+                                    hasRequestError: false,
+                                });
+                                this.props.onProceedToNextStep();
+                            } else {
+                                this.setState({
+                                    hasRequestError: true,
+                                });
+                            }
                         }
                     );
-
-                    this.props.onProceedToNextStep();
                 });
             }
         );
@@ -726,17 +759,10 @@ class PaymentFinancingDetails extends React.Component<
                 </section>
 
                 <section className="page-section page-section-bottom">
-                    <div data-ecom-buttonnav="">
-                        <div className="button-nav-item">
-                            <button
-                                data-ecom-button="full-width"
-                                disabled={this.props.isWaitingForResponse}
-                                onClick={this.handleProceedClick}
-                            >
-                                Välj finansiering
-                            </button>
-                        </div>
-                    </div>
+                    <ProceedButton
+                        updating={this.props.isWaitingForResponse}
+                        onClick={this.handleProceedClick}
+                    />
                 </section>
             </div>
         );
