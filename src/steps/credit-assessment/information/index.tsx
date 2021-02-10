@@ -99,7 +99,7 @@ const CreditAssessmentInformationPresenter = (props: IProps) => {
         setHouseholdDebtIsValid
     );
 
-    const [creationInitiated, setCreationInitiated] = React.useState(false);
+    const [creationTriggered, setCreationTriggered] = React.useState(false);
 
     React.useEffect(() => {
         if (props.hasCreditAssessmentError) {
@@ -109,12 +109,13 @@ const CreditAssessmentInformationPresenter = (props: IProps) => {
     }, [props.hasCreditAssessmentError]);
 
     React.useEffect(() => {
-        if (
-            creationInitiated &&
-            !!props.creditAssessmentCase &&
-            !!props.creditAssessmentCase.caseId
-        ) {
+        const hasCase =
+            !!props.creditAssessmentCase && !!props.creditAssessmentCase.caseId;
+        if (creationTriggered && hasCase) {
+            setCreationTriggered(false);
             props.onProceedToNextStep();
+        } else if (hasCase && !creationTriggered) {
+            props.declineCreditAssessmentCase(() => {});
         }
     }, [props.creditAssessmentCase]);
 
@@ -134,7 +135,7 @@ const CreditAssessmentInformationPresenter = (props: IProps) => {
 
         if (!allFieldsAreValid) {
             setHasError(true);
-            setErrorText("Infomration saknas eller är inkorrekt.");
+            setErrorText("Information saknas eller är inkorrekt.");
             return;
         }
 
@@ -149,7 +150,7 @@ const CreditAssessmentInformationPresenter = (props: IProps) => {
         }
 
         props.createCreditAssessmentCase();
-        setCreationInitiated(true);
+        setCreationTriggered(true);
     };
 
     return (

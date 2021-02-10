@@ -32,6 +32,7 @@ import {
     makeCreditAssessmentSameDeviceSignRequest,
     makeCreditAssessmentCancelSigningRequest,
     makeCreditAssessmentGetStatusRequest,
+    makeCreditAssessmentDeclineRequest,
 } from "./tools/request-service";
 import createCreditAssessmentInquiry from "./utils/credit-assessment/create-inquiry";
 import { getLoanDetails } from "./utils/payment";
@@ -85,6 +86,9 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
         this.handleBankIdReset = this.handleBankIdReset.bind(this);
 
         this.createCreditAssessmentCase = this.createCreditAssessmentCase.bind(
+            this
+        );
+        this.declineCreditAssessmentCase = this.declineCreditAssessmentCase.bind(
             this
         );
         this.signCreditAssessmentWithQrCode = this.signCreditAssessmentWithQrCode.bind(
@@ -423,6 +427,16 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
         this.makeRequest(request);
     }
 
+    declineCreditAssessmentCase(callback: (response: boolean) => void) {
+        const caseId = this.state.creditAssessmentCase.caseId;
+
+        const request = () => {
+            makeCreditAssessmentDeclineRequest(caseId, callback);
+        };
+
+        this.makeRequest(request);
+    }
+
     signCreditAssessmentWithQrCode() {
         const caseId = this.state.creditAssessmentCase.caseId;
 
@@ -553,6 +567,7 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
                 onBankIdReset={this.handleBankIdReset}
                 onBankIdCancel={this.handleBankIdCancel}
                 createCreditAssessmentCase={this.createCreditAssessmentCase}
+                declineCreditAssessmentCase={this.declineCreditAssessmentCase}
                 signCreditAssessmentWithQrCode={
                     this.signCreditAssessmentWithQrCode
                 }
