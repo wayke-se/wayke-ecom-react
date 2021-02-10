@@ -1,12 +1,13 @@
 import StoreAction from "../../../../constants/store-action";
 import { IEcomStore } from "../../../../types";
 import { validatePhoneNumber } from "../../../../utils/validation";
+import { IValidatableInfoItem } from "../types";
 
 const createPhoneField = (
     store: IEcomStore,
     isValid: boolean,
     setIsValid: (value: boolean) => void
-) => {
+): IValidatableInfoItem => {
     const update = (value: string) =>
         store.dispatchStoreAction(StoreAction.UPDATE_NAMED_VALUE, {
             type: "customer",

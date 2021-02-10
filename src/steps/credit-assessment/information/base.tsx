@@ -201,11 +201,16 @@ const CreditAssessmentInformation = ({
         <section className="page-section page-section-bottom">
             <CreateCaseButton creatingCase={creatingCase} onClick={submit} />
         </section>
-        <div data-ecom-form>
-            <div className={`form-group ${!!hasError && "has-error"}`}>
-                <div className="form-alert">{errorText}</div>
+        {!!hasError && (
+            <div data-ecom-alert="error" className="m-t">
+                <div className="alert-icon-section">
+                    <div className="alert-icon">
+                        <i className="icon-exclamation no-margin"></i>
+                    </div>
+                </div>
+                <div className="alert-content">{errorText}</div>
             </div>
-        </div>
+        )}
     </div>
 );
 
