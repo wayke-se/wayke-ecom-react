@@ -1,12 +1,13 @@
 import StoreAction from "../../../../constants/store-action";
 import { IEcomStore } from "../../../../types";
 import { validatePersonalNumber } from "../../../../utils/validation";
+import { IValidatableInfoItem } from "../types";
 
 const createPersonalNumberField = (
     store: IEcomStore,
     isValid: boolean,
     setIsValid: (value: boolean) => void
-) => {
+): IValidatableInfoItem => {
     const value = store.data.customer.personalNumber;
 
     const update = (newValue: string) =>

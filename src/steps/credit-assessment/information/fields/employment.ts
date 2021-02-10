@@ -1,7 +1,8 @@
 import StoreAction from "../../../../constants/store-action";
 import { IEcomStore } from "../../../../types";
+import { IInfoItem } from "../types";
 
-const createEmploymentField = (store: IEcomStore) => {
+const createEmploymentField = (store: IEcomStore): IInfoItem => {
     const value = store.data.householdEconomy.employment;
 
     const update = (newValue: string) =>

@@ -1,12 +1,13 @@
 import StoreAction from "../../../../constants/store-action";
 import { IEcomStore } from "../../../../types";
 import { validateStringNumberInRange } from "../../../../utils/validation";
+import { IValidatableInfoItem } from "../types";
 
 const createHouseholdHousingCostField = (
     store: IEcomStore,
     isValid: boolean,
     setIsValid: (value: boolean) => void
-) => {
+): IValidatableInfoItem => {
     const value = store.data.householdEconomy.householdHousingCost;
 
     const update = (newValue: string) =>
