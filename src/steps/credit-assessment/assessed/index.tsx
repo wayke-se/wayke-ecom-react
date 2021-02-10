@@ -26,13 +26,13 @@ const CreditAssessedPresenter = (props: IProps) => {
         onProceedToNextStep,
     } = props;
 
-    const loanDetails = getLoanDetails(orderOptions, paymentLookup);
-
     const paymentOption = getPaymentOption(props);
     const logoSrc =
         !!paymentOption && getScaledLogoOfPaymentOption(paymentOption);
 
+    const loanDetails = getLoanDetails(orderOptions, paymentLookup);
     const formatter = new Formatter(loanDetails);
+
     const downPayment = formatter.getDownPayment();
     const monthlyCost = formatter.getMonthlyCost();
     const interest = formatter.getInterest();
