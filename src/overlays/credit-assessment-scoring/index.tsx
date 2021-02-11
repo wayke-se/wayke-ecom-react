@@ -8,6 +8,7 @@ import Error from "./error";
 interface IProps extends IEcomContext, IEcomStore {
     onHideOverlay: () => void;
     onProceedToNextStep: () => void;
+    onPreviousStepClick: () => void;
 }
 
 const CreditAssessmentScoring = ({
@@ -15,6 +16,7 @@ const CreditAssessmentScoring = ({
     getCreditAssessmentStatus,
     onHideOverlay,
     onProceedToNextStep,
+    onPreviousStepClick,
     onFetchAddressInformation,
 }: IProps) => {
     const [cancellationToken, setCancellationToken] = React.useState<number>();
@@ -71,7 +73,8 @@ const CreditAssessmentScoring = ({
 
     const cancelScoring = () => {
         clearTimeout(cancellationToken);
-        console.log("Cancelled status collecting");
+        onHideOverlay();
+        onPreviousStepClick();
     };
 
     return hasError ? (

@@ -10,6 +10,7 @@ import CreditAssessmentScoringOverlay from "./overlays/credit-assessment-scoring
 interface IOverlayProps extends IEcomContext, IEcomStore {
     onHideOverlay: () => void;
     onProceedToNextStep: () => void;
+    onPreviousStepClick: () => void;
     onDisplayOverlay: (string) => void;
     type: OverlayType;
 }

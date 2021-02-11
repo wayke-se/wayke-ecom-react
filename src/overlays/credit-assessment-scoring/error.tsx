@@ -17,7 +17,9 @@ export default ({ texts, onReturn }: IProps) => (
                             </div>
                         </div>
                         <div className="alert-content">
-                            {texts.map((text) => ({ text }))}
+                            {texts.map((text, index) => (
+                                <p key={`error-item-${index}`}>{text}</p>
+                            ))}
                         </div>
                     </div>
                 </section>
