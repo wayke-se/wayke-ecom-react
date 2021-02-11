@@ -1,6 +1,6 @@
 import React from "react";
 
-import { IEcomExternalProps, IEcomStore } from "./types";
+import { IdentificationMethod, IEcomExternalProps, IEcomStore } from "./types";
 import {
     IOrderOptionsResponse,
     IInsuranceOptionsResponse,
@@ -36,6 +36,7 @@ import {
 } from "./tools/request-service";
 import createCreditAssessmentInquiry from "./utils/credit-assessment/create-inquiry";
 import { getLoanDetails } from "./utils/payment";
+import getIdentificationMethod from "./utils/identification-method-resolver";
 
 export interface IEcomContextProps extends IEcomExternalProps, IEcomStore {}
 
@@ -152,10 +153,15 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
     }
 
     getAddress() {
-        const { addressLookup, bankIdCollect } = this.state;
-        const { useBankId } = this.props;
+        const { data } = this.props;
+        const { orderOptions, addressLookup, bankIdCollect } = this.state;
 
-        if (useBankId) {
+        const identificationMethod = getIdentificationMethod(
+            data,
+            orderOptions
+        );
+
+        if (identificationMethod === IdentificationMethod.BankId) {
             return bankIdCollect.getAddress();
         }
 

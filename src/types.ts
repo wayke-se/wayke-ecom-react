@@ -287,3 +287,9 @@ export interface IBankIdCollectSdkData {
 export interface IBankIdCancelSdkData {
     orderRef: string;
 }
+
+export enum IdentificationMethod {
+    Manual = "manual",
+    BankId = "bank-id",
+    CreditAssessment = "credit-assessment",
+}
