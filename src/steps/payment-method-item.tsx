@@ -46,12 +46,16 @@ export default (props: IPaymentMethodItemProps) => {
                 value: props.paymentOption.externalId,
             },
             () => {
+                const financialProductCode =
+                    props.paymentOption.type === PaymentType.Loan
+                        ? props.paymentOption.loanDetails.getFinancialProductCode()
+                        : "";
                 props.dispatchStoreAction(
                     StoreAction.UPDATE_NAMED_VALUE,
                     {
                         type: "payment",
                         name: "financialProductCode",
-                        value: props.paymentOption.loanDetails.getFinancialProductCode(),
+                        value: financialProductCode,
                     },
                     () => {
                         props.dispatchStoreAction(

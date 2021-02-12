@@ -223,7 +223,7 @@ class BankId extends React.Component<IBankIdProps, IState> {
         const qrCodeAsBase64 = hasQrCode && bankIdAuth.getQrCode();
         const canLaunch = this.canLaunch();
         const hasOngoingProcess = this.hasOngoingProcess();
-        const message = bankIdCollect.getMessage();
+        const message = !!bankIdCollect ? bankIdCollect.getMessage() : "";
 
         return (
             <BankIdPresenter
