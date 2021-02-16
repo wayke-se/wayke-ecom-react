@@ -30,7 +30,11 @@ export default (props: IEcomCartProps) => {
     const [isExtended, setIsExtended] = React.useState(false);
 
     let displayRetailerName = true;
-    if (!!props.orderOptions && props.orderOptions.requiresDealerSelection() && !props.dealer)
+    if (
+        !!props.orderOptions &&
+        props.orderOptions.requiresDealerSelection() &&
+        !props.dealer
+    )
         displayRetailerName = false;
 
     const cartContent = [];
