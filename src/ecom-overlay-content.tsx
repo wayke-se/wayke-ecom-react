@@ -5,7 +5,7 @@ import { IEcomContext, IEcomStore } from "./types";
 import OverlayType from "./constants/overlay-type";
 import BankIdOverlay from "./overlays/bankid/index";
 import CreditAssessmentBankIdOverlay from "./overlays/bankid/credit-assessment-bankid";
-import CreditAssessmentScoringOverlay from "./overlays/credit-assessment-scoring";
+import CreditAssessmentScoringOverlay from "./overlays/credit-assessment-scoring/index";
 
 interface IOverlayProps extends IEcomContext, IEcomStore {
     onHideOverlay: () => void;

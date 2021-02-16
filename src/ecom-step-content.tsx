@@ -14,9 +14,9 @@ import TradeInCarDefinition from "./steps/trade-in-car-definition";
 import TradeInCarCondition from "./steps/trade-in-car-condition";
 import TradeInConfirmCar from "./steps/trade-in-confirm-car";
 import TradeInExistsChooser from "./steps/trade-in-exists-chooser";
-import CreditAssessmentInformation from "./steps/credit-assessment/information";
-import CreditAssessmentSigning from "./steps/credit-assessment/bankid";
-import CreditAssessed from "./steps/credit-assessment/assessed";
+import CreditAssessmentInformation from "./steps/credit-assessment/information/index";
+import CreditAssessmentSigning from "./steps/credit-assessment/bankid/index";
+import CreditAssessed from "./steps/credit-assessment/assessed/index";
 
 import EcomStep from "./constants/ecom-step";
 import {

@@ -7,7 +7,7 @@ import {
     IEcomLifecycle,
     IEcomStore,
 } from "../../../types";
-import { getScaledLogoOfPaymentOption } from "../utils";
+import { getScaledLogoOfPaymentOption } from "../utils/index";
 
 import createEmploymentField from "./fields/employment";
 import createEmailField from "./fields/email";
