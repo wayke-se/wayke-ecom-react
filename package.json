@@ -38,7 +38,7 @@
     "react": "^16.8.0"
   },
   "dependencies": {
-    "@wayke-se/ecom": "3.3.0",
+    "@wayke-se/ecom": "3.4.2-alpha.1",
     "marked": "^1.2.2"
   },
   "devDependencies": {
