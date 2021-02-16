@@ -29,6 +29,10 @@ export interface IEcomCartProps
 export default (props: IEcomCartProps) => {
     const [isExtended, setIsExtended] = React.useState(false);
 
+    let displayRetailerName = true;
+    if (!!props.orderOptions && props.orderOptions.requiresDealerSelection() && !props.dealer)
+        displayRetailerName = false;
+
     const cartContent = [];
 
     const hasLoan =
@@ -137,9 +141,11 @@ export default (props: IEcomCartProps) => {
                     </div>
                     <div className="cart-header-content-section">
                         <div className="cart-header-content-info">
-                            <div className="cart-seller">
-                                {retailerInformation.name}
-                            </div>
+                            {displayRetailerName && (
+                                <div className="cart-seller">
+                                    {retailerInformation.name}
+                                </div>
+                            )}
                             <div className="cart-header-title">
                                 <span className="font-medium">
                                     {props.vehicle.title}

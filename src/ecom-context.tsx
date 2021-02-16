@@ -37,12 +37,14 @@ import {
 import createCreditAssessmentInquiry from "./utils/credit-assessment/create-inquiry";
 import { getLoanDetails } from "./utils/payment";
 import getIdentificationMethod from "./utils/identification-method-resolver";
+import { IDealerOption } from "@wayke-se/ecom/dist-types/orders/types";
 
 export interface IEcomContextProps extends IEcomExternalProps, IEcomStore {}
 
 interface IState {
     isWaitingForResponse: boolean;
 
+    dealer?: string;
     orderOptions: IOrderOptionsResponse | null;
     insuranceOptions: IInsuranceOptionsResponse | null;
     vehicleLookup: IVehicleLookupResponse | null;
@@ -65,6 +67,7 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
         super(props);
 
         this.getAddress = this.getAddress.bind(this);
+        this.handleDealerSelection = this.handleDealerSelection.bind(this);
         this.handleFetchVehicleInformation = this.handleFetchVehicleInformation.bind(
             this
         );
@@ -114,6 +117,7 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
         this.state = {
             isWaitingForResponse: false,
 
+            dealer: props.dealer,
             orderOptions: null,
             insuranceOptions: null,
             vehicleLookup: null,
@@ -137,6 +141,7 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
             makeOrderOptionsRequest(
                 {
                     vehicleId: this.props.vehicle.id,
+                    dealerId: this.props.dealer,
                 },
                 (response: IOrderOptionsResponse | null) => {
                     this.saveResponse(
@@ -166,6 +171,28 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
         }
 
         return !!addressLookup ? addressLookup.getAddress() : null;
+    }
+
+    handleDealerSelection(dealer: IDealerOption) {
+        const request = () => {
+            makeOrderOptionsRequest(
+                {
+                    vehicleId: this.props.vehicle.id,
+                    dealerId: dealer.id,
+                },
+                (response: IOrderOptionsResponse | null) => {
+                    this.saveResponse(
+                        {
+                            dealer: dealer.id,
+                            orderOptions: response,
+                        },
+                        () => ({})
+                    );
+                }
+            );
+        };
+
+        this.makeRequest(request);
     }
 
     handleFetchVehicleInformation(callback: (isSuccessful: boolean) => void) {
@@ -240,6 +267,7 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
         const request = () => {
             makePaymentLookupRequest(
                 {
+                    dealerId: this.state.dealer,
                     vehicleId: this.props.vehicle.id,
                     ecomData: this.props.data.payment,
                     orderOptions: this.state.orderOptions,
@@ -562,6 +590,7 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
         return (
             <EcomLifecycle
                 getAddress={this.getAddress}
+                onHandleDealerSelection={this.handleDealerSelection}
                 onFetchInsuranceOptions={this.handleFetchInsuranceOptions}
                 onFetchVehicleInformation={this.handleFetchVehicleInformation}
                 onFetchAddressInformation={this.handleFetchAddressInformation}

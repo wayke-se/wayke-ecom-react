@@ -29,6 +29,7 @@ interface IEcomLifecycleProps
         IEcomStore {}
 
 interface IState {
+    dealerSelected: boolean;
     step: EcomStep | undefined;
     stepHistory: EcomStep[];
     isBackwardsStepForbidden: boolean;
@@ -65,6 +66,7 @@ class EcomLifecycle extends React.Component<IEcomLifecycleProps, IState> {
     private frameBodyRef: React.RefObject<HTMLDivElement>;
     private rootRef: React.RefObject<HTMLDivElement>;
     state: {
+        dealerSelected: boolean;
         step: any;
         stepHistory: any[];
         isBackwardsStepForbidden: boolean;
@@ -89,6 +91,7 @@ class EcomLifecycle extends React.Component<IEcomLifecycleProps, IState> {
         this.rootRef = React.createRef();
 
         this.state = {
+            dealerSelected: false,
             step: undefined,
             stepHistory: [],
             isBackwardsStepForbidden: false,
@@ -103,6 +106,21 @@ class EcomLifecycle extends React.Component<IEcomLifecycleProps, IState> {
         const hasNoStep = this.state.step === undefined;
 
         const shouldSetInitialStep = hasOrderOptions && hasNoStep;
+        const dealers = hasOrderOptions
+            ? this.props.orderOptions.getDealerSites()
+            : [];
+        const shouldForceDealer = hasOrderOptions && dealers.length === 1;
+
+        if (shouldForceDealer && !this.state.dealerSelected) {
+            this.setState({
+                dealerSelected: true,
+            });
+
+            const dealer = this.props.orderOptions.getDealerSites()[0];
+            this.props.onHandleDealerSelection(dealer);
+
+            return;
+        }
 
         if (shouldSetInitialStep) {
             const initialStep = getInitialStep(this.props.orderOptions);
