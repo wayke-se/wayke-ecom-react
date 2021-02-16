@@ -229,6 +229,10 @@ class EcomLifecycle extends React.Component<IEcomLifecycleProps, IState> {
             this.handleSpecificStepClick(EcomStep.TRADE_IN_CAR_DEFINITION);
         const onShowPaymentMethodChooser = () =>
             this.handleSpecificStepClick(EcomStep.PAYMENT_METHOD_CHOOSER);
+        const onShowCreditAssessmentInformation = () =>
+            this.handleSpecificStepClick(
+                EcomStep.CREDIT_ASSESSMENT_INFORMATION
+            );
 
         return (
             <div data-ecom-modal="" className="wayke-ecom" ref={this.rootRef}>
@@ -288,6 +292,9 @@ class EcomLifecycle extends React.Component<IEcomLifecycleProps, IState> {
                                                     }
                                                     onShowPaymentMethodChooser={
                                                         onShowPaymentMethodChooser
+                                                    }
+                                                    onShowCreditAssessmentInformation={
+                                                        onShowCreditAssessmentInformation
                                                     }
                                                     onIncompleteUserEvent={
                                                         this

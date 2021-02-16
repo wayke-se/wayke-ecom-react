@@ -103,6 +103,7 @@ export interface IEcomLifecycle {
     onShowInsuranceInformationDefinition: () => void;
     onShowTradeInCarDefinition: () => void;
     onShowPaymentMethodChooser: () => void;
+    onShowCreditAssessmentInformation: () => void;
     onIncompleteUserEvent: (userEvent: UserEvent) => void;
     onDisplayOverlay: (overlayType: OverlayType) => void;
 }

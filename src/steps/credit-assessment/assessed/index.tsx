@@ -26,6 +26,7 @@ const CreditAssessedPresenter = (props: IProps) => {
         paymentLookup,
         creditAssessmentStatus,
         onProceedToNextStep,
+        onShowCreditAssessmentInformation,
     } = props;
 
     const paymentOption = getPaymentOption(props);
@@ -49,7 +50,7 @@ const CreditAssessedPresenter = (props: IProps) => {
     let onButtonClick = onProceedToNextStep;
     if (result === CreditAssessmentResult.Reject) {
         buttonLabel = "Byt betalsätt";
-        onButtonClick = () => {};
+        onButtonClick = onShowCreditAssessmentInformation;
     }
 
     return (
