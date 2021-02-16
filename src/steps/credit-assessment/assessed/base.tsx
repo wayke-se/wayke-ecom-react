@@ -13,9 +13,9 @@ interface IProps {
     duration: string;
     interest: string;
     effectiveInterest: string;
-    decision: CreditAssessmentDecision;
-    recommendation: CreditAssessmentRecommendation;
-    onProceed: () => void;
+    result: CreditAssessmentResult;
+    buttonLabel: string;
+    onButtonClick: () => void;
 }
 
 const CreditAssessed = ({
@@ -26,9 +26,9 @@ const CreditAssessed = ({
     duration,
     interest,
     effectiveInterest,
-    decision,
-    recommendation,
-    onProceed,
+    result,
+    buttonLabel,
+    onButtonClick,
 }: IProps) => (
     <div data-ecom-page>
         <section className="page-section">
@@ -74,13 +74,16 @@ const CreditAssessed = ({
             </div>
         </section>
         <section className="page-section page-section-bottom">
-            <Result decision={decision} recommendation={recommendation} />
+            <Result result={result} />
         </section>
         <section className="page-section page-section-bottom">
             <div data-ecom-buttonnav>
                 <div className="button-nav-item">
-                    <button data-ecom-button="full-width" onClick={onProceed}>
-                        Gå vidare
+                    <button
+                        data-ecom-button="full-width"
+                        onClick={onButtonClick}
+                    >
+                        {buttonLabel}
                     </button>
                 </div>
             </div>

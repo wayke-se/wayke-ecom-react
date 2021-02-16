@@ -1,8 +1,6 @@
-import {
-    CreditAssessmentDecision,
-    CreditAssessmentRecommendation,
-} from "@wayke-se/ecom";
 import React from "react";
+
+import { CreditAssessmentResult } from "./types";
 
 const Success = () => (
     <div data-ecom-alert="success">
@@ -55,36 +53,18 @@ const AssessManually = () => (
     </div>
 );
 
-interface IInconclusiveProps {
-    recommendation: CreditAssessmentRecommendation;
-}
-
-const Inconclusive = ({ recommendation }: IInconclusiveProps) => {
-    switch (recommendation) {
-        case CreditAssessmentRecommendation.Approve:
-            return <Success />;
-        case CreditAssessmentRecommendation.Reject:
-            return <Failure />;
-        case CreditAssessmentRecommendation.AssessManually:
-            return <AssessManually />;
-        default:
-            return null;
-    }
-};
-
 interface IProps {
-    decision: CreditAssessmentDecision;
-    recommendation: CreditAssessmentRecommendation;
+    result: CreditAssessmentResult;
 }
 
-const Result = ({ decision, recommendation }: IProps) => {
-    switch (decision) {
-        case CreditAssessmentDecision.Approved:
+const Result = ({ result }: IProps) => {
+    switch (result) {
+        case CreditAssessmentResult.Approve:
             return <Success />;
-        case CreditAssessmentDecision.Rejected:
+        case CreditAssessmentResult.Reject:
             return <Failure />;
         default:
-            return <Inconclusive recommendation={recommendation} />;
+            return <AssessManually />;
     }
 };
 

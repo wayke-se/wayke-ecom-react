@@ -5,6 +5,8 @@ import { getLoanDetails } from "../../../utils/payment";
 import { getScaledLogoOfPaymentOption } from "../utils";
 
 import Base from "./base";
+import { CreditAssessmentResult } from "./types";
+import resolveResult from "./result-resolver";
 
 interface IProps extends IEcomLifecycle, IEcomContext, IEcomStore {}
 
@@ -39,6 +41,17 @@ const CreditAssessedPresenter = (props: IProps) => {
     const effectiveInterest = formatter.getEffectiveInterest();
     const duration = formatter.getDuration();
 
+    const result = resolveResult(
+        creditAssessmentStatus.getDecision(),
+        creditAssessmentStatus.getRecommendation()
+    );
+    let buttonLabel = "Gå vidare";
+    let onButtonClick = onProceedToNextStep;
+    if (result === CreditAssessmentResult.Reject) {
+        buttonLabel = "Byt betalsätt";
+        onButtonClick = () => {};
+    }
+
     return (
         <Base
             financialInstitutionName={paymentOption.name}
@@ -48,9 +61,9 @@ const CreditAssessedPresenter = (props: IProps) => {
             duration={duration}
             interest={interest}
             effectiveInterest={effectiveInterest}
-            decision={creditAssessmentStatus.getDecision()}
-            recommendation={creditAssessmentStatus.getRecommendation()}
-            onProceed={onProceedToNextStep}
+            result={result}
+            buttonLabel={buttonLabel}
+            onButtonClick={onButtonClick}
         />
     );
 };
