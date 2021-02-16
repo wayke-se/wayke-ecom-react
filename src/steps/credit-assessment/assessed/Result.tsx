@@ -1,3 +1,7 @@
+import {
+    CreditAssessmentDecision,
+    CreditAssessmentRecommendation,
+} from "@wayke-se/ecom";
 import React from "react";
 
 const Success = () => (
@@ -18,7 +22,7 @@ const Success = () => (
 );
 
 const Failure = () => (
-    <div data-ecom-alert="warning">
+    <div data-ecom-alert="error">
         <div className="alert-icon-section">
             <div className="alert-icon">
                 <i className="icon-exclamation no-margin" />
@@ -30,21 +34,58 @@ const Failure = () => (
             </span>{" "}
             Testa att justera lånevillkoren. En ny kreditprövning kommer att
             göras med dina nya val.{" "}
-            <button data-ecom-link="baseline">Justera nu</button>
         </div>
     </div>
 );
 
-interface IProps {
-    decision?: string;
+const AssessManually = () => (
+    <div data-ecom-alert="warning">
+        <div className="alert-icon-section">
+            <div className="alert-icon">
+                <i className="icon-exclamation no-margin" />
+            </div>
+        </div>
+        <div className="alert-content">
+            <span className="font-medium">
+                Vi behöver gå igenom ditt ärende och återkommer inom kort till
+                dig med ett besked.
+            </span>{" "}
+            Slutför ordern genom att klicka dig igenom nästkommande steg.
+        </div>
+    </div>
+);
+
+interface IInconclusiveProps {
+    recommendation: CreditAssessmentRecommendation;
 }
 
-const Result = ({ decision }: IProps) => {
-    // TODO Handle different decisions and recommendations.
-    if (!!decision) {
-        return <Success />;
+const Inconclusive = ({ recommendation }: IInconclusiveProps) => {
+    switch (recommendation) {
+        case CreditAssessmentRecommendation.Approve:
+            return <Success />;
+        case CreditAssessmentRecommendation.Reject:
+            return <Failure />;
+        case CreditAssessmentRecommendation.AssessManually:
+            return <AssessManually />;
+        default:
+            return null;
     }
-    return <Failure />;
+};
+
+interface IProps {
+    decision: CreditAssessmentDecision;
+    recommendation: CreditAssessmentRecommendation;
+}
+
+const Result = ({ decision, recommendation }: IProps) => {
+    switch (decision) {
+        case CreditAssessmentDecision.Approved:
+            return <Success />;
+        case CreditAssessmentDecision.Rejected:
+            return <Failure />;
+        default:
+            return <Inconclusive recommendation={recommendation} />;
+    }
 };
 
 export default Result;

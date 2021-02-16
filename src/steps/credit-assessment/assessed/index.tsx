@@ -49,6 +49,7 @@ const CreditAssessedPresenter = (props: IProps) => {
             interest={interest}
             effectiveInterest={effectiveInterest}
             decision={creditAssessmentStatus.getDecision()}
+            recommendation={creditAssessmentStatus.getRecommendation()}
             onProceed={onProceedToNextStep}
         />
     );

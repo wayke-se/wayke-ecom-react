@@ -1,3 +1,7 @@
+import {
+    CreditAssessmentDecision,
+    CreditAssessmentRecommendation,
+} from "@wayke-se/ecom";
 import React from "react";
 import Result from "./Result";
 
@@ -9,7 +13,8 @@ interface IProps {
     duration: string;
     interest: string;
     effectiveInterest: string;
-    decision?: string;
+    decision: CreditAssessmentDecision;
+    recommendation: CreditAssessmentRecommendation;
     onProceed: () => void;
 }
 
@@ -22,6 +27,7 @@ const CreditAssessed = ({
     interest,
     effectiveInterest,
     decision,
+    recommendation,
     onProceed,
 }: IProps) => (
     <div data-ecom-page>
@@ -68,7 +74,7 @@ const CreditAssessed = ({
             </div>
         </section>
         <section className="page-section page-section-bottom">
-            <Result decision={decision} />
+            <Result decision={decision} recommendation={recommendation} />
         </section>
         <section className="page-section page-section-bottom">
             <div data-ecom-buttonnav>

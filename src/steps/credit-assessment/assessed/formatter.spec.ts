@@ -10,18 +10,22 @@ describe("Credit assessed formatter", () => {
             { downPayment: -2, expected: "-2 kr" },
         ];
 
-        theoretically("Given {downPayment}, should be {expected}", theories, (theory) => {
-            const paymentDetails: any = {
-                getDownPaymentSpec: () => ({
-                    current: theory.downPayment,
-                }),
-            };
-            const formatter = new Formatter(paymentDetails);
+        theoretically(
+            "Given {downPayment}, should be {expected}",
+            theories,
+            (theory) => {
+                const paymentDetails: any = {
+                    getDownPaymentSpec: () => ({
+                        current: theory.downPayment,
+                    }),
+                };
+                const formatter = new Formatter(paymentDetails);
 
-            const formattedDownPayment = formatter.getDownPayment();
+                const formattedDownPayment = formatter.getDownPayment();
 
-            expect(formattedDownPayment).toBe(theory.expected);
-        });
+                expect(formattedDownPayment).toBe(theory.expected);
+            }
+        );
     });
 
     describe("Given duration", () => {
@@ -30,17 +34,21 @@ describe("Credit assessed formatter", () => {
             { downPayment: 72, expected: "72 mån" },
         ];
 
-        theoretically("Given {downPayment}, should be {expected}", theories, (theory) => {
-            const paymentDetails: any = {
-                getDurationSpec: () => ({
-                    current: theory.downPayment,
-                }),
-            };
-            const formatter = new Formatter(paymentDetails);
+        theoretically(
+            "Given {downPayment}, should be {expected}",
+            theories,
+            (theory) => {
+                const paymentDetails: any = {
+                    getDurationSpec: () => ({
+                        current: theory.downPayment,
+                    }),
+                };
+                const formatter = new Formatter(paymentDetails);
 
-            const formattedDownPayment = formatter.getDuration();
+                const formattedDownPayment = formatter.getDuration();
 
-            expect(formattedDownPayment).toBe(theory.expected);
-        });
+                expect(formattedDownPayment).toBe(theory.expected);
+            }
+        );
     });
 });
