@@ -2,7 +2,7 @@ import React from "react";
 import { IEcomContext, IEcomLifecycle, IEcomStore } from "../../../types";
 import Formatter from "./formatter";
 import { getLoanDetails } from "../../../utils/payment";
-import { getScaledLogoOfPaymentOption } from "../utils";
+import { getScaledLogoOfPaymentOption } from "../utils/index";
 
 import Base from "./base";
 import { CreditAssessmentResult } from "./types";
