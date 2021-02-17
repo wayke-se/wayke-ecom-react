@@ -15,6 +15,7 @@ import {
     IEcomExternalProps,
     IEcomLifecycle,
 } from "../types";
+import shouldUseCreditAssessment from "../utils/credit-assessment/usage-resolver";
 
 interface IFinalSummaryProps
     extends IEcomExternalProps,
@@ -84,15 +85,37 @@ export default (props: IFinalSummaryProps) => {
 
         setHasRequestError(false);
 
-        props.onCreateOrder((isSuccessful: boolean) => {
-            if (!isSuccessful) {
-                setHasRequestError(true);
-                return;
-            }
+        // TODO Refactor this horrible code
+        const usingCreditAssessment = shouldUseCreditAssessment(
+            props.data,
+            props.orderOptions
+        );
 
-            props.onIncompleteUserEvent(UserEvent.ORDER_CREATED);
-            props.onProceedToNextStep();
-        });
+        if (usingCreditAssessment) {
+            props.acceptCreditAssessmentCase((caseWasAccepted: boolean) => {
+                if (caseWasAccepted) {
+                    props.onCreateOrder((isSuccessful: boolean) => {
+                        if (!isSuccessful) {
+                            setHasRequestError(true);
+                            return;
+                        }
+
+                        props.onIncompleteUserEvent(UserEvent.ORDER_CREATED);
+                        props.onProceedToNextStep();
+                    });
+                }
+            });
+        } else {
+            props.onCreateOrder((isSuccessful: boolean) => {
+                if (!isSuccessful) {
+                    setHasRequestError(true);
+                    return;
+                }
+
+                props.onIncompleteUserEvent(UserEvent.ORDER_CREATED);
+                props.onProceedToNextStep();
+            });
+        }
     };
 
     const handleShowConditionsClick = () => {

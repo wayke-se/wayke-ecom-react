@@ -25,6 +25,7 @@ import bankIdCollect from "../sdk/bankid/collect";
 import bankIdCancel from "../sdk/bankid/cancel";
 import createCreditAssessmentCase from "../sdk/credit-assessment/new-case";
 import declineCreditAssessmentCase from "../sdk/credit-assessment/decline-case";
+import acceptCreditAssessmentCase from "../sdk/credit-assessment/accept-case";
 import signCreditAssessmentCaseWithQrCode from "../sdk/credit-assessment/sign-with-qr-code";
 import signCreditAssessmentCaseWithSameDevice from "../sdk/credit-assessment/sign-with-same-device";
 import cancelCreditAssessmentSigning from "../sdk/credit-assessment/cancel-signing";
@@ -262,6 +263,20 @@ export const makeCreditAssessmentDeclineRequest = (
     const requestIdentifier = null;
     makeRequest(
         declineCreditAssessmentCase,
+        RequestType.DECLINE_CREDIT_ASSESSMENT_CASE,
+        requestIdentifier,
+        caseId,
+        callback
+    );
+};
+
+export const makeCreditAssessmentAcceptRequest = (
+    caseId: string,
+    callback: (response: boolean) => void
+) => {
+    const requestIdentifier = null;
+    makeRequest(
+        acceptCreditAssessmentCase,
         RequestType.DECLINE_CREDIT_ASSESSMENT_CASE,
         requestIdentifier,
         caseId,

@@ -1,8 +1,6 @@
-import {
-    CreditAssessmentDecision,
-    CreditAssessmentRecommendation,
-} from "@wayke-se/ecom";
 import React from "react";
+
+import { CreditAssessmentResult } from "./types";
 import Result from "./Result";
 
 interface IProps {

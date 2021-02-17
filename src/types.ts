@@ -87,6 +87,7 @@ export interface IEcomContext {
     declineCreditAssessmentCase: (
         callback: (response: boolean) => void
     ) => void;
+    acceptCreditAssessmentCase: (callback: (response: boolean) => void) => void;
     signCreditAssessmentWithQrCode: () => void;
     signCreditAssessmentWithSameDevice: () => void;
     cancelCreditAssessmentSigning: (
