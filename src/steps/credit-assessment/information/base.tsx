@@ -21,6 +21,8 @@ interface IProps {
     hasError: boolean;
     errorText: string;
     creatingCase: boolean;
+    formattedCreditAmount: string;
+    financialProvider: string;
     setTermsApproved: (value: boolean) => void;
     setPrivacyApproved: (value: boolean) => void;
     submit: () => void;
@@ -43,6 +45,8 @@ const CreditAssessmentInformation = ({
     hasError,
     errorText,
     creatingCase,
+    formattedCreditAmount,
+    financialProvider,
     setTermsApproved,
     setPrivacyApproved,
     submit,
@@ -51,12 +55,14 @@ const CreditAssessmentInformation = ({
         <section className="page-section">
             <div data-ecom-columnrow>
                 <div className="column">
-                    <h1 className="h6">Gör klart din låneansökan</h1>
+                    <h1 className="h6">Låneansökan</h1>
                     <div data-ecom-content>
                         <p>
-                            Fyll i följande uppgifter om dig och ditt hushåll,
-                            bekräfta och signera sedan med BankID för att få
-                            ditt lånebesked.
+                            För att besvara din förfrågan om finansiering
+                            behöver vi några fler uppgifter om dig och ditt
+                            hushåll. Frågorna tar bara någon minut att besvara.
+                            Bekräfta och signera sedan med BankID – därefter får
+                            du ditt lånebesked direkt på skärmen!
                         </p>
                     </div>
                 </div>
@@ -140,6 +146,21 @@ const CreditAssessmentInformation = ({
                     errorText="Ange hushållets totala skulder (kr)"
                     wide
                 />
+                <div data-ecom-content="" className="m-t m-b">
+                    <h2 className="h6">Gör låneansökan</h2>
+                    <p>
+                        Genom att gå vidare ansöker du om ett lån på{" "}
+                        <b>{formattedCreditAmount} kr</b> hos {financialProvider}.
+                    </p>
+                    <p>
+                        För att gå vidare med din låneansökan behöver du signera
+                        och validera dina svar med Mobilt BankID mot Volvofinans
+                        Bank. En kreditupplysning kommer att tas och får du ditt
+                        lånebesked direkt. Blir du godkänd så gäller den genom
+                        hela köpet så länge inga tillägg görs – men din ansökan
+                        är inte bindande.
+                    </p>
+                </div>
                 <div className="form-group">
                     <div data-ecom-alert>
                         <div className="alert-icon-section">
@@ -148,10 +169,9 @@ const CreditAssessmentInformation = ({
                             </div>
                         </div>
                         <div className="alert-content">
-                            I samband med att du går vidare med din ansökan
-                            kommer en kreditupplysning att tas och du får svar
-                            direkt. Blir du godkänd så gäller den genom hela
-                            köpet, men din ansökan är inte bindande.
+                            Vi kommer inte att belasta ert konto med någon
+                            kostnad i detta steg. Köpet slutförs sedan vid möte
+                            med handlaren.
                         </div>
                     </div>
                 </div>

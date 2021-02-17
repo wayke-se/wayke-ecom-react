@@ -21,6 +21,8 @@ import createHouseholdHousingCostField from "./fields/householdHousingCost";
 import createHouseholdDebtField from "./fields/householdDebt";
 
 import Base from "./base";
+import { getLoanDetails } from "../../../utils/payment";
+import { formatPrice } from "../../../utils/helpers";
 
 interface IProps
     extends IEcomContext,
@@ -28,14 +30,24 @@ interface IProps
         IEcomLifecycle,
         IEcomExternalProps {}
 
-const getScaledLogo = (props: IProps) => {
+const getSelectedPaymentOption = (props: IProps) => {
     const paymentType = props.data.payment.paymentType;
     const paymentOptions = props.orderOptions.getPaymentOptions();
-    const choosenOption = paymentOptions.find(
+    const selectedOption = paymentOptions.find(
         (option) => option.type === paymentType
     );
 
-    return getScaledLogoOfPaymentOption(choosenOption);
+    return selectedOption;
+};
+
+const getFinancialProvider = (props: IProps) => {
+    const selectedOption = getSelectedPaymentOption(props);
+    return selectedOption.name;
+};
+
+const getScaledLogo = (props: IProps) => {
+    const selectedOption = getSelectedPaymentOption(props);
+    return getScaledLogoOfPaymentOption(selectedOption);
 };
 
 const CreditAssessmentInformationPresenter = (props: IProps) => {
@@ -65,6 +77,8 @@ const CreditAssessmentInformationPresenter = (props: IProps) => {
 
     const [hasError, setHasError] = React.useState(false);
     const [errorText, setErrorText] = React.useState("");
+
+    const [creationTriggered, setCreationTriggered] = React.useState(false);
 
     const scaledLogo = getScaledLogo(props);
 
@@ -99,7 +113,10 @@ const CreditAssessmentInformationPresenter = (props: IProps) => {
         setHouseholdDebtIsValid
     );
 
-    const [creationTriggered, setCreationTriggered] = React.useState(false);
+    const loanDetails = getLoanDetails(props.orderOptions, props.paymentLookup);
+
+    const formattedCreditAmount = formatPrice(loanDetails.getCreditAmount());
+    const financialProvider = getFinancialProvider(props);
 
     React.useEffect(() => {
         if (props.hasCreditAssessmentError) {
@@ -173,6 +190,8 @@ const CreditAssessmentInformationPresenter = (props: IProps) => {
             setTermsApproved={setTermsApproved}
             setPrivacyApproved={setPrivacyApproved}
             creatingCase={props.pendingCreateCreditAssessmentCase}
+            formattedCreditAmount={formattedCreditAmount}
+            financialProvider={financialProvider}
             submit={submit}
         />
     );
