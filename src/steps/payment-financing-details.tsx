@@ -386,6 +386,13 @@ class PaymentFinancingDetails extends React.Component<
         const formattedTotalResidualValue = formatPrice(
             loanDetails.getTotalResidualValue()
         );
+        const formattedCreditAmount = formatPrice(
+            loanDetails.getCreditAmount()
+        );
+        const creditPercentage = !!loanDetails.getPrice()
+            ? loanDetails.getCreditAmount() / loanDetails.getPrice()
+            : 0;
+        const formattedCreditPercentage = formatPercentage(creditPercentage);
 
         const publicUrl = loanDetails.getPublicURL();
 
@@ -405,23 +412,17 @@ class PaymentFinancingDetails extends React.Component<
             hasResidual || hasFixedResidual
                 ? `Beräknat på ${formattedInterest} % ränta (effektivt ${formattedEffectiveInterest} %) och en årlig körsträcka om 1500 mil.`
                 : `Beräknat på ${formattedInterest} % ränta (effektivt ${formattedEffectiveInterest} %).`;
+        const loanText = `Lån (${formattedCreditPercentage} %): ${formattedCreditAmount} kr`;
 
         return (
             <div className="page-main">
                 <section className="page-section">
                     <div data-ecom-columnrow="">
                         <div className="column">
-                            <h1 className="h6 no-margin">Betalsätt</h1>
+                            <h1 className="h6 no-margin">Finansiering</h1>
                             <div className="font-size-small">
                                 {paymentOption.name}
                             </div>
-                            <button
-                                data-ecom-link="font-inerit"
-                                onClick={this.props.onShowPaymentMethodChooser}
-                                className="m-t"
-                            >
-                                Ändra betalsätt
-                            </button>
                         </div>
 
                         {paymentOption.logo && (
@@ -437,6 +438,30 @@ class PaymentFinancingDetails extends React.Component<
                                 />
                             </div>
                         )}
+                    </div>
+                    <div data-ecom-content="" className="m-t-half">
+                        <p>
+                            Betala bilen med finansiering via{" "}
+                            {paymentOption.name}. Gör din låneansökan här – och
+                            få besked direkt. Kom ihåg, köpet är inte bindande
+                            förrän du signerat det definitiva affärsförslaget
+                            som tas fram av säljaren.
+                        </p>
+                        <p>
+                            Ange din tänkta kontantinsats och hur många månader
+                            du vill lägga upp ditt lån på.
+                        </p>
+                    </div>
+                    <div data-ecom-columnrow="">
+                        <div className="column">
+                            <button
+                                data-ecom-link="font-inerit"
+                                onClick={this.props.onShowPaymentMethodChooser}
+                                className="m-t"
+                            >
+                                Ändra betalsätt
+                            </button>
+                        </div>
                     </div>
                 </section>
 
@@ -633,6 +658,7 @@ class PaymentFinancingDetails extends React.Component<
                         kr/mån
                     </div>
                     <div className="font-size-small">{footNote}</div>
+                    <div className="font-size-small">{loanText}</div>
 
                     <div className="m-t-half">
                         <button
@@ -739,6 +765,28 @@ class PaymentFinancingDetails extends React.Component<
                                         kr
                                     </div>
                                 </div>
+                                <div
+                                    data-ecom-content
+                                    className="text-dark-lighten font-size-small m-t"
+                                >
+                                    <p>
+                                        *Det här är inte den slutgiltiga
+                                        offerten. Räntan kan komma att ändras
+                                        ifall det sker justeringar i initial
+                                        amorteringsplan, tillägg i utrustning
+                                        eller andra ändringar som påverkar det
+                                        initiala prisförslaget.
+                                    </p>
+
+                                    <p>
+                                        Om marknadsräntan förändras kan
+                                        månadskostnaden komma att ändras i
+                                        motsvarande mån. Månadskostnaden kan
+                                        också komma att påverkas av den
+                                        kreditriskklass låntagaren åsätts vid en
+                                        kreditbedömning.
+                                    </p>
+                                </div>
                             </div>
 
                             {publicUrl && (
@@ -756,6 +804,20 @@ class PaymentFinancingDetails extends React.Component<
                             )}
                         </React.Fragment>
                     )}
+                    <div data-ecom-alert className="m-t">
+                        <div className="alert-icon-section">
+                            <div className="alert-icon">
+                                <i className="icon-exclamation no-margin"></i>
+                            </div>
+                        </div>
+                        <div className="alert-content">
+                            Det är inte förrän i kontakt med säljaren som det
+                            definitiva affärsförslaget tas fram av säljaren och
+                            godkänns av dig som kund. I samband med leverans
+                            signeras det finansiella avtalet och det är först då
+                            avtalet är bindande.
+                        </div>
+                    </div>
                 </section>
 
                 <section className="page-section page-section-bottom">
