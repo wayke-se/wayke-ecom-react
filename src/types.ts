@@ -253,6 +253,7 @@ export interface ICreateOrderSdkData {
     orderOptions: IOrderOptionsResponse;
     paymentLookup: IPaymentLookupResponse | undefined;
     address: IAddress;
+    creditAssessmentStatus: ICreditAssessmentStatusResponse;
 }
 
 export interface IPaymentLookupSdkData {

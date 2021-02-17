@@ -275,6 +275,7 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
                     orderOptions: this.state.orderOptions,
                     paymentLookup: this.state.paymentLookup,
                     address,
+                    creditAssessmentStatus: this.state.creditAssessmentStatus,
                 },
                 (wasOrderCreated: boolean) => {
                     this.setState(

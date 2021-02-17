@@ -68,12 +68,13 @@ export default (props: IFinalSummaryProps) => {
     const [hasRequestError, setHasRequestError] = React.useState(false);
 
     const address = props.getAddress();
-    const handleCreateOrderClick = () => {
+    const createOrder = () => {
         const isValidData = validateEcomData(
             props.data,
             props.orderOptions,
             props.paymentLookup,
-            address
+            address,
+            props.creditAssessmentStatus
         );
 
         if (!isValidData) {
@@ -85,36 +86,38 @@ export default (props: IFinalSummaryProps) => {
 
         setHasRequestError(false);
 
-        // TODO Refactor this horrible code
+        props.onCreateOrder((isSuccessful: boolean) => {
+            if (!isSuccessful) {
+                setHasRequestError(true);
+                return;
+            }
+
+            props.onIncompleteUserEvent(UserEvent.ORDER_CREATED);
+            props.onProceedToNextStep();
+        });
+    };
+
+    React.useEffect(() => {
+        if (props.creditAssessmentStatus.isAccepted()) {
+            createOrder();
+        }
+    }, [props.creditAssessmentStatus]);
+    const handleCreateOrderClick = () => {
         const usingCreditAssessment = shouldUseCreditAssessment(
             props.data,
             props.orderOptions
         );
+        const requiresAssessmentAcceptance =
+            usingCreditAssessment && !props.creditAssessmentStatus.isAccepted();
 
-        if (usingCreditAssessment) {
+        if (requiresAssessmentAcceptance) {
             props.acceptCreditAssessmentCase((caseWasAccepted: boolean) => {
                 if (caseWasAccepted) {
-                    props.onCreateOrder((isSuccessful: boolean) => {
-                        if (!isSuccessful) {
-                            setHasRequestError(true);
-                            return;
-                        }
-
-                        props.onIncompleteUserEvent(UserEvent.ORDER_CREATED);
-                        props.onProceedToNextStep();
-                    });
+                    props.getCreditAssessmentStatus();
                 }
             });
         } else {
-            props.onCreateOrder((isSuccessful: boolean) => {
-                if (!isSuccessful) {
-                    setHasRequestError(true);
-                    return;
-                }
-
-                props.onIncompleteUserEvent(UserEvent.ORDER_CREATED);
-                props.onProceedToNextStep();
-            });
+            createOrder();
         }
     };
 
