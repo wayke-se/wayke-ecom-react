@@ -150,7 +150,8 @@ const CreditAssessmentInformation = ({
                     <h2 className="h6">Gör låneansökan</h2>
                     <p>
                         Genom att gå vidare ansöker du om ett lån på{" "}
-                        <b>{formattedCreditAmount} kr</b> hos {financialProvider}.
+                        <b>{formattedCreditAmount} kr</b> hos{" "}
+                        {financialProvider}.
                     </p>
                     <p>
                         För att gå vidare med din låneansökan behöver du signera
