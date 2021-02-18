@@ -72,9 +72,6 @@ const CreditAssessmentInformationPresenter = (props: IProps) => {
         true
     );
 
-    const [termsApproved, setTermsApproved] = React.useState(false);
-    const [privacyApproved, setPrivacyApproved] = React.useState(false);
-
     const [hasError, setHasError] = React.useState(false);
     const [errorText, setErrorText] = React.useState("");
 
@@ -156,16 +153,6 @@ const CreditAssessmentInformationPresenter = (props: IProps) => {
             return;
         }
 
-        const hasRequiredApprovals = termsApproved && privacyApproved;
-
-        if (!hasRequiredApprovals) {
-            setHasError(true);
-            setErrorText(
-                "För att gå vidare behöver villkoren och integritetspolicyn godkännas."
-            );
-            return;
-        }
-
         props.createCreditAssessmentCase();
         setCreationTriggered(true);
     };
@@ -183,12 +170,8 @@ const CreditAssessmentInformationPresenter = (props: IProps) => {
             householdIncome={householdIncome}
             householdHousingCost={householdHousingCost}
             householdDebt={householdDebt}
-            termsApproved={termsApproved}
-            privacyApproved={privacyApproved}
             hasError={hasError}
             errorText={errorText}
-            setTermsApproved={setTermsApproved}
-            setPrivacyApproved={setPrivacyApproved}
             creatingCase={props.pendingCreateCreditAssessmentCase}
             formattedCreditAmount={formattedCreditAmount}
             financialProvider={financialProvider}

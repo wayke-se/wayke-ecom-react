@@ -16,15 +16,11 @@ interface IProps {
     householdDebt: IValidatableInfoItem;
     maritalStatus: IInfoItem;
     employment: IInfoItem;
-    termsApproved: boolean;
-    privacyApproved: boolean;
     hasError: boolean;
     errorText: string;
     creatingCase: boolean;
     formattedCreditAmount: string;
     financialProvider: string;
-    setTermsApproved: (value: boolean) => void;
-    setPrivacyApproved: (value: boolean) => void;
     submit: () => void;
 }
 
@@ -40,15 +36,11 @@ const CreditAssessmentInformation = ({
     householdIncome,
     householdHousingCost,
     householdDebt,
-    termsApproved,
-    privacyApproved,
     hasError,
     errorText,
     creatingCase,
     formattedCreditAmount,
     financialProvider,
-    setTermsApproved,
-    setPrivacyApproved,
     submit,
 }: IProps) => (
     <div data-ecom-page>
@@ -174,47 +166,6 @@ const CreditAssessmentInformation = ({
                             kostnad i detta steg. Köpet slutförs sedan vid möte
                             med handlaren.
                         </div>
-                    </div>
-                </div>
-                <div className="form-group">
-                    <div data-ecom-inputselection="checkbox">
-                        <input
-                            type="checkbox"
-                            id="finance-checkbox-1"
-                            checked={termsApproved}
-                            onChange={(e) => setTermsApproved(e.target.checked)}
-                        />
-                        <label htmlFor="finance-checkbox-1">
-                            <span className="text">
-                                Jag har förstått{" "}
-                                <a href="#" title="" data-ecom-link>
-                                    villkoren
-                                </a>{" "}
-                                och accepterar dessa.
-                            </span>
-                        </label>
-                    </div>
-                    <div
-                        data-ecom-inputselection="checkbox"
-                        className="m-t-half"
-                    >
-                        <input
-                            type="checkbox"
-                            id="finance-checkbox-2"
-                            checked={privacyApproved}
-                            onChange={(e) =>
-                                setPrivacyApproved(e.target.checked)
-                            }
-                        />
-                        <label htmlFor="finance-checkbox-2">
-                            <span className="text">
-                                Jag har förstått{" "}
-                                <a href="#" title="" data-ecom-link>
-                                    integritetpolicyn
-                                </a>{" "}
-                                och godkänner denna.
-                            </span>
-                        </label>
                     </div>
                 </div>
             </div>
