@@ -2,18 +2,19 @@ import React from "react";
 
 interface IProps {
     onCancel: () => void;
+    financialProvider: string;
 }
 
-export default ({ onCancel }: IProps) => (
+export default ({ onCancel, financialProvider }: IProps) => (
     <div data-ecom-frame>
         <div className="frame-body">
             <div data-ecom-page="justify-center" className="text-center">
                 <section className="page-section">
-                    <h1 className="h6">Väntar på Volvofinans...</h1>
+                    <h1 className="h6">Väntar på {financialProvider}...</h1>
                     <div data-ecom-content>
                         <p>
-                            Hämtar uppgifter från Volvofinans. Detta kan ta upp
-                            till en minut.
+                            Hämtar uppgifter från {financialProvider}. Vänta
+                            kvar då det kan ta några sekunder.
                         </p>
                     </div>
                 </section>

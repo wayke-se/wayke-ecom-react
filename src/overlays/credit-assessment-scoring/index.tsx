@@ -13,6 +13,8 @@ interface IProps extends IEcomContext, IEcomStore {
 
 const CreditAssessmentScoring = ({
     creditAssessmentStatus,
+    data,
+    orderOptions,
     getCreditAssessmentStatus,
     onHideOverlay,
     onProceedToNextStep,
@@ -77,10 +79,17 @@ const CreditAssessmentScoring = ({
         onPreviousStepClick();
     };
 
+    const paymentType = data.payment.paymentType;
+    const paymentOptions = orderOptions.getPaymentOptions();
+    const selectedOption = paymentOptions.find(
+        (option) => option.type === paymentType
+    );
+    const financialProvider = selectedOption.name;
+
     return hasError ? (
         <Error texts={errorTexts} onReturn={cancelScoring} />
     ) : (
-        <Base onCancel={cancelScoring} />
+        <Base onCancel={cancelScoring} financialProvider={financialProvider} />
     );
 };
 
