@@ -5,6 +5,8 @@ import Result from "./Result";
 
 interface IProps {
     financialInstitutionName: string;
+    retailerName: string;
+    retailerPhoneNumber: string;
     logoSrc: string;
     downPayment: string;
     monthlyCost: string;
@@ -18,6 +20,8 @@ interface IProps {
 
 const CreditAssessed = ({
     financialInstitutionName,
+    retailerName,
+    retailerPhoneNumber,
     logoSrc,
     downPayment,
     monthlyCost,
@@ -41,6 +45,15 @@ const CreditAssessed = ({
                     </div>
                 )}
             </div>
+            <div data-ecom-content="">
+                <p>Här ser du ditt lånebesked:</p>
+            </div>
+            <Result
+                result={result}
+                financialProvider={financialInstitutionName}
+                retailerName={retailerName}
+                retailerPhoneNumber={retailerPhoneNumber}
+            />
         </section>
         <section className="page-section">
             <div data-ecom-columnrow className="repeat-m-half">
@@ -70,9 +83,6 @@ const CreditAssessed = ({
                     Detaljer
                 </button>
             </div>
-        </section>
-        <section className="page-section page-section-bottom">
-            <Result result={result} />
         </section>
         <section className="page-section page-section-bottom">
             <div data-ecom-buttonnav>

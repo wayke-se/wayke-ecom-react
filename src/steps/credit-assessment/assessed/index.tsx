@@ -1,8 +1,10 @@
 import React from "react";
+
 import { IEcomContext, IEcomLifecycle, IEcomStore } from "../../../types";
 import Formatter from "./formatter";
 import { getLoanDetails } from "../../../utils/payment";
 import { getScaledLogoOfPaymentOption } from "../utils/index";
+import { getRetailerInformation } from "../../../utils/retailer";
 
 import Base from "./base";
 import { CreditAssessmentResult } from "./types";
@@ -46,6 +48,7 @@ const CreditAssessedPresenter = (props: IProps) => {
         creditAssessmentStatus.getDecision(),
         creditAssessmentStatus.getRecommendation()
     );
+
     let buttonLabel = "Gå vidare";
     let onButtonClick = onProceedToNextStep;
     if (result === CreditAssessmentResult.Reject) {
@@ -53,9 +56,13 @@ const CreditAssessedPresenter = (props: IProps) => {
         onButtonClick = onShowCreditAssessmentInformation;
     }
 
+    const retailerInformation = getRetailerInformation(props.orderOptions);
+
     return (
         <Base
             financialInstitutionName={paymentOption.name}
+            retailerName={retailerInformation.name}
+            retailerPhoneNumber={retailerInformation.phoneNumber}
             logoSrc={logoSrc}
             downPayment={downPayment}
             monthlyCost={monthlyCost}
