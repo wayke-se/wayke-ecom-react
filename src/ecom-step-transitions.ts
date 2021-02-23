@@ -62,6 +62,14 @@ export const getPrimarySteps = (
     return result;
 };
 
+const displayDeliveryOptions = (options: IOrderOptionsResponse) => {
+    const deliveryOptions = options.getDeliveryOptions() || emptyList;
+    return !(
+        deliveryOptions.length === 1 &&
+        deliveryOptions[0].type === DeliveryType.Pickup
+    );
+};
+
 export const getAllTransitions = () => ({
     [EcomStep.TRADE_IN_EXISTS_CHOOSER]: (data: IEcomData) => {
         if (data.tradeInCar.wantsToDefineTradeIn) {
@@ -94,37 +102,11 @@ export const getAllTransitions = () => ({
         if (isLoan) {
             return EcomStep.PAYMENT_FINANCING_DETAILS;
         }
-        if (!options.getInsuranceOption()) {
-            return getIdentificationStep(data.useBankId);
-        }
 
-        return EcomStep.INSURANCE_INFORMATION_DEFINITION;
-    },
-    [EcomStep.PAYMENT_FINANCING_DETAILS]: (
-        data: IEcomData,
-        options: IOrderOptionsResponse
-    ) => {
         const useCreditAssessment = shouldUseCreditAssessment(data, options);
-
-        if (!options.getInsuranceOption()) {
-            return getIdentificationStep(data.useBankId, useCreditAssessment);
-        }
-
-        return EcomStep.INSURANCE_INFORMATION_DEFINITION;
-    },
-    [EcomStep.INSURANCE_INFORMATION_DEFINITION]: (
-        data: IEcomData,
-        options: IOrderOptionsResponse
-    ) => {
-        const useCreditAssessment = shouldUseCreditAssessment(data, options);
-
-        if (data.insurance.wantsToSeeInsuranceOptions) {
-            return EcomStep.INSURANCE_ALTERNATIVE_CHOOSER;
-        }
-
         return getIdentificationStep(data.useBankId, useCreditAssessment);
     },
-    [EcomStep.INSURANCE_ALTERNATIVE_CHOOSER]: (
+    [EcomStep.PAYMENT_FINANCING_DETAILS]: (
         data: IEcomData,
         options: IOrderOptionsResponse
     ) => {
@@ -143,15 +125,39 @@ export const getAllTransitions = () => ({
         data: IEcomData,
         options: IOrderOptionsResponse
     ) => {
-        const deliveryOptions = options.getDeliveryOptions() || emptyList;
-        if (
-            deliveryOptions.length === 1 &&
-            deliveryOptions[0].type === DeliveryType.Pickup
-        ) {
-            return EcomStep.FINAL_SUMMARY;
+        if (options.getInsuranceOption()) {
+            return EcomStep.INSURANCE_INFORMATION_DEFINITION;
         }
 
-        return EcomStep.DELIVERY_METHOD;
+        if (displayDeliveryOptions(options)) {
+            return EcomStep.DELIVERY_METHOD;
+        }
+
+        return EcomStep.FINAL_SUMMARY;
+    },
+    [EcomStep.INSURANCE_INFORMATION_DEFINITION]: (
+        data: IEcomData,
+        options: IOrderOptionsResponse
+    ) => {
+        if (data.insurance.wantsToSeeInsuranceOptions) {
+            return EcomStep.INSURANCE_ALTERNATIVE_CHOOSER;
+        }
+
+        if (displayDeliveryOptions(options)) {
+            return EcomStep.DELIVERY_METHOD;
+        }
+
+        return EcomStep.FINAL_SUMMARY;
+    },
+    [EcomStep.INSURANCE_ALTERNATIVE_CHOOSER]: (
+        data: IEcomData,
+        options: IOrderOptionsResponse
+    ) => {
+        if (displayDeliveryOptions(options)) {
+            return EcomStep.DELIVERY_METHOD;
+        }
+
+        return EcomStep.FINAL_SUMMARY;
     },
     [EcomStep.DELIVERY_METHOD]: () => EcomStep.FINAL_SUMMARY,
     [EcomStep.FINAL_SUMMARY]: () => EcomStep.FINAL_CONFIRMATION,
