@@ -41,11 +41,11 @@ export const getPrimarySteps = (
 
     result.push(EcomStep.PAYMENT_METHOD_CHOOSER);
 
+    result.push(getIdentificationStep(useBankId));
+
     if (options.getInsuranceOption()) {
         result.push(EcomStep.INSURANCE_INFORMATION_DEFINITION);
     }
-
-    result.push(getIdentificationStep(useBankId));
 
     const deliveryOptions = options.getDeliveryOptions() || emptyList;
     if (

@@ -68,6 +68,20 @@ class InsuranceInformationDefinition extends React.Component<
         };
     }
 
+    componentDidMount() {
+        const insurancePersonalNumber = this.props.data.insurance
+            .personalNumber;
+        const customerPersonalNumber = this.props.data.customer.personalNumber;
+
+        if (!insurancePersonalNumber && !!customerPersonalNumber) {
+            this.props.dispatchStoreAction(StoreAction.UPDATE_NAMED_VALUE, {
+                type: "insurance",
+                name: "personalNumber",
+                value: customerPersonalNumber,
+            });
+        }
+    }
+
     handleExpectedDrivingDistanceChange(
         e: React.ChangeEvent<HTMLSelectElement>
     ) {

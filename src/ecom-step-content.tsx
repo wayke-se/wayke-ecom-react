@@ -61,13 +61,6 @@ export default (props: AllProps) => {
 
         case EcomStep.PAYMENT_FINANCING_DETAILS:
             return <PaymentFinancingDetails {...props} />;
-
-        case EcomStep.INSURANCE_INFORMATION_DEFINITION:
-            return <InsuranceInformationDefinition {...props} />;
-
-        case EcomStep.INSURANCE_ALTERNATIVE_CHOOSER:
-            return <InsuranceAlternativeChooser {...props} />;
-
         case EcomStep.BANKID_AUTHENTICATION:
             return <BankIdAuthentication {...props} />;
 
@@ -85,6 +78,12 @@ export default (props: AllProps) => {
 
         case EcomStep.CUSTOMER_INFORMATION_DETAILS:
             return <CustomerInformationDetails {...props} />;
+
+        case EcomStep.INSURANCE_INFORMATION_DEFINITION:
+            return <InsuranceInformationDefinition {...props} />;
+
+        case EcomStep.INSURANCE_ALTERNATIVE_CHOOSER:
+            return <InsuranceAlternativeChooser {...props} />;
 
         case EcomStep.DELIVERY_METHOD:
             return <DeliveryMethodChooser {...props} />;
