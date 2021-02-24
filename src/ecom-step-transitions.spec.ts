@@ -155,7 +155,9 @@ describe("Get transitions", () => {
                         return d;
                     }
                 );
-                const orderOptions: IOrderOptionsResponse = fixtures.create("IOrderOptionsResponse");
+                const orderOptions: IOrderOptionsResponse = fixtures.create(
+                    "IOrderOptionsResponse"
+                );
 
                 const step = getAllTransitions()[
                     EcomStep.PAYMENT_METHOD_CHOOSER
@@ -220,7 +222,7 @@ describe("Get transitions", () => {
                         return options;
                     }
                 );
-    
+
                 const step = getAllTransitions()[
                     EcomStep.CUSTOMER_INFORMATION_DETAILS
                 ](data, orderOptions);
@@ -241,11 +243,11 @@ describe("Get transitions", () => {
                             return options;
                         }
                     );
-        
+
                     const step = getAllTransitions()[
                         EcomStep.CUSTOMER_INFORMATION_DETAILS
                     ](data, orderOptions);
-        
+
                     expect(step).toBe(EcomStep.DELIVERY_METHOD);
                 });
             });
@@ -268,11 +270,11 @@ describe("Get transitions", () => {
                             return options;
                         }
                     );
-        
+
                     const step = getAllTransitions()[
                         EcomStep.CUSTOMER_INFORMATION_DETAILS
                     ](data, orderOptions);
-        
+
                     expect(step).toBe(EcomStep.FINAL_SUMMARY);
                 });
             });
@@ -286,12 +288,14 @@ describe("Get transitions", () => {
                     d.insurance.wantsToSeeInsuranceOptions = true;
                     return d;
                 });
-                const orderOptions: IOrderOptionsResponse = fixtures.create("IOrderOptionsResponse");
-    
+                const orderOptions: IOrderOptionsResponse = fixtures.create(
+                    "IOrderOptionsResponse"
+                );
+
                 const step = getAllTransitions()[
                     EcomStep.INSURANCE_INFORMATION_DEFINITION
                 ](data, orderOptions);
-    
+
                 expect(step).toBe(EcomStep.INSURANCE_ALTERNATIVE_CHOOSER);
             });
         });
@@ -314,15 +318,15 @@ describe("Get transitions", () => {
                             return options;
                         }
                     );
-        
+
                     const step = getAllTransitions()[
                         EcomStep.INSURANCE_INFORMATION_DEFINITION
                     ](data, orderOptions);
-        
+
                     expect(step).toBe(EcomStep.DELIVERY_METHOD);
                 });
             });
-    
+
             describe("Given single pickup delivery method", () => {
                 it("Should transition to FINAL_SUMMARY", () => {
                     const deliveryOption: IDeliveryOption = fixtures.create(
@@ -339,11 +343,11 @@ describe("Get transitions", () => {
                             return options;
                         }
                     );
-        
+
                     const step = getAllTransitions()[
                         EcomStep.INSURANCE_INFORMATION_DEFINITION
                     ](data, orderOptions);
-        
+
                     expect(step).toBe(EcomStep.FINAL_SUMMARY);
                 });
             });
@@ -361,11 +365,11 @@ describe("Get transitions", () => {
                         return options;
                     }
                 );
-    
+
                 const step = getAllTransitions()[
                     EcomStep.INSURANCE_ALTERNATIVE_CHOOSER
                 ](data, orderOptions);
-    
+
                 expect(step).toBe(EcomStep.DELIVERY_METHOD);
             });
         });
@@ -387,11 +391,11 @@ describe("Get transitions", () => {
                         return options;
                     }
                 );
-    
+
                 const step = getAllTransitions()[
                     EcomStep.INSURANCE_ALTERNATIVE_CHOOSER
                 ](data, orderOptions);
-    
+
                 expect(step).toBe(EcomStep.FINAL_SUMMARY);
             });
         });

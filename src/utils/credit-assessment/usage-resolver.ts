@@ -16,6 +16,10 @@ const shouldUseCreditAssessment = (
     data: IEcomData,
     options: IOrderOptionsResponse
 ) => {
+    if (!data.useBankId) {
+        return false;
+    }
+
     const paymentIsLoan =
         !!data.payment && data.payment.paymentType === PaymentType.Loan;
     if (!paymentIsLoan) {

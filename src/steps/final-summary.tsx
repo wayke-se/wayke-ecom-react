@@ -98,10 +98,18 @@ export default (props: IFinalSummaryProps) => {
     };
 
     React.useEffect(() => {
-        if (props.creditAssessmentStatus.isAccepted()) {
+        const usingCreditAssessment = shouldUseCreditAssessment(
+            props.data,
+            props.orderOptions
+        );
+
+        const hasAcceptedCreditAssessment =
+            usingCreditAssessment && props.creditAssessmentStatus.isAccepted();
+        if (hasAcceptedCreditAssessment) {
             createOrder();
         }
     }, [props.creditAssessmentStatus]);
+
     const handleCreateOrderClick = () => {
         const usingCreditAssessment = shouldUseCreditAssessment(
             props.data,
