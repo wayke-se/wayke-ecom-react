@@ -443,7 +443,7 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
         this.makeRequest(request);
     }
 
-    declineCreditAssessmentCase(callback: (response: boolean) => void) {
+    declineCreditAssessmentCase() {
         const caseId = this.state.creditAssessmentCase.caseId;
 
         const request = () => {
@@ -451,7 +451,11 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
                 this.setState({
                     isWaitingForResponse: false,
                 });
-                callback(success);
+                if (success) {
+                    this.setState({
+                        creditAssessmentCase: null,
+                    });
+                }
             });
         };
 

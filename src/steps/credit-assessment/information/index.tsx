@@ -129,7 +129,7 @@ const CreditAssessmentInformationPresenter = (props: IProps) => {
             setCreationTriggered(false);
             props.onProceedToNextStep();
         } else if (hasCase && !creationTriggered) {
-            props.declineCreditAssessmentCase(() => {});
+            props.declineCreditAssessmentCase();
         }
     }, [props.creditAssessmentCase]);
 
