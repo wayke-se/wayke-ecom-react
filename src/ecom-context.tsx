@@ -383,7 +383,12 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
         };
 
         const request = () => {
-            makeBankIdCancelRequest(data, callback);
+            makeBankIdCancelRequest(data, (success) => {
+                this.setState({
+                    isWaitingForResponse: false,
+                });
+                callback(success);
+            });
         };
 
         this.makeRequest(request);
@@ -442,7 +447,12 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
         const caseId = this.state.creditAssessmentCase.caseId;
 
         const request = () => {
-            makeCreditAssessmentDeclineRequest(caseId, callback);
+            makeCreditAssessmentDeclineRequest(caseId, (success) => {
+                this.setState({
+                    isWaitingForResponse: false,
+                });
+                callback(success);
+            });
         };
 
         this.makeRequest(request);
@@ -452,7 +462,12 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
         const caseId = this.state.creditAssessmentCase.caseId;
 
         const request = () => {
-            makeCreditAssessmentAcceptRequest(caseId, callback);
+            makeCreditAssessmentAcceptRequest(caseId, (success) => {
+                this.setState({
+                    isWaitingForResponse: false,
+                });
+                callback(success);
+            });
         };
 
         this.makeRequest(request);
@@ -518,7 +533,12 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
         const request = () => {
             makeCreditAssessmentCancelSigningRequest(
                 creditAssessmentSigning.getCaseId(),
-                callback
+                (success) => {
+                    this.setState({
+                        isWaitingForResponse: false,
+                    });
+                    callback(success);
+                }
             );
         };
 
