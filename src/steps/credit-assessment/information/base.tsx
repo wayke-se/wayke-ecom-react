@@ -3,6 +3,10 @@ import React from "react";
 import { IInfoItem, IValidatableInfoItem } from "./types";
 import { TextInput, DropDownInput } from "./input";
 import CreateCaseButton from "./create-case-button";
+import {
+    MARITAL_STATUS_VALUES,
+    OCCUPATION_VALUES,
+} from "../../../constants/credit-assessment";
 
 interface IProps {
     logoSrc: string;
@@ -89,7 +93,7 @@ const CreditAssessmentInformation = ({
                 <DropDownInput
                     {...maritalStatus}
                     label="Civilstatus"
-                    options={["Gift", "Singel"]}
+                    options={MARITAL_STATUS_VALUES}
                 />
                 <TextInput
                     {...income}
@@ -101,14 +105,7 @@ const CreditAssessmentInformation = ({
                 <DropDownInput
                     {...employment}
                     label="Sysselsättning"
-                    options={[
-                        "Fulltidsanställd",
-                        "Student",
-                        "Deltidsanställd",
-                        "Pensionär",
-                        "Egenföretagare",
-                        "Annat",
-                    ]}
+                    options={OCCUPATION_VALUES}
                 />
                 <TextInput
                     {...householdChildren}
