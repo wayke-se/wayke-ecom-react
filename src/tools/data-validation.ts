@@ -220,10 +220,9 @@ const validateCreditAssessment = (
     status: ICreditAssessmentStatusResponse,
     payment: IPaymentData
 ) => {
-    const isAccepted = status.isAccepted();
     const hasScoreId = !!status.getScoringId();
     const hasFinancialProductCode = !!payment.financialProductCode;
     const hasExternalId = !!payment.externalId;
 
-    return isAccepted && hasScoreId && hasFinancialProductCode && hasExternalId;
+    return hasScoreId && hasFinancialProductCode && hasExternalId;
 };

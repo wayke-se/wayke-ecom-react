@@ -5,6 +5,7 @@ import OrderSummary from "../components/order-summary";
 
 import { getRetailerInformation } from "../utils/retailer";
 import { IEcomStore, IEcomContext, IEcomExternalProps } from "../types";
+import shouldUseCreditAssessment from "../utils/credit-assessment/usage-resolver";
 
 interface IFinalConfirmationProps
     extends IEcomExternalProps,
@@ -12,6 +13,19 @@ interface IFinalConfirmationProps
         IEcomStore {}
 
 export default (props: IFinalConfirmationProps) => {
+    React.useEffect(() => {
+        const usingCreditAssessment = shouldUseCreditAssessment(
+            props.data,
+            props.orderOptions
+        );
+        const shouldAcceptCase =
+            usingCreditAssessment && !props.creditAssessmentStatus.isAccepted();
+
+        if (shouldAcceptCase) {
+            props.acceptCreditAssessmentCase();
+        }
+    }, []);
+
     const retailerInformation = getRetailerInformation(props.orderOptions);
     const { name, email, phoneNumber } = retailerInformation;
 

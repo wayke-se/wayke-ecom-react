@@ -85,7 +85,7 @@ export interface IEcomContext {
     onBankIdReset: () => void;
     createCreditAssessmentCase: () => void;
     declineCreditAssessmentCase: () => void;
-    acceptCreditAssessmentCase: (callback: (response: boolean) => void) => void;
+    acceptCreditAssessmentCase: () => void;
     signCreditAssessmentWithQrCode: () => void;
     signCreditAssessmentWithSameDevice: () => void;
     cancelCreditAssessmentSigning: (

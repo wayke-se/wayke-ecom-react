@@ -5,7 +5,10 @@ import EcomContext from "./ecom-context";
 import { IEcomExternalProps, IEcomData } from "./types";
 
 import StoreAction from "./constants/store-action";
-import { MARITAL_STATUS_DEFAULT, OCCUPATION_DEFAULT } from "./constants/credit-assessment";
+import {
+    MARITAL_STATUS_DEFAULT,
+    OCCUPATION_DEFAULT,
+} from "./constants/credit-assessment";
 
 class EcomStore extends React.Component<IEcomExternalProps, IEcomData> {
     constructor(props: IEcomExternalProps) {

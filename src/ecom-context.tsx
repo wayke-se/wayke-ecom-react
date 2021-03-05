@@ -462,15 +462,14 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
         this.makeRequest(request);
     }
 
-    acceptCreditAssessmentCase(callback: (response: boolean) => void) {
+    acceptCreditAssessmentCase() {
         const caseId = this.state.creditAssessmentCase.caseId;
 
         const request = () => {
-            makeCreditAssessmentAcceptRequest(caseId, (success) => {
+            makeCreditAssessmentAcceptRequest(caseId, () => {
                 this.setState({
                     isWaitingForResponse: false,
                 });
-                callback(success);
             });
         };
 

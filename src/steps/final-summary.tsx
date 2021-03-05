@@ -15,7 +15,6 @@ import {
     IEcomExternalProps,
     IEcomLifecycle,
 } from "../types";
-import shouldUseCreditAssessment from "../utils/credit-assessment/usage-resolver";
 
 interface IFinalSummaryProps
     extends IEcomExternalProps,
@@ -65,10 +64,14 @@ export default (props: IFinalSummaryProps) => {
         isReturnConditionsExtended,
         setIsReturnConditionsExtended,
     ] = React.useState(false);
-    const [hasRequestError, setHasRequestError] = React.useState(false);
+    const [hasError, setHasError] = React.useState(false);
+    const [errorText, setErrorText] = React.useState("");
 
     const address = props.getAddress();
     const createOrder = () => {
+        setHasError(false);
+        setErrorText("");
+
         const isValidData = validateEcomData(
             props.data,
             props.orderOptions,
@@ -78,17 +81,23 @@ export default (props: IFinalSummaryProps) => {
         );
 
         if (!isValidData) {
+            setHasError(true);
+            setErrorText(
+                "Något gick fel. Vi ber om ursäkt för det. Vänligen kontrollera uppgifterna i tidigare steg och försök igen."
+            );
+
             return props.dispatchStoreAction(
                 StoreAction.INTERACT_SET_ALL_FOR_TYPE,
                 "customer"
             );
         }
 
-        setHasRequestError(false);
-
         props.onCreateOrder((isSuccessful: boolean) => {
             if (!isSuccessful) {
-                setHasRequestError(true);
+                setHasError(true);
+                setErrorText(
+                    "Order kunde inte skapas. Vi ber om ursäkt för det. Vänligen försök igen eller kontakta handlaren."
+                );
                 return;
             }
 
@@ -97,36 +106,8 @@ export default (props: IFinalSummaryProps) => {
         });
     };
 
-    React.useEffect(() => {
-        const usingCreditAssessment = shouldUseCreditAssessment(
-            props.data,
-            props.orderOptions
-        );
-
-        const hasAcceptedCreditAssessment =
-            usingCreditAssessment && props.creditAssessmentStatus.isAccepted();
-        if (hasAcceptedCreditAssessment) {
-            createOrder();
-        }
-    }, [props.creditAssessmentStatus]);
-
     const handleCreateOrderClick = () => {
-        const usingCreditAssessment = shouldUseCreditAssessment(
-            props.data,
-            props.orderOptions
-        );
-        const requiresAssessmentAcceptance =
-            usingCreditAssessment && !props.creditAssessmentStatus.isAccepted();
-
-        if (requiresAssessmentAcceptance) {
-            props.acceptCreditAssessmentCase((caseWasAccepted: boolean) => {
-                if (caseWasAccepted) {
-                    props.getCreditAssessmentStatus();
-                }
-            });
-        } else {
-            createOrder();
-        }
+        createOrder();
     };
 
     const handleShowConditionsClick = () => {
@@ -292,15 +273,15 @@ export default (props: IFinalSummaryProps) => {
                 )}
             </section>
 
-            {hasRequestError && (
-                <section className="page-section">
-                    <Alert message="Tyvärr gick någonting fel. Prova gärna igen om en liten stund." />
-                </section>
-            )}
-
             {props.isWaitingForResponse && (
                 <section className="page-section">
                     <Spinner />
+                </section>
+            )}
+
+            {!!hasError && (
+                <section className="page-section">
+                    <Alert message={errorText} />
                 </section>
             )}
 
