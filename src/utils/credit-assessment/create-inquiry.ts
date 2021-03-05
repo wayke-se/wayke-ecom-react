@@ -26,9 +26,9 @@ const createInquiry = (
         },
         loan: {
             financialProductId: data.payment.financialProductCode,
-            price: loan.getCreditAmount(),
+            price: loan.getPrice(),
             downPayment: loan.getDownPaymentSpec().current,
-            credit: loan.getPrice(),
+            credit: loan.getCreditAmount(),
             interestRate: loan.getInterests().interest,
             monthlyCost: loan.getCosts().monthlyCost,
             term,

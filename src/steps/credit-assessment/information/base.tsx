@@ -93,7 +93,7 @@ const CreditAssessmentInformation = ({
                 <DropDownInput
                     {...maritalStatus}
                     label="Civilstatus"
-                    options={MARITAL_STATUS_VALUES}
+                    options={MARITAL_STATUS_VALUES.slice()}
                 />
                 <TextInput
                     {...income}
@@ -105,7 +105,7 @@ const CreditAssessmentInformation = ({
                 <DropDownInput
                     {...employment}
                     label="Sysselsättning"
-                    options={OCCUPATION_VALUES}
+                    options={OCCUPATION_VALUES.slice()}
                 />
                 <TextInput
                     {...householdChildren}
