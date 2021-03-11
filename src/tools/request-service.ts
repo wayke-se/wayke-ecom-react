@@ -276,6 +276,7 @@ export const makeCreditAssessmentCreateCaseRequest = (
         createCreditAssessmentCase,
         RequestType.CREATE_CREDIT_ASSESSMENT_CASE,
         requestIdentifier,
+        null,
         inquiry,
         callback
     );
@@ -290,6 +291,7 @@ export const makeCreditAssessmentDeclineRequest = (
         declineCreditAssessmentCase,
         RequestType.DECLINE_CREDIT_ASSESSMENT_CASE,
         requestIdentifier,
+        null,
         caseId,
         callback
     );
@@ -304,6 +306,7 @@ export const makeCreditAssessmentAcceptRequest = (
         acceptCreditAssessmentCase,
         RequestType.DECLINE_CREDIT_ASSESSMENT_CASE,
         requestIdentifier,
+        null,
         caseId,
         callback
     );
@@ -318,6 +321,7 @@ export const makeCreditAssessmentQrCodeSignRequest = (
         signCreditAssessmentCaseWithQrCode,
         RequestType.SIGN_CREDIT_ASSESSMENT_WITH_QR_CODE,
         requestIdentifier,
+        null,
         caseId,
         callback
     );
@@ -332,6 +336,7 @@ export const makeCreditAssessmentSameDeviceSignRequest = (
         signCreditAssessmentCaseWithSameDevice,
         RequestType.SIGN_CREDIT_ASSESSMENT_WITH_SAME_DEVICE,
         requestIdentifier,
+        null,
         caseId,
         callback
     );
@@ -346,6 +351,7 @@ export const makeCreditAssessmentCancelSigningRequest = (
         cancelCreditAssessmentSigning,
         RequestType.CANCEL_CREDIT_ASSESSMENT_SIGNING,
         requestIdentifier,
+        null,
         caseId,
         callback
     );
@@ -360,6 +366,7 @@ export const makeCreditAssessmentGetStatusRequest = (
         getCreditAssessmentStatus,
         RequestType.GET_CREDIT_ASSESSMENT_STATUS,
         requestIdentifier,
+        null,
         caseId,
         callback
     );
