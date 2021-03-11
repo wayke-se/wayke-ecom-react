@@ -23,9 +23,12 @@ export const getPaymentLookup = (
         .withDuration(data.ecomData.loanDuration);
 
     const hasResidual = data.ecomData.loanResidual !== null;
-
     if (hasResidual) {
         builder.withResidualValue(data.ecomData.loanResidual);
+    }
+
+    if (data.dealerId) {
+        builder.forDealer(data.dealerId);
     }
 
     const request = builder.build();
