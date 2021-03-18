@@ -22,15 +22,13 @@ const CreditAssessmentScoring = ({
     onFetchAddressInformation,
 }: IProps) => {
     const [cancellationToken, setCancellationToken] = React.useState<number>();
-    const [addressLoaded, setAddressLoaded] = React.useState(false);
     const [hasError, setHasError] = React.useState(false);
     const [errorTexts, setErrorTexts] = React.useState<string[]>([]);
 
     React.useEffect(() => {
-        getCreditAssessmentStatus();
         onFetchAddressInformation((isSuccessful) => {
             if (isSuccessful) {
-                setAddressLoaded(true);
+                getCreditAssessmentStatus();
             } else {
                 const newErrorTexts = errorTexts.concat([
                     "Kunde inte hitta adress",
@@ -54,11 +52,11 @@ const CreditAssessmentScoring = ({
     }, [creditAssessmentStatus]);
 
     React.useEffect(() => {
-        if (creditAssessmentStatus.isScored() && addressLoaded) {
+        if (creditAssessmentStatus.isScored()) {
             onHideOverlay();
             onProceedToNextStep();
         }
-    }, [creditAssessmentStatus, addressLoaded]);
+    }, [creditAssessmentStatus]);
 
     React.useEffect(() => {
         clearTimeout(cancellationToken);
