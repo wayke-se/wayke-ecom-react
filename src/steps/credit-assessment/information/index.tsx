@@ -114,6 +114,8 @@ const CreditAssessmentInformationPresenter = (props: IProps) => {
 
     const formattedCreditAmount = formatPrice(loanDetails.getCreditAmount());
     const financialProvider = getFinancialProvider(props);
+    const hasPrivacyPolicy = loanDetails.hasPrivacyPolicy();
+    const privacyPolicyUrl = loanDetails.getPrivacyPolicyUrl();
 
     React.useEffect(() => {
         if (props.hasCreditAssessmentError) {
@@ -175,6 +177,8 @@ const CreditAssessmentInformationPresenter = (props: IProps) => {
             creatingCase={props.pendingCreateCreditAssessmentCase}
             formattedCreditAmount={formattedCreditAmount}
             financialProvider={financialProvider}
+            hasPrivacyPolicy={hasPrivacyPolicy}
+            privacyPolicyUrl={privacyPolicyUrl}
             submit={submit}
         />
     );

@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-no-target-blank */
 import React from "react";
 
 import { IInfoItem, IValidatableInfoItem } from "./types";
@@ -25,6 +26,8 @@ interface IProps {
     creatingCase: boolean;
     formattedCreditAmount: string;
     financialProvider: string;
+    hasPrivacyPolicy: boolean;
+    privacyPolicyUrl?: string;
     submit: () => void;
 }
 
@@ -45,6 +48,8 @@ const CreditAssessmentInformation = ({
     creatingCase,
     formattedCreditAmount,
     financialProvider,
+    hasPrivacyPolicy,
+    privacyPolicyUrl,
     submit,
 }: IProps) => (
     <div data-ecom-page>
@@ -166,6 +171,17 @@ const CreditAssessmentInformation = ({
                     </div>
                 </div>
             </div>
+            {!!hasPrivacyPolicy && (
+                <div data-ecom-content="" className="m-t m-b">
+                    <p>
+                        Dina uppgifter lagras och sparas säkert. Läs mer i vår{" "}
+                        <a href={privacyPolicyUrl} target="_blank">
+                            dataskyddspolicy
+                        </a>
+                        .
+                    </p>
+                </div>
+            )}
         </section>
         <section className="page-section page-section-bottom">
             <CreateCaseButton creatingCase={creatingCase} onClick={submit} />
