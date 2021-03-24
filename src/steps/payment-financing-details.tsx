@@ -42,7 +42,7 @@ const ProceedButton = ({ updating, onClick }: IProceedButtonProps) => (
                 onClick={onClick}
             >
                 {!updating ? (
-                    "Välj finansiering"
+                    "Gå vidare"
                 ) : (
                     <>
                         <div data-ecom-spinner="inline" className="m-r-half">
@@ -459,7 +459,7 @@ class PaymentFinancingDetails extends React.Component<
                                 onClick={this.props.onShowPaymentMethodChooser}
                                 className="m-t"
                             >
-                                Ändra betalsätt
+                                Ändra finansiering
                             </button>
                         </div>
                     </div>
@@ -681,6 +681,23 @@ class PaymentFinancingDetails extends React.Component<
                                 >
                                     <div className="column">
                                         <div className="font-medium font-size-small">
+                                            Avbetalningsperiod
+                                        </div>
+                                    </div>
+                                    <div className="column">
+                                        {this.props.isWaitingForResponse ? (
+                                            <SpinnerInline />
+                                        ) : (
+                                            durationValue
+                                        )}
+                                    </div>
+                                </div>
+                                <div
+                                    data-ecom-columnrow=""
+                                    className="repeat-m-half"
+                                >
+                                    <div className="column">
+                                        <div className="font-medium font-size-small">
                                             Ränta
                                         </div>
                                     </div>
@@ -797,7 +814,7 @@ class PaymentFinancingDetails extends React.Component<
                                         target="_blank"
                                         rel="noopener noreferrer"
                                     >
-                                        Mer information
+                                        {`Mer information om ${paymentOption.name}`}
                                         <i className="icon-link-external m-l-half" />
                                     </a>
                                 </div>
