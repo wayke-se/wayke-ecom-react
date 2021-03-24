@@ -36,7 +36,7 @@ const CreditAssessed = ({
         <section className="page-section">
             <div data-ecom-columnrow>
                 <div className="column">
-                    <h1 className="h6 no-margin">Finansiering</h1>
+                    <h1 className="h6 no-margin">Billån</h1>
                     <div className="m-t-half">{financialInstitutionName}</div>
                 </div>
                 {!!logoSrc && (

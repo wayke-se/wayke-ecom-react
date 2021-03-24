@@ -78,7 +78,8 @@ export default (props: ITradeInCarDefinitionProps) => {
                 <h1 className="h6">Inbytesbil</h1>
                 <div data-ecom-content="">
                     <p>
-                        Har du en bil du vill byta in när du köper din nya bil?
+                        Ange registreringsnumret och aktuellt miltal för din
+                        inbytesbil så får du ett uppskattat inköpspris av oss.
                     </p>
                 </div>
             </section>

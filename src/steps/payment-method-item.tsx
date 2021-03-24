@@ -15,6 +15,7 @@ import UserEvent from "../constants/user-event";
 import { formatPrice, formatPercentage } from "../utils/helpers";
 import { addSizeQuery } from "../utils/image";
 import { getPaymentMethodTitle } from "../utils/payment";
+import { PaymentLookupResponse } from "@wayke-se/ecom/dist-types/payments/payment-lookup-response";
 
 interface IPaymentMethodItemProps
     extends IEcomExternalProps,
@@ -34,6 +35,16 @@ const getUserEventFromPaymentType = (type: PaymentType): UserEvent | null => {
             // This is sent when the user has gone through the extra loan step.
             return null;
     }
+};
+
+const createLoanExplanation = (loanDetails: PaymentLookupResponse) => {
+    const formattedInterest = formatPercentage(
+        loanDetails!.getInterests().interest
+    );
+    const formattedLoanAmount = formatPrice(loanDetails!.getCreditAmount());
+    const duration = loanDetails.getDurationSpec().current;
+    const loanExplanation = `* Beräknat på ${formattedLoanAmount} kr, ${duration} mån, ${formattedInterest}%.`;
+    return loanExplanation;
 };
 
 export default (props: IPaymentMethodItemProps) => {
@@ -89,15 +100,12 @@ export default (props: IPaymentMethodItemProps) => {
     const isLoan = props.paymentOption.type === PaymentType.Loan;
 
     let formattedPrice = null;
-    let formattedInterest = null;
+    let loanExplanation = null;
 
     if (isLoan) {
         const loanDetails = props.paymentOption.loanDetails;
-
         formattedPrice = formatPrice(loanDetails!.getCosts().monthlyCost);
-        formattedInterest = formatPercentage(
-            loanDetails!.getInterests().interest
-        );
+        loanExplanation = createLoanExplanation(loanDetails);
     } else {
         formattedPrice = formatPrice(props.paymentOption.price);
     }
@@ -119,12 +127,14 @@ export default (props: IPaymentMethodItemProps) => {
                         </div>
                         <div className="option-list-action-meta">
                             {formattedPrice} {props.paymentOption.unit}{" "}
-                            {formattedInterest !== null && (
-                                <span className="text-dark-lighten">
-                                    Ränta {formattedInterest}%
-                                </span>
-                            )}
                         </div>
+                        {!!loanExplanation && (
+                            <div className="option-list-action-meta">
+                                <span className="text-dark-lighten">
+                                    {loanExplanation}
+                                </span>
+                            </div>
+                        )}
                     </div>
 
                     {props.paymentOption.logo && (

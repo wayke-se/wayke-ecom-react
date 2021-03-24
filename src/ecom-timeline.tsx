@@ -17,7 +17,7 @@ const getLabel = (step: EcomStep): string => {
         case EcomStep.TRADE_IN_EXISTS_CHOOSER:
             return "Inbyte";
         case EcomStep.PAYMENT_METHOD_CHOOSER:
-            return "Betalsätt";
+            return "Finansiering";
         case EcomStep.CREDIT_ASSESSMENT_INFORMATION:
         case EcomStep.BANKID_AUTHENTICATION:
         case EcomStep.CUSTOMER_INFORMATION_INITIAL:
