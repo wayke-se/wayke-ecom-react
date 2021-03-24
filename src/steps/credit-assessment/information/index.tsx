@@ -23,6 +23,7 @@ import createHouseholdDebtField from "./fields/householdDebt";
 import Base from "./base";
 import { getLoanDetails } from "../../../utils/payment";
 import { formatPrice } from "../../../utils/helpers";
+import { getRetailerInformation } from "../../../utils/retailer";
 
 interface IProps
     extends IEcomContext,
@@ -117,6 +118,8 @@ const CreditAssessmentInformationPresenter = (props: IProps) => {
     const hasPrivacyPolicy = loanDetails.hasPrivacyPolicy();
     const privacyPolicyUrl = loanDetails.getPrivacyPolicyUrl();
 
+    const retailerName = getRetailerInformation(props.orderOptions).name;
+
     React.useEffect(() => {
         if (props.hasCreditAssessmentError) {
             setHasError(true);
@@ -179,6 +182,7 @@ const CreditAssessmentInformationPresenter = (props: IProps) => {
             financialProvider={financialProvider}
             hasPrivacyPolicy={hasPrivacyPolicy}
             privacyPolicyUrl={privacyPolicyUrl}
+            retailerName={retailerName}
             submit={submit}
         />
     );

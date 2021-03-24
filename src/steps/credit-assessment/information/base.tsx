@@ -28,6 +28,7 @@ interface IProps {
     financialProvider: string;
     hasPrivacyPolicy: boolean;
     privacyPolicyUrl?: string;
+    retailerName: string;
     submit: () => void;
 }
 
@@ -50,6 +51,7 @@ const CreditAssessmentInformation = ({
     financialProvider,
     hasPrivacyPolicy,
     privacyPolicyUrl,
+    retailerName,
     submit,
 }: IProps) => (
     <div data-ecom-page>
@@ -57,18 +59,48 @@ const CreditAssessmentInformation = ({
             <div data-ecom-columnrow>
                 <div className="column">
                     <h1 className="h6">Låneansökan</h1>
-                    <div data-ecom-content>
-                        <p>
-                            För att besvara din förfrågan om finansiering
-                            behöver vi några fler uppgifter om dig och ditt
-                            hushåll. Frågorna tar bara någon minut att besvara.
-                            Bekräfta och signera sedan med BankID – därefter får
-                            du ditt lånebesked direkt på skärmen!
-                        </p>
-                    </div>
                 </div>
                 <div className="column valign-top minimal">
                     <img src={logoSrc} alt="logotyp" className="l-block" />
+                </div>
+            </div>
+            <div data-ecom-columnrow>
+                <div className="column">
+                    <div data-ecom-content>
+                        <p>
+                            För att besvara din förfrågan om billån behöver{" "}
+                            {financialProvider} några fler uppgifter om dig och
+                            ditt hushåll. Frågorna tar bara någon minut att
+                            besvara. Bekräfta och signera sedan med Mobilt
+                            BankID – därefter får du ditt lånebesked direkt på
+                            skärmen och kan gå vidare med ditt bilköp. Blir du
+                            godkänd så gäller lånebeskedet genom hela köpet så
+                            länge inga tillägg görs – men din ansökan är inte
+                            bindande.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div className="form-group m-t">
+                <div data-ecom-alert>
+                    <div className="alert-icon-section">
+                        <div className="alert-icon">
+                            <i className="icon-info no-margin" />
+                        </div>
+                    </div>
+                    <div className="alert-content">
+                        <p>
+                            <span className="font-medium">
+                                Varför måste jag svara på allt detta?
+                            </span>
+                        </p>
+                        {financialProvider}, liksom alla banker i Sverige, är
+                        enligt lagen om åtgärder mot penningtvätt och
+                        finansiering av terrorism skyldiga att ha god kännedom
+                        om sina kunder. Därför måste vi ställa frågor om dig som
+                        kund. Den information vi får om dig behandlas
+                        konfidentiellt och omfattas av banksekretessen och GDPR.
+                    </div>
                 </div>
             </div>
         </section>
@@ -97,7 +129,7 @@ const CreditAssessmentInformation = ({
                 </div>
                 <DropDownInput
                     {...maritalStatus}
-                    label="Civilstatus"
+                    label="Civilstånd"
                     options={MARITAL_STATUS_VALUES.slice()}
                 />
                 <TextInput
@@ -142,18 +174,18 @@ const CreditAssessmentInformation = ({
                 />
                 <div data-ecom-content="" className="m-t m-b">
                     <h2 className="h6">Gör låneansökan</h2>
-                    <p>
+                    <p className="font-size-small">
                         Genom att gå vidare ansöker du om ett lån på{" "}
                         <b>{formattedCreditAmount} kr</b> hos{" "}
                         {financialProvider}.
                     </p>
-                    <p>
+                    <p className="font-size-small">
                         För att gå vidare med din låneansökan behöver du signera
-                        och validera dina svar med Mobilt BankID mot Volvofinans
-                        Bank. En kreditupplysning kommer att tas och får du ditt
-                        lånebesked direkt. Blir du godkänd så gäller den genom
-                        hela köpet så länge inga tillägg görs – men din ansökan
-                        är inte bindande.
+                        och validera dina svar med Mobilt BankID mot{" "}
+                        {financialProvider}. En kreditupplysning kommer att tas
+                        och får du ditt lånebesked direkt. Blir du godkänd så
+                        gäller den genom hela köpet så länge inga tillägg görs –
+                        men din ansökan är inte bindande.
                     </p>
                 </div>
                 <div className="form-group">
@@ -164,24 +196,13 @@ const CreditAssessmentInformation = ({
                             </div>
                         </div>
                         <div className="alert-content">
-                            Vi kommer inte att belasta ert konto med någon
-                            kostnad i detta steg. Köpet slutförs sedan vid möte
-                            med handlaren.
+                            Du betalar inget i detta steg, detta är bara en
+                            låneansökan. Köpet slutförs sedan vid möte med{" "}
+                            {retailerName}.
                         </div>
                     </div>
                 </div>
             </div>
-            {!!hasPrivacyPolicy && (
-                <div data-ecom-content="" className="m-t m-b">
-                    <p>
-                        Dina uppgifter lagras och sparas säkert. Läs mer i vår{" "}
-                        <a href={privacyPolicyUrl} target="_blank">
-                            dataskyddspolicy
-                        </a>
-                        .
-                    </p>
-                </div>
-            )}
         </section>
         <section className="page-section page-section-bottom">
             <CreateCaseButton creatingCase={creatingCase} onClick={submit} />
@@ -194,6 +215,22 @@ const CreditAssessmentInformation = ({
                     </div>
                 </div>
                 <div className="alert-content">{errorText}</div>
+            </div>
+        )}
+        {!!hasPrivacyPolicy && (
+            <div data-ecom-content="" className="m-t m-b">
+                <p className="text-center font-size-small">
+                    Genom att klicka på ”Genomför låneansökan” godkänner jag att{" "}
+                    {financialProvider} gör en kreditupplysning på mig baserat
+                    på informationen ovan och jag bekräftar att jag läst{" "}
+                    <a href={privacyPolicyUrl} target="_blank">
+                        {financialProvider} dataskyddspolicy
+                    </a>
+                    .
+                </p>
+                <p className="text-center font-size-small">
+                    Dina uppgifter lagras och sparas säkert.
+                </p>
             </div>
         )}
     </div>

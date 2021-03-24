@@ -1,8 +1,9 @@
 import { Employment, MaritalStatus } from "@wayke-se/ecom";
+import { MARITAL_STATUS, OCCUPATION } from "../../constants/credit-assessment";
 
 export const asMaritalStatus = (value: string) => {
     switch (value) {
-        case "Gift":
+        case MARITAL_STATUS.married:
             return MaritalStatus.Married;
         default:
             return MaritalStatus.Single;
@@ -11,15 +12,15 @@ export const asMaritalStatus = (value: string) => {
 
 export const asEmployment = (value: string) => {
     switch (value) {
-        case "Fulltidsanställd":
+        case OCCUPATION.fullTimeEmployed:
             return Employment.FullTimeEmployed;
-        case "Student":
+        case OCCUPATION.student:
             return Employment.Student;
-        case "Deltidsanställd":
+        case OCCUPATION.temporarilyEmployed:
             return Employment.TemporarilyEmployed;
-        case "Pensionär":
+        case OCCUPATION.retired:
             return Employment.Retired;
-        case "Egenföretagare":
+        case OCCUPATION.selfEmployed:
             return Employment.SelfEmployed;
         default:
             return Employment.Other;
