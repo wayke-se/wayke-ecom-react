@@ -40,7 +40,13 @@ export default (props: IFinalConfirmationProps) => {
                         <span className="font-medium">
                             {props.data.customer.email}
                         </span>
-                        . Vi kontaktar dig sedan inom kort.
+                        .* {name} tar kontakt med dig för att gå igenom avtal,
+                        betalning och leverans. Sedan är det klart! Kör
+                        försiktigt ute på vägarna.
+                    </p>
+                    <p className="font-size-small text-dark-lighten">
+                        *Orderbekräftelsen skickas normalt inom 10 minuter, men
+                        kan i undantagsfall dröja upp till 48 timmar.
                     </p>
                 </div>
             </section>
