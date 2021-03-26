@@ -52,7 +52,7 @@ const CreditAssessedPresenter = (props: IProps) => {
     let buttonLabel = "Gå vidare";
     let onButtonClick = onProceedToNextStep;
     if (result === CreditAssessmentResult.Reject) {
-        buttonLabel = "Byt betalsätt";
+        buttonLabel = "Byt finansieringssätt";
         onButtonClick = onShowCreditAssessmentInformation;
     }
 

@@ -46,7 +46,7 @@ const CreditAssessed = ({
                 )}
             </div>
             <div data-ecom-content="">
-                <p>Här ser du ditt lånebesked:</p>
+                <p>Ordern är snart klar, här ser du ditt lånebesked:</p>
             </div>
             <Result
                 result={result}

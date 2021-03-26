@@ -16,7 +16,7 @@ const Success = ({
     <div data-ecom-alert="success">
         <div className="alert-icon-section">
             <div className="alert-icon">
-                <i className="icon-exclamation no-margin"></i>
+                <i className="icon-check no-margin"></i>
             </div>
         </div>
         <div className="alert-content">
@@ -26,14 +26,14 @@ const Success = ({
                     {financialProvider}.
                 </span>{" "}
             </p>
-            Slutför ordern genom att klicka dig igenom nästkommande steg. Har du
-            frågor under tiden? Kontakta {retailerName} på tel{" "}
-            {retailerPhoneNumber}.
+            Bilen är inte reserverad ännu. Slutför ordern genom att klicka dig
+            igenom nästkommande steg. Har du frågor under tiden? Kontakta{" "}
+            {retailerName} på tel {retailerPhoneNumber}.
         </div>
     </div>
 );
 
-const Failure = () => (
+const Failure = ({ retailerName, retailerPhoneNumber }: IResultProps) => (
     <div data-ecom-alert="error">
         <div className="alert-icon-section">
             <div className="alert-icon">
@@ -43,18 +43,20 @@ const Failure = () => (
         <div className="alert-content">
             <p>
                 <span className="font-medium">
-                    Vi kan tyvärr inte bevilja din kreditansökan.
+                    Vi kan tyvärr inte bevilja din ansökan om billån.
                 </span>{" "}
             </p>
             <p>
-                De vanligaste orsakerna att kreditansökan inte kan beviljas är
-                tidigare betalningsanmärkningar, en obalans mellan taxerad
-                inkomst och övrig belåning eller att du är under 18 år. Du
-                kommer via brev att få en bekräftelse med kompletterande
-                information.
+                Det kan finnas olika skäl till att en ansökan nekas. Du kommer
+                inom kort få ett brev med bekräftelse och mer information om
+                just din ansökan.
             </p>
-            Ditt redan påbörjade köp kan fortfarande genomföras och avslutas,
-            för att gå vidare kan du välja ett annat betalsätt.
+            <p>
+                Ditt redan påbörjade köp kan fortfarande genomföras och
+                avslutas, för att gå vidare kan du välja ett annat betalsätt.
+            </p>
+            Har du frågor under tiden? Kontakta {retailerName} på tel{" "}
+            {retailerPhoneNumber}.
         </div>
     </div>
 );
@@ -72,14 +74,14 @@ const AssessManually = ({
         <div className="alert-content">
             <p>
                 <span className="font-medium">
-                    Vi behöver gå igenom ditt ärende och återkommer inom kort
-                    till dig med ett besked.
+                    När ordern är slutförd kommer vi att gå igenom ditt ärende
+                    och återkoppla till dig med ett lånebesked.
                 </span>
             </p>
-            Du kan fortfarande sluföra ordern genom att klicka dig igenom
-            nästkommande steg, men det är inte säkert att ditt lån kommer att
-            beviljas. Har du frågor under tiden? Kontakta {retailerName} på tel{" "}
-            {retailerPhoneNumber}.
+            Din bil är fortfarande inte reserverad. Gå vidare till nästa steg
+            för att slutföra ordern, men det är inte säkert att ditt lån kommer
+            att beviljas. Har du frågor under tiden? Kontakta {retailerName} på
+            tel {retailerPhoneNumber}.
         </div>
     </div>
 );
@@ -104,7 +106,13 @@ const Result = ({
                 />
             );
         case CreditAssessmentResult.Reject:
-            return <Failure />;
+            return (
+                <Failure
+                    retailerName={retailerName}
+                    retailerPhoneNumber={retailerPhoneNumber}
+                    financialProvider={financialProvider}
+                />
+            );
         default:
             return (
                 <AssessManually
