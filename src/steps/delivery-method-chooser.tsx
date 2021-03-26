@@ -101,7 +101,9 @@ export default (props: IPaymentMethodChooserProps) => {
             ).length > 0;
 
     const retailerInformation = getRetailerInformation(props.orderOptions);
-    const retailerName = !!retailerInformation ? retailerInformation.name : "Handlaren";
+    const retailerName = !!retailerInformation
+        ? retailerInformation.name
+        : "Handlaren";
 
     return (
         <div className="page-main">

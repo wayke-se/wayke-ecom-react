@@ -15,6 +15,7 @@ import {
     IEcomExternalProps,
     IEcomLifecycle,
 } from "../types";
+import { getRetailerInformation } from "../utils/retailer";
 
 interface IFinalSummaryProps
     extends IEcomExternalProps,
@@ -139,10 +140,24 @@ export default (props: IFinalSummaryProps) => {
     const onHandleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) =>
         handleCheckboxChange(props, e);
 
+    const retailerInformation = getRetailerInformation(props.orderOptions);
+    const retailerName = !!retailerInformation
+        ? retailerInformation.name
+        : "Handlaren";
+
     return (
         <div data-ecom-page="">
             <section className="page-section">
                 <h1 className="h6">Sammanställning</h1>
+                <div data-ecom-content="">
+                    <p>
+                        Granska och godkänn din order för att reservera bilen.
+                        Efter det kommer {retailerName} att kontakta dig för att
+                        slutföra köpet. Köpet blir bindande först när du
+                        signerat det definitiva affärsförslaget med{" "}
+                        {retailerName}. Det är även då betalningen sker.
+                    </p>
+                </div>
             </section>
 
             <section className="page-section page-section-accent">
