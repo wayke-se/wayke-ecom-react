@@ -58,11 +58,14 @@ const CreditAssessedPresenter = (props: IProps) => {
     }
 
     const retailerInformation = getRetailerInformation(props.orderOptions);
+    const retailerName = !!retailerInformation
+        ? retailerInformation.name
+        : "Handlaren";
 
     return (
         <Base
             financialInstitutionName={paymentOption.name}
-            retailerName={retailerInformation.name}
+            retailerName={retailerName}
             retailerPhoneNumber={retailerInformation.phoneNumber}
             logoSrc={logoSrc}
             downPayment={downPayment}

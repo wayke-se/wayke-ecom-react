@@ -222,9 +222,7 @@ class InsuranceInformationDefinition extends React.Component<
                 <section className="page-section">
                     <div data-ecom-columnrow="">
                         <div className="column">
-                            <h1 className="h6 no-margin">
-                                {insuranceOption.title}
-                            </h1>
+                            <h1 className="h6 no-margin">Försäkring</h1>
                         </div>
 
                         {scaledImage && (
@@ -245,7 +243,10 @@ class InsuranceInformationDefinition extends React.Component<
 
                 <section className="page-section">
                     <div data-ecom-content="">
-                        <p>Vill du teckna försäkring på din nya bil?</p>
+                        <p>
+                            Vill du teckna försäkring via{" "}
+                            {insuranceOption.title} på din nya bil?
+                        </p>
                         {markdownEcomInsuranceText && (
                             <div
                                 dangerouslySetInnerHTML={{
@@ -255,7 +256,13 @@ class InsuranceInformationDefinition extends React.Component<
                         )}
                         <p>
                             Skriv in ditt personnummer och din uppskattade
-                            körsträcka för att se din försäkringskostnad.
+                            körsträcka för att se din försäkringskostnad. Vill
+                            du teckna en försäkring via Volvia på din nya bil?
+                            Ange din uppskattade körsträcka för att se din
+                            försäkringskostnad. Därefter presenterar vi förslag
+                            på försäkringar som passar dig och din nya bil. I
+                            både hel- och halvförsäkring ingår trafikförsäkring
+                            som är obligatoriskt att ha.
                         </p>
                     </div>
                 </section>
