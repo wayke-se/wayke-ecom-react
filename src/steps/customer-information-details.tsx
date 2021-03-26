@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-no-target-blank */
 import React from "react";
 
 import StoreAction from "../constants/store-action";
@@ -148,9 +149,22 @@ export default (props: ICustomerInformationDetailsProps) => {
                             </button>
                         </div>
                     </div>
+
+                    <div data-ecom-content="" className="m-t m-b">
+                        <p className="text-center font-size-small">
+                            Dina uppgifter lagras och sparas säkert.
+                            <br /> Läs mer i vår{" "}
+                            <a
+                                href="https://www.wayke.se/personuppgiftspolicy-wayke"
+                                target="_blank"
+                            >
+                                personsuppgiftspolicy
+                            </a>
+                            .
+                        </p>
+                    </div>
                 </section>
             )}
-
             <section className="page-section page-section-accent last-child-pushdown">
                 <div className="page-section-accent-content">
                     <h2 className="h6">Din order</h2>

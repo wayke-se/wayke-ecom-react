@@ -9,6 +9,7 @@ interface IProps {
     retailerPhoneNumber: string;
     logoSrc: string;
     downPayment: string;
+    creditAmount: string;
     monthlyCost: string;
     duration: string;
     interest: string;
@@ -24,6 +25,7 @@ const CreditAssessed = ({
     retailerPhoneNumber,
     logoSrc,
     downPayment,
+    creditAmount,
     monthlyCost,
     duration,
     interest,
@@ -37,7 +39,6 @@ const CreditAssessed = ({
             <div data-ecom-columnrow>
                 <div className="column">
                     <h1 className="h6 no-margin">Billån</h1>
-                    <div className="m-t-half">{financialInstitutionName}</div>
                 </div>
                 {!!logoSrc && (
                     <div className="column valign-top minimal">
@@ -45,7 +46,7 @@ const CreditAssessed = ({
                     </div>
                 )}
             </div>
-            <div data-ecom-content="">
+            <div data-ecom-content="" className="m-t m-b">
                 <p>Ordern är snart klar, här ser du ditt lånebesked:</p>
             </div>
             <Result
@@ -67,7 +68,15 @@ const CreditAssessed = ({
             <div data-ecom-columnrow className="repeat-m-half">
                 <div className="column">
                     <div className="font-medium font-size-small">
-                        Avbetalning
+                        Lånebelopp
+                    </div>
+                </div>
+                <div className="column">{creditAmount}</div>
+            </div>
+            <div data-ecom-columnrow className="repeat-m-half">
+                <div className="column">
+                    <div className="font-medium font-size-small">
+                        Avbetalningsperiod
                     </div>
                 </div>
                 <div className="column">{duration}</div>
@@ -77,11 +86,6 @@ const CreditAssessed = ({
             <div className="h6 m-b-mini">{monthlyCost}</div>
             <div className="font-size-small">
                 {`Beräknat på ${interest} ränta (effektivt ${effectiveInterest})`}
-            </div>
-            <div className="m-t-half">
-                <button data-ecom-link className="l-block">
-                    Detaljer
-                </button>
             </div>
         </section>
         <section className="page-section page-section-bottom">

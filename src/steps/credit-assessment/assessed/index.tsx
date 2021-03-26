@@ -39,6 +39,7 @@ const CreditAssessedPresenter = (props: IProps) => {
     const formatter = new Formatter(loanDetails);
 
     const downPayment = formatter.getDownPayment();
+    const creditAmount = formatter.getCreditAmount();
     const monthlyCost = formatter.getMonthlyCost();
     const interest = formatter.getInterest();
     const effectiveInterest = formatter.getEffectiveInterest();
@@ -65,6 +66,7 @@ const CreditAssessedPresenter = (props: IProps) => {
             retailerPhoneNumber={retailerInformation.phoneNumber}
             logoSrc={logoSrc}
             downPayment={downPayment}
+            creditAmount={creditAmount}
             monthlyCost={monthlyCost}
             duration={duration}
             interest={interest}

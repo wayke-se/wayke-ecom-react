@@ -46,6 +46,14 @@ class CreditAssessedFormatter {
         } mån`;
         return formattedDuration;
     }
+
+    public getCreditAmount() {
+        let formattedCreditAmount = formatPrice(
+            this.loanDetails.getCreditAmount()
+        );
+        formattedCreditAmount = `${formattedCreditAmount} kr`;
+        return formattedCreditAmount;
+    }
 }
 
 export default CreditAssessedFormatter;
