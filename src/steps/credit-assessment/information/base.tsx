@@ -143,7 +143,18 @@ const CreditAssessmentInformation = ({
                     />
                 </div>
                 <div className="m-t m-b">
-                    <HelperLabel label="Inkomst per månad före skatt (kr)" />
+                    <HelperBox
+                        label="Inkomst per månad före skatt (kr)"
+                        title="Hur stor inkomst har du per månad före skatt?"
+                    >
+                        <p>Ange hur stor din totala inkomst är.</p>
+                        <p>Exempel på inkomster kan vara:</p>
+                        <ul>
+                            <li>Lön</li>
+                            <li>Pension</li>
+                            <li>Kapitalinkomst</li>
+                        </ul>
+                    </HelperBox>
                     <TextInput
                         {...income}
                         placeholder="Inkomst"

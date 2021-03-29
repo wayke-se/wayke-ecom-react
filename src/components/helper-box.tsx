@@ -3,10 +3,10 @@ import React from "react";
 interface IProps {
     label: string;
     title?: string;
-    sections?: string[];
+    children?: React.ReactNode;
 }
 
-const HelperBox = ({ label, title, sections }: IProps) => {
+const HelperBox = ({ label, title, children }: IProps) => {
     const [isExpanded, setIsExpanded] = React.useState(false);
 
     const iconClass = isExpanded
@@ -30,15 +30,9 @@ const HelperBox = ({ label, title, sections }: IProps) => {
                     {!!title && (
                         <div className="font-medium m-b-half">{title}</div>
                     )}
-                    {!!sections.length && (
-                        <div data-ecom-content="" className="font-size-small">
-                            {sections.map((section, index) => (
-                                <p key={`helper-${label}-${index}`}>
-                                    {section}
-                                </p>
-                            ))}
-                        </div>
-                    )}
+                    <div data-ecom-content="" className="font-size-small">
+                        {children}
+                    </div>
                 </div>
             )}
         </div>
