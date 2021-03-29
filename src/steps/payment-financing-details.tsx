@@ -25,7 +25,11 @@ import {
 } from "../utils/residual";
 
 import { validatePayment } from "../tools/data-validation";
-import { PaymentType, IPaymentRangeSpec } from "@wayke-se/ecom";
+import {
+    PaymentType,
+    IPaymentRangeSpec,
+    IPaymentLookupResponse,
+} from "@wayke-se/ecom";
 import UserEvent from "../constants/user-event";
 import HelperBox from "../components/helper-box";
 import HelperLabel from "../components/helper-label";
@@ -100,6 +104,20 @@ const getDurationFromIndex = (
     durationSpecification: IPaymentRangeSpec
 ): number =>
     getAllDurationSteps(durationSpecification).find((_, i) => i === index);
+
+const createFinancialProviderLink = (
+    loanDetails: IPaymentLookupResponse,
+    title: string
+) => {
+    let url = loanDetails.getPublicURL();
+    if (!url) {
+        return "";
+    }
+
+    const titleParam = `title=${title}`;
+    url = url.includes("?") ? `${url}&${titleParam}` : `${url}?${titleParam}`;
+    return encodeURI(url);
+};
 
 class PaymentFinancingDetails extends React.Component<
     IPaymentFinancingDetailsProps,
@@ -397,7 +415,10 @@ class PaymentFinancingDetails extends React.Component<
             : 0;
         const formattedCreditPercentage = formatPercentage(creditPercentage);
 
-        const publicUrl = loanDetails.getPublicURL();
+        const publicUrl = createFinancialProviderLink(
+            loanDetails,
+            this.props.vehicle.title
+        );
 
         const onDepositChange = (value) => {
             this.handleSliderChange("deposit", value);
