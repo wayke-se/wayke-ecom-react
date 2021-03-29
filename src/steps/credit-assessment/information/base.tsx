@@ -8,6 +8,8 @@ import {
     MARITAL_STATUS_VALUES,
     OCCUPATION_VALUES,
 } from "../../../constants/credit-assessment";
+import HelperLabel from "../../../components/helper-label";
+import HelperBox from "../../../components/helper-box";
 
 interface IProps {
     logoSrc: string;
@@ -106,72 +108,148 @@ const CreditAssessmentInformation = ({
         </section>
         <section className="page-section">
             <div data-ecom-form>
-                <TextInput
-                    {...personalNumber}
-                    label="Personnummer"
-                    placeholder="ÅÅÅÅMMDD-XXXX"
-                    errorText="Ange personnummer i formatet ÅÅÅÅMMDD-XXXX"
-                    wide
-                />
-                <div className="form-group-row">
+                <div className="m-t m-b">
+                    <HelperLabel label="Personnummer" />
                     <TextInput
-                        {...email}
-                        label="E-postadress"
-                        placeholder="E-postadress"
-                        errorText="En giltig e-postadress måste anges"
-                    />
-                    <TextInput
-                        {...phone}
-                        label="Telefonnummer"
-                        placeholder="07X-XXXXXXX"
-                        errorText="Ange ditt telefonnummer"
+                        {...personalNumber}
+                        placeholder="ÅÅÅÅMMDD-XXXX"
+                        errorText="Ange personnummer i formatet ÅÅÅÅMMDD-XXXX"
+                        wide
                     />
                 </div>
-                <DropDownInput
-                    {...maritalStatus}
-                    label="Civilstånd"
-                    options={MARITAL_STATUS_VALUES.slice()}
-                />
-                <TextInput
-                    {...income}
-                    label="Inkomst per månad före skatt (kr)"
-                    placeholder="Inkomst"
-                    errorText="Ange din inkomst"
-                    wide
-                />
-                <DropDownInput
-                    {...employment}
-                    label="Sysselsättning"
-                    options={OCCUPATION_VALUES.slice()}
-                />
-                <TextInput
-                    {...householdChildren}
-                    label="Antal hemmavarande barn"
-                    placeholder="Antal hemmavarande barn"
-                    errorText="Ange antalet hemmavarande barn i heltal"
-                    wide
-                />
-                <TextInput
-                    {...householdIncome}
-                    label="Hushållets inkomst per månad före skatt (kr)"
-                    placeholder="Hushållets inkomst"
-                    errorText="Ange hushållets inkomst"
-                    wide
-                />
-                <TextInput
-                    {...householdHousingCost}
-                    label="Hushållets ungefärliga boendekostnad per månad (kr)"
-                    placeholder="Ungefärlig boendekostnad"
-                    errorText="Ange hushållets ungefärliga boendekostnad per månad (kr)"
-                    wide
-                />
-                <TextInput
-                    {...householdDebt}
-                    label="Hushållets totala skulder (kr)"
-                    placeholder="Hushållets totala skulder"
-                    errorText="Ange hushållets totala skulder (kr)"
-                    wide
-                />
+                <div className="m-t m-b">
+                    <HelperLabel label="E-postadress" />
+                    <TextInput
+                        {...email}
+                        placeholder="E-postadress"
+                        errorText="En giltig e-postadress måste anges"
+                        wide
+                    />
+                </div>
+                <div className="m-t m-b">
+                    <HelperLabel label="Telefonnummer" />
+                    <TextInput
+                        {...phone}
+                        placeholder="07X-XXXXXXX"
+                        errorText="Ange ditt telefonnummer"
+                        wide
+                    />
+                </div>
+                <div className="m-t m-b">
+                    <HelperLabel label="Civilstånd" />
+                    <DropDownInput
+                        {...maritalStatus}
+                        options={MARITAL_STATUS_VALUES.slice()}
+                    />
+                </div>
+                <div className="m-t m-b">
+                    <HelperLabel label="Inkomst per månad före skatt (kr)" />
+                    <TextInput
+                        {...income}
+                        placeholder="Inkomst"
+                        errorText="Ange din inkomst"
+                        wide
+                    />
+                </div>
+                <div className="m-t m-b">
+                    <HelperLabel label="Sysselsättning" />
+                    <DropDownInput
+                        {...employment}
+                        options={OCCUPATION_VALUES.slice()}
+                    />
+                </div>
+                <div className="m-t m-b">
+                    <HelperBox
+                        label="Antal hemmavarande barn"
+                        title="Hur många barn försörjer du?"
+                    >
+                        <p>
+                            Fyll i antal barn som får barn- eller studiebidrag
+                            och som du försörjer. Barn som bor hemma och arbetar
+                            och kan försörja sig själva behöver inte räknas med.
+                        </p>
+                        <p>
+                            För dig som har delad vårdnad: ange samtliga barn
+                            som bor minst 50 % i hushållet.
+                        </p>
+                    </HelperBox>
+                    <TextInput
+                        {...householdChildren}
+                        placeholder="Antal hemmavarande barn"
+                        errorText="Ange antalet hemmavarande barn i heltal"
+                        wide
+                    />
+                </div>
+                <div className="m-t m-b">
+                    <HelperBox
+                        label="Hushållets inkomst per månad före skatt (kr)"
+                        title="Hur stor inkomst har ert hushåll per månad före skatt?"
+                    >
+                        <p>Ange hur stor hushållets totala inkomst är.</p>
+                        <p>Exempel på inkomster kan vara:</p>
+                        <ul>
+                            <li>Lön</li>
+                            <li>Pension</li>
+                            <li>Kapitalinkomst</li>
+                        </ul>
+                    </HelperBox>
+                    <TextInput
+                        {...householdIncome}
+                        placeholder="Hushållets inkomst"
+                        errorText="Ange hushållets inkomst"
+                        wide
+                    />
+                </div>
+                <div className="m-t m-b">
+                    <HelperBox
+                        label="Hushållets ungefärliga boendekostnad per månad (kr)"
+                        title="Hur stora utgifter för ert boende har ditt hushåll varje månad?"
+                    >
+                        <p>
+                            Ange hur stor hushållets ungefärliga boendekostnader
+                            är.
+                        </p>
+                        <p>Exempel på kostnader kan vara:</p>
+                        <ul>
+                            <li>Hyra</li>
+                            <li>Avgift till förening</li>
+                            <li>Driftkostnader</li>
+                            <li>Räntekostnader</li>
+                        </ul>
+                        <p>Amorteringskostnader ingår inte i beräkningen.</p>
+                    </HelperBox>
+                    <TextInput
+                        {...householdHousingCost}
+                        placeholder="Ungefärlig boendekostnad"
+                        errorText="Ange hushållets ungefärliga boendekostnad per månad (kr)"
+                        wide
+                    />
+                </div>
+                <div className="m-t m-b">
+                    <HelperBox
+                        label="Hushållets totala skulder (kr)"
+                        title="Hur mycket andra skulder har ert hushåll?"
+                    >
+                        <p>
+                            Ange kostnaden för samtliga övriga lån och skulder
+                            som hushållet har.
+                        </p>
+                        <p>Exempel på andra lån kan vara:</p>
+                        <ul>
+                            <li>Andra billån</li>
+                            <li>Bostadslån</li>
+                            <li>Studielån</li>
+                            <li>Blanco/privatlån</li>
+                            <li>Kortkredit</li>
+                        </ul>
+                    </HelperBox>
+                    <TextInput
+                        {...householdDebt}
+                        placeholder="Hushållets totala skulder"
+                        errorText="Ange hushållets totala skulder (kr)"
+                        wide
+                    />
+                </div>
                 <div data-ecom-content="" className="m-t m-b">
                     <h2 className="h6">Gör låneansökan</h2>
                     <p className="font-size-small">

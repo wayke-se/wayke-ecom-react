@@ -485,11 +485,14 @@ class PaymentFinancingDetails extends React.Component<
                             <HelperBox
                                 label="Kontantinsats (kr)"
                                 title="Hur mycket av dina egna pengar vill du lägga?"
-                                sections={[
-                                    `Kontantinsatsen är en del av bilens pris som du betalar med egna pengar. Den behöver vara minst 20% av priset på bilen. Kontantinsatsen betalar du senare i samband med avtalsskrivning hos ${retailerName}.`,
-                                    `Ifall du har en inbytesbil kan du betala kontantinsatsen med den. Detta kommer du överens om tillsammans med ${retailerName} vid avtalsskrivning.`,
-                                ]}
-                            />
+                            >
+                                <p>
+                                    {`Kontantinsatsen är en del av bilens pris som du betalar med egna pengar. Den behöver vara minst 20% av priset på bilen. Kontantinsatsen betalar du senare i samband med avtalsskrivning hos ${retailerName}.`}
+                                </p>
+                                <p>
+                                    {`Ifall du har en inbytesbil kan du betala kontantinsatsen med den. Detta kommer du överens om tillsammans med ${retailerName} vid avtalsskrivning.`}
+                                </p>
+                            </HelperBox>
                             <div data-ecom-inputtext="">
                                 <input
                                     type="text"

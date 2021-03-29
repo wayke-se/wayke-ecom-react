@@ -5,7 +5,6 @@ import { IInfoItem, IValidatableInfoItem } from "./types";
 interface ITextInputProps extends IValidatableInfoItem {
     errorText: string;
     placeholder: string;
-    label: string;
     wide?: boolean;
 }
 
@@ -16,7 +15,6 @@ export const TextInput = ({
     onFinish,
     errorText,
     placeholder,
-    label,
     wide,
 }: ITextInputProps) => {
     let className = "form-group";
@@ -29,9 +27,6 @@ export const TextInput = ({
 
     return (
         <div className={className}>
-            <label data-ecom-inputlabel htmlFor="finance-input-phone">
-                {label}
-            </label>
             <div data-ecom-inputtext>
                 <input
                     type="text"
@@ -47,18 +42,15 @@ export const TextInput = ({
 };
 
 interface IDropDownInputProps extends IInfoItem {
-    label: string;
     options: string[];
 }
 
 export const DropDownInput = ({
     value,
-    label,
     options,
     onChange,
 }: IDropDownInputProps) => (
     <div className="form-group">
-        <label data-ecom-inputlabel>{label}</label>
         <div data-ecom-select>
             <select
                 className="select"
