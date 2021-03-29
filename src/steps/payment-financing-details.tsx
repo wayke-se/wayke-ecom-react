@@ -27,6 +27,9 @@ import {
 import { validatePayment } from "../tools/data-validation";
 import { PaymentType, IPaymentRangeSpec } from "@wayke-se/ecom";
 import UserEvent from "../constants/user-event";
+import HelperBox from "../components/helper-box";
+import HelperLabel from "../components/helper-label";
+import { getRetailerInformation } from "../utils/retailer";
 
 interface IProceedButtonProps {
     updating: boolean;
@@ -414,6 +417,13 @@ class PaymentFinancingDetails extends React.Component<
                 : `Beräknat på ${formattedInterest} % ränta (effektivt ${formattedEffectiveInterest} %).`;
         const loanText = `Lån (${formattedCreditPercentage} %): ${formattedCreditAmount} kr`;
 
+        const retailerInformation = getRetailerInformation(
+            this.props.orderOptions
+        );
+        const retailerName = !!retailerInformation
+            ? retailerInformation.name
+            : "Handlaren";
+
         return (
             <div className="page-main">
                 <section className="page-section">
@@ -472,12 +482,14 @@ class PaymentFinancingDetails extends React.Component<
                                 hasDepositError ? " has-error" : ""
                             }`}
                         >
-                            <label
-                                data-ecom-inputlabel=""
-                                htmlFor="payment-input-downpayment"
-                            >
-                                Kontantinsats (kr)
-                            </label>
+                            <HelperBox
+                                label="Kontantinsats (kr)"
+                                title="Hur mycket av dina egna pengar vill du lägga?"
+                                sections={[
+                                    `Kontantinsatsen är en del av bilens pris som du betalar med egna pengar. Den behöver vara minst 20% av priset på bilen. Kontantinsatsen betalar du senare i samband med avtalsskrivning hos ${retailerName}.`,
+                                    `Ifall du har en inbytesbil kan du betala kontantinsatsen med den. Detta kommer du överens om tillsammans med ${retailerName} vid avtalsskrivning.`,
+                                ]}
+                            />
                             <div data-ecom-inputtext="">
                                 <input
                                     type="text"
@@ -513,12 +525,7 @@ class PaymentFinancingDetails extends React.Component<
                         </div>
 
                         <div className="form-group">
-                            <label
-                                data-ecom-inputlabel=""
-                                htmlFor="payment-input-installment"
-                            >
-                                Avbetalning (mån)
-                            </label>
+                            <HelperLabel label="Avbetalning (mån)" />
                             <div
                                 data-ecom-select=""
                                 className={
