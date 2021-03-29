@@ -96,12 +96,21 @@ const CreditAssessmentInformation = ({
                                 Varför måste jag svara på allt detta?
                             </span>
                         </p>
-                        {financialProvider}, liksom alla banker i Sverige, är
-                        enligt lagen om åtgärder mot penningtvätt och
-                        finansiering av terrorism skyldiga att ha god kännedom
-                        om sina kunder. Därför måste vi ställa frågor om dig som
-                        kund. Den information vi får om dig behandlas
-                        konfidentiellt och omfattas av banksekretessen och GDPR.
+                        <p>
+                            {financialProvider}, liksom alla banker i Sverige,
+                            är enligt lagen om åtgärder mot penningtvätt och
+                            finansiering av terrorism skyldiga att ha god
+                            kännedom om sina kunder. Därför måste vi ställa
+                            frågor om dig som kund. Den information vi får om
+                            dig behandlas konfidentiellt och omfattas av
+                            banksekretessen och GDPR.
+                        </p>
+                        <a
+                            href="https://www.fi.se/sv/bank/penningtvatt"
+                            target="_blank"
+                        >
+                            Läs mer
+                        </a>
                     </div>
                 </div>
             </div>
