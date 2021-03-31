@@ -40,19 +40,23 @@ const CreditAssessmentScoring = ({
     }, []);
 
     React.useEffect(() => {
-        if (!hasError && creditAssessmentStatus.hasPendingScoring()) {
-            scheduleNewStatusCollect();
-        } else if (creditAssessmentStatus.hasScoringError()) {
+        const statusIsInvalid =
+            !creditAssessmentStatus || creditAssessmentStatus.hasScoringError();
+        if (statusIsInvalid) {
             const newErrorTexts = errorTexts.concat([
                 "Kunde inte bedömma ärende",
             ]);
             setErrorTexts(newErrorTexts);
             setHasError(true);
+        } else if (!hasError && creditAssessmentStatus.hasPendingScoring()) {
+            scheduleNewStatusCollect();
         }
     }, [creditAssessmentStatus]);
 
     React.useEffect(() => {
-        if (creditAssessmentStatus.isScored()) {
+        const isScored =
+            !!creditAssessmentStatus && creditAssessmentStatus.isScored();
+        if (isScored) {
             onHideOverlay();
             onProceedToNextStep();
         }
