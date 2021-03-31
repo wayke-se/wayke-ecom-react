@@ -595,7 +595,7 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
 
                     this.saveResponse({
                         creditAssessmentStatus,
-                        hasBankIdError: hasError,
+                        hasCreditAssessmentError: hasError,
                     });
                 }
             );

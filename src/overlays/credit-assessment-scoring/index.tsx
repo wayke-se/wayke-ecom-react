@@ -69,7 +69,6 @@ const CreditAssessmentScoring = ({
     const scheduleNewStatusCollect = () => {
         clearTimeout(cancellationToken);
         const newCancellationToken = window.setTimeout(() => {
-            // TODO Handle case not being active.
             getCreditAssessmentStatus();
         }, 2000);
         setCancellationToken(newCancellationToken);

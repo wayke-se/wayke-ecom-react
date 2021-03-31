@@ -30,7 +30,9 @@ export default ({
     const [description, setDescription] = React.useState("");
 
     React.useEffect(() => {
-        if (hasOngoingProcess) {
+        if (hasError) {
+            setDescription("Någonting gick fel.");
+        } else if (hasOngoingProcess) {
             setDescription(message);
         } else if (useQrCode) {
             setDescription(
@@ -41,13 +43,7 @@ export default ({
                 "För att hämta dina uppgifter, starta din BankID applikation."
             );
         }
-    }, [message, useQrCode]);
-
-    React.useEffect(() => {
-        if (hasError) {
-            setDescription("Någonting gick fel.");
-        }
-    }, [hasError]);
+    }, [message, useQrCode, hasError, hasOngoingProcess]);
 
     const logoDimensions = useQrCode
         ? { width: "32px", height: "32px" }
