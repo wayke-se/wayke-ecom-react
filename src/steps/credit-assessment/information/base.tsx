@@ -97,20 +97,13 @@ const CreditAssessmentInformation = ({
                             </span>
                         </p>
                         <p>
-                            {financialProvider}, liksom alla banker i Sverige,
-                            är enligt lagen om åtgärder mot penningtvätt och
-                            finansiering av terrorism skyldiga att ha god
-                            kännedom om sina kunder. Därför måste vi ställa
-                            frågor om dig som kund. Den information vi får om
-                            dig behandlas konfidentiellt och omfattas av
-                            banksekretessen och GDPR.
+                            För att bevilja dig en finansiering behöver du ange
+                            din sysselsättning och hur stor din månadsinkomst är
+                            före skatt. Tänk på att ta med alla inkomstkällor.
+                            Vi behöver också veta hur stor hushållets inkomst
+                            är, liksom hushållets boendekostnader och totala
+                            skulder.
                         </p>
-                        <a
-                            href="https://www.fi.se/sv/bank/penningtvatt"
-                            target="_blank"
-                        >
-                            Läs mer
-                        </a>
                     </div>
                 </div>
             </div>
