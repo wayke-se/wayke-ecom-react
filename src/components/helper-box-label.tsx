@@ -2,11 +2,12 @@ import React from "react";
 
 interface IProps {
     label: string;
+    forId?: string;
     title?: string;
     children?: React.ReactNode;
 }
 
-const HelperBox = ({ label, title, children }: IProps) => {
+const HelperBoxLabel = ({ label, forId, title, children }: IProps) => {
     const [isExpanded, setIsExpanded] = React.useState(false);
 
     const iconClass = isExpanded
@@ -14,13 +15,15 @@ const HelperBox = ({ label, title, children }: IProps) => {
         : "icon-helper-open no-margin";
 
     return (
-        <div data-ecom-helper-box="" className="m-t-half m-b-half">
+        <div data-ecom-helperbox="label" className="m-t-half m-b-half">
             <button
                 title={label}
                 className="helper-box-header"
                 onClick={() => setIsExpanded(!isExpanded)}
             >
-                <div className="helper-box-title">{label}</div>
+                <label data-ecom-inputlabel="no-margin" htmlFor={forId}>
+                    {label}
+                </label>
                 <div className="helper-box-label">
                     <i className={iconClass} />
                 </div>
@@ -39,4 +42,4 @@ const HelperBox = ({ label, title, children }: IProps) => {
     );
 };
 
-export default HelperBox;
+export default HelperBoxLabel;

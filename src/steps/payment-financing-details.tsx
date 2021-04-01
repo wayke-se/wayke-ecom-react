@@ -31,7 +31,7 @@ import {
     IPaymentLookupResponse,
 } from "@wayke-se/ecom";
 import UserEvent from "../constants/user-event";
-import HelperBox from "../components/helper-box";
+import HelperBoxLabel from "../components/helper-box-label";
 import HelperLabel from "../components/helper-label";
 import { getRetailerInformation } from "../utils/retailer";
 
@@ -503,8 +503,9 @@ class PaymentFinancingDetails extends React.Component<
                                 hasDepositError ? " has-error" : ""
                             }`}
                         >
-                            <HelperBox
+                            <HelperBoxLabel
                                 label="Kontantinsats (kr)"
+                                forId="payment-input-downpayment"
                                 title="Hur mycket av dina egna pengar vill du lägga?"
                             >
                                 <p>
@@ -513,7 +514,7 @@ class PaymentFinancingDetails extends React.Component<
                                 <p>
                                     {`Ifall du har en inbytesbil kan du betala kontantinsatsen med den. Detta kommer du överens om tillsammans med ${retailerName} vid avtalsskrivning.`}
                                 </p>
-                            </HelperBox>
+                            </HelperBoxLabel>
                             <div data-ecom-inputtext="">
                                 <input
                                     type="text"

@@ -3,6 +3,7 @@ import React from "react";
 import { IInfoItem, IValidatableInfoItem } from "./types";
 
 interface ITextInputProps extends IValidatableInfoItem {
+    id: string;
     errorText: string;
     placeholder: string;
     wide?: boolean;
@@ -13,6 +14,7 @@ export const TextInput = ({
     displayError,
     onChange,
     onFinish,
+    id,
     errorText,
     placeholder,
     wide,
@@ -29,6 +31,7 @@ export const TextInput = ({
         <div className={className}>
             <div data-ecom-inputtext>
                 <input
+                    id={id}
                     type="text"
                     placeholder={placeholder}
                     value={value || ""}

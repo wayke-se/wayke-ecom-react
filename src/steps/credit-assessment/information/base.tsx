@@ -9,7 +9,7 @@ import {
     OCCUPATION_VALUES,
 } from "../../../constants/credit-assessment";
 import HelperLabel from "../../../components/helper-label";
-import HelperBox from "../../../components/helper-box";
+import HelperBoxLabel from "../../../components/helper-box-label";
 
 interface IProps {
     logoSrc: string;
@@ -118,27 +118,39 @@ const CreditAssessmentInformation = ({
         <section className="page-section">
             <div data-ecom-form>
                 <div className="m-t m-b">
-                    <HelperLabel label="Personnummer" />
+                    <HelperLabel
+                        label="Personnummer"
+                        forId="kalp-input-personal-number"
+                    />
                     <TextInput
                         {...personalNumber}
+                        id="kalp-input-personal-number"
                         placeholder="ÅÅÅÅMMDD-XXXX"
                         errorText="Ange personnummer i formatet ÅÅÅÅMMDD-XXXX"
                         wide
                     />
                 </div>
                 <div className="m-t m-b">
-                    <HelperLabel label="E-postadress" />
+                    <HelperLabel
+                        label="E-postadress"
+                        forId="kalp-input-email"
+                    />
                     <TextInput
                         {...email}
+                        id="kalp-input-email"
                         placeholder="E-postadress"
                         errorText="En giltig e-postadress måste anges"
                         wide
                     />
                 </div>
                 <div className="m-t m-b">
-                    <HelperLabel label="Telefonnummer" />
+                    <HelperLabel
+                        label="Telefonnummer"
+                        forId="kalp-input-phone"
+                    />
                     <TextInput
                         {...phone}
+                        id="kalp-input-phone"
                         placeholder="07X-XXXXXXX"
                         errorText="Ange ditt telefonnummer"
                         wide
@@ -152,8 +164,9 @@ const CreditAssessmentInformation = ({
                     />
                 </div>
                 <div className="m-t m-b">
-                    <HelperBox
+                    <HelperBoxLabel
                         label="Inkomst per månad före skatt (kr)"
+                        forId="kalp-input-personal-income"
                         title="Hur stor inkomst har du per månad före skatt?"
                     >
                         <p>Ange hur stor din totala inkomst är.</p>
@@ -163,9 +176,10 @@ const CreditAssessmentInformation = ({
                             <li>Pension</li>
                             <li>Kapitalinkomst</li>
                         </ul>
-                    </HelperBox>
+                    </HelperBoxLabel>
                     <TextInput
                         {...income}
+                        id="kalp-input-personal-income"
                         placeholder="Inkomst"
                         errorText="Ange din inkomst"
                         wide
@@ -179,8 +193,9 @@ const CreditAssessmentInformation = ({
                     />
                 </div>
                 <div className="m-t m-b">
-                    <HelperBox
+                    <HelperBoxLabel
                         label="Antal hemmavarande barn"
+                        forId="kalp-input-children"
                         title="Hur många barn försörjer du?"
                     >
                         <p>
@@ -192,17 +207,19 @@ const CreditAssessmentInformation = ({
                             För dig som har delad vårdnad: ange samtliga barn
                             som bor minst 50 % i hushållet.
                         </p>
-                    </HelperBox>
+                    </HelperBoxLabel>
                     <TextInput
                         {...householdChildren}
+                        id="kalp-input-children"
                         placeholder="Antal hemmavarande barn"
                         errorText="Ange antalet hemmavarande barn i heltal"
                         wide
                     />
                 </div>
                 <div className="m-t m-b">
-                    <HelperBox
+                    <HelperBoxLabel
                         label="Hushållets inkomst per månad före skatt (kr)"
+                        forId="kalp-input-household-income"
                         title="Hur stor inkomst har ert hushåll per månad före skatt?"
                     >
                         <p>Ange hur stor hushållets totala inkomst är.</p>
@@ -212,17 +229,19 @@ const CreditAssessmentInformation = ({
                             <li>Pension</li>
                             <li>Kapitalinkomst</li>
                         </ul>
-                    </HelperBox>
+                    </HelperBoxLabel>
                     <TextInput
                         {...householdIncome}
+                        id="kalp-input-household-income"
                         placeholder="Hushållets inkomst"
                         errorText="Ange hushållets inkomst"
                         wide
                     />
                 </div>
                 <div className="m-t m-b">
-                    <HelperBox
+                    <HelperBoxLabel
                         label="Hushållets ungefärliga boendekostnad per månad (kr)"
+                        forId="kalp-input-household-cost"
                         title="Hur stora utgifter för ert boende har ditt hushåll varje månad?"
                     >
                         <p>
@@ -237,17 +256,19 @@ const CreditAssessmentInformation = ({
                             <li>Räntekostnader</li>
                         </ul>
                         <p>Amorteringskostnader ingår inte i beräkningen.</p>
-                    </HelperBox>
+                    </HelperBoxLabel>
                     <TextInput
                         {...householdHousingCost}
+                        id="kalp-input-household-cost"
                         placeholder="Ungefärlig boendekostnad"
                         errorText="Ange hushållets ungefärliga boendekostnad per månad (kr)"
                         wide
                     />
                 </div>
                 <div className="m-t m-b">
-                    <HelperBox
+                    <HelperBoxLabel
                         label="Hushållets totala skulder (kr)"
+                        forId="kalp-input-household-debt"
                         title="Hur mycket andra skulder har ert hushåll?"
                     >
                         <p>
@@ -262,9 +283,10 @@ const CreditAssessmentInformation = ({
                             <li>Blanco/privatlån</li>
                             <li>Kortkredit</li>
                         </ul>
-                    </HelperBox>
+                    </HelperBoxLabel>
                     <TextInput
                         {...householdDebt}
+                        id="kalp-input-household-debt"
                         placeholder="Hushållets totala skulder"
                         errorText="Ange hushållets totala skulder (kr)"
                         wide
