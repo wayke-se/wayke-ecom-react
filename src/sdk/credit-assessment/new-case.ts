@@ -17,8 +17,6 @@ export default (
             .catch(callback);
     } catch (err) {
         if (err instanceof TypeError) {
-            // eslint-disable-next-line no-console
-            console.error(err);
             callback(err);
         }
     }
