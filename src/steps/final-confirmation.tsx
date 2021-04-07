@@ -5,6 +5,7 @@ import OrderSummary from "../components/order-summary";
 
 import { getRetailerInformation } from "../utils/retailer";
 import { IEcomStore, IEcomContext, IEcomExternalProps } from "../types";
+import shouldUseCreditAssessment from "../utils/credit-assessment/usage-resolver";
 
 interface IFinalConfirmationProps
     extends IEcomExternalProps,
@@ -12,6 +13,19 @@ interface IFinalConfirmationProps
         IEcomStore {}
 
 export default (props: IFinalConfirmationProps) => {
+    React.useEffect(() => {
+        const usingCreditAssessment = shouldUseCreditAssessment(
+            props.data,
+            props.orderOptions
+        );
+        const shouldAcceptCase =
+            usingCreditAssessment && !props.creditAssessmentStatus.isAccepted();
+
+        if (shouldAcceptCase) {
+            props.acceptCreditAssessmentCase();
+        }
+    }, []);
+
     const retailerInformation = getRetailerInformation(props.orderOptions);
     const { name, email, phoneNumber } = retailerInformation;
 
@@ -26,7 +40,13 @@ export default (props: IFinalConfirmationProps) => {
                         <span className="font-medium">
                             {props.data.customer.email}
                         </span>
-                        . Vi kontaktar dig sedan inom kort.
+                        .* {name} tar kontakt med dig för att gå igenom avtal,
+                        betalning och leverans. Sedan är det klart! Kör
+                        försiktigt ute på vägarna.
+                    </p>
+                    <p className="font-size-small text-dark-lighten">
+                        *Orderbekräftelsen skickas normalt inom 10 minuter, men
+                        kan i undantagsfall dröja upp till 48 timmar.
                     </p>
                 </div>
             </section>

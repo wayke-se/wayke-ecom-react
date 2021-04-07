@@ -1,6 +1,6 @@
 import React from "react";
 
-import { IEcomExternalProps, IEcomStore } from "./types";
+import { IdentificationMethod, IEcomExternalProps, IEcomStore } from "./types";
 import {
     IOrderOptionsResponse,
     IInsuranceOptionsResponse,
@@ -10,6 +10,10 @@ import {
     IBankIdAuthResponse,
     AuthMethod,
     IBankIdCollectResponse,
+    ICreditAssessmentStatusResponse,
+    ICreditAssessmentCase,
+    ICreditAssessmentInquiry,
+    ICreditAssessmentSignResponse,
 } from "@wayke-se/ecom";
 
 import EcomLifecycle from "./ecom-lifecycle";
@@ -23,7 +27,17 @@ import {
     makeBankIdAuthRequest,
     makeBankIdCollectRequest,
     makeBankIdCancelRequest,
+    makeCreditAssessmentCreateCaseRequest,
+    makeCreditAssessmentQrCodeSignRequest,
+    makeCreditAssessmentSameDeviceSignRequest,
+    makeCreditAssessmentCancelSigningRequest,
+    makeCreditAssessmentGetStatusRequest,
+    makeCreditAssessmentDeclineRequest,
+    makeCreditAssessmentAcceptRequest,
 } from "./tools/request-service";
+import createCreditAssessmentInquiry from "./utils/credit-assessment/create-inquiry";
+import { getLoanDetails } from "./utils/payment";
+import getIdentificationMethod from "./utils/identification-method-resolver";
 import { IDealerOption } from "@wayke-se/ecom/dist-types/orders/types";
 
 export interface IEcomContextProps extends IEcomExternalProps, IEcomStore {}
@@ -41,6 +55,12 @@ interface IState {
     pendingBankIdAuthRequest: boolean;
     bankIdCollect: IBankIdCollectResponse | null;
     hasBankIdError: boolean;
+    hasCreditAssessmentError: boolean;
+    pendingCreateCreditAssessmentCase: boolean;
+    creditAssessmentCase: ICreditAssessmentCase | null;
+    creditAssessmentStatus: ICreditAssessmentStatusResponse | null;
+    creditAssessmentSigning: ICreditAssessmentSignResponse | null;
+    pendingCreditAssessmentSignRequest: boolean;
 }
 
 class EcomContext extends React.Component<IEcomContextProps, IState> {
@@ -70,6 +90,31 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
         this.handleBankIdCancel = this.handleBankIdCancel.bind(this);
         this.handleBankIdReset = this.handleBankIdReset.bind(this);
 
+        this.createCreditAssessmentCase = this.createCreditAssessmentCase.bind(
+            this
+        );
+        this.declineCreditAssessmentCase = this.declineCreditAssessmentCase.bind(
+            this
+        );
+        this.acceptCreditAssessmentCase = this.acceptCreditAssessmentCase.bind(
+            this
+        );
+        this.signCreditAssessmentWithQrCode = this.signCreditAssessmentWithQrCode.bind(
+            this
+        );
+        this.signCreditAssessmentWithSameDevice = this.signCreditAssessmentWithSameDevice.bind(
+            this
+        );
+        this.cancelCreditAssessmentSigning = this.cancelCreditAssessmentSigning.bind(
+            this
+        );
+        this.resetCreditAssessmentSigning = this.resetCreditAssessmentSigning.bind(
+            this
+        );
+        this.getCreditAssessmentStatus = this.getCreditAssessmentStatus.bind(
+            this
+        );
+
         this.makeRequest = this.makeRequest.bind(this);
         this.saveResponse = this.saveResponse.bind(this);
 
@@ -86,6 +131,12 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
             pendingBankIdAuthRequest: false,
             bankIdCollect: null,
             hasBankIdError: false,
+            hasCreditAssessmentError: false,
+            pendingCreateCreditAssessmentCase: false,
+            creditAssessmentCase: null,
+            creditAssessmentStatus: null,
+            creditAssessmentSigning: null,
+            pendingCreditAssessmentSignRequest: false,
         };
     }
 
@@ -111,10 +162,15 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
     }
 
     getAddress() {
-        const { addressLookup, bankIdCollect } = this.state;
-        const { useBankId } = this.props;
+        const { data } = this.props;
+        const { orderOptions, addressLookup, bankIdCollect } = this.state;
 
-        if (useBankId) {
+        const identificationMethod = getIdentificationMethod(
+            data,
+            orderOptions
+        );
+
+        if (identificationMethod === IdentificationMethod.BankId) {
             return bankIdCollect.getAddress();
         }
 
@@ -247,6 +303,7 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
                     orderOptions: this.state.orderOptions,
                     paymentLookup: this.state.paymentLookup,
                     address,
+                    creditAssessmentStatus: this.state.creditAssessmentStatus,
                 },
                 (wasOrderCreated: boolean) => {
                     this.setState(
@@ -354,7 +411,12 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
         };
 
         const request = () => {
-            makeBankIdCancelRequest(data, callback);
+            makeBankIdCancelRequest(data, (success) => {
+                this.setState({
+                    isWaitingForResponse: false,
+                });
+                callback(success);
+            });
         };
 
         this.makeRequest(request);
@@ -365,6 +427,182 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
             hasBankIdError: false,
             bankIdAuth: null,
         });
+    }
+
+    createCreditAssessmentCase() {
+        const loanDetails = getLoanDetails(
+            this.state.orderOptions,
+            this.state.paymentLookup
+        );
+
+        let inquiry: ICreditAssessmentInquiry = null;
+        try {
+            inquiry = createCreditAssessmentInquiry(
+                this.props.data,
+                loanDetails
+            );
+        } catch (error) {
+            if (error instanceof TypeError) {
+                this.setState({
+                    hasCreditAssessmentError: true,
+                });
+                return;
+            }
+        }
+
+        const request = () => {
+            makeCreditAssessmentCreateCaseRequest(inquiry, (response) => {
+                const hasError = response instanceof Error;
+                const creditAssessmentCase = !hasError ? response : null;
+
+                this.saveResponse({
+                    creditAssessmentCase,
+                    creditAssessmentStatus: null,
+                    pendingCreateCreditAssessmentCase: false,
+                    hasCreditAssessmentError: hasError,
+                });
+            });
+        };
+
+        this.setState({
+            hasCreditAssessmentError: false,
+            pendingCreateCreditAssessmentCase: true,
+        });
+        this.makeRequest(request);
+    }
+
+    declineCreditAssessmentCase() {
+        const caseId = this.state.creditAssessmentCase.caseId;
+
+        const request = () => {
+            makeCreditAssessmentDeclineRequest(caseId, (success) => {
+                this.setState({
+                    isWaitingForResponse: false,
+                });
+                if (success) {
+                    this.setState({
+                        creditAssessmentCase: null,
+                    });
+                }
+            });
+        };
+
+        this.makeRequest(request);
+    }
+
+    acceptCreditAssessmentCase() {
+        const caseId = this.state.creditAssessmentCase.caseId;
+
+        const request = () => {
+            makeCreditAssessmentAcceptRequest(caseId, () => {
+                this.setState({
+                    isWaitingForResponse: false,
+                });
+            });
+        };
+
+        this.makeRequest(request);
+    }
+
+    signCreditAssessmentWithQrCode() {
+        const caseId = this.state.creditAssessmentCase.caseId;
+
+        const request = () => {
+            makeCreditAssessmentQrCodeSignRequest(caseId, (response) => {
+                const hasError = response instanceof Error;
+                const creditAssessmentSigning = !hasError ? response : null;
+
+                this.saveResponse({
+                    creditAssessmentSigning,
+                    creditAssessmentStatus: null,
+                    pendingCreditAssessmentSignRequest: false,
+                    hasCreditAssessmentError: hasError,
+                });
+            });
+        };
+
+        this.setState({
+            hasCreditAssessmentError: false,
+            pendingCreditAssessmentSignRequest: true,
+        });
+        this.makeRequest(request);
+    }
+
+    signCreditAssessmentWithSameDevice() {
+        const caseId = this.state.creditAssessmentCase.caseId;
+
+        const request = () => {
+            makeCreditAssessmentSameDeviceSignRequest(caseId, (response) => {
+                const hasError = response instanceof Error;
+                const creditAssessmentSigning = !hasError ? response : null;
+
+                this.saveResponse({
+                    creditAssessmentSigning,
+                    creditAssessmentStatus: null,
+                    pendingCreditAssessmentSignRequest: false,
+                    hasCreditAssessmentError: hasError,
+                });
+            });
+        };
+
+        this.setState({
+            hasCreditAssessmentError: false,
+            pendingCreditAssessmentSignRequest: true,
+        });
+        this.makeRequest(request);
+    }
+
+    cancelCreditAssessmentSigning(callback: (response: boolean) => void) {
+        const { creditAssessmentSigning } = this.state;
+
+        const noActiveSigning = !creditAssessmentSigning;
+        if (noActiveSigning) {
+            callback(false);
+            return;
+        }
+
+        const request = () => {
+            makeCreditAssessmentCancelSigningRequest(
+                creditAssessmentSigning.getCaseId(),
+                (success) => {
+                    this.setState({
+                        isWaitingForResponse: false,
+                    });
+                    callback(success);
+                }
+            );
+        };
+
+        this.makeRequest(request);
+    }
+
+    resetCreditAssessmentSigning() {
+        this.setState({
+            hasCreditAssessmentError: false,
+            creditAssessmentSigning: null,
+        });
+    }
+
+    getCreditAssessmentStatus() {
+        const { creditAssessmentCase } = this.state;
+
+        const request = () => {
+            makeCreditAssessmentGetStatusRequest(
+                creditAssessmentCase.caseId,
+                (response) => {
+                    const hasError = response instanceof Error;
+                    const creditAssessmentStatus = !hasError ? response : null;
+
+                    this.saveResponse({
+                        creditAssessmentStatus,
+                        hasCreditAssessmentError: hasError,
+                    });
+                }
+            );
+        };
+
+        this.setState({ hasCreditAssessmentError: false });
+        this.makeRequest(request);
     }
 
     makeRequest(callback: () => void) {
@@ -401,6 +639,20 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
                 onBankIdCollect={this.handleBankIdCollect}
                 onBankIdReset={this.handleBankIdReset}
                 onBankIdCancel={this.handleBankIdCancel}
+                createCreditAssessmentCase={this.createCreditAssessmentCase}
+                declineCreditAssessmentCase={this.declineCreditAssessmentCase}
+                acceptCreditAssessmentCase={this.acceptCreditAssessmentCase}
+                signCreditAssessmentWithQrCode={
+                    this.signCreditAssessmentWithQrCode
+                }
+                signCreditAssessmentWithSameDevice={
+                    this.signCreditAssessmentWithSameDevice
+                }
+                cancelCreditAssessmentSigning={
+                    this.cancelCreditAssessmentSigning
+                }
+                resetCreditAssessmentSigning={this.resetCreditAssessmentSigning}
+                getCreditAssessmentStatus={this.getCreditAssessmentStatus}
                 {...this.state}
                 {...this.props}
             />

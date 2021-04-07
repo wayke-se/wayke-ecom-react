@@ -17,11 +17,13 @@ const getLabel = (step: EcomStep): string => {
         case EcomStep.TRADE_IN_EXISTS_CHOOSER:
             return "Inbyte";
         case EcomStep.PAYMENT_METHOD_CHOOSER:
-            return "Betalsätt";
+            return "Finansiering";
+        case EcomStep.CREDIT_ASSESSMENT_INFORMATION:
+        case EcomStep.BANKID_AUTHENTICATION:
+        case EcomStep.CUSTOMER_INFORMATION_INITIAL:
+            return "Uppgifter";
         case EcomStep.INSURANCE_INFORMATION_DEFINITION:
             return "Försäkring";
-        case EcomStep.BANKID_AUTHENTICATION:
-            return "Uppgifter";
         case EcomStep.DELIVERY_METHOD:
             return "Leverans";
         case EcomStep.FINAL_SUMMARY:

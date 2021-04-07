@@ -15,6 +15,7 @@ import {
     IEcomExternalProps,
     IEcomLifecycle,
 } from "../types";
+import { getRetailerInformation } from "../utils/retailer";
 
 interface IFinalSummaryProps
     extends IEcomExternalProps,
@@ -64,35 +65,50 @@ export default (props: IFinalSummaryProps) => {
         isReturnConditionsExtended,
         setIsReturnConditionsExtended,
     ] = React.useState(false);
-    const [hasRequestError, setHasRequestError] = React.useState(false);
+    const [hasError, setHasError] = React.useState(false);
+    const [errorText, setErrorText] = React.useState("");
 
     const address = props.getAddress();
-    const handleCreateOrderClick = () => {
+    const createOrder = () => {
+        setHasError(false);
+        setErrorText("");
+
         const isValidData = validateEcomData(
             props.data,
             props.orderOptions,
             props.paymentLookup,
-            address
+            address,
+            props.creditAssessmentStatus
         );
 
         if (!isValidData) {
+            setHasError(true);
+            setErrorText(
+                "Något gick fel. Vi ber om ursäkt för det. Vänligen kontrollera uppgifterna i tidigare steg och försök igen."
+            );
+
             return props.dispatchStoreAction(
                 StoreAction.INTERACT_SET_ALL_FOR_TYPE,
                 "customer"
             );
         }
 
-        setHasRequestError(false);
-
         props.onCreateOrder((isSuccessful: boolean) => {
             if (!isSuccessful) {
-                setHasRequestError(true);
+                setHasError(true);
+                setErrorText(
+                    "Order kunde inte skapas. Vi ber om ursäkt för det. Vänligen försök igen eller kontakta handlaren."
+                );
                 return;
             }
 
             props.onIncompleteUserEvent(UserEvent.ORDER_CREATED);
             props.onProceedToNextStep();
         });
+    };
+
+    const handleCreateOrderClick = () => {
+        createOrder();
     };
 
     const handleShowConditionsClick = () => {
@@ -124,10 +140,24 @@ export default (props: IFinalSummaryProps) => {
     const onHandleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) =>
         handleCheckboxChange(props, e);
 
+    const retailerInformation = getRetailerInformation(props.orderOptions);
+    const retailerName = !!retailerInformation
+        ? retailerInformation.name
+        : "Handlaren";
+
     return (
         <div data-ecom-page="">
             <section className="page-section">
                 <h1 className="h6">Sammanställning</h1>
+                <div data-ecom-content="">
+                    <p>
+                        Granska och godkänn din order för att reservera bilen.
+                        Efter det kommer {retailerName} att kontakta dig för att
+                        slutföra köpet. Köpet blir bindande först när du
+                        signerat det definitiva affärsförslaget med{" "}
+                        {retailerName}. Det är även då betalningen sker.
+                    </p>
+                </div>
             </section>
 
             <section className="page-section page-section-accent">
@@ -258,15 +288,15 @@ export default (props: IFinalSummaryProps) => {
                 )}
             </section>
 
-            {hasRequestError && (
-                <section className="page-section">
-                    <Alert message="Tyvärr gick någonting fel. Prova gärna igen om en liten stund." />
-                </section>
-            )}
-
             {props.isWaitingForResponse && (
                 <section className="page-section">
                     <Spinner />
+                </section>
+            )}
+
+            {!!hasError && (
+                <section className="page-section">
+                    <Alert message={errorText} />
                 </section>
             )}
 

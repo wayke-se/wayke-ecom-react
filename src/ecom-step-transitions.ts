@@ -6,6 +6,7 @@ import {
 
 import EcomStep from "./constants/ecom-step";
 import { IEcomData } from "./types";
+import shouldUseCreditAssessment from "./utils/credit-assessment/usage-resolver";
 
 export const getInitialStep = (options: IOrderOptionsResponse): EcomStep => {
     if (options.requiresDealerSelection()) {
@@ -17,10 +18,19 @@ export const getInitialStep = (options: IOrderOptionsResponse): EcomStep => {
         : EcomStep.PAYMENT_METHOD_CHOOSER;
 };
 
-export const getIdentificationStep = (useBankId: boolean) =>
-    useBankId
-        ? EcomStep.BANKID_AUTHENTICATION
-        : EcomStep.CUSTOMER_INFORMATION_INITIAL;
+// TODO Refactor using two variables here to two separate methods. Not sure if this break initial steps.
+export const getIdentificationStep = (
+    useBankId: boolean,
+    useCreditAssessment?: boolean
+) => {
+    if (useBankId) {
+        if (useCreditAssessment) {
+            return EcomStep.CREDIT_ASSESSMENT_INFORMATION;
+        }
+        return EcomStep.BANKID_AUTHENTICATION;
+    }
+    return EcomStep.CUSTOMER_INFORMATION_INITIAL;
+};
 
 const emptyList = [];
 export const getPrimarySteps = (
@@ -39,11 +49,11 @@ export const getPrimarySteps = (
 
     result.push(EcomStep.PAYMENT_METHOD_CHOOSER);
 
+    result.push(getIdentificationStep(useBankId));
+
     if (options.getInsuranceOption()) {
         result.push(EcomStep.INSURANCE_INFORMATION_DEFINITION);
     }
-
-    result.push(getIdentificationStep(useBankId));
 
     const deliveryOptions = options.getDeliveryOptions() || emptyList;
     if (
@@ -58,6 +68,14 @@ export const getPrimarySteps = (
     result.push(EcomStep.FINAL_CONFIRMATION);
 
     return result;
+};
+
+const displayDeliveryOptions = (options: IOrderOptionsResponse) => {
+    const deliveryOptions = options.getDeliveryOptions() || emptyList;
+    return !(
+        deliveryOptions.length === 1 &&
+        deliveryOptions[0].type === DeliveryType.Pickup
+    );
 };
 
 export const getAllTransitions = () => ({
@@ -100,32 +118,21 @@ export const getAllTransitions = () => ({
         if (isLoan) {
             return EcomStep.PAYMENT_FINANCING_DETAILS;
         }
-        if (!options.getInsuranceOption()) {
-            return getIdentificationStep(data.useBankId);
-        }
 
-        return EcomStep.INSURANCE_INFORMATION_DEFINITION;
+        const useCreditAssessment = shouldUseCreditAssessment(data, options);
+        return getIdentificationStep(data.useBankId, useCreditAssessment);
     },
     [EcomStep.PAYMENT_FINANCING_DETAILS]: (
         data: IEcomData,
         options: IOrderOptionsResponse
     ) => {
-        if (!options.getInsuranceOption()) {
-            return getIdentificationStep(data.useBankId);
-        }
-
-        return EcomStep.INSURANCE_INFORMATION_DEFINITION;
+        const useCreditAssessment = shouldUseCreditAssessment(data, options);
+        return getIdentificationStep(data.useBankId, useCreditAssessment);
     },
-    [EcomStep.INSURANCE_INFORMATION_DEFINITION]: (data: IEcomData) => {
-        if (data.insurance.wantsToSeeInsuranceOptions) {
-            return EcomStep.INSURANCE_ALTERNATIVE_CHOOSER;
-        }
-
-        return getIdentificationStep(data.useBankId);
-    },
-    [EcomStep.INSURANCE_ALTERNATIVE_CHOOSER]: (data: IEcomData) => {
-        return getIdentificationStep(data.useBankId);
-    },
+    [EcomStep.CREDIT_ASSESSMENT_INFORMATION]: () =>
+        EcomStep.CREDIT_ASSESSMENT_SIGNING,
+    [EcomStep.CREDIT_ASSESSMENT_SIGNING]: () => EcomStep.CREDIT_ASSESSED,
+    [EcomStep.CREDIT_ASSESSED]: () => EcomStep.CUSTOMER_INFORMATION_DETAILS,
     [EcomStep.BANKID_AUTHENTICATION]: () =>
         EcomStep.CUSTOMER_INFORMATION_DETAILS,
     [EcomStep.CUSTOMER_INFORMATION_INITIAL]: () =>
@@ -134,15 +141,39 @@ export const getAllTransitions = () => ({
         data: IEcomData,
         options: IOrderOptionsResponse
     ) => {
-        const deliveryOptions = options.getDeliveryOptions() || emptyList;
-        if (
-            deliveryOptions.length === 1 &&
-            deliveryOptions[0].type === DeliveryType.Pickup
-        ) {
-            return EcomStep.FINAL_SUMMARY;
+        if (options.getInsuranceOption()) {
+            return EcomStep.INSURANCE_INFORMATION_DEFINITION;
         }
 
-        return EcomStep.DELIVERY_METHOD;
+        if (displayDeliveryOptions(options)) {
+            return EcomStep.DELIVERY_METHOD;
+        }
+
+        return EcomStep.FINAL_SUMMARY;
+    },
+    [EcomStep.INSURANCE_INFORMATION_DEFINITION]: (
+        data: IEcomData,
+        options: IOrderOptionsResponse
+    ) => {
+        if (data.insurance.wantsToSeeInsuranceOptions) {
+            return EcomStep.INSURANCE_ALTERNATIVE_CHOOSER;
+        }
+
+        if (displayDeliveryOptions(options)) {
+            return EcomStep.DELIVERY_METHOD;
+        }
+
+        return EcomStep.FINAL_SUMMARY;
+    },
+    [EcomStep.INSURANCE_ALTERNATIVE_CHOOSER]: (
+        data: IEcomData,
+        options: IOrderOptionsResponse
+    ) => {
+        if (displayDeliveryOptions(options)) {
+            return EcomStep.DELIVERY_METHOD;
+        }
+
+        return EcomStep.FINAL_SUMMARY;
     },
     [EcomStep.DELIVERY_METHOD]: () => EcomStep.FINAL_SUMMARY,
     [EcomStep.FINAL_SUMMARY]: () => EcomStep.FINAL_CONFIRMATION,

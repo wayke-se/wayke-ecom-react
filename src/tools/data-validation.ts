@@ -5,6 +5,7 @@ import {
     IPaymentLookupResponse,
     DeliveryType,
     IAddress,
+    ICreditAssessmentStatusResponse,
 } from "@wayke-se/ecom";
 import {
     ITradeInCarData,
@@ -30,12 +31,14 @@ import { createCustomerObject } from "./data-creator";
 import { containsValue } from "../utils/enum";
 import { getLoanDetails } from "../utils/payment";
 import { isResidualEnabled } from "../utils/residual";
+import shouldUseCreditAssessment from "../utils/credit-assessment/usage-resolver";
 
 export const validateEcomData = (
     data: IEcomData,
     orderOptions: IOrderOptionsResponse,
     paymentLookup: IPaymentLookupResponse | undefined,
-    address: IAddress
+    address: IAddress,
+    creditAssessmentStatus: ICreditAssessmentStatusResponse
 ) => {
     const isValidTradeIn =
         data.tradeInCar.hasProvidedTradeInInfo && data.tradeInCar.hasTradeInCar
@@ -65,6 +68,11 @@ export const validateEcomData = (
         hasAcceptedReturnConditions = data.customer.hasAcceptedReturnConditions;
     }
 
+    const usingCreditAssessment = shouldUseCreditAssessment(data, orderOptions);
+    const isValidCreditAssessment = usingCreditAssessment
+        ? validateCreditAssessment(creditAssessmentStatus, data.payment)
+        : true;
+
     return (
         isValidTradeIn &&
         isValidPayment &&
@@ -72,7 +80,8 @@ export const validateEcomData = (
         isValidInsurance &&
         isValidCustomer &&
         hasAcceptedConditions &&
-        hasAcceptedReturnConditions
+        hasAcceptedReturnConditions &&
+        isValidCreditAssessment
     );
 };
 
@@ -205,4 +214,15 @@ export const validateCustomerObject = (customerObject: ICustomerObject) => {
         isValidZip &&
         isValidCity
     );
+};
+
+const validateCreditAssessment = (
+    status: ICreditAssessmentStatusResponse,
+    payment: IPaymentData
+) => {
+    const hasScoreId = !!status.getScoringId();
+    const hasFinancialProductCode = !!payment.financialProductCode;
+    const hasExternalId = !!payment.externalId;
+
+    return hasScoreId && hasFinancialProductCode && hasExternalId;
 };

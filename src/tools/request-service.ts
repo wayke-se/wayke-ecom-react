@@ -8,6 +8,10 @@ import {
     IPaymentLookupResponse,
     IBankIdAuthResponse,
     IBankIdCollectResponse,
+    ICreditAssessmentInquiry,
+    ICreditAssessmentCase,
+    ICreditAssessmentSignResponse,
+    ICreditAssessmentStatusResponse,
 } from "@wayke-se/ecom";
 
 import { getOrderOptions } from "../sdk/get-order-options";
@@ -19,6 +23,14 @@ import { createOrder } from "../sdk/create-order";
 import bankIdAuth from "../sdk/bankid/auth";
 import bankIdCollect from "../sdk/bankid/collect";
 import bankIdCancel from "../sdk/bankid/cancel";
+import createCreditAssessmentCase from "../sdk/credit-assessment/new-case";
+import declineCreditAssessmentCase from "../sdk/credit-assessment/decline-case";
+import acceptCreditAssessmentCase from "../sdk/credit-assessment/accept-case";
+import signCreditAssessmentCaseWithQrCode from "../sdk/credit-assessment/sign-with-qr-code";
+import signCreditAssessmentCaseWithSameDevice from "../sdk/credit-assessment/sign-with-same-device";
+import cancelCreditAssessmentSigning from "../sdk/credit-assessment/cancel-signing";
+import getCreditAssessmentStatus from "../sdk/credit-assessment/get-status";
+
 import {
     IOrderOptionsSdkData,
     IVehicleLookupSdkData,
@@ -251,6 +263,111 @@ export const makeBankIdCancelRequest = (
         requestIdentifier,
         null,
         data,
+        callback
+    );
+};
+
+export const makeCreditAssessmentCreateCaseRequest = (
+    inquiry: ICreditAssessmentInquiry,
+    callback: (response: ICreditAssessmentCase | null) => void
+) => {
+    const requestIdentifier = null;
+    makeRequest(
+        createCreditAssessmentCase,
+        RequestType.CREATE_CREDIT_ASSESSMENT_CASE,
+        requestIdentifier,
+        null,
+        inquiry,
+        callback
+    );
+};
+
+export const makeCreditAssessmentDeclineRequest = (
+    caseId: string,
+    callback: (response: boolean) => void
+) => {
+    const requestIdentifier = null;
+    makeRequest(
+        declineCreditAssessmentCase,
+        RequestType.DECLINE_CREDIT_ASSESSMENT_CASE,
+        requestIdentifier,
+        null,
+        caseId,
+        callback
+    );
+};
+
+export const makeCreditAssessmentAcceptRequest = (
+    caseId: string,
+    callback: (response: boolean) => void
+) => {
+    const requestIdentifier = null;
+    makeRequest(
+        acceptCreditAssessmentCase,
+        RequestType.DECLINE_CREDIT_ASSESSMENT_CASE,
+        requestIdentifier,
+        null,
+        caseId,
+        callback
+    );
+};
+
+export const makeCreditAssessmentQrCodeSignRequest = (
+    caseId: string,
+    callback: (response: ICreditAssessmentSignResponse | Error | null) => void
+) => {
+    const requestIdentifier = null;
+    makeRequest(
+        signCreditAssessmentCaseWithQrCode,
+        RequestType.SIGN_CREDIT_ASSESSMENT_WITH_QR_CODE,
+        requestIdentifier,
+        null,
+        caseId,
+        callback
+    );
+};
+
+export const makeCreditAssessmentSameDeviceSignRequest = (
+    caseId: string,
+    callback: (response: ICreditAssessmentSignResponse | Error | null) => void
+) => {
+    const requestIdentifier = null;
+    makeRequest(
+        signCreditAssessmentCaseWithSameDevice,
+        RequestType.SIGN_CREDIT_ASSESSMENT_WITH_SAME_DEVICE,
+        requestIdentifier,
+        null,
+        caseId,
+        callback
+    );
+};
+
+export const makeCreditAssessmentCancelSigningRequest = (
+    caseId: string,
+    callback: (response: boolean) => void
+) => {
+    const requestIdentifier = null;
+    makeRequest(
+        cancelCreditAssessmentSigning,
+        RequestType.CANCEL_CREDIT_ASSESSMENT_SIGNING,
+        requestIdentifier,
+        null,
+        caseId,
+        callback
+    );
+};
+
+export const makeCreditAssessmentGetStatusRequest = (
+    caseId: string,
+    callback: (response: ICreditAssessmentStatusResponse | Error | null) => void
+) => {
+    const requestIdentifier = null;
+    makeRequest(
+        getCreditAssessmentStatus,
+        RequestType.GET_CREDIT_ASSESSMENT_STATUS,
+        requestIdentifier,
+        null,
+        caseId,
         callback
     );
 };

@@ -12,6 +12,7 @@ import UserEvent from "../constants/user-event";
 import DeliveryMethodItem from "./delivery-method-item";
 import { isAvailable } from "../utils/delivery";
 import CustomerInformationInputType from "../constants/customer-information-input-type";
+import { getRetailerInformation } from "../utils/retailer";
 
 export interface IPaymentMethodChooserProps
     extends IEcomExternalProps,
@@ -99,12 +100,20 @@ export default (props: IPaymentMethodChooserProps) => {
                 isAvailable(option, address, isAutomaticAddress)
             ).length > 0;
 
+    const retailerInformation = getRetailerInformation(props.orderOptions);
+    const retailerName = !!retailerInformation
+        ? retailerInformation.name
+        : "Handlaren";
+
     return (
         <div className="page-main">
             <section className="page-section">
                 <h1 className="h6">Leverans</h1>
                 <div data-ecom-content="">
-                    <p>Hur vill du ha din nya bil levererad?</p>
+                    <p>
+                        {retailerName} erbjuder även hemleverans till din
+                        adress. Välj nedan hur du vill ha din nya bil levererad.
+                    </p>
                 </div>
             </section>
 

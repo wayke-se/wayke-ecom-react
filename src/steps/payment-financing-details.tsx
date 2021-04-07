@@ -25,8 +25,43 @@ import {
 } from "../utils/residual";
 
 import { validatePayment } from "../tools/data-validation";
-import { PaymentType, IPaymentRangeSpec } from "@wayke-se/ecom";
+import {
+    PaymentType,
+    IPaymentRangeSpec,
+    IPaymentLookupResponse,
+} from "@wayke-se/ecom";
 import UserEvent from "../constants/user-event";
+import HelperBoxLabel from "../components/helper-box-label";
+import HelperLabel from "../components/helper-label";
+import { getRetailerInformation } from "../utils/retailer";
+
+interface IProceedButtonProps {
+    updating: boolean;
+    onClick: () => void;
+}
+
+const ProceedButton = ({ updating, onClick }: IProceedButtonProps) => (
+    <div data-ecom-buttonnav="">
+        <div className="button-nav-item">
+            <button
+                data-ecom-button="full-width"
+                disabled={updating}
+                onClick={onClick}
+            >
+                {!updating ? (
+                    "Gå vidare"
+                ) : (
+                    <>
+                        <div data-ecom-spinner="inline" className="m-r-half">
+                            <div className="spinner" />
+                        </div>
+                        Uppdaterar
+                    </>
+                )}
+            </button>
+        </div>
+    </div>
+);
 
 export interface IPaymentFinancingDetailsProps
     extends IEcomExternalProps,
@@ -69,6 +104,20 @@ const getDurationFromIndex = (
     durationSpecification: IPaymentRangeSpec
 ): number =>
     getAllDurationSteps(durationSpecification).find((_, i) => i === index);
+
+const createFinancialProviderLink = (
+    loanDetails: IPaymentLookupResponse,
+    title: string
+) => {
+    let url = loanDetails.getPublicURL();
+    if (!url) {
+        return "";
+    }
+
+    const titleParam = `title=${title}`;
+    url = url.includes("?") ? `${url}&${titleParam}` : `${url}?${titleParam}`;
+    return encodeURI(url);
+};
 
 class PaymentFinancingDetails extends React.Component<
     IPaymentFinancingDetailsProps,
@@ -198,7 +247,21 @@ class PaymentFinancingDetails extends React.Component<
                     this.props.onIncompleteUserEvent(
                         UserEvent.PAYMENT_TYPE_LOAN_CHOSEN
                     );
-                    this.props.onProceedToNextStep();
+
+                    this.props.onFetchPaymentInformation(
+                        (isSuccessful: boolean) => {
+                            if (isSuccessful) {
+                                this.setState({
+                                    hasRequestError: false,
+                                });
+                                this.props.onProceedToNextStep();
+                            } else {
+                                this.setState({
+                                    hasRequestError: true,
+                                });
+                            }
+                        }
+                    );
                 });
             }
         );
@@ -344,8 +407,18 @@ class PaymentFinancingDetails extends React.Component<
         const formattedTotalResidualValue = formatPrice(
             loanDetails.getTotalResidualValue()
         );
+        const formattedCreditAmount = formatPrice(
+            loanDetails.getCreditAmount()
+        );
+        const creditPercentage = !!loanDetails.getPrice()
+            ? loanDetails.getCreditAmount() / loanDetails.getPrice()
+            : 0;
+        const formattedCreditPercentage = formatPercentage(creditPercentage);
 
-        const publicUrl = loanDetails.getPublicURL();
+        const publicUrl = createFinancialProviderLink(
+            loanDetails,
+            this.props.vehicle.title
+        );
 
         const onDepositChange = (value) => {
             this.handleSliderChange("deposit", value);
@@ -363,23 +436,24 @@ class PaymentFinancingDetails extends React.Component<
             hasResidual || hasFixedResidual
                 ? `Beräknat på ${formattedInterest} % ränta (effektivt ${formattedEffectiveInterest} %) och en årlig körsträcka om 1500 mil.`
                 : `Beräknat på ${formattedInterest} % ränta (effektivt ${formattedEffectiveInterest} %).`;
+        const loanText = `Lån (${formattedCreditPercentage} %): ${formattedCreditAmount} kr`;
+
+        const retailerInformation = getRetailerInformation(
+            this.props.orderOptions
+        );
+        const retailerName = !!retailerInformation
+            ? retailerInformation.name
+            : "Handlaren";
 
         return (
             <div className="page-main">
                 <section className="page-section">
                     <div data-ecom-columnrow="">
                         <div className="column">
-                            <h1 className="h6 no-margin">Betalsätt</h1>
+                            <h1 className="h6 no-margin">Billån</h1>
                             <div className="font-size-small">
                                 {paymentOption.name}
                             </div>
-                            <button
-                                data-ecom-link="font-inerit"
-                                onClick={this.props.onShowPaymentMethodChooser}
-                                className="m-t"
-                            >
-                                Ändra betalsätt
-                            </button>
                         </div>
 
                         {paymentOption.logo && (
@@ -396,6 +470,30 @@ class PaymentFinancingDetails extends React.Component<
                             </div>
                         )}
                     </div>
+                    <div data-ecom-content="" className="m-t-half">
+                        <p>
+                            Betala bilen med finansiering via{" "}
+                            {paymentOption.name}. Gör din låneansökan här – och
+                            få besked direkt. Kom ihåg, köpet är inte bindande
+                            förrän du signerat det definitiva affärsförslaget
+                            som tas fram av säljaren.
+                        </p>
+                        <p>
+                            Ange din tänkta kontantinsats och hur många månader
+                            du vill lägga upp ditt lån på.
+                        </p>
+                    </div>
+                    <div data-ecom-columnrow="">
+                        <div className="column">
+                            <button
+                                data-ecom-link="font-inerit"
+                                onClick={this.props.onShowPaymentMethodChooser}
+                                className="m-t"
+                            >
+                                Ändra finansiering
+                            </button>
+                        </div>
+                    </div>
                 </section>
 
                 <section className="page-section">
@@ -405,12 +503,18 @@ class PaymentFinancingDetails extends React.Component<
                                 hasDepositError ? " has-error" : ""
                             }`}
                         >
-                            <label
-                                data-ecom-inputlabel=""
-                                htmlFor="payment-input-downpayment"
+                            <HelperBoxLabel
+                                label="Kontantinsats (kr)"
+                                forId="payment-input-downpayment"
+                                title="Hur mycket av dina egna pengar vill du lägga?"
                             >
-                                Kontantinsats (kr)
-                            </label>
+                                <p>
+                                    {`Kontantinsatsen är en del av bilens pris som du betalar med egna pengar. Den behöver vara minst 20% av priset på bilen. Kontantinsatsen betalar du senare i samband med avtalsskrivning hos ${retailerName}.`}
+                                </p>
+                                <p>
+                                    {`Ifall du har en inbytesbil kan du betala kontantinsatsen med den. Detta kommer du överens om tillsammans med ${retailerName} vid avtalsskrivning.`}
+                                </p>
+                            </HelperBoxLabel>
                             <div data-ecom-inputtext="">
                                 <input
                                     type="text"
@@ -446,12 +550,7 @@ class PaymentFinancingDetails extends React.Component<
                         </div>
 
                         <div className="form-group">
-                            <label
-                                data-ecom-inputlabel=""
-                                htmlFor="payment-input-installment"
-                            >
-                                Avbetalning (mån)
-                            </label>
+                            <HelperLabel label="Avbetalning (mån)" />
                             <div
                                 data-ecom-select=""
                                 className={
@@ -591,6 +690,7 @@ class PaymentFinancingDetails extends React.Component<
                         kr/mån
                     </div>
                     <div className="font-size-small">{footNote}</div>
+                    <div className="font-size-small">{loanText}</div>
 
                     <div className="m-t-half">
                         <button
@@ -607,6 +707,23 @@ class PaymentFinancingDetails extends React.Component<
                     {this.state.isShowingDetails && (
                         <React.Fragment>
                             <div className="m-t">
+                                <div
+                                    data-ecom-columnrow=""
+                                    className="repeat-m-half"
+                                >
+                                    <div className="column">
+                                        <div className="font-medium font-size-small">
+                                            Avbetalningsperiod
+                                        </div>
+                                    </div>
+                                    <div className="column">
+                                        {this.props.isWaitingForResponse ? (
+                                            <SpinnerInline />
+                                        ) : (
+                                            durationValue
+                                        )}
+                                    </div>
+                                </div>
                                 <div
                                     data-ecom-columnrow=""
                                     className="repeat-m-half"
@@ -697,6 +814,28 @@ class PaymentFinancingDetails extends React.Component<
                                         kr
                                     </div>
                                 </div>
+                                <div
+                                    data-ecom-content
+                                    className="text-dark-lighten font-size-small m-t"
+                                >
+                                    <p>
+                                        *Det här är inte den slutgiltiga
+                                        offerten. Räntan kan komma att ändras
+                                        ifall det sker justeringar i initial
+                                        amorteringsplan, tillägg i utrustning
+                                        eller andra ändringar som påverkar det
+                                        initiala prisförslaget.
+                                    </p>
+
+                                    <p>
+                                        Om marknadsräntan förändras kan
+                                        månadskostnaden komma att ändras i
+                                        motsvarande mån. Månadskostnaden kan
+                                        också komma att påverkas av den
+                                        kreditriskklass låntagaren åsätts vid en
+                                        kreditbedömning.
+                                    </p>
+                                </div>
                             </div>
 
                             {publicUrl && (
@@ -707,27 +846,34 @@ class PaymentFinancingDetails extends React.Component<
                                         target="_blank"
                                         rel="noopener noreferrer"
                                     >
-                                        Mer information
+                                        {`Mer information om ${paymentOption.name}`}
                                         <i className="icon-link-external m-l-half" />
                                     </a>
                                 </div>
                             )}
                         </React.Fragment>
                     )}
+                    <div data-ecom-alert className="m-t">
+                        <div className="alert-icon-section">
+                            <div className="alert-icon">
+                                <i className="icon-exclamation no-margin"></i>
+                            </div>
+                        </div>
+                        <div className="alert-content">
+                            Det är inte förrän i kontakt med säljaren som det
+                            definitiva affärsförslaget tas fram av säljaren och
+                            godkänns av dig som kund. I samband med leverans
+                            signeras det finansiella avtalet och det är först då
+                            avtalet är bindande.
+                        </div>
+                    </div>
                 </section>
 
                 <section className="page-section page-section-bottom">
-                    <div data-ecom-buttonnav="">
-                        <div className="button-nav-item">
-                            <button
-                                data-ecom-button="full-width"
-                                disabled={this.props.isWaitingForResponse}
-                                onClick={this.handleProceedClick}
-                            >
-                                Välj finansiering
-                            </button>
-                        </div>
-                    </div>
+                    <ProceedButton
+                        updating={this.props.isWaitingForResponse}
+                        onClick={this.handleProceedClick}
+                    />
                 </section>
             </div>
         );

@@ -5,6 +5,10 @@ import EcomContext from "./ecom-context";
 import { IEcomExternalProps, IEcomData } from "./types";
 
 import StoreAction from "./constants/store-action";
+import {
+    MARITAL_STATUS_DEFAULT,
+    OCCUPATION_DEFAULT,
+} from "./constants/credit-assessment";
 
 class EcomStore extends React.Component<IEcomExternalProps, IEcomData> {
     constructor(props: IEcomExternalProps) {
@@ -19,7 +23,7 @@ class EcomStore extends React.Component<IEcomExternalProps, IEcomData> {
                 hasAcceptedConditions: false,
                 hasAcceptedReturnConditions: false,
                 inputType: null,
-                personalNumber: null,
+                personalNumber: "",
                 street: "",
                 zip: "",
                 city: "",
@@ -27,6 +31,15 @@ class EcomStore extends React.Component<IEcomExternalProps, IEcomData> {
                 phone: "",
                 givenName: "",
                 surname: "",
+            },
+            householdEconomy: {
+                maritalStatus: MARITAL_STATUS_DEFAULT,
+                income: "",
+                employment: OCCUPATION_DEFAULT,
+                householdChildren: "",
+                householdIncome: "",
+                householdHousingCost: "",
+                householdDebt: "",
             },
             delivery: {
                 type: DeliveryType.None,

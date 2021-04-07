@@ -17,6 +17,9 @@ import {
     AuthMethod,
     IBankIdCollectResponse,
     IAddress,
+    ICreditAssessmentCase,
+    ICreditAssessmentSignResponse,
+    ICreditAssessmentStatusResponse,
 } from "@wayke-se/ecom";
 import { IDealerOption } from "@wayke-se/ecom/dist-types/orders/types";
 
@@ -55,6 +58,12 @@ export interface IEcomContext {
     pendingBankIdAuthRequest: boolean;
     bankIdCollect: IBankIdCollectResponse;
     hasBankIdError: boolean;
+    hasCreditAssessmentError: boolean;
+    pendingCreateCreditAssessmentCase: boolean;
+    creditAssessmentCase: ICreditAssessmentCase;
+    creditAssessmentStatus: ICreditAssessmentStatusResponse;
+    creditAssessmentSigning: ICreditAssessmentSignResponse;
+    pendingCreditAssessmentSignRequest: boolean;
 
     getAddress: () => IAddress;
 
@@ -77,6 +86,16 @@ export interface IEcomContext {
     onBankIdCollect: () => void;
     onBankIdCancel: (callback: (response: boolean) => void) => void;
     onBankIdReset: () => void;
+    createCreditAssessmentCase: () => void;
+    declineCreditAssessmentCase: () => void;
+    acceptCreditAssessmentCase: () => void;
+    signCreditAssessmentWithQrCode: () => void;
+    signCreditAssessmentWithSameDevice: () => void;
+    cancelCreditAssessmentSigning: (
+        callback: (response: boolean) => void
+    ) => void;
+    resetCreditAssessmentSigning: () => void;
+    getCreditAssessmentStatus: () => void;
 }
 
 export interface IEcomLifecycle {
@@ -86,6 +105,7 @@ export interface IEcomLifecycle {
     onShowInsuranceInformationDefinition: () => void;
     onShowTradeInCarDefinition: () => void;
     onShowPaymentMethodChooser: () => void;
+    onShowCreditAssessmentInformation: () => void;
     onIncompleteUserEvent: (userEvent: UserEvent) => void;
     onDisplayOverlay: (overlayType: OverlayType) => void;
 }
@@ -103,6 +123,7 @@ export interface IEcomStore {
 export interface IEcomData {
     dealer?: string;
     customer: ICustomerData;
+    householdEconomy: IHouseholdEconomyData;
     delivery: IDeliveryMethodData;
     insurance: IInsuranceData;
     interact: IInteractData;
@@ -132,6 +153,8 @@ export interface IPaymentData {
     loanDuration: number;
     loanResidual: number;
     hasAcceptedLoanDetails: boolean;
+    externalId?: string;
+    financialProductCode?: string;
 }
 
 export interface IInsuranceData {
@@ -154,6 +177,16 @@ export interface ICustomerData {
     city: string;
     email: string;
     phone: string;
+}
+
+export interface IHouseholdEconomyData {
+    maritalStatus: string;
+    income: string;
+    employment: string;
+    householdChildren: string;
+    householdIncome: string;
+    householdHousingCost: string;
+    householdDebt: string;
 }
 
 export interface ICustomerObject {
@@ -223,6 +256,7 @@ export interface ICreateOrderSdkData {
     orderOptions: IOrderOptionsResponse;
     paymentLookup: IPaymentLookupResponse | undefined;
     address: IAddress;
+    creditAssessmentStatus: ICreditAssessmentStatusResponse;
 }
 
 export interface IPaymentLookupSdkData {
@@ -259,4 +293,10 @@ export interface IBankIdCollectSdkData {
 
 export interface IBankIdCancelSdkData {
     orderRef: string;
+}
+
+export enum IdentificationMethod {
+    Manual = "manual",
+    BankId = "bank-id",
+    CreditAssessment = "credit-assessment",
 }

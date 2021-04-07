@@ -8,6 +8,7 @@ import {
 import { ICreateOrderSdkData } from "../types";
 import CustomerInformationInputType from "../constants/customer-information-input-type";
 import { validateEcomData } from "../tools/data-validation";
+import shouldUseCreditAssessment from "../utils/credit-assessment/usage-resolver";
 
 export const createOrder = (
     data: ICreateOrderSdkData,
@@ -18,12 +19,14 @@ export const createOrder = (
     const paymentLookup = data.paymentLookup;
     const vehicleId = data.vehicleId;
     const address = data.address;
+    const creditAssessmentStatus = data.creditAssessmentStatus;
 
     const isValidRequestData = validateEcomData(
         ecomData,
         orderOptions,
         paymentLookup,
-        address
+        address,
+        creditAssessmentStatus
     );
 
     if (!isValidRequestData) {
@@ -65,12 +68,28 @@ export const createOrder = (
 
     const paymentBuilder = orders
         .newPayment()
-        .withType(ecomData.payment.paymentType);
+        .withType(ecomData.payment.paymentType)
+        .withExternalId(ecomData.payment.externalId);
     if (isLoan) {
         paymentBuilder
             .withDownPayment(ecomData.payment.loanDeposit)
             .withDuration(ecomData.payment.loanDuration)
             .withResidualValue(ecomData.payment.loanResidual);
+    }
+
+    const usingCreditAssessment = shouldUseCreditAssessment(
+        ecomData,
+        orderOptions
+    );
+    if (usingCreditAssessment) {
+        const creditAssessment = orders
+            .newCreditAssessment()
+            .withFinancialProductCode(ecomData.payment.financialProductCode)
+            .withScoreId(creditAssessmentStatus.getScoringId())
+            .withDecision(creditAssessmentStatus.getDecision())
+            .withRecommendation(creditAssessmentStatus.getRecommendation())
+            .build();
+        paymentBuilder.withCreditAssessment(creditAssessment);
     }
 
     const customer = customerBuilder.build();

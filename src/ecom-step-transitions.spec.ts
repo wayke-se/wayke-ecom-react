@@ -8,7 +8,10 @@ import {
     IDeliveryOption,
 } from "@wayke-se/ecom";
 
-import { getAllTransitions } from "./ecom-step-transitions";
+import {
+    getAllTransitions,
+    getIdentificationStep,
+} from "./ecom-step-transitions";
 import EcomStep from "./constants/ecom-step";
 import { IEcomData } from "./types";
 
@@ -143,7 +146,7 @@ describe("Get transitions", () => {
         });
 
         describe("Given no loan", () => {
-            it("Should transition to BANKID_AUTHENTICATION, given no insurance and bank id", () => {
+            it("Should transition to BANKID_AUTHENTICATION, given bank id", () => {
                 const data: IEcomData = fixtures.create(
                     "IEcomData",
                     (d: IEcomData) => {
@@ -153,11 +156,7 @@ describe("Get transitions", () => {
                     }
                 );
                 const orderOptions: IOrderOptionsResponse = fixtures.create(
-                    "IOrderOptionsResponse",
-                    (options: IOrderOptionsResponse) => {
-                        options.getInsuranceOption = () => null;
-                        return options;
-                    }
+                    "IOrderOptionsResponse"
                 );
 
                 const step = getAllTransitions()[
@@ -167,7 +166,7 @@ describe("Get transitions", () => {
                 expect(step).toBe(EcomStep.BANKID_AUTHENTICATION);
             });
 
-            it("Should transition to CUSTOMER_INFORMATION_INITIAL, given no insurance and not bank id", () => {
+            it("Should transition to CUSTOMER_INFORMATION_INITIAL, given not bank id", () => {
                 const data: IEcomData = fixtures.create(
                     "IEcomData",
                     (d: IEcomData) => {
@@ -190,32 +189,6 @@ describe("Get transitions", () => {
 
                 expect(step).toBe(EcomStep.CUSTOMER_INFORMATION_INITIAL);
             });
-
-            it("Should transition to INSURANCE_INFORMATION_DEFINITION, given insurance", () => {
-                const data: IEcomData = fixtures.create(
-                    "IEcomData",
-                    (d: IEcomData) => {
-                        d.payment.paymentType = PaymentType.Cash;
-                        return d;
-                    }
-                );
-                const insuranceOptions: IAvailableInsuranceOption = fixtures.create(
-                    "IAvailableInsuranceOption"
-                );
-                const orderOptions: IOrderOptionsResponse = fixtures.create(
-                    "IOrderOptionsResponse",
-                    (options: IOrderOptionsResponse) => {
-                        options.getInsuranceOption = () => insuranceOptions;
-                        return options;
-                    }
-                );
-
-                const step = getAllTransitions()[
-                    EcomStep.PAYMENT_METHOD_CHOOSER
-                ](data, orderOptions);
-
-                expect(step).toBe(EcomStep.INSURANCE_INFORMATION_DEFINITION);
-            });
         });
     });
 
@@ -236,45 +209,195 @@ describe("Get transitions", () => {
     });
 
     describe("Given step CUSTOMER_INFORMATION_DETAILS", () => {
-        it("Should transition to DELIVERY_METHOD, given no pickup delivery", () => {
-            const data: IEcomData = fixtures.create("IEcomData");
-            const orderOptions: IOrderOptionsResponse = fixtures.create(
-                "IOrderOptionsResponse",
-                (options: IOrderOptionsResponse) => {
-                    options.getDeliveryOptions = () => [];
-                    return options;
-                }
-            );
+        describe("Given insurance options", () => {
+            it("Should transition to INSURANCE_INFORMATION_DEFINITION", () => {
+                const data: IEcomData = fixtures.create("IEcomData");
+                const insuranceOptions: IAvailableInsuranceOption = fixtures.create(
+                    "IAvailableInsuranceOption"
+                );
+                const orderOptions: IOrderOptionsResponse = fixtures.create(
+                    "IOrderOptionsResponse",
+                    (options: IOrderOptionsResponse) => {
+                        options.getInsuranceOption = () => insuranceOptions;
+                        return options;
+                    }
+                );
 
-            const step = getAllTransitions()[
-                EcomStep.CUSTOMER_INFORMATION_DETAILS
-            ](data, orderOptions);
+                const step = getAllTransitions()[
+                    EcomStep.CUSTOMER_INFORMATION_DETAILS
+                ](data, orderOptions);
 
-            expect(step).toBe(EcomStep.DELIVERY_METHOD);
+                expect(step).toBe(EcomStep.INSURANCE_INFORMATION_DEFINITION);
+            });
         });
 
-        it("Should transition to FINAL_SUMMARY, given pickup delivery", () => {
-            const data: IEcomData = fixtures.create("IEcomData");
-            const deliveryOption: IDeliveryOption = fixtures.create(
-                "IDeliveryOption",
-                (option: IDeliveryOption) => {
-                    option.type = DeliveryType.Pickup;
-                    return option;
-                }
-            );
-            const orderOptions: IOrderOptionsResponse = fixtures.create(
-                "IOrderOptionsResponse",
-                (options: IOrderOptionsResponse) => {
-                    options.getDeliveryOptions = () => [deliveryOption];
-                    return options;
-                }
-            );
+        describe("Given no insurance options", () => {
+            describe("Given no pickup delivery method", () => {
+                it("Should transition to DELIVERY_METHOD", () => {
+                    const data: IEcomData = fixtures.create("IEcomData");
+                    const orderOptions: IOrderOptionsResponse = fixtures.create(
+                        "IOrderOptionsResponse",
+                        (options: IOrderOptionsResponse) => {
+                            options.getDeliveryOptions = () => [];
+                            options.getInsuranceOption = () => null;
+                            return options;
+                        }
+                    );
 
-            const step = getAllTransitions()[
-                EcomStep.CUSTOMER_INFORMATION_DETAILS
-            ](data, orderOptions);
+                    const step = getAllTransitions()[
+                        EcomStep.CUSTOMER_INFORMATION_DETAILS
+                    ](data, orderOptions);
 
-            expect(step).toBe(EcomStep.FINAL_SUMMARY);
+                    expect(step).toBe(EcomStep.DELIVERY_METHOD);
+                });
+            });
+
+            describe("Given single pickup delivery method", () => {
+                it("Should transition to FINAL_SUMMARY", () => {
+                    const data: IEcomData = fixtures.create("IEcomData");
+                    const deliveryOption: IDeliveryOption = fixtures.create(
+                        "IDeliveryOption",
+                        (option: IDeliveryOption) => {
+                            option.type = DeliveryType.Pickup;
+                            return option;
+                        }
+                    );
+                    const orderOptions: IOrderOptionsResponse = fixtures.create(
+                        "IOrderOptionsResponse",
+                        (options: IOrderOptionsResponse) => {
+                            options.getDeliveryOptions = () => [deliveryOption];
+                            options.getInsuranceOption = () => null;
+                            return options;
+                        }
+                    );
+
+                    const step = getAllTransitions()[
+                        EcomStep.CUSTOMER_INFORMATION_DETAILS
+                    ](data, orderOptions);
+
+                    expect(step).toBe(EcomStep.FINAL_SUMMARY);
+                });
+            });
+        });
+    });
+
+    describe("Given step INSURANCE_INFORMATION_DEFINITION", () => {
+        describe("Given wants to see insurance options", () => {
+            it("Should transition to INSURANCE_ALTERNATIVE_CHOOSER", () => {
+                const data: IEcomData = fixtures.create("IEcomData", (d) => {
+                    d.insurance.wantsToSeeInsuranceOptions = true;
+                    return d;
+                });
+                const orderOptions: IOrderOptionsResponse = fixtures.create(
+                    "IOrderOptionsResponse"
+                );
+
+                const step = getAllTransitions()[
+                    EcomStep.INSURANCE_INFORMATION_DEFINITION
+                ](data, orderOptions);
+
+                expect(step).toBe(EcomStep.INSURANCE_ALTERNATIVE_CHOOSER);
+            });
+        });
+        describe("Given not wants to insurance options flag", () => {
+            let data: IEcomData;
+
+            beforeAll(() => {
+                data = fixtures.create("IEcomData", (d: IEcomData) => {
+                    d.insurance.wantsToSeeInsuranceOptions = false;
+                    return d;
+                });
+            });
+
+            describe("Given no pickup delivery method", () => {
+                it("Should transition to DELIVERY_METHOD", () => {
+                    const orderOptions: IOrderOptionsResponse = fixtures.create(
+                        "IOrderOptionsResponse",
+                        (options: IOrderOptionsResponse) => {
+                            options.getDeliveryOptions = () => [];
+                            return options;
+                        }
+                    );
+
+                    const step = getAllTransitions()[
+                        EcomStep.INSURANCE_INFORMATION_DEFINITION
+                    ](data, orderOptions);
+
+                    expect(step).toBe(EcomStep.DELIVERY_METHOD);
+                });
+            });
+
+            describe("Given single pickup delivery method", () => {
+                it("Should transition to FINAL_SUMMARY", () => {
+                    const deliveryOption: IDeliveryOption = fixtures.create(
+                        "IDeliveryOption",
+                        (option: IDeliveryOption) => {
+                            option.type = DeliveryType.Pickup;
+                            return option;
+                        }
+                    );
+                    const orderOptions: IOrderOptionsResponse = fixtures.create(
+                        "IOrderOptionsResponse",
+                        (options: IOrderOptionsResponse) => {
+                            options.getDeliveryOptions = () => [deliveryOption];
+                            return options;
+                        }
+                    );
+
+                    const step = getAllTransitions()[
+                        EcomStep.INSURANCE_INFORMATION_DEFINITION
+                    ](data, orderOptions);
+
+                    expect(step).toBe(EcomStep.FINAL_SUMMARY);
+                });
+            });
+        });
+    });
+
+    describe("Given step INSURANCE_ALTERNATIVE_CHOOSER", () => {
+        describe("Given no pickup delivery method", () => {
+            it("Should transition to DELIVERY_METHOD", () => {
+                const data: IEcomData = fixtures.create("IEcomData");
+                const orderOptions: IOrderOptionsResponse = fixtures.create(
+                    "IOrderOptionsResponse",
+                    (options: IOrderOptionsResponse) => {
+                        options.getDeliveryOptions = () => [];
+                        return options;
+                    }
+                );
+
+                const step = getAllTransitions()[
+                    EcomStep.INSURANCE_ALTERNATIVE_CHOOSER
+                ](data, orderOptions);
+
+                expect(step).toBe(EcomStep.DELIVERY_METHOD);
+            });
+        });
+
+        describe("Given single pickup delivery method", () => {
+            it("Should transition to FINAL_SUMMARY", () => {
+                const data: IEcomData = fixtures.create("IEcomData");
+                const deliveryOption: IDeliveryOption = fixtures.create(
+                    "IDeliveryOption",
+                    (option: IDeliveryOption) => {
+                        option.type = DeliveryType.Pickup;
+                        return option;
+                    }
+                );
+                const orderOptions: IOrderOptionsResponse = fixtures.create(
+                    "IOrderOptionsResponse",
+                    (options: IOrderOptionsResponse) => {
+                        options.getDeliveryOptions = () => [deliveryOption];
+                        return options;
+                    }
+                );
+
+                const step = getAllTransitions()[
+                    EcomStep.INSURANCE_ALTERNATIVE_CHOOSER
+                ](data, orderOptions);
+
+                expect(step).toBe(EcomStep.FINAL_SUMMARY);
+            });
         });
     });
 
@@ -289,6 +412,56 @@ describe("Get transitions", () => {
         it("Should transition to FINAL_CONFIRMATION", () => {
             const step = getAllTransitions()[EcomStep.FINAL_SUMMARY]();
             expect(step).toBe(EcomStep.FINAL_CONFIRMATION);
+        });
+    });
+
+    describe("Given step CREDIT_ASSESSMENT_INFORMATION", () => {
+        it("Should transition to CREDIT_ASSESSMENT_SIGNING", () => {
+            const step = getAllTransitions()[
+                EcomStep.CREDIT_ASSESSMENT_INFORMATION
+            ]();
+            expect(step).toBe(EcomStep.CREDIT_ASSESSMENT_SIGNING);
+        });
+    });
+
+    describe("Given step CREDIT_ASSESSMENT_SIGNING", () => {
+        it("Should transition to CREDIT_ASSESSED", () => {
+            const step = getAllTransitions()[
+                EcomStep.CREDIT_ASSESSMENT_SIGNING
+            ]();
+            expect(step).toBe(EcomStep.CREDIT_ASSESSED);
+        });
+    });
+
+    describe("Given step CREDIT_ASSESSED", () => {
+        it("Should transition to CREDIT_ASSESSED", () => {
+            const step = getAllTransitions()[EcomStep.CREDIT_ASSESSED]();
+            expect(step).toBe(EcomStep.CUSTOMER_INFORMATION_DETAILS);
+        });
+    });
+});
+
+describe("Get identification step", () => {
+    describe("Given use bank id", () => {
+        describe("Given credit assessment", () => {
+            it("Should return credit assessment information step", () => {
+                const step = getIdentificationStep(true, true);
+                expect(step).toBe(EcomStep.CREDIT_ASSESSMENT_INFORMATION);
+            });
+        });
+
+        describe("Given no credit assessment", () => {
+            it("Should return bank id authentication step", () => {
+                const step = getIdentificationStep(true);
+                expect(step).toBe(EcomStep.BANKID_AUTHENTICATION);
+            });
+        });
+    });
+
+    describe("Given no bank id", () => {
+        it("Should return initial customer information step", () => {
+            const step = getIdentificationStep(false);
+            expect(step).toBe(EcomStep.CUSTOMER_INFORMATION_INITIAL);
         });
     });
 });

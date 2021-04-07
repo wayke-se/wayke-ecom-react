@@ -27,9 +27,9 @@ export default (props: IPaymentMethodChooserProps) => {
     return (
         <div className="page-main">
             <section className="page-section">
-                <h1 className="h6">Betalsätt</h1>
+                <h1 className="h6">Finansiering</h1>
                 <div data-ecom-content="">
-                    <p>Hur vill du betala för din nya bil?</p>
+                    <p>Hur vill du finansiera din nya bil?</p>
                 </div>
             </section>
 
