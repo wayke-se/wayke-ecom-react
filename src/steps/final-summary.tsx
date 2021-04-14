@@ -313,6 +313,12 @@ export default (props: IFinalSummaryProps) => {
                             </button>
                         </div>
                     </div>
+                    <div data-ecom-content="" className="m-t m-b">
+                        <p className="text-dark-lighten text-center font-size-small">
+                            Med reservation för eventuell ändring i tillgången
+                            av utbjudna bilar
+                        </p>
+                    </div>
                 </section>
             )}
         </div>
