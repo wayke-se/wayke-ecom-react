@@ -39,6 +39,9 @@ interface AllProps
 
 export default (props: AllProps) => {
     if (!props.orderOptions && !props.isWaitingForResponse) {
+        if (props.vehicleUnavailable) {
+            return <Alert message="Fordonet är sålt." />;
+        }
         return (
             <Alert message="Ett oväntat fel har uppstått. Prova igen senare." />
         );
