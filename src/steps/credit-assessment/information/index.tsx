@@ -123,9 +123,16 @@ const CreditAssessmentInformationPresenter = (props: IProps) => {
     React.useEffect(() => {
         if (props.hasCreditAssessmentError) {
             setHasError(true);
-            setErrorText("Kunde inte skapa ärende. Kontrollera uppgifter");
+            const vehicleUnavailable = props.vehicleUnavailable;
+            const errorText = vehicleUnavailable
+                ? "Bilen är såld"
+                : "Kunde inte skapa ärende. Kontrollera uppgifter";
+            setErrorText(errorText);
+        } else {
+            setHasError(false);
+            setErrorText("");
         }
-    }, [props.hasCreditAssessmentError]);
+    }, [props.hasCreditAssessmentError, props.vehicleUnavailable]);
 
     React.useEffect(() => {
         const hasCase =
@@ -139,9 +146,6 @@ const CreditAssessmentInformationPresenter = (props: IProps) => {
     }, [props.creditAssessmentCase]);
 
     const submit = () => {
-        setHasError(false);
-        setErrorText("");
-
         const allFieldsAreValid =
             phoneIsValid &&
             emailIsValid &&

@@ -453,6 +453,10 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
             this.state.paymentLookup
         );
 
+        this.setState({
+            hasCreditAssessmentError: false,
+        });
+
         let inquiry: ICreditAssessmentInquiry = null;
         try {
             inquiry = createCreditAssessmentInquiry(
@@ -470,15 +474,20 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
 
         const request = () => {
             makeCreditAssessmentCreateCaseRequest(inquiry, (response) => {
-                const hasError = response instanceof Error;
-                const creditAssessmentCase = !hasError ? response : null;
+                const isErrorResponse = response instanceof Error;
+                const creditAssessmentCase = !isErrorResponse ? response : null;
 
                 this.saveResponse({
                     creditAssessmentCase,
                     creditAssessmentStatus: null,
                     pendingCreateCreditAssessmentCase: false,
-                    hasCreditAssessmentError: hasError,
+                    hasCreditAssessmentError: isErrorResponse,
                 });
+                if (isErrorResponse) {
+                    this.resolveVehicleUnavailable(
+                        (response as unknown) as Error
+                    );
+                }
             });
         };
 
