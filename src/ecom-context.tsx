@@ -323,15 +323,16 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
                     address,
                     creditAssessmentStatus: this.state.creditAssessmentStatus,
                 },
-                (wasOrderCreated: boolean) => {
+                (error?: Error) => {
                     this.setState(
                         {
                             isWaitingForResponse: false,
                         },
                         () => {
-                            callback(wasOrderCreated);
+                            callback(!error);
                         }
                     );
+                    this.resolveVehicleUnavailable(error);
                 }
             );
         };

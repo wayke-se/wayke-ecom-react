@@ -68,6 +68,13 @@ export default (props: IFinalSummaryProps) => {
     const [hasError, setHasError] = React.useState(false);
     const [errorText, setErrorText] = React.useState("");
 
+    React.useEffect(() => {
+        if (props.vehicleUnavailable) {
+            setHasError(true);
+            setErrorText("Bilen är såld");
+        }
+    }, [props.vehicleUnavailable]);
+
     const address = props.getAddress();
     const createOrder = () => {
         setHasError(false);
@@ -94,7 +101,11 @@ export default (props: IFinalSummaryProps) => {
         }
 
         props.onCreateOrder((isSuccessful: boolean) => {
-            if (!isSuccessful) {
+            if (props.vehicleUnavailable) {
+                setHasError(true);
+                setErrorText("Bilen är såld");
+                return;
+            } else if (!isSuccessful) {
                 setHasError(true);
                 setErrorText(
                     "Order kunde inte skapas. Vi ber om ursäkt för det. Vänligen försök igen eller kontakta handlaren."

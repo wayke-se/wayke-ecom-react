@@ -205,7 +205,7 @@ export const makePaymentLookupRequest = (
 
 export const makeCreateOrderRequest = (
     data: ICreateOrderSdkData,
-    callback: (wasOrderSuccessful: boolean) => void
+    callback: (error?: Error) => void
 ) => {
     const requestIdentifier = null;
 
