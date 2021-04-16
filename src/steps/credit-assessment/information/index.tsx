@@ -24,6 +24,7 @@ import Base from "./base";
 import { getLoanDetails } from "../../../utils/payment";
 import { formatPrice } from "../../../utils/helpers";
 import { getRetailerInformation } from "../../../utils/retailer";
+import { SOLD_TEXT } from "../../../constants/error-copy";
 
 interface IProps
     extends IEcomContext,
@@ -125,7 +126,7 @@ const CreditAssessmentInformationPresenter = (props: IProps) => {
             setHasError(true);
             const vehicleUnavailable = props.vehicleUnavailable;
             const errorText = vehicleUnavailable
-                ? "Bilen är såld"
+                ? SOLD_TEXT
                 : "Kunde inte skapa ärende. Kontrollera uppgifter";
             setErrorText(errorText);
         } else {

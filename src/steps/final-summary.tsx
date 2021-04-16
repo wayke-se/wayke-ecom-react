@@ -16,6 +16,7 @@ import {
     IEcomLifecycle,
 } from "../types";
 import { getRetailerInformation } from "../utils/retailer";
+import { SOLD_TEXT } from "../constants/error-copy";
 
 interface IFinalSummaryProps
     extends IEcomExternalProps,
@@ -71,7 +72,7 @@ export default (props: IFinalSummaryProps) => {
     React.useEffect(() => {
         if (props.vehicleUnavailable) {
             setHasError(true);
-            setErrorText("Bilen är såld");
+            setErrorText(SOLD_TEXT);
         }
     }, [props.vehicleUnavailable]);
 
@@ -103,7 +104,7 @@ export default (props: IFinalSummaryProps) => {
         props.onCreateOrder((isSuccessful: boolean) => {
             if (props.vehicleUnavailable) {
                 setHasError(true);
-                setErrorText("Bilen är såld");
+                setErrorText(SOLD_TEXT);
                 return;
             } else if (!isSuccessful) {
                 setHasError(true);
