@@ -34,6 +34,7 @@ import UserEvent from "../constants/user-event";
 import HelperBoxLabel from "../components/helper-box-label";
 import HelperLabel from "../components/helper-label";
 import { getRetailerInformation } from "../utils/retailer";
+import shouldUseCreditAssessment from "../utils/credit-assessment/usage-resolver";
 
 interface IProceedButtonProps {
     updating: boolean;
@@ -445,6 +446,14 @@ class PaymentFinancingDetails extends React.Component<
             ? retailerInformation.name
             : "Handlaren";
 
+        const useCreditAssessment = shouldUseCreditAssessment(
+            this.props.data,
+            this.props.orderOptions
+        );
+        const description = useCreditAssessment
+            ? `Betala bilen med finansiering via ${paymentOption.name}. Gör din låneansökan här – och få besked direkt. Kom ihåg, köpet är inte bindande förrän du signerat det definitiva affärsförslaget som tas fram av säljaren.`
+            : `Betala bilen med finansiering via ${paymentOption.name}.`;
+
         return (
             <div className="page-main">
                 <section className="page-section">
@@ -471,13 +480,7 @@ class PaymentFinancingDetails extends React.Component<
                         )}
                     </div>
                     <div data-ecom-content="" className="m-t-half">
-                        <p>
-                            Betala bilen med finansiering via{" "}
-                            {paymentOption.name}. Gör din låneansökan här – och
-                            få besked direkt. Kom ihåg, köpet är inte bindande
-                            förrän du signerat det definitiva affärsförslaget
-                            som tas fram av säljaren.
-                        </p>
+                        <p>{description}</p>
                         <p>
                             Ange din tänkta kontantinsats och hur många månader
                             du vill lägga upp ditt lån på.
