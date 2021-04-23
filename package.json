@@ -39,7 +39,7 @@
   },
   "dependencies": {
     "@wayke-se/ecom": "3.5.1",
-    "marked": "^1.2.2"
+    "marked": "^2.0.0"
   },
   "devDependencies": {
     "@pika/pack": "^0.5.0",
