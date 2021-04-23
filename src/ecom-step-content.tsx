@@ -28,6 +28,21 @@ import {
 } from "./types";
 import Alert from "./components/alert";
 import Spinner from "./components/spinner";
+import { SOLD_TEXT } from "./constants/error-copy";
+
+const SoldAlert = () => (
+    <div data-ecom-alert="error">
+        <div className="alert-icon-section">
+            <div className="alert-icon">
+                <i className="icon-exclamation no-margin" />
+            </div>
+        </div>
+        <div className="alert-content">
+            <span className="font-medium">Åh nej, någon annan hann före! </span>
+            {SOLD_TEXT}
+        </div>
+    </div>
+);
 
 interface AllProps
     extends IEcomExternalProps,
@@ -42,6 +57,9 @@ export default (props: AllProps) => {
         return (
             <Alert message="Ett oväntat fel har uppstått. Prova igen senare." />
         );
+    }
+    if (props.orderOptions && props.orderOptions.isUnavailable()) {
+        return <SoldAlert />;
     }
 
     switch (props.step) {

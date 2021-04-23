@@ -12,7 +12,7 @@ import shouldUseCreditAssessment from "../utils/credit-assessment/usage-resolver
 
 export const createOrder = (
     data: ICreateOrderSdkData,
-    callback: (wasOrderCreated: boolean) => void
+    callback: (error?: Error) => void
 ) => {
     const ecomData = data.ecomData;
     const orderOptions = data.orderOptions;
@@ -30,7 +30,7 @@ export const createOrder = (
     );
 
     if (!isValidRequestData) {
-        return callback(null);
+        return callback(new Error("Invalid request data"));
     }
 
     const isAutomaticCustomerInfo =
@@ -138,9 +138,9 @@ export const createOrder = (
     orders
         .create(createRequest)
         .then(() => {
-            callback(true);
+            callback();
         })
-        .catch(() => {
-            callback(false);
+        .catch((err) => {
+            callback(err);
         });
 };

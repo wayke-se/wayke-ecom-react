@@ -16,6 +16,7 @@ import {
     IEcomLifecycle,
 } from "../types";
 import { getRetailerInformation } from "../utils/retailer";
+import { SOLD_TEXT } from "../constants/error-copy";
 
 interface IFinalSummaryProps
     extends IEcomExternalProps,
@@ -68,6 +69,13 @@ export default (props: IFinalSummaryProps) => {
     const [hasError, setHasError] = React.useState(false);
     const [errorText, setErrorText] = React.useState("");
 
+    React.useEffect(() => {
+        if (props.vehicleUnavailable) {
+            setHasError(true);
+            setErrorText(SOLD_TEXT);
+        }
+    }, [props.vehicleUnavailable]);
+
     const address = props.getAddress();
     const createOrder = () => {
         setHasError(false);
@@ -94,7 +102,11 @@ export default (props: IFinalSummaryProps) => {
         }
 
         props.onCreateOrder((isSuccessful: boolean) => {
-            if (!isSuccessful) {
+            if (props.vehicleUnavailable) {
+                setHasError(true);
+                setErrorText(SOLD_TEXT);
+                return;
+            } else if (!isSuccessful) {
                 setHasError(true);
                 setErrorText(
                     "Order kunde inte skapas. Vi ber om ursäkt för det. Vänligen försök igen eller kontakta handlaren."
@@ -312,6 +324,12 @@ export default (props: IFinalSummaryProps) => {
                                 Genomför köp
                             </button>
                         </div>
+                    </div>
+                    <div data-ecom-content="" className="m-t m-b">
+                        <p className="text-dark-lighten text-center font-size-small">
+                            Med reservation för eventuell ändring i tillgången
+                            av utbjudna bilar
+                        </p>
                     </div>
                 </section>
             )}

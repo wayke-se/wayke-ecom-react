@@ -3,7 +3,7 @@ import { IOrderOptionsSdkData } from "../types";
 
 export const getOrderOptions = (
     data: IOrderOptionsSdkData,
-    callback: (options: IOrderOptionsResponse | null) => void
+    callback: (options: IOrderOptionsResponse | Error) => void
 ) => {
     const request = orders.newOptionsRequest().forVehicle(data.vehicleId);
 
@@ -14,7 +14,5 @@ export const getOrderOptions = (
         .then((response: IOrderOptionsResponse) => {
             callback(response);
         })
-        .catch(() => {
-            callback(null);
-        });
+        .catch(callback);
 };

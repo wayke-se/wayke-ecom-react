@@ -14,6 +14,7 @@ import {
     ICreditAssessmentCase,
     ICreditAssessmentInquiry,
     ICreditAssessmentSignResponse,
+    VehicleUnavailableError,
 } from "@wayke-se/ecom";
 
 import EcomLifecycle from "./ecom-lifecycle";
@@ -61,6 +62,7 @@ interface IState {
     creditAssessmentStatus: ICreditAssessmentStatusResponse | null;
     creditAssessmentSigning: ICreditAssessmentSignResponse | null;
     pendingCreditAssessmentSignRequest: boolean;
+    vehicleUnavailable: boolean;
 }
 
 class EcomContext extends React.Component<IEcomContextProps, IState> {
@@ -137,7 +139,16 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
             creditAssessmentStatus: null,
             creditAssessmentSigning: null,
             pendingCreditAssessmentSignRequest: false,
+            vehicleUnavailable: false,
         };
+    }
+
+    resolveVehicleUnavailable(err: Error) {
+        if (err instanceof VehicleUnavailableError) {
+            this.setState({
+                vehicleUnavailable: true,
+            });
+        }
     }
 
     componentDidMount() {
@@ -147,13 +158,17 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
                     vehicleId: this.props.vehicle.id,
                     dealerId: this.props.dealer,
                 },
-                (response: IOrderOptionsResponse | null) => {
-                    this.saveResponse(
-                        {
+                (response: IOrderOptionsResponse | Error) => {
+                    if (response instanceof Error) {
+                        this.saveResponse({
+                            orderOptions: null,
+                        });
+                        this.resolveVehicleUnavailable(response);
+                    } else {
+                        this.saveResponse({
                             orderOptions: response,
-                        },
-                        () => ({})
-                    );
+                        });
+                    }
                 }
             );
         };
@@ -184,14 +199,17 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
                     vehicleId: this.props.vehicle.id,
                     dealerId: dealer.id,
                 },
-                (response: IOrderOptionsResponse | null) => {
-                    this.saveResponse(
-                        {
-                            dealer: dealer.id,
+                (response: IOrderOptionsResponse | Error) => {
+                    if (response instanceof Error) {
+                        this.saveResponse({
+                            orderOptions: null,
+                        });
+                        this.resolveVehicleUnavailable(response);
+                    } else {
+                        this.saveResponse({
                             orderOptions: response,
-                        },
-                        () => ({})
-                    );
+                        });
+                    }
                 }
             );
         };
@@ -305,15 +323,16 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
                     address,
                     creditAssessmentStatus: this.state.creditAssessmentStatus,
                 },
-                (wasOrderCreated: boolean) => {
+                (error?: Error) => {
                     this.setState(
                         {
                             isWaitingForResponse: false,
                         },
                         () => {
-                            callback(wasOrderCreated);
+                            callback(!error);
                         }
                     );
+                    this.resolveVehicleUnavailable(error);
                 }
             );
         };
@@ -435,6 +454,10 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
             this.state.paymentLookup
         );
 
+        this.setState({
+            hasCreditAssessmentError: false,
+        });
+
         let inquiry: ICreditAssessmentInquiry = null;
         try {
             inquiry = createCreditAssessmentInquiry(
@@ -452,15 +475,20 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
 
         const request = () => {
             makeCreditAssessmentCreateCaseRequest(inquiry, (response) => {
-                const hasError = response instanceof Error;
-                const creditAssessmentCase = !hasError ? response : null;
+                const isErrorResponse = response instanceof Error;
+                const creditAssessmentCase = !isErrorResponse ? response : null;
 
                 this.saveResponse({
                     creditAssessmentCase,
                     creditAssessmentStatus: null,
                     pendingCreateCreditAssessmentCase: false,
-                    hasCreditAssessmentError: hasError,
+                    hasCreditAssessmentError: isErrorResponse,
                 });
+                if (isErrorResponse) {
+                    this.resolveVehicleUnavailable(
+                        (response as unknown) as Error
+                    );
+                }
             });
         };
 

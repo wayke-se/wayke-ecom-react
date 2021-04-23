@@ -64,6 +64,7 @@ export interface IEcomContext {
     creditAssessmentStatus: ICreditAssessmentStatusResponse;
     creditAssessmentSigning: ICreditAssessmentSignResponse;
     pendingCreditAssessmentSignRequest: boolean;
+    vehicleUnavailable: boolean;
 
     getAddress: () => IAddress;
 

@@ -123,7 +123,7 @@ const makeRequest = <S, T>(
 
 export const makeOrderOptionsRequest = (
     data: IOrderOptionsSdkData,
-    callback: (response: IOrderOptionsResponse | null) => void
+    callback: (response: IOrderOptionsResponse | Error) => void
 ) => {
     const requestIdentifier = data.vehicleId;
     const dealerIdentifier = data.dealerId;
@@ -205,7 +205,7 @@ export const makePaymentLookupRequest = (
 
 export const makeCreateOrderRequest = (
     data: ICreateOrderSdkData,
-    callback: (wasOrderSuccessful: boolean) => void
+    callback: (error?: Error) => void
 ) => {
     const requestIdentifier = null;
 
