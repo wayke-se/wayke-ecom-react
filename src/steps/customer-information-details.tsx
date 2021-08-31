@@ -4,7 +4,11 @@ import React from "react";
 import StoreAction from "../constants/store-action";
 import UserEvent from "../constants/user-event";
 
-import { validateEmail, validatePhoneNumber } from "../utils/validation";
+import {
+    validateEmail,
+    validatePhoneNumber,
+    validateZip,
+} from "../utils/validation";
 
 import { ICustomerInformationDetailsProps } from "./customer-information-props";
 
@@ -12,6 +16,12 @@ import OrderSummary from "../components/order-summary";
 import FetchCustomerInfo from "./customer-info-fetch";
 import InputCustomerInfo from "./customer-info-input";
 import CustomerInformationInputType from "../constants/customer-information-input-type";
+
+const baseFields = ["email", "phone"];
+const allManualFields = [
+    ...baseFields,
+    ...["givenName", "surname", "address", "zip", "city", "zip"],
+];
 
 const handleInputChange = (
     props: ICustomerInformationDetailsProps,
@@ -39,7 +49,57 @@ export default (props: ICustomerInformationDetailsProps) => {
         props.data.customer.inputType ===
         CustomerInformationInputType.AUTOMATIC;
 
+    const hasEmailError = !validateEmail(props.data.customer.email);
+    const hasPhoneError =
+        props.data.interact.customer.phone &&
+        !validatePhoneNumber(props.data.customer.phone);
+    const hasGivenNameError = !props.data.customer.givenName;
+    const hasSurnameError = !props.data.customer.surname;
+    const hasAddressError = !props.data.customer.street;
+    const hasZipError = !validateZip(props.data.customer.zip);
+    const hasCityError = !props.data.customer.city;
+
+    const hasInteractEmail = props.data.interact.customer.email;
+    const hasInteractPhone = props.data.interact.customer.phone;
+    const hasInteractGivenName = props.data.interact.customer.givenName;
+    const hasInteractSurname = props.data.interact.customer.surname;
+    const hasInteractAddress = props.data.interact.customer.address;
+    const hasInteractZip = props.data.interact.customer.zip;
+    const hasInteractCity = props.data.interact.customer.city;
+
+    const allFieldsAreValid = !(
+        hasEmailError ||
+        hasPhoneError ||
+        (isAutomatic
+            ? false
+            : hasGivenNameError ||
+              hasSurnameError ||
+              hasAddressError ||
+              hasZipError ||
+              hasCityError)
+    );
+
+    const allFieldsAreInteracted =
+        hasInteractEmail &&
+        hasInteractPhone &&
+        (isAutomatic
+            ? true
+            : hasInteractGivenName &&
+              hasInteractSurname &&
+              hasInteractAddress &&
+              hasInteractZip &&
+              hasInteractCity);
+
     const handleContinueClick = () => {
+        if (!allFieldsAreValid) {
+            if (allFieldsAreInteracted) return;
+            props.dispatchStoreAction(StoreAction.INTERACT_SET_ALL_FROM_LIST, {
+                type: "customer",
+                value: isAutomatic ? baseFields : allManualFields,
+            });
+            return;
+        }
+
         if (isAutomatic) {
             props.onIncompleteUserEvent(
                 UserEvent.CUSTOMER_DETAILS_AUTOMATIC_CHOSEN
@@ -53,12 +113,8 @@ export default (props: ICustomerInformationDetailsProps) => {
         props.onProceedToNextStep();
     };
 
-    const hasEmailError =
-        props.data.interact.customer.email &&
-        !validateEmail(props.data.customer.email);
-    const hasPhoneError =
-        props.data.interact.customer.phone &&
-        !validatePhoneNumber(props.data.customer.phone);
+    const displayEmailError = hasInteractEmail && hasEmailError;
+    const displayPhoneError = hasInteractPhone && hasPhoneError;
 
     const onHandleInputChange = (e: React.ChangeEvent<HTMLInputElement>) =>
         handleInputChange(props, e);
@@ -79,7 +135,7 @@ export default (props: ICustomerInformationDetailsProps) => {
                 <div data-ecom-form="">
                     <div
                         className={`form-group ${
-                            hasEmailError ? " has-error" : ""
+                            displayEmailError ? " has-error" : ""
                         }`}
                     >
                         <label
@@ -108,7 +164,7 @@ export default (props: ICustomerInformationDetailsProps) => {
 
                     <div
                         className={`form-group ${
-                            hasPhoneError ? " has-error" : ""
+                            displayPhoneError ? " has-error" : ""
                         }`}
                     >
                         <label
