@@ -121,6 +121,26 @@ class EcomStore extends React.Component<IEcomExternalProps, IEcomData> {
                 };
                 break;
 
+            case StoreAction.INTERACT_SET_ALL_FROM_LIST:
+                const type = value.type;
+                const list: string[] = value.value || [];
+                const newInteractFromList = {};
+
+                list.forEach((stateKey) => {
+                    newInteractFromList[stateKey] = true;
+                });
+
+                stateUpdate = {
+                    interact: {
+                        ...this.state.interact,
+                        [type]: {
+                            ...this.state.interact[type],
+                            ...newInteractFromList,
+                        },
+                    },
+                };
+                break;
+
             case StoreAction.INTERACT_SET_ALL_FOR_TYPE:
                 const newInteract = {};
                 const stateKeys = Object.keys(this.state.interact[value]);
