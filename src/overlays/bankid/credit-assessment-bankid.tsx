@@ -56,10 +56,8 @@ class CreditAssessmentBankId extends React.Component<IBankIdProps, IState> {
     }
 
     shouldSign() {
-        const {
-            creditAssessmentSigning,
-            pendingCreditAssessmentSignRequest,
-        } = this.props;
+        const { creditAssessmentSigning, pendingCreditAssessmentSignRequest } =
+            this.props;
 
         const signingNotStarted = !creditAssessmentSigning;
         const noPendingSigning = !pendingCreditAssessmentSignRequest;
@@ -95,10 +93,8 @@ class CreditAssessmentBankId extends React.Component<IBankIdProps, IState> {
 
     onSigningStarted(prevProps: IBankIdProps) {
         const { creditAssessmentSigning: prevSigning } = prevProps;
-        const {
-            creditAssessmentSigning,
-            getCreditAssessmentStatus,
-        } = this.props;
+        const { creditAssessmentSigning, getCreditAssessmentStatus } =
+            this.props;
 
         const signingStarted = !!creditAssessmentSigning;
         const signingIsNew = prevSigning !== creditAssessmentSigning;

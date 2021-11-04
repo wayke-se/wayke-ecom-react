@@ -55,24 +55,17 @@ const getScaledLogo = (props: IProps) => {
 const CreditAssessmentInformationPresenter = (props: IProps) => {
     const [phoneIsValid, setPhoneIsValid] = React.useState(true);
     const [emailIsValid, setEmailIsValid] = React.useState(true);
-    const [personalNumberIsValid, setPersonalNumberIsValid] = React.useState(
-        true
-    );
+    const [personalNumberIsValid, setPersonalNumberIsValid] =
+        React.useState(true);
     const [incomeIsValid, setIncomeIsValid] = React.useState(true);
-    const [
-        householdChildrenIsValid,
-        setHouseholdChildrenIsValid,
-    ] = React.useState(true);
-    const [householdIncomeIsValid, setHouseholdIncomeIsValid] = React.useState(
-        true
-    );
-    const [
-        householdHousingCostIsValid,
-        setHouseholdHousingCostIsValid,
-    ] = React.useState(true);
-    const [householdDebtIsValid, setHouseholdDebtIsValid] = React.useState(
-        true
-    );
+    const [householdChildrenIsValid, setHouseholdChildrenIsValid] =
+        React.useState(true);
+    const [householdIncomeIsValid, setHouseholdIncomeIsValid] =
+        React.useState(true);
+    const [householdHousingCostIsValid, setHouseholdHousingCostIsValid] =
+        React.useState(true);
+    const [householdDebtIsValid, setHouseholdDebtIsValid] =
+        React.useState(true);
 
     const [hasError, setHasError] = React.useState(false);
     const [errorText, setErrorText] = React.useState("");

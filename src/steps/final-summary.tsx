@@ -59,13 +59,10 @@ const formatNewLines = (text: string): any => {
 };
 
 export default (props: IFinalSummaryProps) => {
-    const [isConditionsExtended, setIsConditionsExtended] = React.useState(
-        false
-    );
-    const [
-        isReturnConditionsExtended,
-        setIsReturnConditionsExtended,
-    ] = React.useState(false);
+    const [isConditionsExtended, setIsConditionsExtended] =
+        React.useState(false);
+    const [isReturnConditionsExtended, setIsReturnConditionsExtended] =
+        React.useState(false);
     const [hasError, setHasError] = React.useState(false);
     const [errorText, setErrorText] = React.useState("");
 

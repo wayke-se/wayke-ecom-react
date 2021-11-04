@@ -21,6 +21,8 @@ enum EcomStep {
 
     DELIVERY_METHOD,
 
+    ACCESSORIES,
+
     FINAL_SUMMARY,
     FINAL_CONFIRMATION,
 }

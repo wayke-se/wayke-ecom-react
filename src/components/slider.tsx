@@ -84,15 +84,13 @@ class Slider extends React.Component<ISliderProps, IState> {
         this.handleSliderRelease = this.handleSliderRelease.bind(this);
         this.handleSliderMove = this.handleSliderMove.bind(this);
 
-        this.calculateNewFractionPosition = this.calculateNewFractionPosition.bind(
-            this
-        );
+        this.calculateNewFractionPosition =
+            this.calculateNewFractionPosition.bind(this);
 
         this.getValueInsideOfBounds = this.getValueInsideOfBounds.bind(this);
         this.getFractionPosition = this.getFractionPosition.bind(this);
-        this.getPercentagePositionFromFraction = this.getPercentagePositionFromFraction.bind(
-            this
-        );
+        this.getPercentagePositionFromFraction =
+            this.getPercentagePositionFromFraction.bind(this);
 
         this.sliderRef = React.createRef();
 
@@ -202,8 +200,8 @@ class Slider extends React.Component<ISliderProps, IState> {
 
     calculateNewFractionPosition(x: number) {
         const boundaryMin = this.sliderRef.current.getBoundingClientRect().left;
-        const boundaryMax = this.sliderRef.current.getBoundingClientRect()
-            .right;
+        const boundaryMax =
+            this.sliderRef.current.getBoundingClientRect().right;
 
         const valueInsideOfBounds = this.getValueInsideOfBounds(
             x,

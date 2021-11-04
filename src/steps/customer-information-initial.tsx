@@ -64,9 +64,8 @@ export default (props: ICustomerInformationInitialProps) => {
 
     const handleProceedWithAutomaticLookup = (state: IEcomData) => {
         const customerObject = createCustomerObject(state.customer, null);
-        const isValidPersonalNumber = validateCustomerObjectPersonalNumber(
-            customerObject
-        );
+        const isValidPersonalNumber =
+            validateCustomerObjectPersonalNumber(customerObject);
 
         if (!isValidPersonalNumber) {
             return props.dispatchStoreAction(

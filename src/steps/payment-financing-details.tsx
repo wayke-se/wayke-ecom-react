@@ -140,9 +140,10 @@ class PaymentFinancingDetails extends React.Component<
             props.paymentLookup
         );
 
-        const convertedResidualSpecification = getConvertedResidualSpecification(
-            loanDetails.getResidualValueSpec()
-        );
+        const convertedResidualSpecification =
+            getConvertedResidualSpecification(
+                loanDetails.getResidualValueSpec()
+            );
         const hasResidual = isResidualEnabled(convertedResidualSpecification);
 
         let residual = null;
@@ -276,9 +277,10 @@ class PaymentFinancingDetails extends React.Component<
 
         const depositSpecification = loanDetails.getDownPaymentSpec();
         const durationSpecification = loanDetails.getDurationSpec();
-        const convertedResidualSpecification = getConvertedResidualSpecification(
-            loanDetails.getResidualValueSpec()
-        );
+        const convertedResidualSpecification =
+            getConvertedResidualSpecification(
+                loanDetails.getResidualValueSpec()
+            );
 
         const deposit = validateStringNumberInRange(
             this.state.deposit,
@@ -331,9 +333,10 @@ class PaymentFinancingDetails extends React.Component<
 
         const depositSpecification = loanDetails.getDownPaymentSpec();
         const durationSpecification = loanDetails.getDurationSpec();
-        const convertedResidualSpecification = getConvertedResidualSpecification(
-            loanDetails.getResidualValueSpec()
-        );
+        const convertedResidualSpecification =
+            getConvertedResidualSpecification(
+                loanDetails.getResidualValueSpec()
+            );
 
         const options = getAllDurationSteps(durationSpecification).map(
             (s) => `${s} mån`

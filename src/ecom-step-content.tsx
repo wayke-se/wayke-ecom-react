@@ -18,6 +18,7 @@ import TradeInExistsChooser from "./steps/trade-in-exists-chooser";
 import CreditAssessmentInformation from "./steps/credit-assessment/information/index";
 import CreditAssessmentSigning from "./steps/credit-assessment/bankid/index";
 import CreditAssessed from "./steps/credit-assessment/assessed/index";
+import Accessories from "./steps/accessories";
 
 import EcomStep from "./constants/ecom-step";
 import {
@@ -109,6 +110,9 @@ export default (props: AllProps) => {
 
         case EcomStep.DELIVERY_METHOD:
             return <DeliveryMethodChooser {...props} />;
+
+        case EcomStep.ACCESSORIES:
+            return <Accessories {...props} />;
 
         case EcomStep.FINAL_SUMMARY:
             return <FinalSummary {...props} />;

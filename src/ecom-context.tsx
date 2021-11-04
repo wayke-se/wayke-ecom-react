@@ -71,51 +71,38 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
 
         this.getAddress = this.getAddress.bind(this);
         this.handleDealerSelection = this.handleDealerSelection.bind(this);
-        this.handleFetchVehicleInformation = this.handleFetchVehicleInformation.bind(
-            this
-        );
-        this.handleFetchInsuranceOptions = this.handleFetchInsuranceOptions.bind(
-            this
-        );
-        this.handleFetchAddressInformation = this.handleFetchAddressInformation.bind(
-            this
-        );
-        this.handleFetchPaymentInformation = this.handleFetchPaymentInformation.bind(
-            this
-        );
+        this.handleFetchVehicleInformation =
+            this.handleFetchVehicleInformation.bind(this);
+        this.handleFetchInsuranceOptions =
+            this.handleFetchInsuranceOptions.bind(this);
+        this.handleFetchAddressInformation =
+            this.handleFetchAddressInformation.bind(this);
+        this.handleFetchPaymentInformation =
+            this.handleFetchPaymentInformation.bind(this);
         this.handleCreateOrder = this.handleCreateOrder.bind(this);
         this.handleBankIdQrCodeAuth = this.handleBankIdQrCodeAuth.bind(this);
-        this.handleBankIdSameDeviceAuth = this.handleBankIdSameDeviceAuth.bind(
-            this
-        );
+        this.handleBankIdSameDeviceAuth =
+            this.handleBankIdSameDeviceAuth.bind(this);
         this.handleBankIdCollect = this.handleBankIdCollect.bind(this);
         this.handleBankIdCancel = this.handleBankIdCancel.bind(this);
         this.handleBankIdReset = this.handleBankIdReset.bind(this);
 
-        this.createCreditAssessmentCase = this.createCreditAssessmentCase.bind(
-            this
-        );
-        this.declineCreditAssessmentCase = this.declineCreditAssessmentCase.bind(
-            this
-        );
-        this.acceptCreditAssessmentCase = this.acceptCreditAssessmentCase.bind(
-            this
-        );
-        this.signCreditAssessmentWithQrCode = this.signCreditAssessmentWithQrCode.bind(
-            this
-        );
-        this.signCreditAssessmentWithSameDevice = this.signCreditAssessmentWithSameDevice.bind(
-            this
-        );
-        this.cancelCreditAssessmentSigning = this.cancelCreditAssessmentSigning.bind(
-            this
-        );
-        this.resetCreditAssessmentSigning = this.resetCreditAssessmentSigning.bind(
-            this
-        );
-        this.getCreditAssessmentStatus = this.getCreditAssessmentStatus.bind(
-            this
-        );
+        this.createCreditAssessmentCase =
+            this.createCreditAssessmentCase.bind(this);
+        this.declineCreditAssessmentCase =
+            this.declineCreditAssessmentCase.bind(this);
+        this.acceptCreditAssessmentCase =
+            this.acceptCreditAssessmentCase.bind(this);
+        this.signCreditAssessmentWithQrCode =
+            this.signCreditAssessmentWithQrCode.bind(this);
+        this.signCreditAssessmentWithSameDevice =
+            this.signCreditAssessmentWithSameDevice.bind(this);
+        this.cancelCreditAssessmentSigning =
+            this.cancelCreditAssessmentSigning.bind(this);
+        this.resetCreditAssessmentSigning =
+            this.resetCreditAssessmentSigning.bind(this);
+        this.getCreditAssessmentStatus =
+            this.getCreditAssessmentStatus.bind(this);
 
         this.makeRequest = this.makeRequest.bind(this);
         this.saveResponse = this.saveResponse.bind(this);
@@ -486,7 +473,7 @@ class EcomContext extends React.Component<IEcomContextProps, IState> {
                 });
                 if (isErrorResponse) {
                     this.resolveVehicleUnavailable(
-                        (response as unknown) as Error
+                        response as unknown as Error
                     );
                 }
             });

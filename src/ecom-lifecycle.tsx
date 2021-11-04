@@ -81,9 +81,8 @@ class EcomLifecycle extends React.Component<IEcomLifecycleProps, IState> {
         this.handleProceedToNextStep = this.handleProceedToNextStep.bind(this);
         this.handlePreviousStepClick = this.handlePreviousStepClick.bind(this);
         this.handleSpecificStepClick = this.handleSpecificStepClick.bind(this);
-        this.handleIncompleteUserEvent = this.handleIncompleteUserEvent.bind(
-            this
-        );
+        this.handleIncompleteUserEvent =
+            this.handleIncompleteUserEvent.bind(this);
         this.onDisplayOverlay = this.onDisplayOverlay.bind(this);
         this.onHideOverlay = this.onHideOverlay.bind(this);
 

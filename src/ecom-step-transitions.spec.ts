@@ -26,9 +26,8 @@ describe("Get transitions", () => {
                 }
             );
 
-            const step = getAllTransitions()[EcomStep.TRADE_IN_EXISTS_CHOOSER](
-                data
-            );
+            const step =
+                getAllTransitions()[EcomStep.TRADE_IN_EXISTS_CHOOSER](data);
 
             expect(step).toBe(EcomStep.TRADE_IN_CAR_DEFINITION);
         });
@@ -42,9 +41,8 @@ describe("Get transitions", () => {
                 }
             );
 
-            const step = getAllTransitions()[EcomStep.TRADE_IN_EXISTS_CHOOSER](
-                data
-            );
+            const step =
+                getAllTransitions()[EcomStep.TRADE_IN_EXISTS_CHOOSER](data);
 
             expect(step).toBe(EcomStep.PAYMENT_METHOD_CHOOSER);
         });
@@ -60,9 +58,8 @@ describe("Get transitions", () => {
                 }
             );
 
-            const step = getAllTransitions()[EcomStep.TRADE_IN_CAR_DEFINITION](
-                data
-            );
+            const step =
+                getAllTransitions()[EcomStep.TRADE_IN_CAR_DEFINITION](data);
 
             expect(step).toBe(EcomStep.TRADE_IN_CAR_CONDITION);
         });
@@ -76,9 +73,8 @@ describe("Get transitions", () => {
                 }
             );
 
-            const step = getAllTransitions()[EcomStep.TRADE_IN_CAR_DEFINITION](
-                data
-            );
+            const step =
+                getAllTransitions()[EcomStep.TRADE_IN_CAR_DEFINITION](data);
 
             expect(step).toBe(EcomStep.PAYMENT_METHOD_CHOOSER);
         });
@@ -94,9 +90,8 @@ describe("Get transitions", () => {
                 }
             );
 
-            const step = getAllTransitions()[EcomStep.TRADE_IN_CAR_CONDITION](
-                data
-            );
+            const step =
+                getAllTransitions()[EcomStep.TRADE_IN_CAR_CONDITION](data);
 
             expect(step).toBe(EcomStep.TRADE_IN_CONFIRM_CAR);
         });
@@ -110,9 +105,8 @@ describe("Get transitions", () => {
                 }
             );
 
-            const step = getAllTransitions()[EcomStep.TRADE_IN_CAR_CONDITION](
-                data
-            );
+            const step =
+                getAllTransitions()[EcomStep.TRADE_IN_CAR_CONDITION](data);
 
             expect(step).toBe(EcomStep.PAYMENT_METHOD_CHOOSER);
         });
@@ -201,9 +195,8 @@ describe("Get transitions", () => {
 
     describe("Given step CUSTOMER_INFORMATION_INITIAL", () => {
         it("Should transition to CUSTOMER_INFORMATION_DETAILS", () => {
-            const step = getAllTransitions()[
-                EcomStep.CUSTOMER_INFORMATION_INITIAL
-            ]();
+            const step =
+                getAllTransitions()[EcomStep.CUSTOMER_INFORMATION_INITIAL]();
             expect(step).toBe(EcomStep.CUSTOMER_INFORMATION_DETAILS);
         });
     });
@@ -212,9 +205,8 @@ describe("Get transitions", () => {
         describe("Given insurance options", () => {
             it("Should transition to INSURANCE_INFORMATION_DEFINITION", () => {
                 const data: IEcomData = fixtures.create("IEcomData");
-                const insuranceOptions: IAvailableInsuranceOption = fixtures.create(
-                    "IAvailableInsuranceOption"
-                );
+                const insuranceOptions: IAvailableInsuranceOption =
+                    fixtures.create("IAvailableInsuranceOption");
                 const orderOptions: IOrderOptionsResponse = fixtures.create(
                     "IOrderOptionsResponse",
                     (options: IOrderOptionsResponse) => {
@@ -417,18 +409,16 @@ describe("Get transitions", () => {
 
     describe("Given step CREDIT_ASSESSMENT_INFORMATION", () => {
         it("Should transition to CREDIT_ASSESSMENT_SIGNING", () => {
-            const step = getAllTransitions()[
-                EcomStep.CREDIT_ASSESSMENT_INFORMATION
-            ]();
+            const step =
+                getAllTransitions()[EcomStep.CREDIT_ASSESSMENT_INFORMATION]();
             expect(step).toBe(EcomStep.CREDIT_ASSESSMENT_SIGNING);
         });
     });
 
     describe("Given step CREDIT_ASSESSMENT_SIGNING", () => {
         it("Should transition to CREDIT_ASSESSED", () => {
-            const step = getAllTransitions()[
-                EcomStep.CREDIT_ASSESSMENT_SIGNING
-            ]();
+            const step =
+                getAllTransitions()[EcomStep.CREDIT_ASSESSMENT_SIGNING]();
             expect(step).toBe(EcomStep.CREDIT_ASSESSED);
         });
     });

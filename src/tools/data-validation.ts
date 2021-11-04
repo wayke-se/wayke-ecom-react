@@ -188,9 +188,8 @@ export const validateCustomerObjectPersonalNumber = (
 };
 
 export const validateCustomerObject = (customerObject: ICustomerObject) => {
-    const isValidPersonalNumber = validateCustomerObjectPersonalNumber(
-        customerObject
-    );
+    const isValidPersonalNumber =
+        validateCustomerObjectPersonalNumber(customerObject);
     const isValidEmail = validateEmail(customerObject.email);
     const isValidPhone = validatePhoneNumber(customerObject.phone);
 

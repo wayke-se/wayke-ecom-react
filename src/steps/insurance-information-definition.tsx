@@ -47,13 +47,11 @@ class InsuranceInformationDefinition extends React.Component<
     constructor(props: IInsuranceInformationDefinitionProps) {
         super(props);
 
-        this.handleExpectedDrivingDistanceChange = this.handleExpectedDrivingDistanceChange.bind(
-            this
-        );
+        this.handleExpectedDrivingDistanceChange =
+            this.handleExpectedDrivingDistanceChange.bind(this);
         this.handleProceedClick = this.handleProceedClick.bind(this);
-        this.handleProceedAfterUpdate = this.handleProceedAfterUpdate.bind(
-            this
-        );
+        this.handleProceedAfterUpdate =
+            this.handleProceedAfterUpdate.bind(this);
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleBlur = this.handleBlur.bind(this);
 
@@ -69,8 +67,8 @@ class InsuranceInformationDefinition extends React.Component<
     }
 
     componentDidMount() {
-        const insurancePersonalNumber = this.props.data.insurance
-            .personalNumber;
+        const insurancePersonalNumber =
+            this.props.data.insurance.personalNumber;
         const customerPersonalNumber = this.props.data.customer.personalNumber;
 
         if (!insurancePersonalNumber && !!customerPersonalNumber) {
@@ -93,10 +91,9 @@ class InsuranceInformationDefinition extends React.Component<
                 this.props.dispatchStoreAction(StoreAction.UPDATE_NAMED_VALUE, {
                     type: "insurance",
                     name: "expectedDrivingDistance",
-                    value:
-                        drivingDistanceOptions[
-                            this.state.expectedDrivingDistanceIndex
-                        ],
+                    value: drivingDistanceOptions[
+                        this.state.expectedDrivingDistanceIndex
+                    ],
                 });
             }
         );
@@ -131,10 +128,9 @@ class InsuranceInformationDefinition extends React.Component<
             {
                 type: "insurance",
                 name: "expectedDrivingDistance",
-                value:
-                    drivingDistanceOptions[
-                        this.state.expectedDrivingDistanceIndex
-                    ],
+                value: drivingDistanceOptions[
+                    this.state.expectedDrivingDistanceIndex
+                ],
             },
             (state: IEcomData) => {
                 this.handleProceedAfterUpdate(state);
