@@ -64,6 +64,8 @@ export const getPrimarySteps = (
         result.push(EcomStep.DELIVERY_METHOD);
     }
 
+    result.push(EcomStep.ACCESORIES_CHOOSER);
+
     result.push(EcomStep.FINAL_SUMMARY);
     result.push(EcomStep.FINAL_CONFIRMATION);
 
@@ -149,7 +151,7 @@ export const getAllTransitions = () => ({
             return EcomStep.DELIVERY_METHOD;
         }
 
-        return EcomStep.FINAL_SUMMARY;
+        return EcomStep.ACCESORIES_CHOOSER;
     },
     [EcomStep.INSURANCE_INFORMATION_DEFINITION]: (
         data: IEcomData,
@@ -163,7 +165,7 @@ export const getAllTransitions = () => ({
             return EcomStep.DELIVERY_METHOD;
         }
 
-        return EcomStep.FINAL_SUMMARY;
+        return EcomStep.ACCESORIES_CHOOSER;
     },
     [EcomStep.INSURANCE_ALTERNATIVE_CHOOSER]: (
         data: IEcomData,
@@ -173,8 +175,9 @@ export const getAllTransitions = () => ({
             return EcomStep.DELIVERY_METHOD;
         }
 
-        return EcomStep.FINAL_SUMMARY;
+        return EcomStep.ACCESORIES_CHOOSER;
     },
-    [EcomStep.DELIVERY_METHOD]: () => EcomStep.FINAL_SUMMARY,
+    [EcomStep.DELIVERY_METHOD]: () => EcomStep.ACCESORIES_CHOOSER,
+    [EcomStep.ACCESORIES_CHOOSER]: () => EcomStep.FINAL_SUMMARY,
     [EcomStep.FINAL_SUMMARY]: () => EcomStep.FINAL_CONFIRMATION,
 });

@@ -1,5 +1,6 @@
 import React from "react";
 
+import AccesoriesChooser from "./steps/accessories-chooser";
 import DealerChooser from "./steps/dealer-chooser";
 import BankIdAuthentication from "./steps/bankid-authentication";
 import CustomerInformationInitial from "./steps/customer-information-initial";
@@ -10,7 +11,7 @@ import FinalSummary from "./steps/final-summary";
 import InsuranceAlternativeChooser from "./steps/insurance-alternative-chooser";
 import InsuranceInformationDefinition from "./steps/insurance-information-definition";
 import PaymentFinancingDetails from "./steps/payment-financing-details";
-import PaymentMethodChooser from "./steps/payment-method-chooser";
+// import PaymentMethodChooser from "./steps/payment-method-chooser";
 import TradeInCarDefinition from "./steps/trade-in-car-definition";
 import TradeInCarCondition from "./steps/trade-in-car-condition";
 import TradeInConfirmCar from "./steps/trade-in-confirm-car";
@@ -79,7 +80,7 @@ export default (props: AllProps) => {
             return <TradeInConfirmCar {...props} />;
 
         case EcomStep.PAYMENT_METHOD_CHOOSER:
-            return <PaymentMethodChooser {...props} />;
+            return <AccesoriesChooser {...props} />;
 
         case EcomStep.PAYMENT_FINANCING_DETAILS:
             return <PaymentFinancingDetails {...props} />;
@@ -109,6 +110,9 @@ export default (props: AllProps) => {
 
         case EcomStep.DELIVERY_METHOD:
             return <DeliveryMethodChooser {...props} />;
+
+        case EcomStep.ACCESORIES_CHOOSER:
+            return <AccesoriesChooser {...props} />;
 
         case EcomStep.FINAL_SUMMARY:
             return <FinalSummary {...props} />;

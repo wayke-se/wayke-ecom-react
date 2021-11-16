@@ -100,6 +100,7 @@ factory.define("IEcomExternalProps", [
 ]);
 
 factory.define("IOrderOptionsResponse", [
+    "getAccessories".as(() => []),
     "getPaymentOptions".as(() => []),
     "getDeliveryOptions".as(() => []),
     "getInsuranceOption".as(() => undefined),
