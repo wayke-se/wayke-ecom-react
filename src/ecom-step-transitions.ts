@@ -80,6 +80,11 @@ const displayDeliveryOptions = (options: IOrderOptionsResponse) => {
     );
 };
 
+const displayAccessories = (options: IOrderOptionsResponse) => {
+    const accessories = options.getAccessories();
+    return accessories && accessories.length > 0;
+};
+
 export const getAllTransitions = () => ({
     [EcomStep.DEALER_CHOOSER]: (
         _: IEcomData,
@@ -147,11 +152,15 @@ export const getAllTransitions = () => ({
             return EcomStep.INSURANCE_INFORMATION_DEFINITION;
         }
 
+        if(displayAccessories(options)) {
+            return EcomStep.ACCESORIES_CHOOSER;
+        }
+
         if (displayDeliveryOptions(options)) {
             return EcomStep.DELIVERY_METHOD;
         }
 
-        return EcomStep.ACCESORIES_CHOOSER;
+        return EcomStep.FINAL_SUMMARY;
     },
     [EcomStep.INSURANCE_INFORMATION_DEFINITION]: (
         data: IEcomData,
@@ -161,23 +170,31 @@ export const getAllTransitions = () => ({
             return EcomStep.INSURANCE_ALTERNATIVE_CHOOSER;
         }
 
+        if(displayAccessories(options)) {
+            return EcomStep.ACCESORIES_CHOOSER;
+        }
+
         if (displayDeliveryOptions(options)) {
             return EcomStep.DELIVERY_METHOD;
         }
 
-        return EcomStep.ACCESORIES_CHOOSER;
+        return EcomStep.FINAL_SUMMARY;
     },
     [EcomStep.INSURANCE_ALTERNATIVE_CHOOSER]: (
         data: IEcomData,
         options: IOrderOptionsResponse
     ) => {
+        if(displayAccessories(options)) {
+            return EcomStep.ACCESORIES_CHOOSER;
+        }
+
         if (displayDeliveryOptions(options)) {
             return EcomStep.DELIVERY_METHOD;
         }
 
-        return EcomStep.ACCESORIES_CHOOSER;
+        return EcomStep.FINAL_SUMMARY;
     },
-    [EcomStep.DELIVERY_METHOD]: () => EcomStep.ACCESORIES_CHOOSER,
-    [EcomStep.ACCESORIES_CHOOSER]: () => EcomStep.FINAL_SUMMARY,
+    [EcomStep.ACCESORIES_CHOOSER]: () => EcomStep.DELIVERY_METHOD,
+    [EcomStep.DELIVERY_METHOD]: () => EcomStep.FINAL_SUMMARY,
     [EcomStep.FINAL_SUMMARY]: () => EcomStep.FINAL_CONFIRMATION,
 });

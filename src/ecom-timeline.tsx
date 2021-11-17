@@ -24,10 +24,10 @@ const getLabel = (step: EcomStep): string => {
             return "Uppgifter";
         case EcomStep.INSURANCE_INFORMATION_DEFINITION:
             return "Försäkring";
+        case EcomStep.ACCESORIES_CHOOSER:
+            return "Tillbehör";
         case EcomStep.DELIVERY_METHOD:
             return "Leverans";
-        case EcomStep.ACCESORIES_CHOOSER:
-            return "Tillbehörsval";
         case EcomStep.FINAL_SUMMARY:
             return "Sammanställning";
         case EcomStep.FINAL_CONFIRMATION:
