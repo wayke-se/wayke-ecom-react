@@ -131,10 +131,15 @@ export interface IEcomData {
     payment: IPaymentData;
     tradeInCar: ITradeInCarData;
     useBankId: boolean;
+    chosenAccessories: IChosenAccessoryData;
 }
 
 export interface IDeliveryMethodData {
     type: DeliveryType;
+}
+
+export interface IChosenAccessoryData {
+    ids: string[];
 }
 
 export interface ITradeInCarData {

@@ -33,6 +33,7 @@ export default (props: IOrderSummaryProps) => {
         props.data.tradeInCar.hasTradeInCar &&
         props.data.tradeInCar.registrationNumber &&
         props.vehicleLookup !== null;
+    const hasAccessories = props.data.chosenAccessories.ids.length > 0;
 
     if (hasLoan) {
         const loanDetails = getLoanDetails(
@@ -67,6 +68,29 @@ export default (props: IOrderSummaryProps) => {
             description: `${insuranceOption.brand.name} - ${insuranceOption.name}`,
             price: insuranceOption.price,
             unit: insuranceOption.unit,
+        });
+    }
+
+    if (hasAccessories) {
+        const accessories = props.orderOptions.getAccessories();
+        const chosenAccessories = accessories.filter((a) =>
+            props.data.chosenAccessories.ids.includes(a.id)
+        );
+        const addons = chosenAccessories.map((a) => ({
+            title: a.name,
+            price: a.price,
+            unit: "kr",
+        }));
+
+        let accessoriesSumPrice = 0
+        accessories.forEach(a => accessoriesSumPrice += a.price)
+
+        products.push({
+            addons,
+            title: "Tillbehör",
+            description: `Valda tillbehör`,
+            price: accessoriesSumPrice,
+            unit: "kr",
         });
     }
 

@@ -23,7 +23,7 @@ export default (props: IAccessoryProps) => {
                 <div data-ecom-content="">
                     <p>
                         Vill du utrusta din nya bil med något extra? Nedan
-                        listas ett urval av tillbehör som passar till din Volvo.
+                        listas ett urval av tillbehör som passar till din bil.
                     </p>
                 </div>
             </section>
@@ -31,7 +31,7 @@ export default (props: IAccessoryProps) => {
                 {props.orderOptions
                     .getAccessories()
                     .map((accesory: IAccessory) => (
-                        <Accessory accessory={accesory} key={accesory.id} />
+                        <Accessory accessory={accesory} key={accesory.id} {...props}/>
                     ))}
             </section>
             <section className="page-section">

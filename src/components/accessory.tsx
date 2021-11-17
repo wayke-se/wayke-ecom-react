@@ -1,31 +1,79 @@
 import { IAccessory } from "@wayke-se/ecom/dist-types/orders/types";
-import React from "react";
+import React, { useEffect } from "react";
+import marked from 'marked';
 
 import { addSizeQuery } from "../utils/image";
+import { htmlEncode } from "../utils/encode";
+import { IEcomStore } from "../types";
+import StoreAction from "../constants/store-action";
 
-interface AccessoryProps {
+interface IAccessoryProps extends IEcomStore {
     accessory: IAccessory;
 }
 
-export default (props: AccessoryProps) => {
+const markedRenderer = new marked.Renderer();
+const linkRenderer = markedRenderer.link;
+
+markedRenderer.link = (href: any, title: any, text: any) => {
+    const html = linkRenderer.call(markedRenderer, href, title, text);
+    return html.replace(/<a/, '<a target="_blank"');
+};
+
+export default (props: IAccessoryProps) => {
     const [isExtended, setIsExtended] = React.useState(false);
     const [isChosen, setChosen] = React.useState(false);
+    const accessory = props.accessory;
+
+    useEffect(() => {
+        if(accessory && props.data.chosenAccessories) {
+            const ids = [...props.data.chosenAccessories.ids];
+            let foundIdx = ids.findIndex(id => id === accessory.id);
+            if(isChosen && foundIdx < 0) {
+                ids.push(accessory.id)
+                updateAccessoryIds(ids)
+            }
+            else if(!isChosen && foundIdx > -1) {
+                ids.splice(foundIdx, 1)
+                updateAccessoryIds(ids)
+            }
+        }
+      }, [isChosen, accessory, props.data.chosenAccessories]); // Only re-run the effect if count changes
+    
+    
+    const updateAccessoryIds = (newIds: string[]) => {
+        props.dispatchStoreAction(StoreAction.UPDATE_NAMED_VALUE, {
+            type: "chosenAccessories",
+            name: "ids",
+            value: newIds,
+        });
+    };
 
     const handleMoreInformationClick = () => {
         setIsExtended(!isExtended);
     };
 
     let heroImgUrlResized = "";
-    if (props.accessory.media.length > 0)
+    if (accessory.media.length > 0)
         heroImgUrlResized = addSizeQuery(
-            props.accessory.media[0].url,
+            accessory.media[0].url,
             400,
             200
         );
 
     let logoImgUrlResized = "";
-    if (props.accessory.logoUrl)
-        logoImgUrlResized = addSizeQuery(props.accessory.logoUrl, 96, 8);
+    if (accessory.logoUrl)
+        logoImgUrlResized = addSizeQuery(accessory.logoUrl, 96, 8);
+
+    let markdownLongDescription;
+
+    if (accessory.longDescription) {
+        const encodedlongDescription = htmlEncode(
+            accessory.longDescription
+        );
+        markdownLongDescription = marked(encodedlongDescription, {
+            renderer: markedRenderer,
+        });
+    }
 
     return (
         <div className="repeat-m">
@@ -44,7 +92,7 @@ export default (props: AccessoryProps) => {
                     <div data-ecom-columnrow="" className="m-b">
                         <div className="column">
                             <h2 className="h6 no-margin">
-                                {props.accessory.name}
+                                {accessory.name}
                             </h2>
                         </div>
                         <div className="column minimal">
@@ -58,28 +106,33 @@ export default (props: AccessoryProps) => {
                 </div>
                 <div className="repeat-m">
                     <div className="font-medium">
-                        {props.accessory.price} kr
+                        {accessory.price} kr
                     </div>
                     <div className="font-size-small">
-                        Kontantpris inkl. montering (DETTA FÄLT ÄR EJ ÄNNU
-                        IMPLEMENTERAT)
+                        Kontantpris
                     </div>
                 </div>
                 <div data-ecom-content="" className="repeat-m">
-                    <p>{props.accessory.shortDescription}</p>
+                    <p>{accessory.shortDescription}</p>
                 </div>
                 <div className="box-extend">
                     <div className="repeat-m">
-                        {props.accessory.longDescription}
+                    {markdownLongDescription && (
+                            <div
+                                dangerouslySetInnerHTML={{
+                                    __html: markdownLongDescription,
+                                }}
+                            />
+                        )}
                     </div>
                     <div className="repeat-m">
                         <div className="font-medium">Art.nr.</div>
-                        <div>{props.accessory.articleNumber}</div>
+                        <div>{accessory.articleNumber}</div>
                     </div>
                     <div className="repeat-m">
-                        {props.accessory.productPageLink && (
+                        {accessory.productPageLink && (
                             <a
-                                href={props.accessory.productPageLink}
+                                href={accessory.productPageLink}
                                 title="test"
                                 target="_blank"
                                 rel="noopener noreferrer nofollow"
