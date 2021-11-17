@@ -152,7 +152,7 @@ export const getAllTransitions = () => ({
             return EcomStep.INSURANCE_INFORMATION_DEFINITION;
         }
 
-        if(displayAccessories(options)) {
+        if (displayAccessories(options)) {
             return EcomStep.ACCESORIES_CHOOSER;
         }
 
@@ -170,7 +170,7 @@ export const getAllTransitions = () => ({
             return EcomStep.INSURANCE_ALTERNATIVE_CHOOSER;
         }
 
-        if(displayAccessories(options)) {
+        if (displayAccessories(options)) {
             return EcomStep.ACCESORIES_CHOOSER;
         }
 
@@ -184,7 +184,7 @@ export const getAllTransitions = () => ({
         data: IEcomData,
         options: IOrderOptionsResponse
     ) => {
-        if(displayAccessories(options)) {
+        if (displayAccessories(options)) {
             return EcomStep.ACCESORIES_CHOOSER;
         }
 

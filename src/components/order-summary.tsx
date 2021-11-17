@@ -82,8 +82,8 @@ export default (props: IOrderSummaryProps) => {
             unit: "kr",
         }));
 
-        let accessoriesSumPrice = 0
-        accessories.forEach(a => accessoriesSumPrice += a.price)
+        let accessoriesSumPrice = 0;
+        accessories.forEach((a) => (accessoriesSumPrice += a.price));
 
         products.push({
             addons,

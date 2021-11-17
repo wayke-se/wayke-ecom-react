@@ -240,7 +240,7 @@ describe("Get transitions", () => {
                         (options: IOrderOptionsResponse) => {
                             options.getDeliveryOptions = () => [];
                             options.getInsuranceOption = () => null;
-                            options.getAccessories = () => []
+                            options.getAccessories = () => [];
                             return options;
                         }
                     );
@@ -370,7 +370,7 @@ describe("Get transitions", () => {
                     "IOrderOptionsResponse",
                     (options: IOrderOptionsResponse) => {
                         options.getDeliveryOptions = () => [];
-                        options.getAccessories= () => [];
+                        options.getAccessories = () => [];
                         return options;
                     }
                 );

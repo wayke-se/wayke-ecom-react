@@ -98,7 +98,7 @@ class EcomStore extends React.Component<IEcomExternalProps, IEcomData> {
             },
             useBankId,
             chosenAccessories: {
-                ids: []
+                ids: [],
             },
         };
     }

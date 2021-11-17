@@ -1,6 +1,6 @@
 import { IAccessory } from "@wayke-se/ecom/dist-types/orders/types";
 import React, { useEffect } from "react";
-import marked from 'marked';
+import marked from "marked";
 
 import { addSizeQuery } from "../utils/image";
 import { htmlEncode } from "../utils/encode";
@@ -25,21 +25,19 @@ export default (props: IAccessoryProps) => {
     const accessory = props.accessory;
 
     useEffect(() => {
-        if(accessory && props.data.chosenAccessories) {
+        if (accessory && props.data.chosenAccessories) {
             const ids = [...props.data.chosenAccessories.ids];
-            let foundIdx = ids.findIndex(id => id === accessory.id);
-            if(isChosen && foundIdx < 0) {
-                ids.push(accessory.id)
-                updateAccessoryIds(ids)
-            }
-            else if(!isChosen && foundIdx > -1) {
-                ids.splice(foundIdx, 1)
-                updateAccessoryIds(ids)
+            let foundIdx = ids.findIndex((id) => id === accessory.id);
+            if (isChosen && foundIdx < 0) {
+                ids.push(accessory.id);
+                updateAccessoryIds(ids);
+            } else if (!isChosen && foundIdx > -1) {
+                ids.splice(foundIdx, 1);
+                updateAccessoryIds(ids);
             }
         }
-      }, [isChosen, accessory, props.data.chosenAccessories]); // Only re-run the effect if count changes
-    
-    
+    }, [isChosen, accessory, props.data.chosenAccessories]);
+
     const updateAccessoryIds = (newIds: string[]) => {
         props.dispatchStoreAction(StoreAction.UPDATE_NAMED_VALUE, {
             type: "chosenAccessories",
@@ -54,11 +52,7 @@ export default (props: IAccessoryProps) => {
 
     let heroImgUrlResized = "";
     if (accessory.media.length > 0)
-        heroImgUrlResized = addSizeQuery(
-            accessory.media[0].url,
-            400,
-            200
-        );
+        heroImgUrlResized = addSizeQuery(accessory.media[0].url, 400, 200);
 
     let logoImgUrlResized = "";
     if (accessory.logoUrl)
@@ -67,9 +61,7 @@ export default (props: IAccessoryProps) => {
     let markdownLongDescription;
 
     if (accessory.longDescription) {
-        const encodedlongDescription = htmlEncode(
-            accessory.longDescription
-        );
+        const encodedlongDescription = htmlEncode(accessory.longDescription);
         markdownLongDescription = marked(encodedlongDescription, {
             renderer: markedRenderer,
         });
@@ -91,9 +83,7 @@ export default (props: IAccessoryProps) => {
                 <div className="repeat-m">
                     <div data-ecom-columnrow="" className="m-b">
                         <div className="column">
-                            <h2 className="h6 no-margin">
-                                {accessory.name}
-                            </h2>
+                            <h2 className="h6 no-margin">{accessory.name}</h2>
                         </div>
                         <div className="column minimal">
                             <img
@@ -105,19 +95,15 @@ export default (props: IAccessoryProps) => {
                     </div>
                 </div>
                 <div className="repeat-m">
-                    <div className="font-medium">
-                        {accessory.price} kr
-                    </div>
-                    <div className="font-size-small">
-                        Kontantpris
-                    </div>
+                    <div className="font-medium">{accessory.price} kr</div>
+                    <div className="font-size-small">Kontantpris</div>
                 </div>
                 <div data-ecom-content="" className="repeat-m">
                     <p>{accessory.shortDescription}</p>
                 </div>
                 <div className="box-extend">
                     <div className="repeat-m">
-                    {markdownLongDescription && (
+                        {markdownLongDescription && (
                             <div
                                 dangerouslySetInnerHTML={{
                                     __html: markdownLongDescription,

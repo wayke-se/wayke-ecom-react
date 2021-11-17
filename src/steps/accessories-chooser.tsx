@@ -31,7 +31,11 @@ export default (props: IAccessoryProps) => {
                 {props.orderOptions
                     .getAccessories()
                     .map((accesory: IAccessory) => (
-                        <Accessory accessory={accesory} key={accesory.id} {...props}/>
+                        <Accessory
+                            accessory={accesory}
+                            key={accesory.id}
+                            {...props}
+                        />
                     ))}
             </section>
             <section className="page-section">
