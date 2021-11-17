@@ -240,6 +240,7 @@ describe("Get transitions", () => {
                         (options: IOrderOptionsResponse) => {
                             options.getDeliveryOptions = () => [];
                             options.getInsuranceOption = () => null;
+                            options.getAccessories = () => []
                             return options;
                         }
                     );
@@ -267,6 +268,7 @@ describe("Get transitions", () => {
                         (options: IOrderOptionsResponse) => {
                             options.getDeliveryOptions = () => [deliveryOption];
                             options.getInsuranceOption = () => null;
+                            options.getAccessories = () => [];
                             return options;
                         }
                     );
@@ -289,7 +291,11 @@ describe("Get transitions", () => {
                     return d;
                 });
                 const orderOptions: IOrderOptionsResponse = fixtures.create(
-                    "IOrderOptionsResponse"
+                    "IOrderOptionsResponse",
+                    (options: IOrderOptionsResponse) => {
+                        options.getAccessories = () => [];
+                        return options;
+                    }
                 );
 
                 const step = getAllTransitions()[
@@ -315,6 +321,7 @@ describe("Get transitions", () => {
                         "IOrderOptionsResponse",
                         (options: IOrderOptionsResponse) => {
                             options.getDeliveryOptions = () => [];
+                            options.getAccessories = () => [];
                             return options;
                         }
                     );
@@ -340,6 +347,7 @@ describe("Get transitions", () => {
                         "IOrderOptionsResponse",
                         (options: IOrderOptionsResponse) => {
                             options.getDeliveryOptions = () => [deliveryOption];
+                            options.getAccessories = () => [];
                             return options;
                         }
                     );
@@ -362,6 +370,7 @@ describe("Get transitions", () => {
                     "IOrderOptionsResponse",
                     (options: IOrderOptionsResponse) => {
                         options.getDeliveryOptions = () => [];
+                        options.getAccessories= () => [];
                         return options;
                     }
                 );
@@ -388,6 +397,7 @@ describe("Get transitions", () => {
                     "IOrderOptionsResponse",
                     (options: IOrderOptionsResponse) => {
                         options.getDeliveryOptions = () => [deliveryOption];
+                        options.getAccessories = () => [];
                         return options;
                     }
                 );
