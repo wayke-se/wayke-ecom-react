@@ -55,6 +55,11 @@ export const getPrimarySteps = (
         result.push(EcomStep.INSURANCE_INFORMATION_DEFINITION);
     }
 
+    const accessories = options.getAccessories();
+    if (accessories && accessories.length > 1) {
+        result.push(EcomStep.ACCESORIES_CHOOSER);
+    }
+
     const deliveryOptions = options.getDeliveryOptions() || emptyList;
     if (
         deliveryOptions.length > 1 ||
@@ -63,8 +68,6 @@ export const getPrimarySteps = (
     ) {
         result.push(EcomStep.DELIVERY_METHOD);
     }
-
-    result.push(EcomStep.ACCESORIES_CHOOSER);
 
     result.push(EcomStep.FINAL_SUMMARY);
     result.push(EcomStep.FINAL_CONFIRMATION);
@@ -194,7 +197,16 @@ export const getAllTransitions = () => ({
 
         return EcomStep.FINAL_SUMMARY;
     },
-    [EcomStep.ACCESORIES_CHOOSER]: () => EcomStep.DELIVERY_METHOD,
+    [EcomStep.ACCESORIES_CHOOSER]: (
+        data: IEcomData,
+        options: IOrderOptionsResponse
+    ) => {
+        if (displayDeliveryOptions(options)) {
+            return EcomStep.DELIVERY_METHOD;
+        }
+
+        return EcomStep.FINAL_SUMMARY;
+    },
     [EcomStep.DELIVERY_METHOD]: () => EcomStep.FINAL_SUMMARY,
     [EcomStep.FINAL_SUMMARY]: () => EcomStep.FINAL_CONFIRMATION,
 });

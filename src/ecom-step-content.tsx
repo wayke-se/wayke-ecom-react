@@ -108,11 +108,11 @@ export default (props: AllProps) => {
         case EcomStep.INSURANCE_ALTERNATIVE_CHOOSER:
             return <InsuranceAlternativeChooser {...props} />;
 
-        case EcomStep.DELIVERY_METHOD:
-            return <DeliveryMethodChooser {...props} />;
-
         case EcomStep.ACCESORIES_CHOOSER:
             return <AccesoriesChooser {...props} />;
+
+        case EcomStep.DELIVERY_METHOD:
+            return <DeliveryMethodChooser {...props} />;
 
         case EcomStep.FINAL_SUMMARY:
             return <FinalSummary {...props} />;

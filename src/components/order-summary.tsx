@@ -88,7 +88,6 @@ export default (props: IOrderSummaryProps) => {
         products.push({
             addons,
             title: "Tillbehör",
-            description: `Valda tillbehör`,
             price: accessoriesSumPrice,
             unit: "kr",
         });
