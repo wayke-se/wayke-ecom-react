@@ -27,7 +27,7 @@ export default (props: IAccessoryProps) => {
     useEffect(() => {
         if (accessory && props.data.chosenAccessories) {
             const ids = [...props.data.chosenAccessories.ids];
-            let foundIdx = ids.findIndex((id) => id === accessory.id);
+            const foundIdx = ids.findIndex((id) => id === accessory.id);
             if (isChosen && foundIdx < 0) {
                 ids.push(accessory.id);
                 updateAccessoryIds(ids);
