@@ -21,22 +21,28 @@ markedRenderer.link = (href: any, title: any, text: any) => {
 
 export default (props: IAccessoryProps) => {
     const [isExtended, setIsExtended] = React.useState(false);
-    const [isChosen, setChosen] = React.useState(false);
-    const accessory = props.accessory;
 
-    useEffect(() => {
-        if (accessory && props.data.chosenAccessories) {
-            const ids = [...props.data.chosenAccessories.ids];
-            const foundIdx = ids.findIndex((id) => id === accessory.id);
-            if (isChosen && foundIdx < 0) {
-                ids.push(accessory.id);
-                updateAccessoryIds(ids);
-            } else if (!isChosen && foundIdx > -1) {
-                ids.splice(foundIdx, 1);
-                updateAccessoryIds(ids);
-            }
+    const accessory = props.accessory;
+    const ids = [...props.data.chosenAccessories.ids];
+
+    let isChosen = ids.findIndex((id) => id === accessory.id) > -1;
+
+    const setChosen = (yes: boolean) => {
+        if (yes) {
+            isChosen = true;
+        } else {
+            isChosen = false;
         }
-    }, [isChosen, accessory, props.data.chosenAccessories]);
+        const ids = [...props.data.chosenAccessories.ids];
+        const foundIdx = ids.findIndex((id) => id === accessory.id);
+        if (isChosen && foundIdx < 0) {
+            ids.push(accessory.id);
+            updateAccessoryIds(ids);
+        } else if (!isChosen && foundIdx > -1) {
+            ids.splice(foundIdx, 1);
+            updateAccessoryIds(ids);
+        }
+    };
 
     const updateAccessoryIds = (newIds: string[]) => {
         props.dispatchStoreAction(StoreAction.UPDATE_NAMED_VALUE, {
@@ -65,7 +71,6 @@ export default (props: IAccessoryProps) => {
         logoImgUrlResized = addSizeQuery(accessory.logoUrl, 96, 8);
 
     let markdownLongDescription;
-
     if (accessory.longDescription) {
         const encodedlongDescription = htmlEncode(accessory.longDescription);
         markdownLongDescription = marked(encodedlongDescription, {
