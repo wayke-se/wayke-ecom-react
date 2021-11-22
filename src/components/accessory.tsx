@@ -50,6 +50,12 @@ export default (props: IAccessoryProps) => {
         setIsExtended(!isExtended);
     };
 
+    const assemblyPriceExist = props.accessory.assemblyPrice !== undefined;
+    let totalPrice = accessory.price;
+    if (assemblyPriceExist) {
+        totalPrice += accessory.assemblyPrice;
+    }
+
     let heroImgUrlResized = "";
     if (accessory.media.length > 0)
         heroImgUrlResized = addSizeQuery(accessory.media[0].url, 400, 200);
@@ -95,8 +101,10 @@ export default (props: IAccessoryProps) => {
                     </div>
                 </div>
                 <div className="repeat-m">
-                    <div className="font-medium">{accessory.price} kr</div>
-                    <div className="font-size-small">Kontantpris</div>
+                    <div className="font-medium">{totalPrice} kr</div>
+                    <div className="font-size-small">
+                        {assemblyPriceExist ? "Pris inkl. montering" : "Pris"}
+                    </div>
                 </div>
                 <div data-ecom-content="" className="repeat-m">
                     <p>{accessory.shortDescription}</p>
@@ -134,14 +142,14 @@ export default (props: IAccessoryProps) => {
                     <div data-ecom-columnrow="">
                         <div className="column font-size-small">
                             <button
-                                data-ecom-link="action font-size-inherit"
+                                data-ecom-link=""
                                 className="l-block"
                                 onClick={handleMoreInformationClick}
                             >
                                 {isExtended ? "Mindre" : "Mer"} information
                                 <i
                                     className={`m-l-mini ${
-                                        false
+                                        isExtended
                                             ? "icon-chevron-up"
                                             : "icon-chevron-down"
                                     }`}
@@ -164,7 +172,12 @@ export default (props: IAccessoryProps) => {
                                     data-ecom-button="small"
                                     onClick={() => setChosen(true)}
                                 >
-                                    Välj
+                                    <span className="button-section">
+                                        <i className="icon-plus no-margin"></i>
+                                    </span>
+                                    <span className="button-section">
+                                        Lägg till
+                                    </span>
                                 </button>
                             )}
                         </div>

@@ -76,14 +76,24 @@ export default (props: IOrderSummaryProps) => {
         const chosenAccessories = accessories.filter((a) =>
             props.data.chosenAccessories.ids.includes(a.id)
         );
-        const addons = chosenAccessories.map((a) => ({
-            title: a.name,
-            price: a.price,
-            unit: "kr",
-        }));
+        const addons = chosenAccessories.map((a) => {
+            let totalPrice = a.price;
+            if (a.assemblyPrice !== undefined) totalPrice += a.assemblyPrice;
+
+            return {
+                title: a.name,
+                price: totalPrice,
+                unit: "kr",
+            };
+        });
 
         let accessoriesSumPrice = 0;
-        accessories.forEach((a) => (accessoriesSumPrice += a.price));
+        chosenAccessories.map((a) => {
+            accessoriesSumPrice += a.price;
+            if (a.assemblyPrice) {
+                accessoriesSumPrice += a.assemblyPrice;
+            }
+        });
 
         products.push({
             addons,
