@@ -56,7 +56,7 @@ export const getPrimarySteps = (
     }
 
     const accessories = options.getAccessories();
-    if (accessories && accessories.length > 1) {
+    if (accessories && accessories.length > 0) {
         result.push(EcomStep.ACCESORIES_CHOOSER);
     }
 
