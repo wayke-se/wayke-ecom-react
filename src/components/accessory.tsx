@@ -68,7 +68,7 @@ export default (props: IAccessoryProps) => {
 
     let logoImgUrlResized = "";
     if (accessory.logoUrl)
-        logoImgUrlResized = addSizeQuery(accessory.logoUrl, 96, 8);
+        logoImgUrlResized = addSizeQuery(accessory.logoUrl, 100);
 
     let markdownLongDescription;
     if (accessory.longDescription) {

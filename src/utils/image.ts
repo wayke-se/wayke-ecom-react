@@ -1,7 +1,7 @@
 export const addSizeQuery = (
     imageSource: string,
     width: number,
-    height: number
+    height?: number
 ) => {
     if (!imageSource) {
         return null;
@@ -13,5 +13,7 @@ export const addSizeQuery = (
         return imageSource;
     }
 
-    return `${imageSource}?w=${width}&h=${height}`;
+    if (width && height) return `${imageSource}?w=${width}&h=${height}`;
+
+    return `${imageSource}?w=${width}`;
 };
