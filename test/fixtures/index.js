@@ -7,6 +7,27 @@ factory.define("IDistance", [
     "unit".pickFrom(["m", "km"]),
 ]);
 
+factory.define("IAccessory", [
+    "id",
+    "id",
+    "articleNumber",
+    "logoUrl",
+    "longDescription",
+    "shortDescription",
+    "manufacturer",
+    "model",
+    "name",
+    "price",
+    "assemblyPrice".asNumber(),
+    "salePrice".asNumber(),
+    "productPageLink",
+    "productPageLinkText",
+    "media".asArray(),
+    "templateDeleted".asBoolean(),
+    "createdAt",
+    "updatedAt",
+]);
+
 factory.define("IAddress", [
     "city",
     "name",

@@ -14,6 +14,7 @@ import {
 } from "./ecom-step-transitions";
 import EcomStep from "./constants/ecom-step";
 import { IEcomData } from "./types";
+import { IAccessory } from "@wayke-se/ecom/dist-types/orders/types";
 
 describe("Get transitions", () => {
     describe("Given step TRADE_IN_EXISTS_CHOOSER", () => {
@@ -233,51 +234,114 @@ describe("Get transitions", () => {
 
         describe("Given no insurance options", () => {
             describe("Given no pickup delivery method", () => {
-                it("Should transition to DELIVERY_METHOD", () => {
-                    const data: IEcomData = fixtures.create("IEcomData");
-                    const orderOptions: IOrderOptionsResponse = fixtures.create(
-                        "IOrderOptionsResponse",
-                        (options: IOrderOptionsResponse) => {
-                            options.getDeliveryOptions = () => [];
-                            options.getInsuranceOption = () => null;
-                            options.getAccessories = () => [];
-                            return options;
-                        }
-                    );
+                describe("Given no accessories", () => {
+                    it("Should transition to DELIVERY_METHOD", () => {
+                        const data: IEcomData = fixtures.create("IEcomData");
+                        const orderOptions: IOrderOptionsResponse = fixtures.create(
+                            "IOrderOptionsResponse",
+                            (options: IOrderOptionsResponse) => {
+                                options.getDeliveryOptions = () => [];
+                                options.getInsuranceOption = () => null;
+                                options.getAccessories = () => [];
+                                return options;
+                            }
+                        );
 
-                    const step = getAllTransitions()[
-                        EcomStep.CUSTOMER_INFORMATION_DETAILS
-                    ](data, orderOptions);
+                        const step = getAllTransitions()[
+                            EcomStep.CUSTOMER_INFORMATION_DETAILS
+                        ](data, orderOptions);
 
-                    expect(step).toBe(EcomStep.DELIVERY_METHOD);
+                        expect(step).toBe(EcomStep.DELIVERY_METHOD);
+                    });
+                });
+
+                describe("Given accessories", () => {
+                    it("Should transition to ACCESORIES_CHOOSER", () => {
+                        const data: IEcomData = fixtures.create("IEcomData");
+                        const accessory: IAccessory = fixtures.create(
+                            "IAccessory"
+                        );
+                        const orderOptions: IOrderOptionsResponse = fixtures.create(
+                            "IOrderOptionsResponse",
+                            (options: IOrderOptionsResponse) => {
+                                options.getDeliveryOptions = () => [];
+                                options.getInsuranceOption = () => null;
+                                options.getAccessories = () => [accessory];
+                                return options;
+                            }
+                        );
+
+                        const step = getAllTransitions()[
+                            EcomStep.CUSTOMER_INFORMATION_DETAILS
+                        ](data, orderOptions);
+
+                        expect(step).toBe(EcomStep.ACCESORIES_CHOOSER);
+                    });
                 });
             });
 
             describe("Given single pickup delivery method", () => {
-                it("Should transition to FINAL_SUMMARY", () => {
-                    const data: IEcomData = fixtures.create("IEcomData");
-                    const deliveryOption: IDeliveryOption = fixtures.create(
-                        "IDeliveryOption",
-                        (option: IDeliveryOption) => {
-                            option.type = DeliveryType.Pickup;
-                            return option;
-                        }
-                    );
-                    const orderOptions: IOrderOptionsResponse = fixtures.create(
-                        "IOrderOptionsResponse",
-                        (options: IOrderOptionsResponse) => {
-                            options.getDeliveryOptions = () => [deliveryOption];
-                            options.getInsuranceOption = () => null;
-                            options.getAccessories = () => [];
-                            return options;
-                        }
-                    );
+                describe("Given no accessories", () => {
+                    it("Should transition to FINAL_SUMMARY", () => {
+                        const data: IEcomData = fixtures.create("IEcomData");
+                        const deliveryOption: IDeliveryOption = fixtures.create(
+                            "IDeliveryOption",
+                            (option: IDeliveryOption) => {
+                                option.type = DeliveryType.Pickup;
+                                return option;
+                            }
+                        );
+                        const orderOptions: IOrderOptionsResponse = fixtures.create(
+                            "IOrderOptionsResponse",
+                            (options: IOrderOptionsResponse) => {
+                                options.getDeliveryOptions = () => [
+                                    deliveryOption,
+                                ];
+                                options.getInsuranceOption = () => null;
+                                options.getAccessories = () => [];
+                                return options;
+                            }
+                        );
 
-                    const step = getAllTransitions()[
-                        EcomStep.CUSTOMER_INFORMATION_DETAILS
-                    ](data, orderOptions);
+                        const step = getAllTransitions()[
+                            EcomStep.CUSTOMER_INFORMATION_DETAILS
+                        ](data, orderOptions);
 
-                    expect(step).toBe(EcomStep.FINAL_SUMMARY);
+                        expect(step).toBe(EcomStep.FINAL_SUMMARY);
+                    });
+                });
+
+                describe("Given accessories", () => {
+                    it("Should transition to ACCESORIES_CHOOSER", () => {
+                        const data: IEcomData = fixtures.create("IEcomData");
+                        const accessory: IAccessory = fixtures.create(
+                            "IAccessory"
+                        );
+                        const deliveryOption: IDeliveryOption = fixtures.create(
+                            "IDeliveryOption",
+                            (option: IDeliveryOption) => {
+                                option.type = DeliveryType.Pickup;
+                                return option;
+                            }
+                        );
+                        const orderOptions: IOrderOptionsResponse = fixtures.create(
+                            "IOrderOptionsResponse",
+                            (options: IOrderOptionsResponse) => {
+                                options.getDeliveryOptions = () => [
+                                    deliveryOption,
+                                ];
+                                options.getInsuranceOption = () => null;
+                                options.getAccessories = () => [accessory];
+                                return options;
+                            }
+                        );
+
+                        const step = getAllTransitions()[
+                            EcomStep.CUSTOMER_INFORMATION_DETAILS
+                        ](data, orderOptions);
+
+                        expect(step).toBe(EcomStep.ACCESORIES_CHOOSER);
+                    });
                 });
             });
         });
@@ -316,7 +380,112 @@ describe("Get transitions", () => {
             });
 
             describe("Given no pickup delivery method", () => {
+                describe("Given no accessories", () => {
+                    it("Should transition to DELIVERY_METHOD", () => {
+                        const orderOptions: IOrderOptionsResponse = fixtures.create(
+                            "IOrderOptionsResponse",
+                            (options: IOrderOptionsResponse) => {
+                                options.getDeliveryOptions = () => [];
+                                options.getAccessories = () => [];
+                                return options;
+                            }
+                        );
+
+                        const step = getAllTransitions()[
+                            EcomStep.INSURANCE_INFORMATION_DEFINITION
+                        ](data, orderOptions);
+
+                        expect(step).toBe(EcomStep.DELIVERY_METHOD);
+                    });
+                });
+
+                describe("Given accessories", () => {
+                    it("Should transition to ACCESORIES_CHOOSER", () => {
+                        const accessory: IAccessory = fixtures.create(
+                            "IAccessory"
+                        );
+                        const orderOptions: IOrderOptionsResponse = fixtures.create(
+                            "IOrderOptionsResponse",
+                            (options: IOrderOptionsResponse) => {
+                                options.getDeliveryOptions = () => [];
+                                options.getAccessories = () => [accessory];
+                                return options;
+                            }
+                        );
+
+                        const step = getAllTransitions()[
+                            EcomStep.INSURANCE_INFORMATION_DEFINITION
+                        ](data, orderOptions);
+
+                        expect(step).toBe(EcomStep.ACCESORIES_CHOOSER);
+                    });
+                });
+            });
+
+            describe("Given single pickup delivery method", () => {
+                describe("Given no accessories" , () => {
+                    it("Should transition to FINAL_SUMMARY", () => {
+                        const deliveryOption: IDeliveryOption = fixtures.create(
+                            "IDeliveryOption",
+                            (option: IDeliveryOption) => {
+                                option.type = DeliveryType.Pickup;
+                                return option;
+                            }
+                        );
+                        const orderOptions: IOrderOptionsResponse = fixtures.create(
+                            "IOrderOptionsResponse",
+                            (options: IOrderOptionsResponse) => {
+                                options.getDeliveryOptions = () => [deliveryOption];
+                                options.getAccessories = () => [];
+                                return options;
+                            }
+                        );
+
+                        const step = getAllTransitions()[
+                            EcomStep.INSURANCE_INFORMATION_DEFINITION
+                        ](data, orderOptions);
+
+                        expect(step).toBe(EcomStep.FINAL_SUMMARY);
+                    });
+                });
+
+                describe("Given accessories" , () => {
+                    it("Should transition to ACCESSORIES_CHOOSER", () => {
+                        const accessory: IAccessory = fixtures.create(
+                            "IAccessory"
+                        );
+                        const deliveryOption: IDeliveryOption = fixtures.create(
+                            "IDeliveryOption",
+                            (option: IDeliveryOption) => {
+                                option.type = DeliveryType.Pickup;
+                                return option;
+                            }
+                        );
+                        const orderOptions: IOrderOptionsResponse = fixtures.create(
+                            "IOrderOptionsResponse",
+                            (options: IOrderOptionsResponse) => {
+                                options.getDeliveryOptions = () => [deliveryOption];
+                                options.getAccessories = () => [accessory];
+                                return options;
+                            }
+                        );
+
+                        const step = getAllTransitions()[
+                            EcomStep.INSURANCE_INFORMATION_DEFINITION
+                        ](data, orderOptions);
+
+                        expect(step).toBe(EcomStep.ACCESORIES_CHOOSER);
+                    });
+                });
+            });
+        });
+    });
+
+    describe("Given step INSURANCE_ALTERNATIVE_CHOOSER", () => {
+        describe("Given no pickup delivery method", () => {
+            describe("Given no accessories", () => {
                 it("Should transition to DELIVERY_METHOD", () => {
+                    const data: IEcomData = fixtures.create("IEcomData");
                     const orderOptions: IOrderOptionsResponse = fixtures.create(
                         "IOrderOptionsResponse",
                         (options: IOrderOptionsResponse) => {
@@ -327,15 +496,41 @@ describe("Get transitions", () => {
                     );
 
                     const step = getAllTransitions()[
-                        EcomStep.INSURANCE_INFORMATION_DEFINITION
+                        EcomStep.INSURANCE_ALTERNATIVE_CHOOSER
                     ](data, orderOptions);
 
                     expect(step).toBe(EcomStep.DELIVERY_METHOD);
                 });
             });
 
-            describe("Given single pickup delivery method", () => {
+            describe("Given accessories", () => {
+                it("Should transition to ACCESORIES_CHOOSER", () => {
+                    const data: IEcomData = fixtures.create("IEcomData");
+                    const accessory: IAccessory = fixtures.create(
+                        "IAccessory"
+                    );
+                    const orderOptions: IOrderOptionsResponse = fixtures.create(
+                        "IOrderOptionsResponse",
+                        (options: IOrderOptionsResponse) => {
+                            options.getDeliveryOptions = () => [];
+                            options.getAccessories = () => [accessory];
+                            return options;
+                        }
+                    );
+
+                    const step = getAllTransitions()[
+                        EcomStep.INSURANCE_ALTERNATIVE_CHOOSER
+                    ](data, orderOptions);
+
+                    expect(step).toBe(EcomStep.ACCESORIES_CHOOSER);
+                });
+            });
+        });
+
+        describe("Given single pickup delivery method", () => {
+            describe("Given no accessories", () => {
                 it("Should transition to FINAL_SUMMARY", () => {
+                    const data: IEcomData = fixtures.create("IEcomData");
                     const deliveryOption: IDeliveryOption = fixtures.create(
                         "IDeliveryOption",
                         (option: IDeliveryOption) => {
@@ -353,60 +548,41 @@ describe("Get transitions", () => {
                     );
 
                     const step = getAllTransitions()[
-                        EcomStep.INSURANCE_INFORMATION_DEFINITION
+                        EcomStep.INSURANCE_ALTERNATIVE_CHOOSER
                     ](data, orderOptions);
 
                     expect(step).toBe(EcomStep.FINAL_SUMMARY);
                 });
             });
-        });
-    });
 
-    describe("Given step INSURANCE_ALTERNATIVE_CHOOSER", () => {
-        describe("Given no pickup delivery method", () => {
-            it("Should transition to DELIVERY_METHOD", () => {
-                const data: IEcomData = fixtures.create("IEcomData");
-                const orderOptions: IOrderOptionsResponse = fixtures.create(
-                    "IOrderOptionsResponse",
-                    (options: IOrderOptionsResponse) => {
-                        options.getDeliveryOptions = () => [];
-                        options.getAccessories = () => [];
-                        return options;
-                    }
-                );
+            describe("Given no accessories", () => {
+                it("Should transition to ACCESORIES_CHOOSER", () => {
+                    const data: IEcomData = fixtures.create("IEcomData");
+                    const accessory: IAccessory = fixtures.create(
+                        "IAccessory"
+                    );
+                    const deliveryOption: IDeliveryOption = fixtures.create(
+                        "IDeliveryOption",
+                        (option: IDeliveryOption) => {
+                            option.type = DeliveryType.Pickup;
+                            return option;
+                        }
+                    );
+                    const orderOptions: IOrderOptionsResponse = fixtures.create(
+                        "IOrderOptionsResponse",
+                        (options: IOrderOptionsResponse) => {
+                            options.getDeliveryOptions = () => [deliveryOption];
+                            options.getAccessories = () => [accessory];
+                            return options;
+                        }
+                    );
 
-                const step = getAllTransitions()[
-                    EcomStep.INSURANCE_ALTERNATIVE_CHOOSER
-                ](data, orderOptions);
+                    const step = getAllTransitions()[
+                        EcomStep.INSURANCE_ALTERNATIVE_CHOOSER
+                    ](data, orderOptions);
 
-                expect(step).toBe(EcomStep.DELIVERY_METHOD);
-            });
-        });
-
-        describe("Given single pickup delivery method", () => {
-            it("Should transition to FINAL_SUMMARY", () => {
-                const data: IEcomData = fixtures.create("IEcomData");
-                const deliveryOption: IDeliveryOption = fixtures.create(
-                    "IDeliveryOption",
-                    (option: IDeliveryOption) => {
-                        option.type = DeliveryType.Pickup;
-                        return option;
-                    }
-                );
-                const orderOptions: IOrderOptionsResponse = fixtures.create(
-                    "IOrderOptionsResponse",
-                    (options: IOrderOptionsResponse) => {
-                        options.getDeliveryOptions = () => [deliveryOption];
-                        options.getAccessories = () => [];
-                        return options;
-                    }
-                );
-
-                const step = getAllTransitions()[
-                    EcomStep.INSURANCE_ALTERNATIVE_CHOOSER
-                ](data, orderOptions);
-
-                expect(step).toBe(EcomStep.FINAL_SUMMARY);
+                    expect(step).toBe(EcomStep.ACCESORIES_CHOOSER);
+                });
             });
         });
     });
