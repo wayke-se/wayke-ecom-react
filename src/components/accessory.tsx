@@ -1,5 +1,5 @@
 import { IAccessory } from "@wayke-se/ecom/dist-types/orders/types";
-import React, { useEffect } from "react";
+import React from "react";
 import marked from "marked";
 
 import { addSizeQuery } from "../utils/image";

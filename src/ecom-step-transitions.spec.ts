@@ -423,7 +423,7 @@ describe("Get transitions", () => {
             });
 
             describe("Given single pickup delivery method", () => {
-                describe("Given no accessories" , () => {
+                describe("Given no accessories", () => {
                     it("Should transition to FINAL_SUMMARY", () => {
                         const deliveryOption: IDeliveryOption = fixtures.create(
                             "IDeliveryOption",
@@ -435,7 +435,9 @@ describe("Get transitions", () => {
                         const orderOptions: IOrderOptionsResponse = fixtures.create(
                             "IOrderOptionsResponse",
                             (options: IOrderOptionsResponse) => {
-                                options.getDeliveryOptions = () => [deliveryOption];
+                                options.getDeliveryOptions = () => [
+                                    deliveryOption,
+                                ];
                                 options.getAccessories = () => [];
                                 return options;
                             }
@@ -449,7 +451,7 @@ describe("Get transitions", () => {
                     });
                 });
 
-                describe("Given accessories" , () => {
+                describe("Given accessories", () => {
                     it("Should transition to ACCESSORIES_CHOOSER", () => {
                         const accessory: IAccessory = fixtures.create(
                             "IAccessory"
@@ -464,7 +466,9 @@ describe("Get transitions", () => {
                         const orderOptions: IOrderOptionsResponse = fixtures.create(
                             "IOrderOptionsResponse",
                             (options: IOrderOptionsResponse) => {
-                                options.getDeliveryOptions = () => [deliveryOption];
+                                options.getDeliveryOptions = () => [
+                                    deliveryOption,
+                                ];
                                 options.getAccessories = () => [accessory];
                                 return options;
                             }
@@ -506,9 +510,7 @@ describe("Get transitions", () => {
             describe("Given accessories", () => {
                 it("Should transition to ACCESORIES_CHOOSER", () => {
                     const data: IEcomData = fixtures.create("IEcomData");
-                    const accessory: IAccessory = fixtures.create(
-                        "IAccessory"
-                    );
+                    const accessory: IAccessory = fixtures.create("IAccessory");
                     const orderOptions: IOrderOptionsResponse = fixtures.create(
                         "IOrderOptionsResponse",
                         (options: IOrderOptionsResponse) => {
@@ -558,9 +560,7 @@ describe("Get transitions", () => {
             describe("Given no accessories", () => {
                 it("Should transition to ACCESORIES_CHOOSER", () => {
                     const data: IEcomData = fixtures.create("IEcomData");
-                    const accessory: IAccessory = fixtures.create(
-                        "IAccessory"
-                    );
+                    const accessory: IAccessory = fixtures.create("IAccessory");
                     const deliveryOption: IDeliveryOption = fixtures.create(
                         "IDeliveryOption",
                         (option: IDeliveryOption) => {

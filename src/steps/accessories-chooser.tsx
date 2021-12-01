@@ -30,7 +30,7 @@ export default (props: IAccessoryProps) => {
             <section className="page-section page-section-accent">
                 {props.orderOptions
                     .getAccessories()
-                    .slice(0,5)
+                    .slice(0, 5)
                     .map((accesory: IAccessory) => (
                         <Accessory
                             accessory={accesory}
