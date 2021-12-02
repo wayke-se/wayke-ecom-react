@@ -40,21 +40,22 @@ export default (props: IAccessoryProps) => {
                     ))}
             </section>
             <section className="page-section">
-                <button
-                    data-ecom-button="full-width"
-                    onClick={props.onProceedToNextStep}
-                >
-                    Gå vidare
-                </button>
-            </section>
-            <section className="page-section text-center">
-                <button
-                    data-ecom-link="action"
-                    onClick={props.onProceedToNextStep}
-                >
-                    <i className="icon-skip m-r-half"></i>
-                    Hoppa över detta steg
-                </button>
+                <div className="repeat-m">
+                    <button
+                        data-ecom-button="full-width"
+                        onClick={props.onProceedToNextStep}
+                    >
+                        Gå vidare
+                    </button>
+                </div>
+                <div className="repeat-m">
+                    <button
+                        data-ecom-button="full-width light"
+                        onClick={props.onProceedToNextStep}
+                    >
+                        Hoppa över detta steg
+                    </button>
+                </div>
             </section>
         </div>
     );
