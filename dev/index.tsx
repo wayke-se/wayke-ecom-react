@@ -7,7 +7,7 @@ import { IEcomExternalProps } from "../src/types";
 
 const devData: IEcomExternalProps = {
     vehicle: {
-        id: "7b6fc1fa-167c-4e9c-b779-18961991851e",
+        id: "a1cfc883-5b28-4785-ad6a-3b0065373be2",
         title: "Volvo V70",
         shortDescription: "D3 Momentum",
         price: 138900,

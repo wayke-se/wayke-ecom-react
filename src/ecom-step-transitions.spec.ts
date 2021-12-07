@@ -256,7 +256,7 @@ describe("Get transitions", () => {
                 });
 
                 describe("Given accessories", () => {
-                    it("Should transition to ACCESORIES_CHOOSER", () => {
+                    it("Should transition to ACCESSORIES_CHOOSER", () => {
                         const data: IEcomData = fixtures.create("IEcomData");
                         const accessory: IAccessory = fixtures.create(
                             "IAccessory"
@@ -275,7 +275,7 @@ describe("Get transitions", () => {
                             EcomStep.CUSTOMER_INFORMATION_DETAILS
                         ](data, orderOptions);
 
-                        expect(step).toBe(EcomStep.ACCESORIES_CHOOSER);
+                        expect(step).toBe(EcomStep.ACCESSORIES_CHOOSER);
                     });
                 });
             });
@@ -312,7 +312,7 @@ describe("Get transitions", () => {
                 });
 
                 describe("Given accessories", () => {
-                    it("Should transition to ACCESORIES_CHOOSER", () => {
+                    it("Should transition to ACCESSORIES_CHOOSER", () => {
                         const data: IEcomData = fixtures.create("IEcomData");
                         const accessory: IAccessory = fixtures.create(
                             "IAccessory"
@@ -340,7 +340,7 @@ describe("Get transitions", () => {
                             EcomStep.CUSTOMER_INFORMATION_DETAILS
                         ](data, orderOptions);
 
-                        expect(step).toBe(EcomStep.ACCESORIES_CHOOSER);
+                        expect(step).toBe(EcomStep.ACCESSORIES_CHOOSER);
                     });
                 });
             });
@@ -400,7 +400,7 @@ describe("Get transitions", () => {
                 });
 
                 describe("Given accessories", () => {
-                    it("Should transition to ACCESORIES_CHOOSER", () => {
+                    it("Should transition to ACCESSORIES_CHOOSER", () => {
                         const accessory: IAccessory = fixtures.create(
                             "IAccessory"
                         );
@@ -417,7 +417,7 @@ describe("Get transitions", () => {
                             EcomStep.INSURANCE_INFORMATION_DEFINITION
                         ](data, orderOptions);
 
-                        expect(step).toBe(EcomStep.ACCESORIES_CHOOSER);
+                        expect(step).toBe(EcomStep.ACCESSORIES_CHOOSER);
                     });
                 });
             });
@@ -478,7 +478,7 @@ describe("Get transitions", () => {
                             EcomStep.INSURANCE_INFORMATION_DEFINITION
                         ](data, orderOptions);
 
-                        expect(step).toBe(EcomStep.ACCESORIES_CHOOSER);
+                        expect(step).toBe(EcomStep.ACCESSORIES_CHOOSER);
                     });
                 });
             });
@@ -508,7 +508,7 @@ describe("Get transitions", () => {
             });
 
             describe("Given accessories", () => {
-                it("Should transition to ACCESORIES_CHOOSER", () => {
+                it("Should transition to ACCESSORIES_CHOOSER", () => {
                     const data: IEcomData = fixtures.create("IEcomData");
                     const accessory: IAccessory = fixtures.create("IAccessory");
                     const orderOptions: IOrderOptionsResponse = fixtures.create(
@@ -524,7 +524,7 @@ describe("Get transitions", () => {
                         EcomStep.INSURANCE_ALTERNATIVE_CHOOSER
                     ](data, orderOptions);
 
-                    expect(step).toBe(EcomStep.ACCESORIES_CHOOSER);
+                    expect(step).toBe(EcomStep.ACCESSORIES_CHOOSER);
                 });
             });
         });
@@ -558,7 +558,7 @@ describe("Get transitions", () => {
             });
 
             describe("Given no accessories", () => {
-                it("Should transition to ACCESORIES_CHOOSER", () => {
+                it("Should transition to ACCESSORIES_CHOOSER", () => {
                     const data: IEcomData = fixtures.create("IEcomData");
                     const accessory: IAccessory = fixtures.create("IAccessory");
                     const deliveryOption: IDeliveryOption = fixtures.create(
@@ -581,7 +581,7 @@ describe("Get transitions", () => {
                         EcomStep.INSURANCE_ALTERNATIVE_CHOOSER
                     ](data, orderOptions);
 
-                    expect(step).toBe(EcomStep.ACCESORIES_CHOOSER);
+                    expect(step).toBe(EcomStep.ACCESSORIES_CHOOSER);
                 });
             });
         });

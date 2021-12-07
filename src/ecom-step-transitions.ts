@@ -57,7 +57,7 @@ export const getPrimarySteps = (
 
     const accessories = options.getAccessories();
     if (accessories && accessories.length > 0) {
-        result.push(EcomStep.ACCESORIES_CHOOSER);
+        result.push(EcomStep.ACCESSORIES_CHOOSER);
     }
 
     const deliveryOptions = options.getDeliveryOptions() || emptyList;
@@ -156,7 +156,7 @@ export const getAllTransitions = () => ({
         }
 
         if (displayAccessories(options)) {
-            return EcomStep.ACCESORIES_CHOOSER;
+            return EcomStep.ACCESSORIES_CHOOSER;
         }
 
         if (displayDeliveryOptions(options)) {
@@ -174,7 +174,7 @@ export const getAllTransitions = () => ({
         }
 
         if (displayAccessories(options)) {
-            return EcomStep.ACCESORIES_CHOOSER;
+            return EcomStep.ACCESSORIES_CHOOSER;
         }
 
         if (displayDeliveryOptions(options)) {
@@ -188,7 +188,7 @@ export const getAllTransitions = () => ({
         options: IOrderOptionsResponse
     ) => {
         if (displayAccessories(options)) {
-            return EcomStep.ACCESORIES_CHOOSER;
+            return EcomStep.ACCESSORIES_CHOOSER;
         }
 
         if (displayDeliveryOptions(options)) {
@@ -197,7 +197,7 @@ export const getAllTransitions = () => ({
 
         return EcomStep.FINAL_SUMMARY;
     },
-    [EcomStep.ACCESORIES_CHOOSER]: (
+    [EcomStep.ACCESSORIES_CHOOSER]: (
         data: IEcomData,
         options: IOrderOptionsResponse
     ) => {

@@ -1,4 +1,3 @@
-import { IAccessory } from "@wayke-se/ecom/dist-types/orders/types";
 import React from "react";
 
 import Accessory from "../components/accessory";
@@ -31,7 +30,7 @@ export default (props: IAccessoryProps) => {
                 {props.orderOptions
                     .getAccessories()
                     .slice(0, 5)
-                    .map((accesory: IAccessory) => (
+                    .map((accesory) => (
                         <Accessory
                             accessory={accesory}
                             key={accesory.id}
