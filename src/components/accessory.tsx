@@ -56,8 +56,15 @@ export default (props: IAccessoryProps) => {
         setIsExtended(!isExtended);
     };
 
-    const assemblyPriceExist = props.accessory.assemblyPrice !== undefined;
+    const assemblyPriceExist = accessory.assemblyPrice !== undefined;
+    const salePriceExist = accessory.salePrice !== undefined && accessory.salePrice > 0;
+
     let totalPrice = accessory.price;
+
+    if (salePriceExist) {
+        totalPrice = accessory.salePrice
+    }
+
     if (assemblyPriceExist) {
         totalPrice += accessory.assemblyPrice;
     }
