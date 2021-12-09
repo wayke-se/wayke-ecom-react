@@ -57,7 +57,7 @@ export default (props: IAccessoryProps) => {
     };
 
     const assemblyPriceExist = accessory.assemblyPrice !== undefined;
-    const salePriceExist = accessory.salePrice !== undefined && accessory.salePrice > 0;
+    const salePriceExist = accessory.salePrice !== undefined;
 
     let totalPrice = accessory.price;
 

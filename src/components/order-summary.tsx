@@ -78,6 +78,7 @@ export default (props: IOrderSummaryProps) => {
         );
         const addons = chosenAccessories.map((a) => {
             let totalPrice = a.price;
+            if (a.salePrice !== undefined) totalPrice = a.salePrice;
             if (a.assemblyPrice !== undefined) totalPrice += a.assemblyPrice;
 
             return {
