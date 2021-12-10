@@ -1,3 +1,5 @@
+import { IAccessory } from "@wayke-se/ecom/dist-types/orders/types";
+
 const separateEveryThirdCharacter = (value: string) => {
     const characters = [...value].reverse();
     let result = characters[0];
@@ -35,4 +37,13 @@ export const formatPrice = (value: number, decimalSymbol = ",") => {
 export const formatPercentage = (fractionValue: number) => {
     const percentageValue = fractionValue * 100;
     return (Math.round(percentageValue * 100) / 100).toFixed(2);
+};
+
+export const accessoryTotalPrice = (accessory: IAccessory) => {
+    let totalPrice = accessory.price;
+    if (accessory.salePrice !== undefined) totalPrice = accessory.salePrice;
+    if (accessory.assemblyPrice !== undefined)
+        totalPrice += accessory.assemblyPrice;
+
+    return totalPrice;
 };

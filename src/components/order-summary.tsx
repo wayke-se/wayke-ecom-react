@@ -3,7 +3,7 @@ import React from "react";
 import { PaymentType, VehicleCondition } from "@wayke-se/ecom";
 import { IEcomContext, IEcomExternalProps, IEcomStore } from "../types";
 
-import { formatPrice } from "../utils/helpers";
+import { accessoryTotalPrice, formatPrice } from "../utils/helpers";
 import {
     getLoanDetails,
     getLoanInformation,
@@ -77,9 +77,7 @@ export default (props: IOrderSummaryProps) => {
             props.data.chosenAccessories.ids.includes(a.id)
         );
         const addons = chosenAccessories.map((a) => {
-            let totalPrice = a.price;
-            if (a.salePrice !== undefined) totalPrice = a.salePrice;
-            if (a.assemblyPrice !== undefined) totalPrice += a.assemblyPrice;
+            let totalPrice = accessoryTotalPrice(a);
 
             return {
                 title: a.name,
@@ -90,10 +88,7 @@ export default (props: IOrderSummaryProps) => {
 
         let accessoriesSumPrice = 0;
         chosenAccessories.map((a) => {
-            accessoriesSumPrice += a.price;
-            if (a.assemblyPrice) {
-                accessoriesSumPrice += a.assemblyPrice;
-            }
+            accessoriesSumPrice += accessoryTotalPrice(a);
         });
 
         products.push({

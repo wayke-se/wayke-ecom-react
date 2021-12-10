@@ -6,6 +6,7 @@ import { addSizeQuery } from "../utils/image";
 import { htmlEncode } from "../utils/encode";
 import { IEcomStore } from "../types";
 import StoreAction from "../constants/store-action";
+import { accessoryTotalPrice, formatPrice } from "../utils/helpers";
 
 interface IAccessoryProps extends IEcomStore {
     accessory: IAccessory;
@@ -57,17 +58,8 @@ export default (props: IAccessoryProps) => {
     };
 
     const assemblyPriceExist = accessory.assemblyPrice !== undefined;
-    const salePriceExist = accessory.salePrice !== undefined;
 
-    let totalPrice = accessory.price;
-
-    if (salePriceExist) {
-        totalPrice = accessory.salePrice
-    }
-
-    if (assemblyPriceExist) {
-        totalPrice += accessory.assemblyPrice;
-    }
+    let totalPrice = accessoryTotalPrice(accessory);
 
     let heroImgUrlResized = "";
     if (accessory.media.length > 0)
@@ -113,7 +105,9 @@ export default (props: IAccessoryProps) => {
                     </div>
                 </div>
                 <div className="repeat-m">
-                    <div className="font-medium">{totalPrice} kr</div>
+                    <div className="font-medium">
+                        {formatPrice(totalPrice)} kr
+                    </div>
                     <div className="font-size-small">
                         {assemblyPriceExist ? "Pris inkl. montering" : "Pris"}
                     </div>
