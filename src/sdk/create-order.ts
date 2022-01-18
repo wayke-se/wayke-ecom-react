@@ -135,7 +135,12 @@ export const createOrder = (
     }
 
     if (hasChosenAccessories) {
-        createRequestBuilder.withAccessoriesIds(ecomData.chosenAccessories.ids);
+        const allAccessories = orderOptions.getAccessories();
+        const accesories = allAccessories.filter((a) =>
+            ecomData.chosenAccessories.ids.includes(a.id)
+        );
+
+        createRequestBuilder.withAccessories(accesories);
     }
 
     const createRequest = createRequestBuilder.build();
