@@ -20,7 +20,7 @@ interface ICartItemProps {
 export default (props: ICartItemProps) => {
     const addonItems = props.addons.map((a, index) => (
         <div key={index}>
-            {a.title} - {a.price} {a.unit}
+            {a.title} - {formatPrice(a.price)} {a.unit}
         </div>
     ));
 

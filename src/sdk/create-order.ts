@@ -43,6 +43,7 @@ export const createOrder = (
         ecomData.tradeInCar.wantsToDefineTradeIn &&
         ecomData.tradeInCar.hasProvidedTradeInInfo &&
         ecomData.tradeInCar.hasTradeInCar;
+    const hasChosenAccessories = ecomData.chosenAccessories.ids.length > 0;
 
     const customerBuilder = customers
         .newCustomer()
@@ -131,6 +132,15 @@ export const createOrder = (
 
     if (tradeIn) {
         createRequestBuilder.withTradeIn(tradeIn);
+    }
+
+    if (hasChosenAccessories) {
+        const allAccessories = orderOptions.getAccessories();
+        const accesories = allAccessories.filter((a) =>
+            ecomData.chosenAccessories.ids.includes(a.id)
+        );
+
+        createRequestBuilder.withAccessories(accesories);
     }
 
     const createRequest = createRequestBuilder.build();

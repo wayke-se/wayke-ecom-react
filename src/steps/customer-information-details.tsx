@@ -221,13 +221,6 @@ export default (props: ICustomerInformationDetailsProps) => {
                     </div>
                 </section>
             )}
-            <section className="page-section page-section-accent last-child-pushdown">
-                <div className="page-section-accent-content">
-                    <h2 className="h6">Din order</h2>
-                </div>
-
-                <OrderSummary {...props} />
-            </section>
         </div>
     );
 };

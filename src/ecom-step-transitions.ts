@@ -55,6 +55,11 @@ export const getPrimarySteps = (
         result.push(EcomStep.INSURANCE_INFORMATION_DEFINITION);
     }
 
+    const accessories = options.getAccessories();
+    if (accessories && accessories.length > 0) {
+        result.push(EcomStep.ACCESSORIES_CHOOSER);
+    }
+
     const deliveryOptions = options.getDeliveryOptions() || emptyList;
     if (
         deliveryOptions.length > 1 ||
@@ -76,6 +81,11 @@ const displayDeliveryOptions = (options: IOrderOptionsResponse) => {
         deliveryOptions.length === 1 &&
         deliveryOptions[0].type === DeliveryType.Pickup
     );
+};
+
+const displayAccessories = (options: IOrderOptionsResponse) => {
+    const accessories = options.getAccessories();
+    return accessories && accessories.length > 0;
 };
 
 export const getAllTransitions = () => ({
@@ -145,6 +155,10 @@ export const getAllTransitions = () => ({
             return EcomStep.INSURANCE_INFORMATION_DEFINITION;
         }
 
+        if (displayAccessories(options)) {
+            return EcomStep.ACCESSORIES_CHOOSER;
+        }
+
         if (displayDeliveryOptions(options)) {
             return EcomStep.DELIVERY_METHOD;
         }
@@ -159,6 +173,10 @@ export const getAllTransitions = () => ({
             return EcomStep.INSURANCE_ALTERNATIVE_CHOOSER;
         }
 
+        if (displayAccessories(options)) {
+            return EcomStep.ACCESSORIES_CHOOSER;
+        }
+
         if (displayDeliveryOptions(options)) {
             return EcomStep.DELIVERY_METHOD;
         }
@@ -166,6 +184,20 @@ export const getAllTransitions = () => ({
         return EcomStep.FINAL_SUMMARY;
     },
     [EcomStep.INSURANCE_ALTERNATIVE_CHOOSER]: (
+        data: IEcomData,
+        options: IOrderOptionsResponse
+    ) => {
+        if (displayAccessories(options)) {
+            return EcomStep.ACCESSORIES_CHOOSER;
+        }
+
+        if (displayDeliveryOptions(options)) {
+            return EcomStep.DELIVERY_METHOD;
+        }
+
+        return EcomStep.FINAL_SUMMARY;
+    },
+    [EcomStep.ACCESSORIES_CHOOSER]: (
         data: IEcomData,
         options: IOrderOptionsResponse
     ) => {

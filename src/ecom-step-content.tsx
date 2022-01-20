@@ -1,5 +1,6 @@
 import React from "react";
 
+import AccessoriesChooser from "./steps/accessories-chooser";
 import DealerChooser from "./steps/dealer-chooser";
 import BankIdAuthentication from "./steps/bankid-authentication";
 import CustomerInformationInitial from "./steps/customer-information-initial";
@@ -106,6 +107,9 @@ export default (props: AllProps) => {
 
         case EcomStep.INSURANCE_ALTERNATIVE_CHOOSER:
             return <InsuranceAlternativeChooser {...props} />;
+
+        case EcomStep.ACCESSORIES_CHOOSER:
+            return <AccessoriesChooser {...props} />;
 
         case EcomStep.DELIVERY_METHOD:
             return <DeliveryMethodChooser {...props} />;

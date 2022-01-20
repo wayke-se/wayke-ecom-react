@@ -8,7 +8,7 @@ import {
     IEcomContext,
 } from "./types";
 
-import { formatPrice } from "./utils/helpers";
+import { accessoryTotalPrice, formatPrice } from "./utils/helpers";
 import {
     getPaymentMethodTitle,
     getLoanDetails,
@@ -55,6 +55,7 @@ export default (props: IEcomCartProps) => {
         props.data.tradeInCar.hasTradeInCar &&
         props.data.tradeInCar.registrationNumber &&
         props.vehicleLookup !== null;
+    const hasAccessories = props.data.chosenAccessories.ids.length > 0;
 
     if (hasLoan) {
         const loanDetails = getLoanDetails(
@@ -105,6 +106,31 @@ export default (props: IEcomCartProps) => {
             valuation: Math.round(vehicleInformation.valuation / 100) * 100,
             unit: "kr",
             addons: [],
+        });
+    }
+
+    if (hasAccessories) {
+        const accessories = props.orderOptions.getAccessories();
+        const chosenAccessories = accessories.filter((a) =>
+            props.data.chosenAccessories.ids.includes(a.id)
+        );
+        const addons = chosenAccessories.map((a) => {
+            const totalPrice = accessoryTotalPrice(a);
+
+            return {
+                title: a.name,
+                price: totalPrice,
+                unit: "kr",
+            };
+        });
+
+        const accessoriesSumPrice = chosenAccessories.reduce((sum, accessory) => sum + accessoryTotalPrice(accessory), 0);
+
+        cartContent.push({
+            addons,
+            title: "Tillbehör",
+            price: accessoriesSumPrice,
+            unit: "kr",
         });
     }
 

@@ -54,7 +54,6 @@ const getNextStep = (
 
 const shouldShowCart = (step: EcomStep) => {
     switch (step) {
-        case EcomStep.CUSTOMER_INFORMATION_DETAILS:
         case EcomStep.FINAL_CONFIRMATION:
             return false;
         default:

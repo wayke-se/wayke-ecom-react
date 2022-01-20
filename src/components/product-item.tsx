@@ -21,7 +21,7 @@ interface IProductItemProps extends IEcomStore {
 export default (props: IProductItemProps) => {
     const addonItems = props.addons.map((a, index) => (
         <div key={index}>
-            {a.title} - {a.price}
+            {a.title} - {formatPrice(a.price)}
             {a.unit}
         </div>
     ));

@@ -3,7 +3,7 @@ import React from "react";
 import { PaymentType, VehicleCondition } from "@wayke-se/ecom";
 import { IEcomContext, IEcomExternalProps, IEcomStore } from "../types";
 
-import { formatPrice } from "../utils/helpers";
+import { accessoryTotalPrice, formatPrice } from "../utils/helpers";
 import {
     getLoanDetails,
     getLoanInformation,
@@ -33,6 +33,7 @@ export default (props: IOrderSummaryProps) => {
         props.data.tradeInCar.hasTradeInCar &&
         props.data.tradeInCar.registrationNumber &&
         props.vehicleLookup !== null;
+    const hasAccessories = props.data.chosenAccessories.ids.length > 0;
 
     if (hasLoan) {
         const loanDetails = getLoanDetails(
@@ -67,6 +68,31 @@ export default (props: IOrderSummaryProps) => {
             description: `${insuranceOption.brand.name} - ${insuranceOption.name}`,
             price: insuranceOption.price,
             unit: insuranceOption.unit,
+        });
+    }
+
+    if (hasAccessories) {
+        const accessories = props.orderOptions.getAccessories();
+        const chosenAccessories = accessories.filter((a) =>
+            props.data.chosenAccessories.ids.includes(a.id)
+        );
+        const addons = chosenAccessories.map((a) => {
+            const totalPrice = accessoryTotalPrice(a);
+
+            return {
+                title: a.name,
+                price: totalPrice,
+                unit: "kr",
+            };
+        });
+
+        const accessoriesSumPrice = chosenAccessories.reduce((sum, accessory) => sum + accessoryTotalPrice(accessory), 0);
+
+        products.push({
+            addons,
+            title: "Tillbehör",
+            price: accessoriesSumPrice,
+            unit: "kr",
         });
     }
 
