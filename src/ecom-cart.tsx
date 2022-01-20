@@ -115,7 +115,7 @@ export default (props: IEcomCartProps) => {
             props.data.chosenAccessories.ids.includes(a.id)
         );
         const addons = chosenAccessories.map((a) => {
-            let totalPrice = accessoryTotalPrice(a);
+            const totalPrice = accessoryTotalPrice(a);
 
             return {
                 title: a.name,
@@ -124,10 +124,7 @@ export default (props: IEcomCartProps) => {
             };
         });
 
-        let accessoriesSumPrice = 0;
-        chosenAccessories.map((a) => {
-            accessoriesSumPrice += accessoryTotalPrice(a);
-        });
+        const accessoriesSumPrice = chosenAccessories.reduce((sum, accessory) => sum + accessoryTotalPrice(accessory), 0);
 
         cartContent.push({
             addons,

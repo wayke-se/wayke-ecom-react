@@ -28,12 +28,7 @@ export default (props: IAccessoryProps) => {
 
     let isChosen = ids.findIndex((id) => id === accessory.id) > -1;
 
-    const setChosen = (yes: boolean) => {
-        if (yes) {
-            isChosen = true;
-        } else {
-            isChosen = false;
-        }
+    const setChosen = (isChosen: boolean) => {
         const ids = [...props.data.chosenAccessories.ids];
         const foundIdx = ids.findIndex((id) => id === accessory.id);
         if (isChosen && foundIdx < 0) {

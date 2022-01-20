@@ -41,9 +41,8 @@ export const formatPercentage = (fractionValue: number) => {
 
 export const accessoryTotalPrice = (accessory: IAccessory) => {
     let totalPrice = accessory.price;
-    if (accessory.salePrice !== undefined) totalPrice = accessory.salePrice;
-    if (accessory.assemblyPrice !== undefined)
-        totalPrice += accessory.assemblyPrice;
+    if (accessory.salePrice) totalPrice = accessory.salePrice;
+    if (accessory.assemblyPrice) totalPrice += accessory.assemblyPrice;
 
     return totalPrice;
 };
