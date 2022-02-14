@@ -83,6 +83,10 @@ The ecom component will always be visible, so you have to set it's visibility by
 
 In the folder `assets/styles` there is a CSS-file `default.css`. If you want to use these provided styles, you can simply add this CSS to your html-head as normally with a `link` element.
 
+This _CSS_ file contains references to an icon font used to dislplay icons. Include the folder `assets/font/icons` as well for the icons to display properly.
+
+> **Important:** The relative path between the _CSS_ file and `icons.woff(s)` has to be the same as in the `assets` folder unless you change the path to the fonts in the _CSS_ yourself.
+
 ### Development
 
 ```
